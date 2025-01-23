@@ -759,7 +759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joystick: {fileID: 993211296}
-  speed: 1
+  playerData: {fileID: 11400000, guid: 733398d73c3c22a4aa9a391cc7f2ea49, type: 2}
 --- !u!1 &2120877803
 GameObject:
   m_ObjectHideFlags: 0
