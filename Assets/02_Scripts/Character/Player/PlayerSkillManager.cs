@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class PlayerSkillManager : MonoBehaviour
 {
-    [SerializeField]
-    private Transform attackStartPos = null;
-
     private List<PlayerSkillData> skillDatas = null;
 
     private Animator animator = null;
@@ -61,15 +58,21 @@ public class PlayerSkillManager : MonoBehaviour
     public void TestRaycast()
     {
         Debug.Log("Raycast!");
-        Debug.DrawLine(attackStartPos.position, transform.forward + attackStartPos.position, Color.red, 2f);
+        Debug.DrawLine(transform.position, transform.forward + transform.position, Color.red, 2f);
 
-        Ray ray = new Ray(attackStartPos.position, transform.forward);
+        Ray ray = new Ray(transform.position, transform.forward);
 
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 30f))
         {
             Debug.Log(hit.transform.name);
+
+            // 백어택 체크.
+            // 캐릭터의 전방 방향으로 기술이 나가게만 설정해놨음. 애초에 백어택 체크 기술들은 전부 캐릭터 전방으로 향하고
+            // 따라서 캐릭터의 forward 와 충돌체의 forward 의 각도로 백어택 여부를 체크하는 중.
+            if (Vector3.Angle(transform.forward, hit.transform.forward) < 80f)
+                Debug.Log("BackAttack!");
         }
     }
 
