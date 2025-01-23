@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class PlayerSkillManager : MonoBehaviour
 {
+    [SerializeField]
+    private Transform attackStartPos = null;
+
     private List<PlayerSkillData> skillDatas = null;
 
     private Animator animator = null;
@@ -53,6 +56,21 @@ public class PlayerSkillManager : MonoBehaviour
         Debug.Log("Use Skill!");
 
         animator.SetTrigger("Skill01");
+    }
+
+    public void TestRaycast()
+    {
+        Debug.Log("Raycast!");
+        Debug.DrawLine(attackStartPos.position, transform.forward + attackStartPos.position, Color.red, 2f);
+
+        Ray ray = new Ray(attackStartPos.position, transform.forward);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 30f))
+        {
+            Debug.Log(hit.transform.name);
+        }
     }
 
     #endregion
