@@ -2,13 +2,14 @@ using UnityEngine;
 
 namespace EnumTypes
 {
-    public enum InputButtonType
+    public enum SkillType
     {
         None = 0,
         Skill_A,
         Skill_B,
         Skill_C,
-        BasicAttack
+        BasicAttack,
+        Dash
     }
 
     public enum PlayerStateType

@@ -5,7 +5,7 @@ using EnumTypes;
 [CreateAssetMenu(fileName = "PlayerSkillData", menuName = "Scriptable Objects/PlayerSkillData")]
 public class PlayerSkillData : ScriptableObject
 {
-    public int skillIdx = 0;
+    public SkillType skillType;
 
     public float damage = 0f;
 

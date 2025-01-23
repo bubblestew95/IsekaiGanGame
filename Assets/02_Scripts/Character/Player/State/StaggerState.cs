@@ -1,16 +1,23 @@
 using UnityEngine;
 
-public class StaggerState : MonoBehaviour
+public class StaggerState : BasePlayerState
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public StaggerState(PlayerManager playerMng) : base(playerMng)
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnEnterState()
     {
-        
+        throw new System.NotImplementedException();
+    }
+
+    public override void OnExitState()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void OnUpdateState()
+    {
+        throw new System.NotImplementedException();
     }
 }

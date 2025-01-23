@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class ActionState : BasePlayerState
+public class DashState : BasePlayerState
 {
-    public ActionState(PlayerManager playerMng) : base(playerMng)
+    public DashState(PlayerManager playerMng) : base(playerMng)
     {
     }
 

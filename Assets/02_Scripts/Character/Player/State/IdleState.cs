@@ -1,16 +1,30 @@
+using EnumTypes;
 using UnityEngine;
 
-public class IdleState : MonoBehaviour
+public class IdleState : BasePlayerState
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public IdleState(PlayerManager playerMng) : base(playerMng)
+    {
+    }
+
+    public override void OnEnterState()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnExitState()
     {
         
+    }
+
+    public override void OnUpdateState()
+    {
+        SkillType skillType = playerMng.GetNextSkill();
+
+        if(skillType != SkillType.None)
+        {
+            // 이따 바꿔야 함.
+            playerMng.UseSkill(skillType);
+        }
     }
 }
