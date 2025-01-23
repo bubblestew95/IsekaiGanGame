@@ -15,8 +15,22 @@ public class PlayerManager : MonoBehaviour
     private PlayerData playerData = null;
 
     private CharacterController characterCont = null;
+    private PlayerSkillManager skillMng = null;
+
+    public PlayerData PlayerData
+    {
+        get {  return playerData; }
+    }
 
     #region Public Functions
+    /// <summary>
+    /// 스킬 발동을 시도한다.
+    /// </summary>
+    /// <param name="_skillIdx"></param>
+    public void UseSkill(int _skillIdx)
+    {
+        skillMng.TryUseSkill(_skillIdx);
+    }
     #endregion
 
     #region Private Functions
@@ -38,27 +52,26 @@ public class PlayerManager : MonoBehaviour
 
         transform.rotation = Quaternion.LookRotation(moveVector);
     }
-
-    private void UseSkill()
-    {
-        Debug.Log("Use Skill!");
-
-
-    }
     #endregion
 
-    #region Unity Callbacks
+    #region Unity Callback
     private void Awake()
     {
         characterCont = GetComponent<CharacterController>();
+
+        skillMng = GetComponent<PlayerSkillManager>();
+
+        skillMng.Init();
     }
 
     private void Update()
     {
         MoveByJoystick();
 
-        if (Input.GetKeyDown(KeyCode.K))
-            UseSkill();
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            UseSkill(0);
+        }
     }
 
     #endregion
