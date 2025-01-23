@@ -12,7 +12,7 @@ public partial class WaitAnimAction : Action
     [SerializeReference] public BlackboardVariable<string> CurAnim;
     protected override Status OnUpdate()
     {
-        if (Animator.Value.GetCurrentAnimatorStateInfo(0).IsName(CurAnim.Value) && Animator.Value.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+        if (Animator.Value.GetCurrentAnimatorStateInfo(0).IsName(CurAnim.Value) && Animator.Value.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f)
         {
             return Status.Success;
         }
