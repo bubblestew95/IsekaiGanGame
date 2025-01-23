@@ -689,6 +689,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 125998, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 136312, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 179124, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
       propertyPath: m_Name
       value: P_Archer

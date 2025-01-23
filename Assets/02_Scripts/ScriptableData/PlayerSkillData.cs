@@ -17,6 +17,8 @@ public class PlayerSkillData : ScriptableObject
         Immediately
     }
 
+    public int skillIdx = 0;
+
     public float damage = 0f;
 
     public float coolTime = 0f;
