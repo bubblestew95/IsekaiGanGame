@@ -290,6 +290,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9137032837993464747, guid: 4534b9cc6330aed499be54b02abf5283, type: 3}
       insertIndex: -1
       addedObject: {fileID: 918530079}
+    - targetCorrespondingSourceObject: {fileID: 9137032837993464747, guid: 4534b9cc6330aed499be54b02abf5283, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 918530081}
+    - targetCorrespondingSourceObject: {fileID: 9137032837993464747, guid: 4534b9cc6330aed499be54b02abf5283, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 918530082}
   m_SourcePrefab: {fileID: 100100000, guid: 4534b9cc6330aed499be54b02abf5283, type: 3}
 --- !u!1 &762210613
 GameObject:
@@ -468,6 +474,40 @@ MonoBehaviour:
           m_Value1: 962863377982030798
         Name: BossAnim
         m_Value: {fileID: 918530077}
+--- !u!114 &918530081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918530075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc25e28d7362b424bba0cf259766bf94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackMat: {fileID: 2100000, guid: ebdbaae0558ed794ab3496ea98571ba6, type: 2}
+--- !u!65 &918530082
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918530075}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 1, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1599632196
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,7 +650,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -678,7 +718,7 @@ Transform:
   m_GameObject: {fileID: 1762429921}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: 0, z: 5.73}
+  m_LocalPosition: {x: -0.03, y: 0, z: 6.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
