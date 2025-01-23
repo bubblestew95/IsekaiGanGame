@@ -10819,6 +10819,8 @@ GameObject:
   - component: {fileID: 494462}
   - component: {fileID: 9563318}
   - component: {fileID: 6093684178934932082}
+  - component: {fileID: 4146515583710344192}
+  - component: {fileID: 3109163507745385269}
   m_Layer: 0
   m_Name: P_Archer
   m_TagString: Untagged
@@ -10853,7 +10855,7 @@ Animator:
   m_GameObject: {fileID: 179124}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 02ded044b8e0963439276550f50be6f9, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9fde480495944084eb7a10b6d1b57314, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -10890,6 +10892,32 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!114 &4146515583710344192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bfa38ae7095fa64aa2e58d734226279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  joystick: {fileID: 0}
+  playerData: {fileID: 11400000, guid: 733398d73c3c22a4aa9a391cc7f2ea49, type: 2}
+--- !u!114 &3109163507745385269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13917431feb79514e9a9ebc1b82e365b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &179126
 GameObject:
   m_ObjectHideFlags: 0
