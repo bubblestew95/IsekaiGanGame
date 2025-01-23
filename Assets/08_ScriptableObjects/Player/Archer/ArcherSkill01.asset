@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db5ce20329354ab4790360e86adb07fc, type: 3}
   m_Name: ArcherSkill01
   m_EditorClassIdentifier: 
-  clip: {fileID: 0}
-  damage: 0
-  coolTime: 0
+  clip: {fileID: 7400000, guid: 2f2a39086989dc44b8d626d1c663ed0d, type: 3}
+  damage: 5
+  coolTime: 5
+  rangeType: 0
+  activatedType: 2

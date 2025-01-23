@@ -17,8 +17,6 @@ public class PlayerSkillData : ScriptableObject
         Immediately
     }
 
-    public AnimationClip clip = null;
-
     public float damage = 0f;
 
     public float coolTime = 0f;

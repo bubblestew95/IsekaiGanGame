@@ -5,6 +5,8 @@ public class PlayerSkillManager : MonoBehaviour
 {
     private List<PlayerSkillData> skillDatas = null;
 
+    private Animator animator = null;
+
     private float[] coolTimeArr = null;
 
     #region Public Functions
@@ -18,6 +20,8 @@ public class PlayerSkillManager : MonoBehaviour
         skillDatas = GetComponent<PlayerManager>().PlayerData.skills;
 
         coolTimeArr = new float[skillDatas.Count];
+        for (int i = 0; i < coolTimeArr.Length; ++i)
+            coolTimeArr[i] = 0f;
     }
 
     /// <summary>
@@ -47,6 +51,8 @@ public class PlayerSkillManager : MonoBehaviour
         }
 
         Debug.Log("Use Skill!");
+
+        animator.SetTrigger("Skill01");
     }
 
     #endregion
@@ -73,5 +79,9 @@ public class PlayerSkillManager : MonoBehaviour
     #endregion
 
     #region Unity Callback
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
     #endregion
 }
