@@ -3,7 +3,7 @@ using UnityEngine;
 
 using EnumTypes;
 
-public class StateMachine
+public class PlayerStateMachine
 {
     private BasePlayerState currentState = null;
 

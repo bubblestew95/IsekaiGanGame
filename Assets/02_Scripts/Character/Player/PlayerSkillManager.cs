@@ -91,7 +91,8 @@ public class PlayerSkillManager
     {
         foreach (var key in currentCoolTimeMap.Keys.ToList())
         {
-            currentCoolTimeMap[key] = Mathf.Clamp(currentCoolTimeMap[key] - _delta, 0f, 10000f);
+            if(currentCoolTimeMap[key] > 0f)
+                currentCoolTimeMap[key] = Mathf.Clamp(currentCoolTimeMap[key] - _delta, 0f, 10000f);
         }
     }
 
