@@ -51,6 +51,10 @@ public class PlayerManager : MonoBehaviour
         skillBuffer.Enqueue(_input);
     }
 
+    /// <summary>
+    /// 현재 스킬 입력 버퍼에서 하나를 꺼내옴.
+    /// </summary>
+    /// <returns>사용할 스킬의 타입</returns>
     public SkillType GetNextSkill()
     {
         if (skillBuffer.TryDequeue(out SkillType nextSkillType))
@@ -105,9 +109,19 @@ public class PlayerManager : MonoBehaviour
         InitStates();
     }
 
+    private void Start()
+    {
+        stateMachine.ChangeState(PlayerStateType.Idle);
+    }
+
     private void Update()
     {
+        stateMachine.UpdateState();
+
         MoveByJoystick();
+
+        skillMng.DecreaseCoolTimes(Time.deltaTime);
+        Debug.Log(skillMng.GetCoolTime(SkillType.Skill_A));
     }
 
     #endregion

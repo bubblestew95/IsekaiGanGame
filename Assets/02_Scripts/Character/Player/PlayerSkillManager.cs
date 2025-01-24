@@ -1,14 +1,18 @@
-using EnumTypes;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
+using EnumTypes;
 
 public class PlayerSkillManager
 {
     private List<PlayerSkillData> skillDatas = null;
 
     private Animator animator = null;
+    private Dictionary<SkillType, int> animatorIdMap = null;
 
-    private Dictionary<SkillType, float> coolTimeMap = null;
+    private Dictionary<SkillType, float> currentCoolTimeMap = null;
+    private Dictionary<SkillType, float> maxCoolTimeMap = null;
 
     #region Public Functions
 
@@ -20,12 +24,27 @@ public class PlayerSkillManager
     {
         skillDatas = _mng.PlayerData.skills;
 
-        coolTimeMap = new Dictionary<SkillType, float>();
+        animator = _mng.GetComponent<Animator>();
 
-        foreach(var data in skillDatas)
+        animatorIdMap = new Dictionary<SkillType, int>();
+        currentCoolTimeMap = new Dictionary<SkillType, float>();
+        maxCoolTimeMap = new Dictionary<SkillType, float>();
+
+        foreach (var data in skillDatas)
         {
-            coolTimeMap.Add(data.skillType, 0f);
+            currentCoolTimeMap.Add(data.skillType, 0f);
+            maxCoolTimeMap.Add(data.skillType, data.coolTime);
         }
+
+        // 우선 하드코딩으로 애니메이터 id를 캐싱함. 확장성 생각하면 나중에 수정할 것!
+        {
+            animatorIdMap.Add(SkillType.Skill_A, Animator.StringToHash("Skill_A"));
+            animatorIdMap.Add(SkillType.Skill_B, Animator.StringToHash("Skill_B"));
+            animatorIdMap.Add(SkillType.Skill_C, Animator.StringToHash("Skill_C"));
+            animatorIdMap.Add(SkillType.BasicAttack, Animator.StringToHash("BasicAttack"));
+            animatorIdMap.Add(SkillType.Dash, Animator.StringToHash("Dash"));
+        }
+
     }
 
     /// <summary>
@@ -34,7 +53,7 @@ public class PlayerSkillManager
     /// <param name="_skillIdx">사용할 스킬의 스킬 리스트 상 인덱스</param>
     public void TryUseSkill(SkillType _type)
     {
-        if(skillDatas == null || coolTimeMap == null)
+        if (skillDatas == null || currentCoolTimeMap == null)
         {
             Debug.LogWarning("Skill List is not valid!");
             return;
@@ -49,9 +68,34 @@ public class PlayerSkillManager
 
         Debug.Log("Use Skill!");
 
-        animator.SetTrigger("Skill01");
+        // 스킬 사용
+        if(animatorIdMap.TryGetValue(_type, out int animId))
+        {
+            animator.SetTrigger(animId);
+        }
+
+        // 쿨타임 적용
+        currentCoolTimeMap[_type] = maxCoolTimeMap[_type];
     }
 
+    public float GetCoolTime(SkillType _type)
+    {
+        return currentCoolTimeMap[_type];
+    }
+
+    /// <summary>
+    /// 모든 스킬들의 쿨타임을 변화량만큼 뺀다.
+    /// </summary>
+    /// <param name="_deltaTime">변화량</param>
+    public void DecreaseCoolTimes(float _delta)
+    {
+        foreach (var key in currentCoolTimeMap.Keys.ToList())
+        {
+            currentCoolTimeMap[key] = Mathf.Clamp(currentCoolTimeMap[key] - _delta, 0f, 10000f);
+        }
+    }
+
+    // 백어택 체크 기술검증용 레이캐스트 함수. 나중에 실사용을 위해서 잠시 남겨놓음.
     //public void TestRaycast()
     //{
     //    Debug.Log("Raycast!");
@@ -78,14 +122,14 @@ public class PlayerSkillManager
     #region Private Functions
 
     /// <summary>
-    /// 현재 지정한 스킬 인덱스의 스킬이 사용 가능한 지 체크한다.
+    /// 현재 지정한 스킬 타입의 스킬이 사용 가능한 지 체크한다.
     /// </summary>
-    /// <param name="_skillIdx">체크할 스킬의 인덱스</param>
+    /// <param name="_skillIdx">체크할 스킬의 타입</param>
     /// <returns></returns>
     private bool IsSkillUsable(SkillType _type)
     {
         // 쿨타임 체크
-        if (coolTimeMap[_type] > 0f)
+        if (currentCoolTimeMap[_type] > 0f)
         {
             Debug.Log("Index {0} Skill is coolTime!");
             return false;

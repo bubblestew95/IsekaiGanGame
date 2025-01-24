@@ -34,6 +34,10 @@ public class StateMachine
         stateMap.Remove(_stateType);
     }
 
+    /// <summary>
+    /// 상태 머신의 상태를 변화시킨다.
+    /// </summary>
+    /// <param name="_stateType">변화하고자 하는 상태 타입</param>
     public void ChangeState(PlayerStateType _stateType)
     {
         // 먼저 현재 상태를 종료함.
