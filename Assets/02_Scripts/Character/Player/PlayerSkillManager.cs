@@ -3,12 +3,18 @@ using System.Linq;
 using UnityEngine;
 
 using EnumTypes;
+using UnityEditor.VersionControl;
 
 public class PlayerSkillManager
 {
+    private PlayerManager playerManager = null;
+
     private List<PlayerSkillData> skillDatas = null;
 
     private Animator animator = null;
+    /// <summary>
+    /// 애니메이터의 각 트리거 아이디를 미리 캐싱해놓고, 이를 스킬 타입에 따라 저장해놓음.
+    /// </summary>
     private Dictionary<SkillType, int> animatorIdMap = null;
 
     private Dictionary<SkillType, float> currentCoolTimeMap = null;
@@ -22,6 +28,7 @@ public class PlayerSkillManager
     /// <param name="_skilldataList">스킬 데이터 리스트</param>
     public void Init(PlayerManager _mng)
     {
+        playerManager = _mng;
         skillDatas = _mng.PlayerData.skills;
 
         animator = _mng.GetComponent<Animator>();
@@ -62,7 +69,7 @@ public class PlayerSkillManager
         // 스킬이 현재 사용 가능한지 체크함.
         if (!IsSkillUsable(_type))
         {
-            Debug.Log("Index {0} Skill is coolTime!");
+            Debug.LogFormat("Currnet Skill type {0} is not usable!", _type);
             return;
         }
 
@@ -72,6 +79,15 @@ public class PlayerSkillManager
         if(animatorIdMap.TryGetValue(_type, out int animId))
         {
             animator.SetTrigger(animId);
+        }
+
+        if(_type == SkillType.Dash)
+        {
+            playerManager.ChangeState(PlayerStateType.Dash);
+        }
+        else
+        {
+            playerManager.ChangeState(PlayerStateType.Action);
         }
 
         // 쿨타임 적용
@@ -132,7 +148,7 @@ public class PlayerSkillManager
         // 쿨타임 체크
         if (currentCoolTimeMap[_type] > 0f)
         {
-            Debug.Log("Index {0} Skill is coolTime!");
+            Debug.LogFormat("{0} Skill is coolTime!", _type);
             return false;
         }
 

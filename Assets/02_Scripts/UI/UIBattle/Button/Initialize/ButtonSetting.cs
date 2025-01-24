@@ -4,12 +4,24 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+using EnumTypes;
+
 public class ButtonSetting : MonoBehaviour
 {
+    [SerializeField]
+    private SkillType buttonSkillType = SkillType.None;
+
     public List<Image> images = new List<Image>();
     public List<TextMeshProUGUI> textMeshPros = null;
     public Button button = null;
     public CoolTime cooltime = null;
+
+    private SkillButtonsManager skillButtonsManager = null;
+
+    public SkillType ButtonSkillType
+    {
+        get { return buttonSkillType; }
+    }
 
     private void Awake()
     {
@@ -17,6 +29,8 @@ public class ButtonSetting : MonoBehaviour
         images = GetComponentsInChildren<Image>(true).ToList();
         textMeshPros = GetComponentsInChildren<TextMeshProUGUI>().ToList();
         cooltime = GetComponentInChildren<CoolTime>();
+
+        skillButtonsManager = GetComponentInParent<SkillButtonsManager>();
     }
     private void Start()
     {
@@ -39,10 +53,12 @@ public class ButtonSetting : MonoBehaviour
 
     private void ButtonPressed()
     {
-        if (!cooltime.isPressed)
-        {
-            cooltime.CooltimeDown();
-        }
-        cooltime.isPressed = true;
+        //if (!cooltime.isPressed)
+        //{
+        //    cooltime.CooltimeDown();
+        //}
+        //cooltime.isPressed = true;
+
+        skillButtonsManager.OnSkillButtonClicked(ButtonSkillType);
     }
 }

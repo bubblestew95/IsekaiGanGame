@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using EnumTypes;
 
 public class UIBattleUIManager : MonoBehaviour
 {
+    public PlayerManager playerManager = null;
     public List<UIHpsManager> hpList = new List<UIHpsManager>();
     public List<UIBossHpsManager> bossHpList = new List<UIBossHpsManager>();
     public List<UIWarningManager> warningList = new List<UIWarningManager>();
@@ -14,6 +16,8 @@ public class UIBattleUIManager : MonoBehaviour
     public int bossMaxHp = 1;
     public int playerMaxHp = 1;
 
+    private SkillButtonsManager skillButtonsManager = null;
+
     private void Awake()
     {
         hpList = GetComponentsInChildren<UIHpsManager>().ToList();
@@ -21,18 +25,36 @@ public class UIBattleUIManager : MonoBehaviour
         warningList = GetComponentsInChildren<UIWarningManager>().ToList();
         buttonList = GetComponentsInChildren<ButtonSetting>().ToList();
         joyStick = GetComponentInChildren<FloatingJoystick>();
+
         //테스트 용 쿨타임
         if (cooltimeList.Count <= 4)
         {
             List<float> testCoolValue = new List<float> { 1, 1, 1, 1, 1 };
             cooltimeList = testCoolValue;
-            if (cooltimeList.Count ==0)
-                Debug.Log("쿨타임 리스트가 비어있어 테스트 쿨타임으로 시작합니다.");            
+            if (cooltimeList.Count == 0)
+                Debug.Log("쿨타임 리스트가 비어있어 테스트 쿨타임으로 시작합니다.");
             if (cooltimeList.Count < 0)
                 Debug.Log("쿨타임 리스트가 5개보다 적어 테스트 쿨타임으로 시작합니다.");
         }
         //
         SetupAllUI();
+
+        skillButtonsManager = GetComponentInChildren<SkillButtonsManager>();
+    }
+
+    /// <summary>
+    /// 입력받은 스킬 버튼을 플레이어 매니저에게 전달한다.
+    /// </summary>
+    /// <param name="_type">입력받은 스킬 버튼의 스킬 타입</param>
+    public void OnClickedSkillButton(SkillType _type)
+    {
+        if (playerManager == null)
+        {
+            Debug.LogWarning("Player Manager is Null!");
+            return;
+        }
+
+        playerManager.OnButtonInput(_type);
     }
 
     public void CooltimeListSetting(List<float> _timeList) // 평타,회피,스킬1,스킬2,스킬3 순서
