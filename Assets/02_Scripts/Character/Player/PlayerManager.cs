@@ -16,11 +16,9 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     private PlayerData playerData = null;
 
-    [SerializeField]
-    private float dequeueTime = 0.05f;
-
     private Queue<SkillType> skillBuffer = new Queue<SkillType>();
-    private float beforeDequeueTime = 0f;
+    private readonly float checkDequeueTime = 0.05f;
+    private float remainDequeueTime = 0f;
 
     private CharacterController characterCont = null;
     private PlayerSkillManager skillMng = null;
@@ -49,6 +47,8 @@ public class PlayerManager : MonoBehaviour
     public void OnButtonInput(SkillType _input)
     {
         skillBuffer.Enqueue(_input);
+        if (skillBuffer.Count == 1)
+            remainDequeueTime = checkDequeueTime;
     }
 
     /// <summary>
@@ -116,12 +116,37 @@ public class PlayerManager : MonoBehaviour
 
     private void Update()
     {
+        CheckSkillInputBuffer();
+
         stateMachine.UpdateState();
 
         MoveByJoystick();
 
         skillMng.DecreaseCoolTimes(Time.deltaTime);
         Debug.Log(skillMng.GetCoolTime(SkillType.Skill_A));
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            OnButtonInput(SkillType.Skill_A);
+        }
+    }
+
+    /// <summary>
+    /// 스킬 입력 버퍼에서 입력를 빼내는 처리를 한다.
+    /// </summary>
+    private void CheckSkillInputBuffer()
+    {
+        if (skillBuffer.Count > 0 && remainDequeueTime > 0f)
+            remainDequeueTime -= Time.deltaTime;
+
+        if (remainDequeueTime <= 0f)
+        {
+            Debug.Log("Dequeue!");
+            remainDequeueTime = checkDequeueTime;
+            if (skillBuffer.Count > 0)
+                skillBuffer.Dequeue();
+        }
+
     }
 
     #endregion
