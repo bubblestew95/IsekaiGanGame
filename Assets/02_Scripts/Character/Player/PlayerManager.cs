@@ -12,13 +12,12 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector]
     public UnityEvent OnPlayerDead = new UnityEvent();
 
-    /// <summary>
-    /// 가상 조이스틱 컴포넌트 지정.
-    /// </summary>
-    [SerializeField]
-    private FloatingJoystick joystick = null;
     [SerializeField]
     private PlayerData playerData = null;
+    [SerializeField]
+    private UIBattleUIManager battleUIManager = null;
+
+    private FloatingJoystick joystick = null;
 
     private Queue<SkillType> skillBuffer = new Queue<SkillType>();
     private readonly float checkDequeueTime = 0.05f;
@@ -47,7 +46,13 @@ public class PlayerManager : MonoBehaviour
     /// <param name="_skillIdx"></param>
     public void UseSkill(SkillType _type)
     {
-        skillMng.TryUseSkill(_type);
+        // 스킬 발동에 성공했다면
+        if(skillMng.TryUseSkill(_type))
+        {
+            // UI에 쿨타임을 적용한다.
+            if (battleUIManager != null)
+                battleUIManager.ApplyCooltime(_type, skillMng.GetCoolTime(_type));
+        }
     }
 
     /// <summary>
@@ -68,6 +73,10 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     public void MoveByJoystick()
     {
+        if (joystick == null)
+        {
+            return;
+        }
         float x = joystick.Horizontal;
         float z = joystick.Vertical;
         float speed = playerData.walkSpeed;
@@ -92,6 +101,16 @@ public class PlayerManager : MonoBehaviour
             return nextSkillType;
 
         return SkillType.None;
+    }
+
+    public void EndSkill()
+    {
+        ChangeState(PlayerStateType.Idle);
+    }
+
+    public void ChangeState(PlayerStateType _type)
+    {
+        StateMachine.ChangeState(_type);
     }
 
     #endregion
@@ -138,6 +157,8 @@ public class PlayerManager : MonoBehaviour
     {
         characterCont = GetComponent<CharacterController>();
 
+        joystick = FindAnyObjectByType<FloatingJoystick>();
+
         skillMng = new PlayerSkillManager();
         skillMng.Init(this);
 
@@ -156,17 +177,12 @@ public class PlayerManager : MonoBehaviour
     {
         CheckSkillInputBuffer();
 
+        // 현재 상태에 따른 행동을 업데이트한다.
         stateMachine.UpdateState();
 
         // MoveByJoystick();
 
         skillMng.DecreaseCoolTimes(Time.deltaTime);
-        Debug.Log(skillMng.GetCoolTime(SkillType.Skill_A));
-
-        if(Input.GetKeyDown(KeyCode.L))
-        {
-            OnButtonInput(SkillType.Skill_A);
-        }
     }
 
     #endregion
