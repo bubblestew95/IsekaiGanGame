@@ -9,7 +9,6 @@ public class UIWarningManager : MonoBehaviour
     private void Awake()
     {
         errorImage = GetComponentInChildren<Image>();
-        errorImage.enabled = false;
     }
     
     public void ConnectionError() // 에러 표시 On

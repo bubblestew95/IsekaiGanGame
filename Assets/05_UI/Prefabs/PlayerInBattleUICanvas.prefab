@@ -416,6 +416,8 @@ MonoBehaviour:
   images: []
   textMeshPros: []
   button: {fileID: 0}
+  cooltime: {fileID: 0}
+  isPressed: 0
 --- !u!1 &1104005065135161988
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,7 +558,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 11.1
+  m_text: 111.1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 426a1da042f23db4c8b4770a0d754d48, type: 2}
   m_sharedMaterial: {fileID: 2171133546506418051, guid: 426a1da042f23db4c8b4770a0d754d48, type: 2}
@@ -772,7 +774,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6724691684446953109}
-  - component: {fileID: 3275312752940797657}
+  - component: {fileID: 67946992392058550}
   m_Layer: 5
   m_Name: BossHP
   m_TagString: Untagged
@@ -802,7 +804,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -5}
   m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0.5, y: 1}
---- !u!114 &3275312752940797657
+--- !u!114 &67946992392058550
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -811,9 +813,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2061833342816192545}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e23e740e8d5d5641ba620da1b35476b, type: 3}
+  m_Script: {fileID: 11500000, guid: 81198e2c56865234495adf0e1534d4a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHp: 0
+  curHp: 0
 --- !u!1 &2249723221817298411
 GameObject:
   m_ObjectHideFlags: 0
@@ -985,7 +989,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 50}
+  m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7043697534236536532
 CanvasRenderer:
@@ -1009,7 +1013,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1192,6 +1196,8 @@ MonoBehaviour:
   images: []
   textMeshPros: []
   button: {fileID: 0}
+  cooltime: {fileID: 0}
+  isPressed: 0
 --- !u!1 &3364944419301081637
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,7 +1256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3207547, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.39215687, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6576,7 +6582,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 11.1
+  m_text: 111.1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 426a1da042f23db4c8b4770a0d754d48, type: 2}
   m_sharedMaterial: {fileID: 2171133546506418051, guid: 426a1da042f23db4c8b4770a0d754d48, type: 2}
@@ -7186,7 +7192,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -75, y: 0}
-  m_SizeDelta: {x: 1, y: 25}
+  m_SizeDelta: {x: 140, y: 25}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &1888057880562475519
 CanvasRenderer:
@@ -7282,6 +7288,8 @@ MonoBehaviour:
   images: []
   textMeshPros: []
   button: {fileID: 8541506088332512456}
+  cooltime: {fileID: 0}
+  isPressed: 0
 --- !u!1 &5758725221495443921
 GameObject:
   m_ObjectHideFlags: 0
@@ -7340,7 +7348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3207547, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.39215687, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7392,7 +7400,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -249.99998, y: 0}
-  m_SizeDelta: {x: 500, y: 50}
+  m_SizeDelta: {x: 450, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &6238670654544678859
 CanvasRenderer:
@@ -7836,7 +7844,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -60, y: 16}
+  m_AnchoredPosition: {x: -21.22583, y: 16}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 0}
 --- !u!225 &7404303915985389094
@@ -8350,6 +8358,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e23e740e8d5d5641ba620da1b35476b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHp: 0
+  curHp: 0
 --- !u!1 &7512670174137288330
 GameObject:
   m_ObjectHideFlags: 0
@@ -8726,6 +8736,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a7a025050abd0479b8ebf3cf37ffa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpList: []
+  warningList: []
+  buttonList: []
+  joyStick: {fileID: 0}
+  bossHp: 0
 --- !u!1 &8006339919685914553
 GameObject:
   m_ObjectHideFlags: 0
@@ -9144,6 +9159,8 @@ MonoBehaviour:
   images: []
   textMeshPros: []
   button: {fileID: 0}
+  cooltime: {fileID: 0}
+  isPressed: 0
 --- !u!1 &8850652440943405327
 GameObject:
   m_ObjectHideFlags: 0
@@ -9199,6 +9216,8 @@ MonoBehaviour:
   images: []
   textMeshPros: []
   button: {fileID: 0}
+  cooltime: {fileID: 0}
+  isPressed: 0
 --- !u!1001 &1152064809829640436
 PrefabInstance:
   m_ObjectHideFlags: 0

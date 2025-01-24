@@ -11,7 +11,6 @@ public class ButtonSetting : MonoBehaviour
     public Button button = null;
     public CoolTime cooltime = null;
 
-
     private void Awake()
     {
         button = GetComponentInChildren<Button>();
@@ -30,6 +29,20 @@ public class ButtonSetting : MonoBehaviour
             img.raycastTarget = false;
         }
         button.gameObject.GetComponent<Image>().raycastTarget = true;
+        button.onClick.AddListener(ButtonPressed);
     }
 
+    public void SetCooltime(float _cooltime)
+    {
+        cooltime.SetMaxCooltime(_cooltime);
+    }
+
+    private void ButtonPressed()
+    {
+        if (!cooltime.isPressed)
+        {
+            cooltime.CooltimeDown();
+        }
+        cooltime.isPressed = true;
+    }
 }
