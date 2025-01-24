@@ -20,6 +20,11 @@ public class SkillButtonsManager : MonoBehaviour
         battleUIManager.OnClickedSkillButton(_type);
     }
 
+    public void ApplyCooltime(SkillType _type, float _time)
+    {
+        skillButtonMap[_type].SetCooltime(_time);
+    }
+
     private void Awake()
     {
         battleUIManager = GetComponentInParent<UIBattleUIManager>();

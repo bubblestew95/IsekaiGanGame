@@ -14,6 +14,8 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField]
     private PlayerData playerData = null;
+    [SerializeField]
+    private UIBattleUIManager battleUIManager = null;
 
     private FloatingJoystick joystick = null;
 
@@ -44,7 +46,13 @@ public class PlayerManager : MonoBehaviour
     /// <param name="_skillIdx"></param>
     public void UseSkill(SkillType _type)
     {
-        skillMng.TryUseSkill(_type);
+        // 스킬 발동에 성공했다면
+        if(skillMng.TryUseSkill(_type))
+        {
+            // UI에 쿨타임을 적용한다.
+            if (battleUIManager != null)
+                battleUIManager.ApplyCooltime(_type, skillMng.GetCoolTime(_type));
+        }
     }
 
     /// <summary>

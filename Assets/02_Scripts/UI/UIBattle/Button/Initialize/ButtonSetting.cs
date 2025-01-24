@@ -44,6 +44,8 @@ public class ButtonSetting : MonoBehaviour
         }
         button.gameObject.GetComponent<Image>().raycastTarget = true;
         button.onClick.AddListener(ButtonPressed);
+
+        SetCooltime(0.1f);
     }
 
     public void SetCooltime(float _cooltime)

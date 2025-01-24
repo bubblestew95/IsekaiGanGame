@@ -58,19 +58,19 @@ public class PlayerSkillManager
     /// 스킬 사용을 시도한다.
     /// </summary>
     /// <param name="_skillIdx">사용할 스킬의 스킬 리스트 상 인덱스</param>
-    public void TryUseSkill(SkillType _type)
+    public bool TryUseSkill(SkillType _type)
     {
         if (skillDatas == null || currentCoolTimeMap == null)
         {
             Debug.LogWarning("Skill List is not valid!");
-            return;
+            return false;
         }
 
         // 스킬이 현재 사용 가능한지 체크함.
         if (!IsSkillUsable(_type))
         {
             Debug.LogFormat("Currnet Skill type {0} is not usable!", _type);
-            return;
+            return false;
         }
 
         Debug.Log("Use Skill!");
@@ -92,6 +92,8 @@ public class PlayerSkillManager
 
         // 쿨타임 적용
         currentCoolTimeMap[_type] = maxCoolTimeMap[_type];
+
+        return true;
     }
 
     public float GetCoolTime(SkillType _type)
