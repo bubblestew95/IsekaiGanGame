@@ -26,10 +26,10 @@ public class PlayerManager : MonoBehaviour
 
     private CharacterController characterCont = null;
     private PlayerSkillManager skillMng = null;
-    private PlayerStatusManager statusMng = null;
-    private StateMachine stateMachine = null;
+    private StatusManager statusMng = null;
+    private PlayerStateMachine stateMachine = null;
 
-    public StateMachine StateMachine
+    public PlayerStateMachine StateMachine
     {
         get { return stateMachine; }
     }
@@ -70,7 +70,7 @@ public class PlayerManager : MonoBehaviour
     {
         float x = joystick.Horizontal;
         float z = joystick.Vertical;
-        float speed = playerData.speed;
+        float speed = playerData.walkSpeed;
 
         Vector3 moveVector = new Vector3(x, 0f, z) * speed * Time.deltaTime;
 
@@ -103,7 +103,7 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     private void InitStates()
     {
-        stateMachine = new StateMachine();
+        stateMachine = new PlayerStateMachine();
 
         stateMachine.AddState(PlayerStateType.Idle, new IdleState(this));
         stateMachine.AddState(PlayerStateType.Action, new ActionState(this));
@@ -140,6 +140,9 @@ public class PlayerManager : MonoBehaviour
 
         skillMng = new PlayerSkillManager();
         skillMng.Init(this);
+
+        statusMng = new StatusManager();
+        statusMng.Init(this);
 
         InitStates();
     }
