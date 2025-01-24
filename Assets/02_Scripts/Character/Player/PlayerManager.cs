@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using EnumTypes;
 
 /// <summary>
-/// 플레이어 캐릭터를 관리하는 매니저.
+/// 플레이어 캐릭터를 총괄적으로 관리하는 매니저.
 /// </summary>
 public class PlayerManager : MonoBehaviour
 {
@@ -27,6 +27,9 @@ public class PlayerManager : MonoBehaviour
     private PlayerSkillManager skillMng = null;
     private StatusManager statusMng = null;
     private PlayerStateMachine stateMachine = null;
+    private Animator animator = null;
+
+    private int animId_Speed = 0;
 
     public PlayerStateMachine StateMachine
     {
@@ -77,6 +80,7 @@ public class PlayerManager : MonoBehaviour
         {
             return;
         }
+
         float x = joystick.Horizontal;
         float z = joystick.Vertical;
         float speed = playerData.walkSpeed;
@@ -85,7 +89,11 @@ public class PlayerManager : MonoBehaviour
 
         characterCont.Move(moveVector);
 
-        if (moveVector.sqrMagnitude == 0f)
+        float currentSpeed = moveVector.sqrMagnitude;
+
+        SetAnimatorWalkSpeed(currentSpeed);
+
+        if (currentSpeed == 0f)
             return;
 
         transform.rotation = Quaternion.LookRotation(moveVector);
@@ -111,6 +119,11 @@ public class PlayerManager : MonoBehaviour
     public void ChangeState(PlayerStateType _type)
     {
         StateMachine.ChangeState(_type);
+    }
+
+    public void SetAnimatorWalkSpeed(float _speed)
+    {
+        animator.SetFloat(animId_Speed, _speed);
     }
 
     #endregion
@@ -164,6 +177,10 @@ public class PlayerManager : MonoBehaviour
 
         statusMng = new StatusManager();
         statusMng.Init(this);
+
+        animator = GetComponent<Animator>();
+
+        animId_Speed = Animator.StringToHash("Speed");
 
         InitStates();
     }

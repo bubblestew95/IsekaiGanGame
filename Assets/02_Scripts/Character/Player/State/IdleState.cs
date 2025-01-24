@@ -14,7 +14,7 @@ public class IdleState : BasePlayerState
 
     public override void OnExitState()
     {
-        
+        playerMng.SetAnimatorWalkSpeed(0f);
     }
 
     public override void OnUpdateState()
