@@ -1,16 +1,23 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIWarningManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public Image errorImage = null;
+    public bool isError = false;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        errorImage = GetComponentInChildren<Image>();
+        errorImage.enabled = false;
+    }
+    
+    public void ConnectionError() // 에러 표시 On
+    {
+        errorImage.enabled = true;
+    }
+    public void ReConnection() // 에러 표시 OFF
+    {
+        errorImage.enabled = false;
     }
 }

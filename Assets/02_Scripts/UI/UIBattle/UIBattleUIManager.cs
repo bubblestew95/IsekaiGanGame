@@ -1,16 +1,19 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public class UIBattleUIManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public List<UIHpsManager> hpList = new List<UIHpsManager>();
+    public List<UIWarningManager> warningList = new List<UIWarningManager>();
+    public List <ButtonSetting> buttonList = new List<ButtonSetting>();
+    public FloatingJoystick joyStick = null;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        hpList = GetComponentsInChildren<UIHpsManager>().ToList();
+        warningList = GetComponentsInChildren<UIWarningManager>().ToList();
+        buttonList = GetComponentsInChildren<ButtonSetting>().ToList();
+        joyStick = GetComponentInChildren<FloatingJoystick>();
     }
 }

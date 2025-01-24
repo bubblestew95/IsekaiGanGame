@@ -464,6 +464,50 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 13167786882900424, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 879085824762528253, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -21.22583
+      objectReference: {fileID: 0}
+    - target: {fileID: 4588566477767479685, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_Color.r
+      value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 4588566477767479685, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5933188120688654988, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_text
+      value: 111.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5977235681699083031, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6249550007936842613, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 140
+      objectReference: {fileID: 0}
+    - target: {fileID: 6356822659639225006, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 450
+      objectReference: {fileID: 0}
+    - target: {fileID: 7288732437921610385, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_text
+      value: 111.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7312724109109166597, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_Color.r
+      value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: 7788108378726620266, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 7895803505749026427, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: m_Name
       value: PlayerInBattleUICanvas (1)
@@ -551,28 +595,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2392934617023527044, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1124395532}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
---- !u!1 &1124395531 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2392934617023527044, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
-  m_PrefabInstance: {fileID: 1124395530}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1124395532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1124395531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d56a579fed0b8640a1e4d9438b2fd02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -7,19 +7,24 @@ using UnityEngine.UI;
 public class ButtonSetting : MonoBehaviour
 {
     public List<Image> images = new List<Image>();
-    public TextMeshProUGUI textMeshPro = null;
+    public List<TextMeshProUGUI> textMeshPros = null;
     public Button button = null;
+    public CoolTime cooltime = null;
 
 
     private void Awake()
     {
         button = GetComponentInChildren<Button>();
-        images = GetComponentsInChildren<Image>().ToList();
-        textMeshPro = GetComponentInChildren<TextMeshProUGUI>();
+        images = GetComponentsInChildren<Image>(true).ToList();
+        textMeshPros = GetComponentsInChildren<TextMeshProUGUI>().ToList();
+        cooltime = GetComponentInChildren<CoolTime>();
     }
     private void Start()
     {
-        textMeshPro.raycastTarget = false;
+        foreach (TextMeshProUGUI TMPro in textMeshPros)
+        {
+            TMPro.raycastTarget = false;
+        }
         foreach (Image img in images)
         {
             img.raycastTarget = false;
