@@ -10,5 +10,6 @@ public enum BossState
 	Attack3,
 	Attack4,
 	Attack5,
-	Attack6
+	Attack6,
+	Attack7
 }
