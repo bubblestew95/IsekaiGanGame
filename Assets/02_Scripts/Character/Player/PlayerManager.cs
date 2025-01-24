@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 using EnumTypes;
 
@@ -8,6 +9,9 @@ using EnumTypes;
 /// </summary>
 public class PlayerManager : MonoBehaviour
 {
+    [HideInInspector]
+    public UnityEvent OnPlayerDead = new UnityEvent();
+
     /// <summary>
     /// 가상 조이스틱 컴포넌트 지정.
     /// </summary>
@@ -22,6 +26,7 @@ public class PlayerManager : MonoBehaviour
 
     private CharacterController characterCont = null;
     private PlayerSkillManager skillMng = null;
+    private PlayerStatusManager statusMng = null;
     private StateMachine stateMachine = null;
 
     public StateMachine StateMachine
@@ -35,6 +40,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     #region Public Functions
+
     /// <summary>
     /// 스킬 발동을 시도한다.
     /// </summary>
@@ -44,31 +50,23 @@ public class PlayerManager : MonoBehaviour
         skillMng.TryUseSkill(_type);
     }
 
+    /// <summary>
+    /// 입력을 받았을 때 입력 버퍼에 해당 입력의 스킬 타입을 넣는다.
+    /// </summary>
+    /// <param name="_input">입력 버퍼에 Enqueue할 스킬 타입</param>
     public void OnButtonInput(SkillType _input)
     {
         skillBuffer.Enqueue(_input);
+
+        // 만약 입력 버퍼가 비어있다가 새롭게 입력됐다면 Dequeue 시간을 측정하기 시작한다.
         if (skillBuffer.Count == 1)
             remainDequeueTime = checkDequeueTime;
     }
 
     /// <summary>
-    /// 현재 스킬 입력 버퍼에서 하나를 꺼내옴.
-    /// </summary>
-    /// <returns>사용할 스킬의 타입</returns>
-    public SkillType GetNextSkill()
-    {
-        if (skillBuffer.TryDequeue(out SkillType nextSkillType))
-            return nextSkillType;
-
-        return SkillType.None;
-    }
-    #endregion
-
-    #region Private Functions
-    /// <summary>
     /// 조이스틱 입력을 받고 움직임을 처리한다.
     /// </summary>
-    private void MoveByJoystick()
+    public void MoveByJoystick()
     {
         float x = joystick.Horizontal;
         float z = joystick.Vertical;
@@ -84,6 +82,25 @@ public class PlayerManager : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(moveVector);
     }
 
+    /// <summary>
+    /// 현재 스킬 입력 버퍼에서 하나를 꺼내옴.
+    /// </summary>
+    /// <returns>사용할 스킬의 타입</returns>
+    public SkillType GetNextSkill()
+    {
+        if (skillBuffer.TryDequeue(out SkillType nextSkillType))
+            return nextSkillType;
+
+        return SkillType.None;
+    }
+
+    #endregion
+
+    #region Private Functions
+
+    /// <summary>
+    /// 상태 머신을 초기화한다.
+    /// </summary>
     private void InitStates()
     {
         stateMachine = new StateMachine();
@@ -93,6 +110,24 @@ public class PlayerManager : MonoBehaviour
         stateMachine.AddState(PlayerStateType.Death, new DeathState(this));
         stateMachine.AddState(PlayerStateType.Stagger, new StaggerState(this));
         stateMachine.AddState(PlayerStateType.Dash, new DashState(this));
+    }
+
+    /// <summary>
+    /// 정해진 시간마다 스킬 입력 버퍼에서 입력를 하나씩 빼내는 처리를 한다.
+    /// </summary>
+    private void CheckSkillInputBuffer()
+    {
+        if (skillBuffer.Count > 0 && remainDequeueTime > 0f)
+            remainDequeueTime -= Time.deltaTime;
+
+        if (remainDequeueTime <= 0f)
+        {
+            Debug.Log("Dequeue!");
+            remainDequeueTime = checkDequeueTime;
+            if (skillBuffer.Count > 0)
+                skillBuffer.Dequeue();
+        }
+
     }
 
     #endregion
@@ -120,7 +155,7 @@ public class PlayerManager : MonoBehaviour
 
         stateMachine.UpdateState();
 
-        MoveByJoystick();
+        // MoveByJoystick();
 
         skillMng.DecreaseCoolTimes(Time.deltaTime);
         Debug.Log(skillMng.GetCoolTime(SkillType.Skill_A));
@@ -129,24 +164,6 @@ public class PlayerManager : MonoBehaviour
         {
             OnButtonInput(SkillType.Skill_A);
         }
-    }
-
-    /// <summary>
-    /// 스킬 입력 버퍼에서 입력를 빼내는 처리를 한다.
-    /// </summary>
-    private void CheckSkillInputBuffer()
-    {
-        if (skillBuffer.Count > 0 && remainDequeueTime > 0f)
-            remainDequeueTime -= Time.deltaTime;
-
-        if (remainDequeueTime <= 0f)
-        {
-            Debug.Log("Dequeue!");
-            remainDequeueTime = checkDequeueTime;
-            if (skillBuffer.Count > 0)
-                skillBuffer.Dequeue();
-        }
-
     }
 
     #endregion

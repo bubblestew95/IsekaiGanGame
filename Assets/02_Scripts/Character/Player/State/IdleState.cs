@@ -19,12 +19,14 @@ public class IdleState : BasePlayerState
 
     public override void OnUpdateState()
     {
+        // 대기 상태일 때만 움직일 수 있음.
+        playerMng.MoveByJoystick();
+
         // 대기 상태일 때만 스킬이 사용 가능함. 스킬 사용 체크.
         SkillType skillType = playerMng.GetNextSkill();
 
         if(skillType != SkillType.None)
         {
-            // 이따 바꿔야 함.
             playerMng.UseSkill(skillType);
         }
     }

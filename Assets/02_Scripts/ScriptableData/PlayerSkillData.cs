@@ -11,7 +11,7 @@ public class PlayerSkillData : ScriptableObject
 
     public float coolTime = 0f;
 
-    public SkillRangeType rangeType = SkillRangeType.None;
+    public PlayerSkillRangeType rangeType = PlayerSkillRangeType.None;
 
-    public SkillActivatedType activatedType = SkillActivatedType.Casting;
+    public PlayerSkillActivatedType activatedType = PlayerSkillActivatedType.Casting;
 }
