@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System.Diagnostics;
+using UnityEngine;
 
 public static class BossSkillUtils
 {
-    private static List<BossSkillCooldown> availList = new List<BossSkillCooldown>();
-
     /// <summary>
     /// 사거리 내에 사용가능한 스킬 리스트를 반환
     /// </summary>
@@ -12,7 +10,7 @@ public static class BossSkillUtils
     ///     /// <param name="_skills"> 사정거리 체크할 스킬리스트 </param>
     public static List<BossSkillCooldown> GetAvailableSkillsInRange(float _range, List<BossSkillCooldown> _skills)
     {
-        availList.Clear();
+        List<BossSkillCooldown> availList = new List<BossSkillCooldown>();
 
         foreach (BossSkillCooldown skill in _skills)
         {
@@ -31,13 +29,14 @@ public static class BossSkillUtils
     /// <param name="_skills"> 쿨타임 체크할 스킬리스트 </param>
     public static List<BossSkillCooldown> GetSkillsCooldownOn(List<BossSkillCooldown> _skills)
     {
-        availList.Clear();
+        List<BossSkillCooldown> availList = new List<BossSkillCooldown>();
 
         foreach (BossSkillCooldown skill in _skills)
         {
-
+            if (skill.IsCooldownOver())
+            {
                 availList.Add(skill);
-            
+            }
         }
 
         return availList;

@@ -1,59 +1,98 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using Unity.Behavior;
 using UnityEngine;
 
 public class BossBehaviorManager : MonoBehaviour
 {
+    [SerializeField] private BossStateManager bossState;
     [SerializeField] private List<BossSkillCooldown> skills;
-    [SerializeField] private GameObject aggroPlayer;
-    [SerializeField] private GameObject Boss;
-    [SerializeField] private BehaviorGraphAgent agentGraph;
+    [SerializeField] private BossBT bossBT;
 
     private List<BossSkillCooldown> tmpList = new List<BossSkillCooldown>();
+    private WaitForSeconds delay1f = new WaitForSeconds(1f);
+    private bool hp10Trigger = false;
+    private bool hpHalfTrigger = false;
+    private int hp10Cnt = 0;
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Debug.Log("A 누름");
-            agentGraph.BlackboardReference.SetVariableValue("BossState", GetRandomAction());
-        }
+        bossBT.behaviorEndCallback += () => StartCoroutine(BossPerformAction());
+        bossState.bossHp10Callback += SetHP10;
+        bossState.bossHpHalfCallback += SetHPHalf;
     }
 
     // 특정조건에서 랜덤한 행동을 하나 선택하는 함수
-    // 쿨타임과 사거리 계산후 랜덤한 상태를 enum값으로 가져옴.
+    // 사거리와 쿨타임 계산후 랜덤한 상태를 enum값으로 리턴
     private BossState GetRandomAction()
     {
         tmpList.Clear();
 
-        float dis = GetDisWithoutY();
+        float dis = bossState.GetDisWithoutY();
 
         tmpList = BossSkillUtils.GetAvailableSkillsInRange(dis, skills);
-
-        foreach (BossSkillCooldown skill in tmpList)
-        {
-            Debug.Log("사거리 체크후 스킬 :" +  skill);
-        }
-
         tmpList = BossSkillUtils.GetSkillsCooldownOn(tmpList);
 
-        foreach (BossSkillCooldown skill in tmpList)
-        {
-            Debug.Log("쿨타임 체크후 스킬 :" + skill);
-        }
-
         int randomIndex = UnityEngine.Random.Range(0, tmpList.Count);
+
+        if (tmpList.Count == 0)
+        {
+            return BossState.Chase;
+        }
 
         return (BossState)Enum.Parse(typeof(BossState), tmpList[randomIndex].bossSkillData.SkillName);
     }
 
-    // 보스와 플레이어 사이의 거리 계산
-    private float GetDisWithoutY()
+    // 보스가 특정 행동을 하도록 설정하는 함수
+    private void SetBossBehavior(BossState _state)
     {
-        Vector2 bossPos2D = new Vector2(Boss.transform.position.x, Boss.transform.position.z);
-        Vector2 playerPos2D = new Vector2(aggroPlayer.transform.position.x, aggroPlayer.transform.position.z);
+        bossBT.curState = _state;
+    }
 
-        return Vector2.Distance(bossPos2D, playerPos2D);
+    // 보스가 특정행동 하도록 최종실행시키는 함수
+    private IEnumerator BossPerformAction()
+    {
+        // 패턴 후 딜레이
+        yield return delay1f;
+
+        // 피가 10퍼 깍였을때 쓰는 패턴
+        if (hp10Trigger)
+        {
+            hp10Trigger = false;
+            hp10Cnt++;
+            SetBossBehavior(BossState.Chase);
+            yield break;
+        }
+
+        // 돌 4번 던진후 쓰는 패턴
+        if (hp10Cnt == 4)
+        {
+            hp10Cnt = 0;
+            SetBossBehavior(BossState.Chase);
+            yield break;
+        }
+
+        // 피가 50퍼 깍였을때 쓰는 패턴
+        if (hpHalfTrigger)
+        {
+            hpHalfTrigger = false;
+            SetBossBehavior(BossState.Chase);
+            yield break;
+        }
+
+        // 각종 조건들에 따라 다르게 실행 
+        SetBossBehavior(GetRandomAction());
+    }
+
+    // hp10퍼 까였을때 실행되는 패턴설정
+    private void SetHP10()
+    {
+        hp10Trigger = true;
+    }
+
+    // hp50퍼 까였을때 실행되는 패턴설정
+    private void SetHPHalf()
+    {
+        hpHalfTrigger = true;
     }
 }

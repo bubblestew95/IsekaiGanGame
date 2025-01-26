@@ -1,16 +1,121 @@
+using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class BossStateManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public delegate void BossStateDelegate();
+    public BossStateDelegate bossDieCallback;
+    public BossStateDelegate bossHp10Callback;
+    public BossStateDelegate bossHpHalfCallback;
+
+    [SerializeField] public GameObject aggroPlayer;
+    [SerializeField] private GameObject Boss;
+    [SerializeField] public float damage;
+    [SerializeField] public float chainTime;
+
+    private List<BossChain> activeChain = new List<BossChain>();
+    private float maxHp;
+    private float curHp;
+    private bool[] hpCheck = new bool[4];
+
+    private void Awake()
     {
-        
+        hpCheck[0] = false;
+        hpCheck[1] = false;
+        hpCheck[2] = false;
+        hpCheck[3] = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    // 공격이 들어왔을때
+    private void OnTriggerEnter(Collider _playerAttack)
     {
-        
+        // 추가로 고려해야 하는 상황
+        // 1. 네트워크 동기화
+        // 2. 플레이어별 데미지 check를 위한 구성
+        // 3. 플레이어별 어그로 check
+
+        // 플레이어 어택의 공격력을 가져옴.
+
+        // 해당 공격력만큼 보스피를 하락
+
+        // 만약 체인어택 공격이라면 상태이상 리스트에 추가
+
+    }
+
+    // 데미지만큼 hp에서 하락시킴.
+    private void TakeDamage(float _damage)
+    {
+        if (curHp <= 0) return;
+
+        curHp -= _damage;
+
+        if (curHp <= 0)
+        {
+            curHp = 0;
+            bossDieCallback?.Invoke();
+        }
+
+        // UI에 보스체력 동기화 시키는 코드 필요
+    }
+
+    // 특정 hp이하일때 마다 콜백을 던짐
+    private void CheckHpCallback()
+    {
+        float hp = (curHp / maxHp) * 100f;
+
+        if (hp <= 90f && !hpCheck[0])
+        {
+            hpCheck[0] = true;
+            bossHp10Callback?.Invoke();
+        }
+        else if (hp <= 80f && !hpCheck[1])
+        {
+            hpCheck[1] = true;
+            bossHp10Callback?.Invoke();
+        }
+        else if (hp <= 70f && !hpCheck[2])
+        {
+            hpCheck[2] = true;
+            bossHp10Callback?.Invoke();
+        }
+        else if (hp <= 60f && !hpCheck[3])
+        {
+            hpCheck[3] = true;
+            bossHp10Callback?.Invoke();
+        }
+    }
+
+    // chain 상태를 관리하는 List에 저장
+    private void AddChainList(BossChain _chainType)
+    {
+        activeChain.Add(_chainType);
+        StartCoroutine(RemoveChainList(_chainType));
+    }
+
+    // chain 특정 시간후 제거
+    private IEnumerator RemoveChainList(BossChain _chainType)
+    {
+        yield return new WaitForSeconds(chainTime);
+
+        if (activeChain.Contains(_chainType))
+        {
+            activeChain.Remove(_chainType);
+        }
+    }
+
+    // Chain 상태 확인
+    public bool HasChain(BossChain _chainType)
+    {
+        return activeChain.Contains(_chainType);
+    }
+
+    // 보스와 어그로 플레이어 사이의 거리 계산
+    public float GetDisWithoutY()
+    {
+        Vector2 bossPos2D = new Vector2(Boss.transform.position.x, Boss.transform.position.z);
+        Vector2 playerPos2D = new Vector2(aggroPlayer.transform.position.x, aggroPlayer.transform.position.z);
+
+        return Vector2.Distance(bossPos2D, playerPos2D);
     }
 }
