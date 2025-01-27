@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+// 0127 executeState 만들어서 현재 실행중인 상태 표시
+
 public class BossBT : MonoBehaviour
 {
-    public delegate void BehaviorEndDelegate();
-    public BehaviorEndDelegate behaviorEndCallback;
+
+    public delegate void BTDelegate();
+    public BTDelegate behaviorEndCallback;
+    public delegate void BTStartDelegate(BossState _state);
+    public BTStartDelegate behaviorStartCallback;
 
     [SerializeField] public BossState curState;
     
@@ -77,6 +82,9 @@ public class BossBT : MonoBehaviour
         // 쿨타임 실행, 보스 공격력 설정
         SetBoss();
 
+        //애니메이션 실행됬다고 콜백
+        behaviorStartCallback?.Invoke(BossState.Attack1);
+
         // 애니메이션 끝
         while (true)
         {
@@ -109,6 +117,9 @@ public class BossBT : MonoBehaviour
 
         // 쿨타임 실행, 보스 공격력 설정
         SetBoss();
+
+        //애니메이션 실행됬다고 콜백
+        behaviorStartCallback?.Invoke(BossState.Attack2);
 
         // 애니메이션 끝
         while (true)
@@ -143,6 +154,9 @@ public class BossBT : MonoBehaviour
         // 쿨타임 실행, 보스 공격력 설정
         SetBoss();
 
+        //애니메이션 실행됬다고 콜백
+        behaviorStartCallback?.Invoke(BossState.Attack3);
+
         // 애니메이션 끝
         while (true)
         {
@@ -175,6 +189,9 @@ public class BossBT : MonoBehaviour
 
         // 쿨타임 실행, 보스 공격력 설정
         SetBoss();
+
+        //애니메이션 실행됬다고 콜백
+        behaviorStartCallback?.Invoke(BossState.Attack4);
 
         // 애니메이션 끝
         while (true)
@@ -209,6 +226,9 @@ public class BossBT : MonoBehaviour
         // 쿨타임 실행, 보스 공격력 설정
         SetBoss();
 
+        //애니메이션 실행됬다고 콜백
+        behaviorStartCallback?.Invoke(BossState.Attack5);
+
         // 애니메이션 끝
         while (true)
         {
@@ -241,6 +261,9 @@ public class BossBT : MonoBehaviour
 
         // 쿨타임 실행, 보스 공격력 설정
         SetBoss();
+
+        //애니메이션 실행됬다고 콜백
+        behaviorStartCallback?.Invoke(BossState.Attack6);
 
         // 애니메이션 끝
         while (true)

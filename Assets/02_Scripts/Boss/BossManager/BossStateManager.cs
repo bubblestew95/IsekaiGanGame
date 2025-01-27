@@ -17,7 +17,7 @@ public class BossStateManager : MonoBehaviour
     private List<BossChain> activeChain = new List<BossChain>();
     private float maxHp;
     private float curHp;
-    private bool[] hpCheck = new bool[4];
+    private bool[] hpCheck = new bool[5];
 
     private void Awake()
     {
@@ -56,6 +56,8 @@ public class BossStateManager : MonoBehaviour
             bossDieCallback?.Invoke();
         }
 
+        CheckHpCallback();
+
         // UI에 보스체력 동기화 시키는 코드 필요
     }
 
@@ -83,6 +85,11 @@ public class BossStateManager : MonoBehaviour
         {
             hpCheck[3] = true;
             bossHp10Callback?.Invoke();
+        }
+        else if (hp <= 50f && !hpCheck[4])
+        {
+            hpCheck[4] = true;
+            bossHpHalfCallback?.Invoke();
         }
     }
 
