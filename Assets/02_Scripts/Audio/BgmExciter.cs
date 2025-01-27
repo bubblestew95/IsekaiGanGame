@@ -11,6 +11,7 @@ public class BgmExciter : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         lowPassFilter = GetComponent<AudioLowPassFilter>();
+        SoundExcitedLevel(1);
         SoundExcitedLevel(0);
     }
 
@@ -26,8 +27,8 @@ public class BgmExciter : MonoBehaviour
         {
             // 초반에 천천히 올라가고 후반에 급격히 올라가는 효과 (비선형 변화)
             float adjustedLevel = Mathf.Pow(_level, 2); // 제곱을 사용하여 점진적인 상승
-            lowPassFilter.cutoffFrequency = Mathf.Lerp(1000,22000, adjustedLevel);
-            audioSource.pitch = Mathf.Lerp(0.9f, 1.15f, adjustedLevel);
+            lowPassFilter.cutoffFrequency = Mathf.Lerp(3000,22000, adjustedLevel);
+            audioSource.pitch = Mathf.Lerp(0.95f, 1.15f, adjustedLevel);
 
             // 이전 값을 현재 값으로 업데이트
             previousLevel = _level;
