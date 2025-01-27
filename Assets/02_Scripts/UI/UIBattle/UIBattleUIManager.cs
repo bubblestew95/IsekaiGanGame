@@ -86,6 +86,11 @@ public class UIBattleUIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 지정한 타입의 스킬 버튼에 쿨타임 UI를 적용한다.
+    /// </summary>
+    /// <param name="_type">지정할 스킬 타입</param>
+    /// <param name="_time">쿨타임 시간</param>
     public void ApplyCooltime(SkillType _type, float _time)
     {
         skillButtonsManager.ApplyCooltime(_type, _time);

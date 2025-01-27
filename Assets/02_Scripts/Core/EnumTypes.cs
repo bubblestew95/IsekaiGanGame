@@ -23,7 +23,6 @@ namespace EnumTypes
 
     public enum StatusEffectType
     {
-        Normal,     // 상태이상 없음
         Immune,     // 무적 상태.
         Evade,       // 회피 상태. 특정 공격에는 맞도록 설계해야 할 듯.
         Stun,       // 스턴 상태. 아마도 그로기랑도 같이 쓸 수 있을 듯?
