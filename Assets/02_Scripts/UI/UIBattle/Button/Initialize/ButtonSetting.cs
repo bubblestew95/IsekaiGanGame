@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
 
 using EnumTypes;
 
@@ -15,6 +16,7 @@ public class ButtonSetting : MonoBehaviour
     public List<TextMeshProUGUI> textMeshPros = null;
     public Button button = null;
     public CoolTime cooltime = null;
+    private EventTrigger eventTrigger = null;
 
     private SkillButtonsManager skillButtonsManager = null;
 
@@ -29,8 +31,10 @@ public class ButtonSetting : MonoBehaviour
         images = GetComponentsInChildren<Image>(true).ToList();
         textMeshPros = GetComponentsInChildren<TextMeshProUGUI>().ToList();
         cooltime = GetComponentInChildren<CoolTime>();
+        eventTrigger = GetComponentInChildren<EventTrigger>();
 
         skillButtonsManager = GetComponentInParent<SkillButtonsManager>();
+
     }
     private void Start()
     {
@@ -62,5 +66,15 @@ public class ButtonSetting : MonoBehaviour
         //cooltime.isPressed = true;
 
         skillButtonsManager.OnSkillButtonClicked(ButtonSkillType);
+    }
+
+    public void ButtonDown(BaseEventData _eventData)
+    {
+        Debug.Log("Button Down!");
+    }
+
+    public void ButtonUp(BaseEventData _eventData)
+    {
+        Debug.Log("Button Up!");
     }
 }

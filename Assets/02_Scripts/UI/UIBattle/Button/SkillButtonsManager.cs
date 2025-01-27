@@ -9,6 +9,17 @@ public class SkillButtonsManager : MonoBehaviour
 
     private Dictionary<SkillType, ButtonSetting> skillButtonMap = null;
 
+    public void OnSkillButtonClickDown(SkillType _type)
+    {
+        if (battleUIManager == null)
+        {
+            Debug.LogWarning("Battle UI Manager is Null!");
+            return;
+        }
+
+
+    }
+
     public void OnSkillButtonClicked(SkillType _type)
     {
         if(battleUIManager == null)

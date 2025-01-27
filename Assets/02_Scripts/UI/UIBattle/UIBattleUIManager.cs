@@ -6,6 +6,7 @@ using EnumTypes;
 public class UIBattleUIManager : MonoBehaviour
 {
     public PlayerManager playerManager = null;
+    public SkillUIManager skillUIManager = null;
     public List<UIHpsManager> hpList = new List<UIHpsManager>();
     public List<UIBossHpsManager> bossHpList = new List<UIBossHpsManager>();
     public List<UIWarningManager> warningList = new List<UIWarningManager>();
@@ -55,6 +56,18 @@ public class UIBattleUIManager : MonoBehaviour
         }
 
         playerManager.OnButtonInput(_type);
+    }
+    public void OnSkillButtonDown(SkillType _type)
+    {
+
+    }
+    public void OnSkillButtonUp(SkillType _type)
+    {
+
+    }
+    public void OnSkillButtonExit(SkillType _type)
+    {
+
     }
 
     //public void CooltimeListSetting(List<float> _timeList) // 평타,회피,스킬1,스킬2,스킬3 순서
