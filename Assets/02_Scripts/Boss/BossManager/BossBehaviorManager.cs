@@ -6,8 +6,8 @@ using UnityEngine;
 public class BossBehaviorManager : MonoBehaviour
 {
     [SerializeField] private BossStateManager bossState;
-    [SerializeField] private List<BossSkillCooldown> skills;
     [SerializeField] private BossBT bossBT;
+    [SerializeField] private List<BossSkillCooldown> skills;
 
     private List<BossSkillCooldown> tmpList = new List<BossSkillCooldown>();
     private WaitForSeconds delay1f = new WaitForSeconds(1f);

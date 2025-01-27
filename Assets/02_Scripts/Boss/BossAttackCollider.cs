@@ -25,8 +25,6 @@ public class BossAttackCollider : MonoBehaviour
         AttackCollider.transform.localScale = new Vector3 (3f, 0.5f, 3f);
         AttackCollider.GetComponent<Collider>().isTrigger = true;
         AttackCollider.GetComponent<Renderer>().material = attackMat;
-
-        StartCoroutine(DestroyObjCoroutine(AttackCollider));
     }
 
     private void Attack2()
@@ -40,15 +38,6 @@ public class BossAttackCollider : MonoBehaviour
             AttackCollider.transform.localScale = new Vector3(3f, 0.5f, 3f);
             AttackCollider.GetComponent<Collider>().isTrigger = true;
             AttackCollider.GetComponent<Renderer>().material = attackMat;
-
-            StartCoroutine(DestroyObjCoroutine(AttackCollider));
         }
-    }
-
-    private IEnumerator DestroyObjCoroutine(GameObject attackCol)
-    {
-        yield return new WaitForSeconds(1f);
-
-        Destroy(attackCol.gameObject);
     }
 }

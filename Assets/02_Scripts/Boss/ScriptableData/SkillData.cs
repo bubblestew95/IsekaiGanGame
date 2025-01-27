@@ -30,5 +30,10 @@ public class BossSkillData : ScriptableObject
 
     public float MaxRange { get { return maxRange; } }
 
+    [SerializeField]
+    private float attackRange;
+
+    public float AttackRange { get { return attackRange; } }
+
 
 }
