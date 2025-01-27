@@ -1091,6 +1091,11 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!4 &2043026031 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8468617057500289297, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+  m_PrefabInstance: {fileID: 1546865054}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2067705895
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1143,6 +1148,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2481139205278611692, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+      propertyPath: debugTr
+      value: 
+      objectReference: {fileID: 2043026031}
     - target: {fileID: 2481139205278611692, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
       propertyPath: skillUIList.Array.size
       value: 3

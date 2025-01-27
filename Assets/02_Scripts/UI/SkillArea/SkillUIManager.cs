@@ -9,5 +9,10 @@ public class SkillUIManager : MonoBehaviour
     [SerializeField]
     private List<SkillUI_Base> skillUIList = null;
 
+    public Transform debugTr = null;
 
+    private void Update()
+    {
+        ((SkillUI_AOE)skillUIList[0]).SetTargetPosition(debugTr.position);
+    }
 }
