@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class BossBehaviorManager : MonoBehaviour
 {
-    [SerializeField] private BossStateManager bossState;
+    [SerializeField] private BossStateManager bossStateManager;
+    [SerializeField] private BossSkillManager bossSkillManager;
     [SerializeField] private BossBT bossBT;
-    [SerializeField] private List<BossSkillCooldown> skills;
 
-    private List<BossSkillCooldown> tmpList = new List<BossSkillCooldown>();
+    private List<BossSkill> tmpList = new List<BossSkill>();
     private WaitForSeconds delay1f = new WaitForSeconds(1f);
     private bool hp10Trigger = false;
     private bool hpHalfTrigger = false;
@@ -18,8 +18,8 @@ public class BossBehaviorManager : MonoBehaviour
     private void Start()
     {
         bossBT.behaviorEndCallback += () => StartCoroutine(BossPerformAction());
-        bossState.bossHp10Callback += SetHP10;
-        bossState.bossHpHalfCallback += SetHPHalf;
+        bossStateManager.bossHp10Callback += SetHP10;
+        bossStateManager.bossHpHalfCallback += SetHPHalf;
     }
 
     // 특정조건에서 랜덤한 행동을 하나 선택하는 함수
@@ -28,10 +28,10 @@ public class BossBehaviorManager : MonoBehaviour
     {
         tmpList.Clear();
 
-        float dis = bossState.GetDisWithoutY();
+        float dis = bossStateManager.GetDisWithoutY();
 
-        tmpList = BossSkillUtils.GetAvailableSkillsInRange(dis, skills);
-        tmpList = BossSkillUtils.GetSkillsCooldownOn(tmpList);
+        tmpList = bossSkillManager.IsSkillInRange(dis, bossSkillManager.Skills);
+        tmpList = bossSkillManager.IsSkillCooldown(tmpList);
 
         int randomIndex = UnityEngine.Random.Range(0, tmpList.Count);
 
@@ -40,7 +40,7 @@ public class BossBehaviorManager : MonoBehaviour
             return BossState.Chase;
         }
 
-        return (BossState)Enum.Parse(typeof(BossState), tmpList[randomIndex].bossSkillData.SkillName);
+        return (BossState)Enum.Parse(typeof(BossState), tmpList[randomIndex].SkillData.SkillName);
     }
 
     // 보스가 특정 행동을 하도록 설정하는 함수

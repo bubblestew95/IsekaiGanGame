@@ -35,5 +35,9 @@ public class BossSkillData : ScriptableObject
 
     public float AttackRange { get { return attackRange; } }
 
+    [SerializeField]
+    private float attackColliderDelay;
+
+    public float AttackColliderDelay { get { return attackColliderDelay; } }
 
 }

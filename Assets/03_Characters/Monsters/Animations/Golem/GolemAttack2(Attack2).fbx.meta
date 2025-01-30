@@ -63,10 +63,10 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.7820293
-        functionName: Attack2
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: dc25e28d7362b424bba0cf259766bf94, type: 3}
+      - time: 0
+        functionName: PerformAttack
+        data: Attack2
+        objectReferenceParameter: {fileID: 9137032837993464747, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

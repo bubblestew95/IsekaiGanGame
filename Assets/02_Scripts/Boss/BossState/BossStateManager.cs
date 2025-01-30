@@ -5,19 +5,25 @@ using UnityEngine;
 public class BossStateManager : MonoBehaviour
 {
     public delegate void BossStateDelegate();
+    public delegate void BossStateDelegate2(GameObject _target);
     public BossStateDelegate bossDieCallback;
     public BossStateDelegate bossHp10Callback;
     public BossStateDelegate bossHpHalfCallback;
+    public BossStateDelegate2 bossRandomTargetCallback;
 
     [SerializeField] public GameObject aggroPlayer;
-    [SerializeField] private GameObject Boss;
-    [SerializeField] public float damage;
+    [SerializeField] private GameObject[] players;
+    [SerializeField] private GameObject boss;
     [SerializeField] public float chainTime;
+
+    public GameObject Boss {get {return boss;}}
+    public GameObject[] Players {get {return players;}}
 
     private List<BossChain> activeChain = new List<BossChain>();
     private float maxHp;
     private float curHp;
     private bool[] hpCheck = new bool[5];
+    private GameObject randomTarget;
 
     private void Awake()
     {
@@ -25,6 +31,7 @@ public class BossStateManager : MonoBehaviour
         hpCheck[1] = false;
         hpCheck[2] = false;
         hpCheck[3] = false;
+        hpCheck[4] = false;
     }
 
     // 공격이 들어왔을때
@@ -70,21 +77,33 @@ public class BossStateManager : MonoBehaviour
         {
             hpCheck[0] = true;
             bossHp10Callback?.Invoke();
+
+            randomTarget = RandomPlayer();
+            bossRandomTargetCallback?.Invoke(randomTarget);
         }
         else if (hp <= 80f && !hpCheck[1])
         {
             hpCheck[1] = true;
             bossHp10Callback?.Invoke();
+
+            randomTarget = RandomPlayer();
+            bossRandomTargetCallback?.Invoke(randomTarget);
         }
         else if (hp <= 70f && !hpCheck[2])
         {
             hpCheck[2] = true;
             bossHp10Callback?.Invoke();
+
+            randomTarget = RandomPlayer();
+            bossRandomTargetCallback?.Invoke(randomTarget);
         }
         else if (hp <= 60f && !hpCheck[3])
         {
             hpCheck[3] = true;
             bossHp10Callback?.Invoke();
+
+            randomTarget = RandomPlayer();
+            bossRandomTargetCallback?.Invoke(randomTarget);
         }
         else if (hp <= 50f && !hpCheck[4])
         {
@@ -120,9 +139,17 @@ public class BossStateManager : MonoBehaviour
     // 보스와 어그로 플레이어 사이의 거리 계산
     public float GetDisWithoutY()
     {
-        Vector2 bossPos2D = new Vector2(Boss.transform.position.x, Boss.transform.position.z);
+        Vector2 bossPos2D = new Vector2(boss.transform.position.x, boss.transform.position.z);
         Vector2 playerPos2D = new Vector2(aggroPlayer.transform.position.x, aggroPlayer.transform.position.z);
 
         return Vector2.Distance(bossPos2D, playerPos2D);
+    }
+
+    // 랜덤한 플레이어를 호출하는 함수
+    private GameObject RandomPlayer()
+    {
+        int randomIndex = Random.Range(0, players.Length);
+
+        return players[randomIndex];
     }
 }
