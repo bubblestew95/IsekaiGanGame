@@ -15,11 +15,15 @@ public class BgmController : MonoBehaviour
     public BgmDefeat bgmDefeat = null;
     public BgmVictory bgmVictory = null;
     public AudioSource curPlayingAudio = null;
-    public List<AudioSource> AudioList = null;
+    public List<AudioSource> audioList = null;
     private void Awake()
     {
+        audioList = GetComponentsInChildren<AudioSource>().ToList(); // 전체 오디오 리스트
+        foreach (AudioSource audio in audioList) 
+        { 
+            audio.spatialBlend = 0f; // 거리 상관없이 일정한 소리로 들리게 해줌
+        }
         bgmCharacterThemes = GetComponentsInChildren<BgmCharacterTheme>().ToList(); // 캐릭터 테마 리스트
-        AudioList = GetComponentsInChildren<AudioSource>().ToList(); // 전체 오디오 리스트
         bgmBossThemes = GetComponentsInChildren<BgmBossTheme>().ToList(); // 보스 테마 리스트
         bgmExciters = GetComponentsInChildren<BgmExciter>().ToList(); // 보스 테마 효과컨트롤러 리스트 
         bgmVictory = GetComponentInChildren<BgmVictory>(); // 승리 Bgm
@@ -123,7 +127,7 @@ public class BgmController : MonoBehaviour
             return;
         }
         float volume = _level/100;
-        foreach (AudioSource audioSource in AudioList)
+        foreach (AudioSource audioSource in audioList)
         {
             audioSource.volume = volume;
         }
