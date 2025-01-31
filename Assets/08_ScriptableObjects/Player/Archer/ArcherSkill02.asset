@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: ArcherSkill02
   m_EditorClassIdentifier: 
   skillType: 2
-  damage: 0
-  coolTime: 0
+  damage: 5
+  aggro: 0
+  coolTime: 5
   rangeType: 0
-  activatedType: 0
+  activatedType: 2
