@@ -10827,7 +10827,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &494462
 Transform:
   m_ObjectHideFlags: 0
@@ -13785,7 +13785,7 @@ Transform:
   m_Children:
   - {fileID: 4554398382176959353}
   m_Father: {fileID: 497262}
-  m_LocalEulerAnglesHint: {x: -0.60304546, y: 3.0913315, z: 173.0564}
+  m_LocalEulerAnglesHint: {x: -0.42924303, y: 0.13558787, z: 159.06256}
 --- !u!1001 &1811855724199648073
 PrefabInstance:
   m_ObjectHideFlags: 0
