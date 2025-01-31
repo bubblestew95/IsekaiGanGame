@@ -11725,6 +11725,7 @@ GameObject:
   - component: {fileID: 2057149518702304469}
   - component: {fileID: 3451853758380156579}
   - component: {fileID: 2566862019923990714}
+  - component: {fileID: 4635323897246943225}
   m_Layer: 0
   m_Name: P_Magician
   m_TagString: Untagged
@@ -11797,6 +11798,23 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!114 &4635323897246943225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7514786493872156022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bfa38ae7095fa64aa2e58d734226279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnPlayerDead:
+    m_PersistentCalls:
+      m_Calls: []
+  playerData: {fileID: 11400000, guid: 1ce10086db3c0b94087376c991e2091d, type: 2}
+  battleUIManager: {fileID: 8430448378155957809}
 --- !u!1 &7617502916217710384
 GameObject:
   m_ObjectHideFlags: 0
@@ -13780,6 +13798,10 @@ PrefabInstance:
       propertyPath: buttonSkillType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2354821613029669478, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: playerManager
+      value: 
+      objectReference: {fileID: 4635323897246943225}
     - target: {fileID: 2753883462998251982, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: buttonSkillType
       value: 3
@@ -13926,3 +13948,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7938309828721989989, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
   m_PrefabInstance: {fileID: 6075630663414531159}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8430448378155957809 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2354821613029669478, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+  m_PrefabInstance: {fileID: 6075630663414531159}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12a7a025050abd0479b8ebf3cf37ffa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
