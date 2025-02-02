@@ -12,6 +12,7 @@ public class PlayerSkillManager
     private List<PlayerSkillData> skillDatas = null;
 
     private Animator animator = null;
+
     /// <summary>
     /// 애니메이터의 각 트리거 아이디를 미리 캐싱해놓고, 이를 스킬 타입에 따라 저장해놓음.
     /// </summary>

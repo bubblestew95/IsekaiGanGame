@@ -11,8 +11,8 @@ public class SkillUIManager : MonoBehaviour
 
     public Transform debugTr = null;
 
-    private void Update()
+    public void SetSkillUIPosition()
     {
-        ((SkillUI_AOE)skillUIList[0]).SetTargetPosition(debugTr.position);
+
     }
 }

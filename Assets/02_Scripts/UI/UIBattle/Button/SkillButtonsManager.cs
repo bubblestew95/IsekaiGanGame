@@ -18,17 +18,6 @@ public class SkillButtonsManager : MonoBehaviour
         }
     }
 
-    public void OnSkillButtonClicked(SkillType _type)
-    {
-        if(battleUIManager == null)
-        {
-            Debug.LogWarning("Battle UI Manager is Null!");
-            return;
-        }
-
-        battleUIManager.OnClickedSkillButton(_type);
-    }
-
     public void ApplyCooltime(SkillType _type, float _time)
     {
         skillButtonMap[_type].SetCooltime(_time);

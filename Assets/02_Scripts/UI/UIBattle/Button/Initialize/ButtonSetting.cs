@@ -19,7 +19,6 @@ public class ButtonSetting : MonoBehaviour
     //public Button button = null;
     public CoolTime cooltime = null;
 
-    private EventTrigger eventTrigger = null;
     private SkillButtonsManager skillButtonsManager = null;
     private FixedJoystick joystick = null;
 
@@ -36,7 +35,6 @@ public class ButtonSetting : MonoBehaviour
         images = GetComponentsInChildren<Image>(true).ToList();
         textMeshPros = GetComponentsInChildren<TextMeshProUGUI>().ToList();
         cooltime = GetComponentInChildren<CoolTime>();
-        eventTrigger = GetComponent<EventTrigger>();
         joystick = GetComponent<FixedJoystick>();
         skillButtonsManager = GetComponentInParent<SkillButtonsManager>();
     }
@@ -73,11 +71,6 @@ public class ButtonSetting : MonoBehaviour
         Debug.Log("Button Up!");
         StopCoroutine(currentSkillCoroutine);
     }
-
-    //private void ButtonPressed()
-    //{
-    //    skillButtonsManager.OnSkillButtonClicked(ButtonSkillType);
-    //}
 
     private IEnumerator SkillHoldingCoroutine(SkillType _type)
     {
