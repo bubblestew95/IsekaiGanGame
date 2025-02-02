@@ -16,8 +16,6 @@ public class SkillButtonsManager : MonoBehaviour
             Debug.LogWarning("Battle UI Manager is Null!");
             return;
         }
-
-
     }
 
     public void OnSkillButtonClicked(SkillType _type)
