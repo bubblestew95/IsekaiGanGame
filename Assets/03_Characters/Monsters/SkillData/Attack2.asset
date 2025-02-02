@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Attack2
   m_EditorClassIdentifier: 
   skillName: Attack2
-  coolDown: 15
-  damage: 0
+  coolDown: 30
+  damage: 2
   minRange: 0
   maxRange: 100
+  attackRange: 5
+  attackColliderDelay: 1.7
