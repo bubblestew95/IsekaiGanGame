@@ -9,6 +9,4 @@ public class BossAttackCollider : MonoBehaviour
         get { return damage; } 
         set { damage = value; } 
     }
-
-
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,6 +16,7 @@ public class BossBT : MonoBehaviour
     [SerializeField] private NavMeshAgent nvAgent;
     [SerializeField] private BossStateManager bossStateManager;
     [SerializeField] private BossSkillManager bossSkillManager;
+    [SerializeField] private BossAttackManager bossAttackManager;
 
     private bool isCoroutineRunning = false;
     private BossState previousBehavior;
@@ -201,15 +203,51 @@ public class BossBT : MonoBehaviour
             }
         }
 
-        // 애니메이션 끝
+        // Attack4 준비모션에서는 안따라다니게 설정
         while (true)
         {
-            if (CheckEndAnim(curState))
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName(curState.ToString()))
             {
-                SetAnimBool(curState, false);
                 break;
             }
+            yield return null;
+        }
 
+        while (true)
+        {
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName(curState.ToString()))
+            {
+                break;
+            }
+            yield return null;
+        }
+
+        // attack4의 지속시간을 가져옴.
+        BSD_Duration attack4 = bossSkillManager.Skills
+            .Where(skill => skill.SkillData.SkillName == "Attack4")
+            .Select(skill => skill.SkillData as BSD_Duration)
+            .FirstOrDefault(bsd => bsd != null);
+
+        float duration = attack4.Duration;
+        float elapseTime = 0f;
+
+        // 이동속도 설정
+        nvAgent.speed = 6f;
+
+        // 애니메이션 4-1을 지속시간동안 실행
+        while (true)
+        {
+            // 어그로 플레이어 따라다님
+            nvAgent.SetDestination(bossStateManager.aggroPlayer.transform.position);
+
+            elapseTime += Time.deltaTime;
+            if (elapseTime >= duration)
+            {
+                SetAnimBool(curState, false);
+                nvAgent.ResetPath();
+                nvAgent.speed = 3f;
+                break;
+            }
             yield return null;
         }
 
@@ -296,6 +334,81 @@ public class BossBT : MonoBehaviour
         behaviorEndCallback?.Invoke();
 
         isCoroutineRunning = false;
+    }
+
+    private IEnumerator Attack7()
+    {
+        isCoroutineRunning = true;
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 쿨타임 실행
+        foreach (BossSkill skill in bossSkillManager.Skills)
+        {
+            if (skill.SkillData.SkillName == curState.ToString())
+            {
+                skill.UseSkill();
+            }
+        }
+
+        // Chase -> Attack7 넘어갔는지 check
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName(curState.ToString()))
+            {
+                break;
+            }
+            yield return null;
+        }
+
+        // Attack7이 끝났는지 Check
+        while (true)
+        {
+            if (CheckEndAnim(curState))
+            {
+                // boss의 skin을 사라지게 하기, collider도 잠시 비활성화
+                bossStateManager.BossSkin.SetActive(false);
+                bossStateManager.Boss.GetComponent<BoxCollider>().enabled = false;
+
+                // boss의 Tr을 공격위치로 옮기기
+                bossStateManager.Boss.transform.position = bossAttackManager.CircleSkillPos[0].transform.position;
+
+                // 몇초있다가 (총 공격 delay에서 내려찍는데 까지 걸리는 시간을 뻄)
+                yield return new WaitForSeconds(bossAttackManager.Delay - 1.1f);
+
+                // 애니메이션 재생 및 skin, collider 활성화
+                anim.SetBool("Attack7-1Flag", true);
+                bossStateManager.BossSkin.SetActive(true);
+                bossStateManager.Boss.GetComponent<BoxCollider>().enabled = true;
+                break;
+            }
+            yield return null;
+        }
+
+        // Attack 7-1이 끝났는지 check
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack7-1") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                SetAnimBool(curState, false);
+                anim.SetBool("Attack7-1Flag", false);
+                break;
+            }
+            yield return null;
+        }
+
+
+        // 상태를 chase로 변경
+        curState = BossState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
+
+        yield return null;
     }
     #endregion
 

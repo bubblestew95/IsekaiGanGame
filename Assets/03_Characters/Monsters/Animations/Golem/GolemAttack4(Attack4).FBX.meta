@@ -1,12 +1,5 @@
 fileFormatVersion: 2
-guid: 6109206d08b76db4cbc5b972d5cee47d
-AssetOrigin:
-  serializedVersion: 1
-  productId: 129733
-  packageName: Frank Action RPG 2Handed (Combination)
-  packageVersion: 1.7
-  assetPath: Assets/Frank_RPG_2Handed/Assets/Animations/FBX_Animation/Root_Motion/Frank_RPG_2Hand_Skill01_WhirlWind.FBX
-  uploadId: 300957
+guid: d15d7457bd1b9c642b257110bc93c82f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -566,7 +559,7 @@ ModelImporter:
       takeName: Take 001
       internalID: 7400000
       firstFrame: 0
-      lastFrame: 177
+      lastFrame: 67
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

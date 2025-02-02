@@ -15,8 +15,10 @@ public class BossStateManager : MonoBehaviour
     [SerializeField] private GameObject[] players;
     [SerializeField] private GameObject boss;
     [SerializeField] public float chainTime;
+    [SerializeField] private GameObject bossSkin;
 
     public GameObject Boss {get {return boss;}}
+    public GameObject BossSkin { get { return bossSkin; } }
     public GameObject[] Players {get {return players;}}
 
     private List<BossChain> activeChain = new List<BossChain>();

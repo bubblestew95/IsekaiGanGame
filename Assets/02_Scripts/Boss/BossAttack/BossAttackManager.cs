@@ -10,6 +10,7 @@ using UnityEngine.Rendering.Universal;
 // 각 attack collider의 size는 skill 튤팁에 있는 정보를 토대로 만들어짐.
 public class BossAttackManager : MonoBehaviour
 {
+    [SerializeField] private Animator anim;
     [SerializeField] private BossStateManager bossStateManager;
     [SerializeField] private BossSkillManager bossSkillManager;
 
@@ -30,6 +31,7 @@ public class BossAttackManager : MonoBehaviour
     private float range;
     private float damage;
     private float delay;
+    private float duration;
 
     // 부채꼴 생성 관련
     private float angle;
@@ -43,6 +45,10 @@ public class BossAttackManager : MonoBehaviour
 
     // 랜덤 타겟
     private GameObject randomTarget;
+
+    // 프로퍼티
+    public GameObject[] CircleSkillPos { get { return circleSkillPos; } }
+    public float Delay { get { return delay; } }
 
     private void Start()
     {
@@ -72,6 +78,9 @@ public class BossAttackManager : MonoBehaviour
                 break;
             case "Attack6":
                 StartCoroutine(Attack6());
+                break;
+            case "Attack7":
+                StartCoroutine(Attack7());
                 break;
             default:
                 break;
@@ -104,13 +113,14 @@ public class BossAttackManager : MonoBehaviour
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         angle = 90f;
         radius = range/2;
-        thickness = 0.5f;
+        thickness = 1f;
         segmentCount = 50;
 
         if (!firstTime)
         {
             Mesh fanMesh = BuildMesh();
             fanAttackCollider.GetComponent<MeshFilter>().mesh = fanMesh;
+            fanAttackCollider.GetComponent<MeshCollider>().sharedMesh = fanMesh;
         }
 
         // 스킬 표시
@@ -160,12 +170,11 @@ public class BossAttackManager : MonoBehaviour
         }
 
         // 스킬 데미지 설정
-        fanAttackCollider.GetComponent<BossAttackCollider>().Damage = damage;
-
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         foreach (GameObject attackCollider in circleAttackColliders)
         {
             attackCollider.transform.localScale = new Vector3(range, 0.5f, range);
+            attackCollider.GetComponent<BossAttackCollider>().Damage = damage;
         }
 
         // 스킬 표시
@@ -264,13 +273,82 @@ public class BossAttackManager : MonoBehaviour
         circleAttackColliders[0].SetActive(false);
     }
 
+    // 휠윈드
     private IEnumerator Attack4()
     {
+        BSD_Duration skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack4").SkillData as BSD_Duration;
+
+        damage = skill.Damage;
+        duration = skill.Duration;
+
+        // 스킬 데미지 설정
+        GetComponent<BossAttackCollider>().Damage = damage;
+
+        // 공격 콜라이더 설정(크기, 위치, 각도 등)
+        GetComponent<BoxCollider>().isTrigger = true;
+        Vector3 originSize = GetComponent<BoxCollider>().size;
+        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
+        bossStateManager.Boss.tag = "BossAttack";
+
+        // 공격 끝났는지 Check
+        while (true)
+        {
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+            {
+                break;
+            }
+            yield return null;
+        }
+
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+            {
+                break;
+            }
+            yield return null;
+        }
+
+        // 공격 끝난후
+        GetComponent<BoxCollider>().size = originSize;
+        GetComponent<BoxCollider>().isTrigger = false;
+        bossStateManager.Boss.tag = "Untagged";
+
         yield return null;
     }
 
+    // 특수 패턴 돌진기 (기본 거리 6)
     private IEnumerator Attack5()
     {
+        skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack5").SkillData;
+
+        damage = skill.Damage;
+
+        // 스킬 데미지 설정
+        GetComponent<BossAttackCollider>().Damage = damage;
+
+        // 공격 콜라이더 설정(크기, 위치, 각도 등)
+        GetComponent<BoxCollider>().isTrigger = true;
+        Vector3 originSize = GetComponent<BoxCollider>().size;
+        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
+        bossStateManager.Boss.tag = "BossAttack";
+
+        // 공격 끝났는지 Check
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 공격 끝난후
+        GetComponent<BoxCollider>().size = originSize;
+        GetComponent<BoxCollider>().isTrigger = false;
+        bossStateManager.Boss.tag = "Untagged";
+
         yield return null;
     }
 
@@ -319,6 +397,55 @@ public class BossAttackManager : MonoBehaviour
 
         // attackCollider 비활성화
         circleAttackColliders[0].SetActive(false);
+    }
+
+    // 보스 점프
+    private IEnumerator Attack7()
+    {
+        skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack7").SkillData;
+
+        range = skill.AttackRange;
+        damage = skill.Damage;
+        delay = skill.AttackColliderDelay;
+
+        // 스킬위치 조정
+        circleSkillPos[0].transform.position = new Vector3(bossStateManager.aggroPlayer.transform.position.x, 0.3f, bossStateManager.aggroPlayer.transform.position.z);
+
+        // 스킬 데미지 설정
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
+
+        // 공격 콜라이더 설정(크기, 위치, 각도 등)
+        circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
+
+        // 스킬 표시
+        circleFullRangeDecals[0].size = new Vector3(range, range, 1f);
+
+        // 스킬 차는거 표시
+        float elapseTime = 0f;
+
+        while (elapseTime < delay)
+        {
+            elapseTime += Time.deltaTime;
+
+            circleChargingRangeDecals[0].size = new Vector3(range * (elapseTime / delay), range * (elapseTime / delay), 1f);
+
+            yield return null;
+        }
+        yield return null;
+
+        // 사거리 표시 없에기
+        circleFullRangeDecals[0].size = new Vector3(0f, 0f, 0f);
+        circleChargingRangeDecals[0].size = new Vector3(0f, 0f, 0f);
+
+        // attackCollider 활성화
+        circleAttackColliders[0].SetActive(true);
+
+        yield return attackColliderTime;
+
+        // attackCollider 비활성화
+        circleAttackColliders[0].SetActive(false);
+
+
     }
 
     // 부채꼴 모양 만듦.
