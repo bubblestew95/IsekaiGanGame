@@ -4,8 +4,11 @@ public class BossSkill
 {
     private BossSkillData skillData;
     private float lastUsedTime;
+    private float cooldownModifier = 1.0f;
 
     public BossSkillData SkillData {  get { return skillData; } }
+    public float CooldownModifier { set { CooldownModifier = value; } }
+
 
     public BossSkill(BossSkillData _data)
     {
@@ -25,7 +28,7 @@ public class BossSkill
     // 스킬 쓸수있는지 check
     public bool CheckCooldown()
     {
-        return Time.time >= lastUsedTime + skillData.CoolDown;
+        return Time.time >= lastUsedTime + (skillData.CoolDown * cooldownModifier);
     }
 
     // 사거리 체크

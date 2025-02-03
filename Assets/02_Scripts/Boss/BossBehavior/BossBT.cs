@@ -1,10 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-
-// 0127 executeState 만들어서 현재 실행중인 상태 표시
 
 public class BossBT : MonoBehaviour
 {
@@ -17,15 +15,29 @@ public class BossBT : MonoBehaviour
     [SerializeField] private BossStateManager bossStateManager;
     [SerializeField] private BossSkillManager bossSkillManager;
     [SerializeField] private BossAttackManager bossAttackManager;
+    [SerializeField] private Vector3 center;
 
     private bool isCoroutineRunning = false;
+    private bool isStun = false;
     private BossState previousBehavior;
+    private float patternDelay = 2f;
+    private Coroutine curCoroutine;
+
+    public float PatternDelay { get { return patternDelay; } set { patternDelay = value; } }
+
 
     private void Update()
     {
+        if (curState == BossState.Stun && !isStun)
+        {
+            StopCoroutine(curCoroutine);
+            StartCoroutine(curState.ToString());
+            isStun = true;
+        }
+
         if (!isCoroutineRunning)
         {
-            StartCoroutine(curState.ToString());
+            curCoroutine = StartCoroutine(curState.ToString());
         }
     }
 
@@ -56,7 +68,7 @@ public class BossBT : MonoBehaviour
                     break;
             }
 
-            if (elapseTime >= 2f)
+            if (elapseTime >= patternDelay)
             {
                 elapseTime = 0f;
                 behaviorEndCallback?.Invoke();
@@ -277,17 +289,138 @@ public class BossBT : MonoBehaviour
             }
         }
 
-        // 애니메이션 끝
+        // 공격 5 끝
         while (true)
         {
-            if (CheckEndAnim(curState))
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
-                SetAnimBool(curState, false);
+                anim.SetBool("Attack5Flag", false);
                 break;
             }
 
             yield return null;
         }
+
+        float elapseTime = 0f;
+        int randomNum = Random.Range(0, bossStateManager.Players.Length);
+
+        // 잠시 다른 플레이어 쳐다보다가
+        while (true)
+        {
+            nvAgent.SetDestination(bossStateManager.Players[randomNum].transform.position);
+            elapseTime += Time.deltaTime;
+
+            if (elapseTime >= 1f)
+            {
+                anim.SetBool("Attack5-1Flag", true);
+                nvAgent.ResetPath();
+                elapseTime = 0f;
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 공격 5-1
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5-1") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                anim.SetBool("Attack5-1Flag", false);
+                break;
+            }
+
+            yield return null;
+        }
+
+        randomNum = Random.Range(0, bossStateManager.Players.Length);
+
+        // 또다른 플레이어 쳐다보다가
+        while (true)
+        {
+            nvAgent.SetDestination(bossStateManager.Players[randomNum].transform.position);
+            elapseTime += Time.deltaTime;
+
+            if (elapseTime >= 1f)
+            {
+                anim.SetBool("Attack5-2Flag", true);
+                nvAgent.ResetPath();
+                elapseTime = 0f;
+                break;
+            }
+
+            yield return null;
+        }
+
+
+        // 공격 5-2
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5-2") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                anim.SetBool("Attack5-2Flag", false);
+                break;
+            }
+
+            yield return null;
+        }
+
+        randomNum = Random.Range(0, bossStateManager.Players.Length);
+        // 또다른 플레이어 쳐다보다가 
+        while (true)
+        {
+            nvAgent.SetDestination(bossStateManager.Players[randomNum].transform.position);
+            elapseTime += Time.deltaTime;
+
+            if (elapseTime >= 1f)
+            {
+                anim.SetBool("Attack5-3Flag", true);
+                nvAgent.ResetPath();
+                elapseTime = 0f;
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 공격 5-3
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5-3") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                anim.SetBool("Attack5-3Flag", false);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 가운데로 이동해서 특수패턴(전멸기)
+        // 현재 위치에서 가운데 위치로 Lerp하게 이동하면서, 점프 애니메이션 실행하면 될듯
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5Jump") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                anim.SetBool("Attack5-4Flag", true);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // Roar(전멸기 패턴)
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5Roar") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                anim.SetBool("Attack5-4Flag", false);
+                break;
+            }
+
+            yield return null;
+        }
+
+
 
         // 상태를 chase로 변경
         curState = BossState.Chase;
@@ -410,6 +543,37 @@ public class BossBT : MonoBehaviour
 
         yield return null;
     }
+
+    private IEnumerator Stun()
+    {
+        isCoroutineRunning = true;
+
+        // 기존 작업들을 초기화 하는 코드
+        // 1. flag 초기화
+        // 2. 이동속도 초기화
+        // 3. 보스 y값이 이상할수도 있으니, y값 초기화
+        // 4. 스킨과 collider 정상화
+        ResetAnimBool();
+        nvAgent.speed = 3f;
+        bossStateManager.Boss.transform.position = new Vector3(bossStateManager.Boss.transform.position.x, 0f, bossStateManager.Boss.transform.position.z);
+        bossStateManager.BossSkin.SetActive(true);
+        bossStateManager.Boss.GetComponent<BoxCollider>().enabled = true;
+        nvAgent.ResetPath();
+
+        // 스턴 애니메이션 강제 재생
+        anim.Play("Stun");
+        SetAnimBool(curState, true);
+
+        // 몇초후
+        yield return new WaitForSeconds(3f);
+        SetAnimBool(curState, false);
+
+        // 상태를 스턴걸리기 전 상태로
+        curState = previousBehavior;
+
+        isCoroutineRunning = false;
+        isStun = false;
+    }
     #endregion
 
     // 애니메이션 bool값 설정
@@ -428,6 +592,20 @@ public class BossBT : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    // 애니메이션 모든 bool값 초기화
+    private void ResetAnimBool()
+    {
+        AnimatorControllerParameter[] parameters = anim.parameters;
+
+        foreach (var parameter in parameters)
+        {
+            if (parameter.type == AnimatorControllerParameterType.Bool)
+            {
+                anim.SetBool(parameter.name, false);
+            }
         }
     }
 }

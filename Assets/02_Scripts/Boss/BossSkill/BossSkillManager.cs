@@ -4,9 +4,13 @@ using UnityEngine;
 public class BossSkillManager : MonoBehaviour
 {
     [SerializeField] private List<BossSkillData> skillDatas;
+    [SerializeField] private List<BossSkillData> randomSkillDatas;
+
     private List<BossSkill> skills = new List<BossSkill>();
+    private List<BossSkill> randomSkills = new List<BossSkill>();
 
     public List<BossSkill> Skills { get { return skills; } }
+    public List<BossSkill> RandomSkills { get { return randomSkills; } }
 
     private void Start()
     {
@@ -18,6 +22,11 @@ public class BossSkillManager : MonoBehaviour
         foreach (BossSkillData skillData in skillDatas)
         {
             skills.Add(new BossSkill(skillData));
+        }
+
+        foreach (BossSkillData skillData in randomSkillDatas)
+        {
+            randomSkills.Add(new BossSkill(skillData));
         }
     }
 

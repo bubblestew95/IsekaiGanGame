@@ -1,13 +1,7 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
-using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-// 애니메이션 시작시 보스 위치, 각도에서 공격하는 것들이 있고,
-// 플레이어의 위치에서 시작하는것들고 있고
-// 각 attack collider에는 데미지에 관한 정보가 있어서 해당 데미지 만큼 플레이어한테 입혀야함.
-// 각 attack collider의 size는 skill 튤팁에 있는 정보를 토대로 만들어짐.
 public class BossAttackManager : MonoBehaviour
 {
     [SerializeField] private Animator anim;
@@ -26,8 +20,13 @@ public class BossAttackManager : MonoBehaviour
     [SerializeField] private DecalProjector[] circleFullRangeDecals;
     [SerializeField] private DecalProjector[] circleChargingRangeDecals;
 
+    [Header("돌 던지기")]
+    [SerializeField] private GameObject P_Stone;
+    [SerializeField] private Transform rightHand;
+
     // 스킬 관련
     private BossSkillData skill;
+    private string skillName;
     private float range;
     private float damage;
     private float delay;
@@ -46,9 +45,19 @@ public class BossAttackManager : MonoBehaviour
     // 랜덤 타겟
     private GameObject randomTarget;
 
+    // 애니메이션 속도 배속시 delay감소 시켜야함.
+    private float animSpd = 1f;
+
+    // 돌 던지기 관련(stun시 돌도 사라지도록 만들어야함)
+    private GameObject curStone;
+
+    // 스턴시 진행중이였던 코루틴 중지
+    private Coroutine curCoroutine;
+
     // 프로퍼티
     public GameObject[] CircleSkillPos { get { return circleSkillPos; } }
     public float Delay { get { return delay; } }
+    public float AnimSpd { set { animSpd = value; } }
 
     private void Start()
     {
@@ -62,25 +71,28 @@ public class BossAttackManager : MonoBehaviour
         switch (_state)
         {
             case "Attack1":
-                StartCoroutine(Attack1());
+                curCoroutine = StartCoroutine(Attack1());
                 break;
             case "Attack2":
-                StartCoroutine(Attack2());
+                curCoroutine = StartCoroutine(Attack2());
                 break;
             case "Attack3":
-                StartCoroutine(Attack3());
+                curCoroutine = StartCoroutine(Attack3());
                 break;
             case "Attack4":
-                StartCoroutine(Attack4());
+                curCoroutine = StartCoroutine(Attack4());
                 break;
             case "Attack5":
-                StartCoroutine(Attack5());
+                curCoroutine = StartCoroutine(Attack5());
                 break;
             case "Attack6":
-                StartCoroutine(Attack6());
+                curCoroutine = StartCoroutine(Attack6());
                 break;
             case "Attack7":
-                StartCoroutine(Attack7());
+                curCoroutine = StartCoroutine(Attack7());
+                break;
+            case "Stun":
+                StartCoroutine(Stun());
                 break;
             default:
                 break;
@@ -92,9 +104,10 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack1").SkillData;
 
+        skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
-        delay = skill.AttackColliderDelay;
+        delay = skill.AttackColliderDelay / animSpd;
 
         range = range * 2;
 
@@ -109,6 +122,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 스킬 데미지 설정
         fanAttackCollider.GetComponent<BossAttackCollider>().Damage = damage;
+        fanAttackCollider.GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         angle = 90f;
@@ -145,6 +159,9 @@ public class BossAttackManager : MonoBehaviour
         // attackCollider 활성화
         fanAttackCollider.SetActive(true);
 
+        // 파티클 재생
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, new Vector3(fanAttackCollider.transform.position.x + forwardOffset.x * 3f, 0.5f, fanAttackCollider.transform.position.z + forwardOffset.z * 3f));
+
         yield return attackColliderTime;
 
         // attackCollider 비활성화
@@ -156,9 +173,10 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack2").SkillData;
 
+        skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
-        delay = skill.AttackColliderDelay;
+        delay = skill.AttackColliderDelay / animSpd;
 
         int cnt = 0;
 
@@ -175,6 +193,7 @@ public class BossAttackManager : MonoBehaviour
         {
             attackCollider.transform.localScale = new Vector3(range, 0.5f, range);
             attackCollider.GetComponent<BossAttackCollider>().Damage = damage;
+            attackCollider.GetComponent<BossAttackCollider>().SkillName = skillName;
         }
 
         // 스킬 표시
@@ -215,6 +234,9 @@ public class BossAttackManager : MonoBehaviour
         foreach (GameObject circleAttackCollider in circleAttackColliders)
         {
             circleAttackCollider.SetActive(true);
+
+            // 파티클 재생
+            ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, circleAttackCollider.transform.position);
         }
 
         yield return attackColliderTime;
@@ -231,15 +253,17 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack3").SkillData;
 
+        skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
-        delay = skill.AttackColliderDelay;
+        delay = skill.AttackColliderDelay / animSpd;
 
         // 스킬위치 조정
         circleSkillPos[0].transform.position = new Vector3(bossStateManager.Boss.transform.position.x, 0.3f, bossStateManager.Boss.transform.position.z);
 
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
@@ -267,6 +291,9 @@ public class BossAttackManager : MonoBehaviour
         // attackCollider 활성화
         circleAttackColliders[0].SetActive(true);
 
+        // 파티클 재생
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, circleAttackColliders[0].transform.position);
+
         yield return attackColliderTime;
 
         // attackCollider 비활성화
@@ -278,16 +305,18 @@ public class BossAttackManager : MonoBehaviour
     {
         BSD_Duration skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack4").SkillData as BSD_Duration;
 
+        skillName = skill.SkillName;
         damage = skill.Damage;
         duration = skill.Duration;
 
         // 스킬 데미지 설정
         GetComponent<BossAttackCollider>().Damage = damage;
+        GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         GetComponent<BoxCollider>().isTrigger = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
-        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
+        GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
         bossStateManager.Boss.tag = "BossAttack";
 
         // 공격 끝났는지 Check
@@ -322,15 +351,17 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack5").SkillData;
 
+        skillName = skill.SkillName;
         damage = skill.Damage;
 
         // 스킬 데미지 설정
         GetComponent<BossAttackCollider>().Damage = damage;
+        GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         GetComponent<BoxCollider>().isTrigger = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
-        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
+        GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
         bossStateManager.Boss.tag = "BossAttack";
 
         // 공격 끝났는지 Check
@@ -357,21 +388,32 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack6").SkillData;
 
+        skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
-        delay = skill.AttackColliderDelay;
+        delay = skill.AttackColliderDelay / animSpd;
 
         // 스킬위치 조정
         circleSkillPos[0].transform.position = new Vector3(randomTarget.transform.position.x, 0.3f, randomTarget.transform.position.z);
 
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
 
         // 스킬 표시
         circleFullRangeDecals[0].size = new Vector3(range, range, 1f);
+
+        // 돌생성
+        GameObject stone = Instantiate(P_Stone, rightHand);
+        curStone = stone;
+
+        stone.transform.SetParent(null);
+        Vector3 startPos = stone.transform.position;
+        Vector3 startSize = stone.transform.localScale;
+        Quaternion startRotation = stone.transform.rotation;
 
         // 스킬 차는거 표시
         float elapseTime = 0f;
@@ -381,6 +423,10 @@ public class BossAttackManager : MonoBehaviour
             elapseTime += Time.deltaTime;
 
             circleChargingRangeDecals[0].size = new Vector3(range * (elapseTime / delay), range * (elapseTime / delay), 1f);
+
+            stone.transform.position = Vector3.Lerp(startPos, circleSkillPos[0].transform.position, elapseTime / delay);
+            stone.transform.localScale = Vector3.Lerp(startSize, new Vector3(2f, 2f, 2f), elapseTime / delay);
+            stone.transform.rotation = Quaternion.Lerp(startRotation, Quaternion.Euler(0f, 0f, 0f), elapseTime / delay);
 
             yield return null;
         }
@@ -393,10 +439,15 @@ public class BossAttackManager : MonoBehaviour
         // attackCollider 활성화
         circleAttackColliders[0].SetActive(true);
 
+        // 파티클 재생
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, circleAttackColliders[0].transform.position);
+
         yield return attackColliderTime;
 
         // attackCollider 비활성화
         circleAttackColliders[0].SetActive(false);
+
+        curStone = null;
     }
 
     // 보스 점프
@@ -404,15 +455,17 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack7").SkillData;
 
+        skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
-        delay = skill.AttackColliderDelay;
+        delay = skill.AttackColliderDelay / animSpd;
 
         // 스킬위치 조정
         circleSkillPos[0].transform.position = new Vector3(bossStateManager.aggroPlayer.transform.position.x, 0.3f, bossStateManager.aggroPlayer.transform.position.z);
 
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
@@ -440,12 +493,30 @@ public class BossAttackManager : MonoBehaviour
         // attackCollider 활성화
         circleAttackColliders[0].SetActive(true);
 
+        // 파티클 재생
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, circleAttackColliders[0].transform.position);
+
         yield return attackColliderTime;
 
         // attackCollider 비활성화
         circleAttackColliders[0].SetActive(false);
 
 
+    }
+    
+    // 스턴 걸렸을때
+    private IEnumerator Stun()
+    {
+        // 현재 실행중인 코루틴 종료
+        StopCoroutine(curCoroutine);
+
+        // 공격 초기화
+        InitAttack();
+
+        // 현재 돌 삭제
+        Destroy(curStone);
+
+        yield return null;
     }
 
     // 부채꼴 모양 만듦.
@@ -542,4 +613,31 @@ public class BossAttackManager : MonoBehaviour
     {
         randomTarget = _target;
     }
+
+    // 공격 초기화
+    private void InitAttack()
+    {
+        // 데칼 size 조정
+        fanFullRangeDecal.size = new Vector3(0f, 0f, 0f);
+        fanChargingRangeDecal.size = new Vector3(0f, 0f, 0f);
+        foreach (DecalProjector circleFullRangeDecal in circleFullRangeDecals)
+        {
+            circleFullRangeDecal.size = new Vector3(0f, 0f, 0f);
+        }
+        foreach (DecalProjector circleChargingRangeDecal in circleChargingRangeDecals)
+        {
+            circleChargingRangeDecal.size = new Vector3(0f, 0f, 0f);
+        }
+
+        // 공격 콜라이더 끄기
+        fanAttackCollider.SetActive(false);
+        foreach (GameObject circleAttackCollider in circleAttackColliders)
+        {
+            circleAttackCollider.SetActive(false);
+        }
+
+        // 태그 정상화
+        bossStateManager.Boss.tag = "Untagged";
+    }
+
 }

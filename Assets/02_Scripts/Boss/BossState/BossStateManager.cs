@@ -9,6 +9,7 @@ public class BossStateManager : MonoBehaviour
     public BossStateDelegate bossDieCallback;
     public BossStateDelegate bossHp10Callback;
     public BossStateDelegate bossHpHalfCallback;
+    public BossStateDelegate bossStunCallback;
     public BossStateDelegate2 bossRandomTargetCallback;
 
     [SerializeField] public GameObject aggroPlayer;
@@ -34,6 +35,14 @@ public class BossStateManager : MonoBehaviour
         hpCheck[2] = false;
         hpCheck[3] = false;
         hpCheck[4] = false;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            BossStun();
+        }
     }
 
     // 공격이 들어왔을때
@@ -153,5 +162,11 @@ public class BossStateManager : MonoBehaviour
         int randomIndex = Random.Range(0, players.Length);
 
         return players[randomIndex];
+    }
+
+    //보스가 스턴걸렸을때 호출되는 함수
+    public void BossStun()
+    {
+        bossStunCallback?.Invoke();
     }
 }

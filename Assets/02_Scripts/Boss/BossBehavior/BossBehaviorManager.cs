@@ -20,6 +20,7 @@ public class BossBehaviorManager : MonoBehaviour
         bossBT.behaviorEndCallback += () => StartCoroutine(BossPerformAction());
         bossStateManager.bossHp10Callback += SetHP10;
         bossStateManager.bossHpHalfCallback += SetHPHalf;
+        bossStateManager.bossStunCallback += SetStun;
     }
 
     // 특정조건에서 랜덤한 행동을 하나 선택하는 함수
@@ -94,5 +95,11 @@ public class BossBehaviorManager : MonoBehaviour
     private void SetHPHalf()
     {
         hpHalfTrigger = true;
+    }
+
+    // 보스가 스턴일때
+    private void SetStun()
+    {
+        SetBossBehavior(BossState.Stun);
     }
 }
