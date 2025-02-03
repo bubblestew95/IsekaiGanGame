@@ -1,13 +1,7 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
-using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-// 애니메이션 시작시 보스 위치, 각도에서 공격하는 것들이 있고,
-// 플레이어의 위치에서 시작하는것들고 있고
-// 각 attack collider에는 데미지에 관한 정보가 있어서 해당 데미지 만큼 플레이어한테 입혀야함.
-// 각 attack collider의 size는 skill 튤팁에 있는 정보를 토대로 만들어짐.
 public class BossAttackManager : MonoBehaviour
 {
     [SerializeField] private Animator anim;
@@ -51,9 +45,19 @@ public class BossAttackManager : MonoBehaviour
     // 랜덤 타겟
     private GameObject randomTarget;
 
+    // 애니메이션 속도 배속시 delay감소 시켜야함.
+    private float animSpd = 1f;
+
+    // 돌 던지기 관련(stun시 돌도 사라지도록 만들어야함)
+    private GameObject curStone;
+
+    // 스턴시 진행중이였던 코루틴 중지
+    private Coroutine curCoroutine;
+
     // 프로퍼티
     public GameObject[] CircleSkillPos { get { return circleSkillPos; } }
     public float Delay { get { return delay; } }
+    public float AnimSpd { set { animSpd = value; } }
 
     private void Start()
     {
@@ -67,25 +71,28 @@ public class BossAttackManager : MonoBehaviour
         switch (_state)
         {
             case "Attack1":
-                StartCoroutine(Attack1());
+                curCoroutine = StartCoroutine(Attack1());
                 break;
             case "Attack2":
-                StartCoroutine(Attack2());
+                curCoroutine = StartCoroutine(Attack2());
                 break;
             case "Attack3":
-                StartCoroutine(Attack3());
+                curCoroutine = StartCoroutine(Attack3());
                 break;
             case "Attack4":
-                StartCoroutine(Attack4());
+                curCoroutine = StartCoroutine(Attack4());
                 break;
             case "Attack5":
-                StartCoroutine(Attack5());
+                curCoroutine = StartCoroutine(Attack5());
                 break;
             case "Attack6":
-                StartCoroutine(Attack6());
+                curCoroutine = StartCoroutine(Attack6());
                 break;
             case "Attack7":
-                StartCoroutine(Attack7());
+                curCoroutine = StartCoroutine(Attack7());
+                break;
+            case "Stun":
+                StartCoroutine(Stun());
                 break;
             default:
                 break;
@@ -100,7 +107,7 @@ public class BossAttackManager : MonoBehaviour
         skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
-        delay = skill.AttackColliderDelay;
+        delay = skill.AttackColliderDelay / animSpd;
 
         range = range * 2;
 
@@ -169,7 +176,7 @@ public class BossAttackManager : MonoBehaviour
         skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
-        delay = skill.AttackColliderDelay;
+        delay = skill.AttackColliderDelay / animSpd;
 
         int cnt = 0;
 
@@ -249,7 +256,7 @@ public class BossAttackManager : MonoBehaviour
         skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
-        delay = skill.AttackColliderDelay;
+        delay = skill.AttackColliderDelay / animSpd;
 
         // 스킬위치 조정
         circleSkillPos[0].transform.position = new Vector3(bossStateManager.Boss.transform.position.x, 0.3f, bossStateManager.Boss.transform.position.z);
@@ -309,7 +316,7 @@ public class BossAttackManager : MonoBehaviour
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         GetComponent<BoxCollider>().isTrigger = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
-        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
+        GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
         bossStateManager.Boss.tag = "BossAttack";
 
         // 공격 끝났는지 Check
@@ -354,7 +361,7 @@ public class BossAttackManager : MonoBehaviour
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         GetComponent<BoxCollider>().isTrigger = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
-        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
+        GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
         bossStateManager.Boss.tag = "BossAttack";
 
         // 공격 끝났는지 Check
@@ -384,7 +391,7 @@ public class BossAttackManager : MonoBehaviour
         skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
-        delay = skill.AttackColliderDelay;
+        delay = skill.AttackColliderDelay / animSpd;
 
         // 스킬위치 조정
         circleSkillPos[0].transform.position = new Vector3(randomTarget.transform.position.x, 0.3f, randomTarget.transform.position.z);
@@ -401,6 +408,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 돌생성
         GameObject stone = Instantiate(P_Stone, rightHand);
+        curStone = stone;
 
         stone.transform.SetParent(null);
         Vector3 startPos = stone.transform.position;
@@ -438,6 +446,8 @@ public class BossAttackManager : MonoBehaviour
 
         // attackCollider 비활성화
         circleAttackColliders[0].SetActive(false);
+
+        curStone = null;
     }
 
     // 보스 점프
@@ -448,7 +458,7 @@ public class BossAttackManager : MonoBehaviour
         skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
-        delay = skill.AttackColliderDelay;
+        delay = skill.AttackColliderDelay / animSpd;
 
         // 스킬위치 조정
         circleSkillPos[0].transform.position = new Vector3(bossStateManager.aggroPlayer.transform.position.x, 0.3f, bossStateManager.aggroPlayer.transform.position.z);
@@ -492,6 +502,21 @@ public class BossAttackManager : MonoBehaviour
         circleAttackColliders[0].SetActive(false);
 
 
+    }
+    
+    // 스턴 걸렸을때
+    private IEnumerator Stun()
+    {
+        // 현재 실행중인 코루틴 종료
+        StopCoroutine(curCoroutine);
+
+        // 공격 초기화
+        InitAttack();
+
+        // 현재 돌 삭제
+        Destroy(curStone);
+
+        yield return null;
     }
 
     // 부채꼴 모양 만듦.
@@ -588,4 +613,31 @@ public class BossAttackManager : MonoBehaviour
     {
         randomTarget = _target;
     }
+
+    // 공격 초기화
+    private void InitAttack()
+    {
+        // 데칼 size 조정
+        fanFullRangeDecal.size = new Vector3(0f, 0f, 0f);
+        fanChargingRangeDecal.size = new Vector3(0f, 0f, 0f);
+        foreach (DecalProjector circleFullRangeDecal in circleFullRangeDecals)
+        {
+            circleFullRangeDecal.size = new Vector3(0f, 0f, 0f);
+        }
+        foreach (DecalProjector circleChargingRangeDecal in circleChargingRangeDecals)
+        {
+            circleChargingRangeDecal.size = new Vector3(0f, 0f, 0f);
+        }
+
+        // 공격 콜라이더 끄기
+        fanAttackCollider.SetActive(false);
+        foreach (GameObject circleAttackCollider in circleAttackColliders)
+        {
+            circleAttackCollider.SetActive(false);
+        }
+
+        // 태그 정상화
+        bossStateManager.Boss.tag = "Untagged";
+    }
+
 }
