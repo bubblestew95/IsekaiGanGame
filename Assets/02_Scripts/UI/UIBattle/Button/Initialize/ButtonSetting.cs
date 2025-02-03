@@ -82,6 +82,7 @@ public class ButtonSetting : MonoBehaviour
         while (true)
         {
             // Debug.LogFormat("{0}, {1}", joystick.Horizontal, joystick.Vertical);
+            skillButtonsManager.SendSkillDirection(_type, joystick.Horizontal, joystick.Vertical);
 
             yield return null;
         }

@@ -7,9 +7,11 @@ public class SkillUI_Direction : SkillUI_Base
     [SerializeField]
     private RectTransform arrowImagePivot = null;
 
-    public override void AimSkill(Vector3 _aim)
+    public override void AimSkill(float _horizontal, float _vertical)
     {
-        SetDirection(_aim);
+        base.AimSkill(_horizontal, _vertical);
+
+        SetDirection(_horizontal, _vertical);
     }
 
     public override void SetEnabled(bool _enabled)
@@ -18,8 +20,9 @@ public class SkillUI_Direction : SkillUI_Base
         arrowImagePivot.gameObject.SetActive(_enabled);
     }
 
-    private void SetDirection(Vector3 _lookPos)
+    private void SetDirection(float x, float z)
     {
-        arrowImagePivot.LookAt(_lookPos);
+        float angle = Mathf.Atan2(x, z) * Mathf.Rad2Deg;
+        arrowImagePivot.rotation = Quaternion.Euler(0f, angle, 0f);
     }
 }

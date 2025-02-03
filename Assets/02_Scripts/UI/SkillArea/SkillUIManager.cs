@@ -28,6 +28,18 @@ public class SkillUIManager : MonoBehaviour
         }
     }
 
+    public void SetSkillAimPosition(SkillType _type, float _horizontal, float _vertical)
+    {
+        if (skillUIMap.TryGetValue(_type, out var skillUI))
+        {
+            skillUI.AimSkill(_horizontal,_vertical);
+        }
+        else
+        {
+            Debug.LogFormat("{0} type skill don't need to show skill area!", _type);
+        }
+    }
+
     private void Awake()
     {
         skillUIMap = new Dictionary<SkillType, SkillUI_Base>();

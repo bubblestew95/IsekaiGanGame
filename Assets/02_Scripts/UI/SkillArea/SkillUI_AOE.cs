@@ -11,12 +11,16 @@ public class SkillUI_AOE : SkillUI_Base
     [SerializeField]
     private GameObject rangeImageObj = null;
 
+    [SerializeField]
     private float maxRangeRadius = 5f;
 
-    public override void AimSkill(Vector3 _aim)
+    private readonly float defaultY = 0.1f;
+
+    public override void AimSkill(float _horizontal, float _vertical)
     {
-        base.AimSkill(_aim);
-        SetTargetPosition(_aim);
+        base.AimSkill(_horizontal, _vertical);
+
+        SetTargetPosition(new Vector3(_horizontal, defaultY, _vertical));
     }
     public override void SetEnabled(bool _enabled)
     {
@@ -31,6 +35,9 @@ public class SkillUI_AOE : SkillUI_Base
     /// <param name="_pos">옮기고자 하는 대상 지점</param>
     private void SetTargetPosition(Vector3 _pos)
     {
+        _pos *= maxRangeRadius;
+        _pos += transform.position;
+
         targetRectTr.position = Vector3.ClampMagnitude(_pos, maxRangeRadius);
     }
 }

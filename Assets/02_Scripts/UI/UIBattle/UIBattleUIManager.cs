@@ -60,6 +60,11 @@ public class UIBattleUIManager : MonoBehaviour
 
     }
 
+    public void SendSkillDirectionToSkillUI(SkillType _type, float _horizontal, float _vertical)
+    {
+        skillUIManager.SetSkillAimPosition(_type, _horizontal, _vertical);
+    }
+
     //public void CooltimeListSetting(List<float> _timeList) // 평타,회피,스킬1,스킬2,스킬3 순서
     //{
     //    for (int i = 0; i < _timeList.Count; i++)

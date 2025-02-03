@@ -36,6 +36,17 @@ public class SkillButtonsManager : MonoBehaviour
         skillButtonMap[_type].SetCooltime(_time);
     }
 
+    public void SendSkillDirection(SkillType _type, float _horizontal, float _vertical)
+    {
+        if (battleUIManager == null)
+        {
+            Debug.LogWarning("Battle UI Manager is Null!");
+            return;
+        }
+
+        battleUIManager.SendSkillDirectionToSkillUI(_type, _horizontal, _vertical);
+    }
+
     private void Awake()
     {
         battleUIManager = GetComponentInParent<UIBattleUIManager>();
