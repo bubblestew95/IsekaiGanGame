@@ -1658,6 +1658,18 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3478431685719019078, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -0.00858492
+      objectReference: {fileID: 0}
+    - target: {fileID: 3478431685719019078, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 3.2947254
+      objectReference: {fileID: 0}
+    - target: {fileID: 3478431685719019078, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 172.72923
+      objectReference: {fileID: 0}
     - target: {fileID: 3966677247355321309, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
       propertyPath: m_IsActive
       value: 0

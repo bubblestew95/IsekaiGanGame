@@ -7,11 +7,11 @@ public class PlayerSkillData : ScriptableObject
 {
     public SkillType skillType;
 
-    public float damage = 0f;
+    public float damage = 5f;
 
-    public float aggro = 0f;
+    public float aggro = 5f;
 
-    public float coolTime = 0f;
+    public float coolTime = 3f;
 
     public PlayerSkillRangeType rangeType = PlayerSkillRangeType.None;
 
