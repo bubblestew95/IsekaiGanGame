@@ -121,9 +121,9 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-    public void UpdatePlayerList(string playerName, bool isJoining)
+    public void UpdatePlayerStatus(string playerName, PlayerStatus status)
     {
-        PlayerListManager.Instance.UpdatePlayerList(playerName, isJoining);
+        PlayerListManager.Instance.UpdatePlayerStatus(playerName, status);
     }
 
 
