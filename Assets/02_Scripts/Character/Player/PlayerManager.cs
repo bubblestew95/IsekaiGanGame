@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using EnumTypes;
+using StructTypes;
 
 /// <summary>
 /// 플레이어 캐릭터를 총괄적으로 관리하는 매니저.
@@ -23,6 +24,7 @@ public class PlayerManager : MonoBehaviour
     private readonly float checkDequeueTime = 0.05f;
     private float remainDequeueTime = 0f;
 
+    private PlayerInputManager playerInputManager = null;
     private CharacterController characterCont = null;
     private PlayerSkillManager skillMng = null;
     private StatusManager statusMng = null;
@@ -39,6 +41,11 @@ public class PlayerManager : MonoBehaviour
     public PlayerData PlayerData
     {
         get {  return playerData; }
+    }
+
+    public PlayerInputManager InputManager
+    {
+        get { return playerInputManager; }
     }
 
     #region Public Functions
@@ -74,18 +81,11 @@ public class PlayerManager : MonoBehaviour
     /// <summary>
     /// 조이스틱 입력을 받고 움직임을 처리한다.
     /// </summary>
-    public void MoveByJoystick()
+    public void MoveByJoystick(JoystickInputData _inputData)
     {
-        if (joystick == null)
-        {
-            return;
-        }
-
-        float x = joystick.Horizontal;
-        float z = joystick.Vertical;
         float speed = playerData.walkSpeed;
 
-        Vector3 moveVector = new Vector3(x, 0f, z) * speed * Time.deltaTime;
+        Vector3 moveVector = new Vector3(_inputData.x, 0f, _inputData.z) * speed * Time.deltaTime;
 
         characterCont.Move(moveVector);
 
@@ -111,6 +111,9 @@ public class PlayerManager : MonoBehaviour
         return SkillType.None;
     }
 
+    /// <summary>
+    /// 스킬이 끝났을 때 호출되는 함수. 우선은 다시 대기 상태로 돌아오도록 설정.
+    /// </summary>
     public void EndSkill()
     {
         ChangeState(PlayerStateType.Idle);
@@ -170,13 +173,14 @@ public class PlayerManager : MonoBehaviour
     {
         characterCont = GetComponent<CharacterController>();
 
-        joystick = FindAnyObjectByType<FloatingJoystick>();
-
         skillMng = new PlayerSkillManager();
         skillMng.Init(this);
 
         statusMng = new StatusManager();
         statusMng.Init(this);
+
+        playerInputManager = new PlayerInputManager();
+        playerInputManager.Init(FindAnyObjectByType<FloatingJoystick>());
 
         animator = GetComponent<Animator>();
 

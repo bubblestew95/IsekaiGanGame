@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-using EnumTypes;
+using StructTypes;
 
 public class PlayerInputManager
 {
@@ -10,17 +9,17 @@ public class PlayerInputManager
     /// </summary>
     private FloatingJoystick joystick = null;
 
-    private float dequeueTime = 0.05f;
-
-    private Queue<SkillType> inputButtonBuffer = new Queue<SkillType>();
-
-    private float beforeDequeueTime = 0f;
-
     #region Public Func
     
-    public void OnButtonInput(SkillType _input)
+    public void Init(FloatingJoystick _joystick)
     {
-        inputButtonBuffer.Enqueue(_input);
+        joystick = _joystick;
+    }
+
+    public void GetJoystickInputValue(out JoystickInputData _inputData)
+    {
+        _inputData.x = joystick.Horizontal;
+        _inputData.z = joystick.Vertical;
     }
 
     #endregion

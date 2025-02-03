@@ -9,20 +9,42 @@ public class SkillButtonsManager : MonoBehaviour
 
     private Dictionary<SkillType, ButtonSetting> skillButtonMap = null;
 
-    public void OnSkillButtonClicked(SkillType _type)
+    public void OnSkillButtonClickDown(SkillType _type)
     {
-        if(battleUIManager == null)
+        if (battleUIManager == null)
         {
             Debug.LogWarning("Battle UI Manager is Null!");
             return;
         }
 
-        battleUIManager.OnClickedSkillButton(_type);
+        battleUIManager.OnSkillButtonDown(_type);
+    }
+
+    public void OnSkillButtonClickUp(SkillType _type)
+    {
+        if (battleUIManager == null)
+        {
+            Debug.LogWarning("Battle UI Manager is Null!");
+            return;
+        }
+
+        battleUIManager.OnSkillButtonUp(_type);
     }
 
     public void ApplyCooltime(SkillType _type, float _time)
     {
         skillButtonMap[_type].SetCooltime(_time);
+    }
+
+    public void SendSkillDirection(SkillType _type, float _horizontal, float _vertical)
+    {
+        if (battleUIManager == null)
+        {
+            Debug.LogWarning("Battle UI Manager is Null!");
+            return;
+        }
+
+        battleUIManager.SendSkillDirectionToSkillUI(_type, _horizontal, _vertical);
     }
 
     private void Awake()

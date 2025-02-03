@@ -1,8 +1,12 @@
-using EnumTypes;
 using UnityEngine;
+
+using EnumTypes;
+using StructTypes;
 
 public class IdleState : BasePlayerState
 {
+    private JoystickInputData joystickInputData;
+
     public IdleState(PlayerManager playerMng) : base(playerMng)
     {
     }
@@ -20,7 +24,8 @@ public class IdleState : BasePlayerState
     public override void OnUpdateState()
     {
         // 대기 상태일 때만 움직일 수 있음.
-        playerMng.MoveByJoystick();
+        playerMng.InputManager.GetJoystickInputValue(out joystickInputData);
+        playerMng.MoveByJoystick(joystickInputData);
 
         // 대기 상태일 때만 스킬이 사용 가능함. 스킬 사용 체크.
         SkillType skillType = playerMng.GetNextSkill();
