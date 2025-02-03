@@ -6,6 +6,14 @@ using UnityEngine;
 /// </summary>
 public abstract class SkillUI_Base : MonoBehaviour
 {
-    [SerializeField]
-    protected SkillType skillType = SkillType.None;
+    /// <summary>
+    /// 스킬을 특정 위치 혹은 방향을 향해 조준한다.
+    /// </summary>
+    public virtual void AimSkill(float _horizontal, float _vertical)
+    {
+    }
+
+    public virtual void SetEnabled(bool _enabled)
+    {
+    }
 }
