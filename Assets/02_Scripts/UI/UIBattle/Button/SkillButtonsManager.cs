@@ -16,6 +16,19 @@ public class SkillButtonsManager : MonoBehaviour
             Debug.LogWarning("Battle UI Manager is Null!");
             return;
         }
+
+        battleUIManager.OnSkillButtonDown(_type);
+    }
+
+    public void OnSkillButtonClickUp(SkillType _type)
+    {
+        if (battleUIManager == null)
+        {
+            Debug.LogWarning("Battle UI Manager is Null!");
+            return;
+        }
+
+        battleUIManager.OnSkillButtonUp(_type);
     }
 
     public void ApplyCooltime(SkillType _type, float _time)

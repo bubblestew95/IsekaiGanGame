@@ -6,7 +6,6 @@ using EnumTypes;
 public class UIBattleUIManager : MonoBehaviour
 {
     public PlayerManager playerManager = null;
-    public SkillUIManager skillUIManager = null;
     public List<UIHpsManager> hpList = new List<UIHpsManager>();
     public List<UIBossHpsManager> bossHpList = new List<UIBossHpsManager>();
     public List<UIWarningManager> warningList = new List<UIWarningManager>();
@@ -18,6 +17,7 @@ public class UIBattleUIManager : MonoBehaviour
     public int playerMaxHp = 1;
 
     private SkillButtonsManager skillButtonsManager = null;
+    private SkillUIManager skillUIManager = null;
 
     private void Awake()
     {
@@ -27,20 +27,10 @@ public class UIBattleUIManager : MonoBehaviour
         buttonList = GetComponentsInChildren<ButtonSetting>().ToList();
         joyStick = GetComponentInChildren<FloatingJoystick>();
 
-        ////테스트 용 쿨타임
-        //if (cooltimeList.Count <= 4)
-        //{
-        //    List<float> testCoolValue = new List<float> { 1, 1, 1, 1, 1 };
-        //    cooltimeList = testCoolValue;
-        //    if (cooltimeList.Count == 0)
-        //        Debug.Log("쿨타임 리스트가 비어있어 테스트 쿨타임으로 시작합니다.");
-        //    if (cooltimeList.Count < 0)
-        //        Debug.Log("쿨타임 리스트가 5개보다 적어 테스트 쿨타임으로 시작합니다.");
-        //}
-        ////
         SetupAllUI();
 
         skillButtonsManager = GetComponentInChildren<SkillButtonsManager>();
+        skillUIManager = transform.parent.GetComponentInChildren<SkillUIManager>();
     }
 
     /// <summary>
@@ -59,11 +49,11 @@ public class UIBattleUIManager : MonoBehaviour
     }
     public void OnSkillButtonDown(SkillType _type)
     {
-
+        skillUIManager.SetSkillUIEnabled(_type, true);
     }
     public void OnSkillButtonUp(SkillType _type)
     {
-
+        skillUIManager.SetSkillUIEnabled(_type, false);
     }
     public void OnSkillButtonExit(SkillType _type)
     {
@@ -95,7 +85,6 @@ public class UIBattleUIManager : MonoBehaviour
         for (int i = 0; i < buttonList.Count; i++) // 쿨타임 리스트에 있는 쿨타임들 각각 버튼에 설정// 평타,회피,스킬1,스킬2,스킬3 순서
         {
             ButtonSetting buttonSetting = buttonList[i];
-            // buttonSetting.SetCooltime(cooltimeList[i]);
         }
     }
 
