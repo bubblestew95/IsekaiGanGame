@@ -145,6 +145,9 @@ public class BossAttackManager : MonoBehaviour
         // attackCollider 활성화
         fanAttackCollider.SetActive(true);
 
+        // 파티클 재생
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, new Vector3(fanAttackCollider.transform.position.x + forwardOffset.x * 3f, 0.5f, fanAttackCollider.transform.position.z + forwardOffset.z * 3f));
+
         yield return attackColliderTime;
 
         // attackCollider 비활성화
@@ -215,6 +218,9 @@ public class BossAttackManager : MonoBehaviour
         foreach (GameObject circleAttackCollider in circleAttackColliders)
         {
             circleAttackCollider.SetActive(true);
+
+            // 파티클 재생
+            ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, circleAttackCollider.transform.position);
         }
 
         yield return attackColliderTime;
@@ -266,6 +272,9 @@ public class BossAttackManager : MonoBehaviour
 
         // attackCollider 활성화
         circleAttackColliders[0].SetActive(true);
+
+        // 파티클 재생
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, circleAttackColliders[0].transform.position);
 
         yield return attackColliderTime;
 
@@ -393,6 +402,9 @@ public class BossAttackManager : MonoBehaviour
         // attackCollider 활성화
         circleAttackColliders[0].SetActive(true);
 
+        // 파티클 재생
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, circleAttackColliders[0].transform.position);
+
         yield return attackColliderTime;
 
         // attackCollider 비활성화
@@ -439,6 +451,9 @@ public class BossAttackManager : MonoBehaviour
 
         // attackCollider 활성화
         circleAttackColliders[0].SetActive(true);
+
+        // 파티클 재생
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, circleAttackColliders[0].transform.position);
 
         yield return attackColliderTime;
 
