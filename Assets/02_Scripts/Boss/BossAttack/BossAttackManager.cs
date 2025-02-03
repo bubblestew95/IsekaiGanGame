@@ -26,8 +26,13 @@ public class BossAttackManager : MonoBehaviour
     [SerializeField] private DecalProjector[] circleFullRangeDecals;
     [SerializeField] private DecalProjector[] circleChargingRangeDecals;
 
+    [Header("돌 던지기")]
+    [SerializeField] private GameObject P_Stone;
+    [SerializeField] private Transform rightHand;
+
     // 스킬 관련
     private BossSkillData skill;
+    private string skillName;
     private float range;
     private float damage;
     private float delay;
@@ -92,6 +97,7 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack1").SkillData;
 
+        skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay;
@@ -109,6 +115,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 스킬 데미지 설정
         fanAttackCollider.GetComponent<BossAttackCollider>().Damage = damage;
+        fanAttackCollider.GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         angle = 90f;
@@ -159,6 +166,7 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack2").SkillData;
 
+        skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay;
@@ -178,6 +186,7 @@ public class BossAttackManager : MonoBehaviour
         {
             attackCollider.transform.localScale = new Vector3(range, 0.5f, range);
             attackCollider.GetComponent<BossAttackCollider>().Damage = damage;
+            attackCollider.GetComponent<BossAttackCollider>().SkillName = skillName;
         }
 
         // 스킬 표시
@@ -237,6 +246,7 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack3").SkillData;
 
+        skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay;
@@ -246,6 +256,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
@@ -287,11 +298,13 @@ public class BossAttackManager : MonoBehaviour
     {
         BSD_Duration skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack4").SkillData as BSD_Duration;
 
+        skillName = skill.SkillName;
         damage = skill.Damage;
         duration = skill.Duration;
 
         // 스킬 데미지 설정
         GetComponent<BossAttackCollider>().Damage = damage;
+        GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         GetComponent<BoxCollider>().isTrigger = true;
@@ -331,10 +344,12 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack5").SkillData;
 
+        skillName = skill.SkillName;
         damage = skill.Damage;
 
         // 스킬 데미지 설정
         GetComponent<BossAttackCollider>().Damage = damage;
+        GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         GetComponent<BoxCollider>().isTrigger = true;
@@ -366,6 +381,7 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack6").SkillData;
 
+        skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay;
@@ -375,12 +391,21 @@ public class BossAttackManager : MonoBehaviour
 
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
 
         // 스킬 표시
         circleFullRangeDecals[0].size = new Vector3(range, range, 1f);
+
+        // 돌생성
+        GameObject stone = Instantiate(P_Stone, rightHand);
+
+        stone.transform.SetParent(null);
+        Vector3 startPos = stone.transform.position;
+        Vector3 startSize = stone.transform.localScale;
+        Quaternion startRotation = stone.transform.rotation;
 
         // 스킬 차는거 표시
         float elapseTime = 0f;
@@ -390,6 +415,10 @@ public class BossAttackManager : MonoBehaviour
             elapseTime += Time.deltaTime;
 
             circleChargingRangeDecals[0].size = new Vector3(range * (elapseTime / delay), range * (elapseTime / delay), 1f);
+
+            stone.transform.position = Vector3.Lerp(startPos, circleSkillPos[0].transform.position, elapseTime / delay);
+            stone.transform.localScale = Vector3.Lerp(startSize, new Vector3(2f, 2f, 2f), elapseTime / delay);
+            stone.transform.rotation = Quaternion.Lerp(startRotation, Quaternion.Euler(0f, 0f, 0f), elapseTime / delay);
 
             yield return null;
         }
@@ -416,6 +445,7 @@ public class BossAttackManager : MonoBehaviour
     {
         skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack7").SkillData;
 
+        skillName = skill.SkillName;
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay;
@@ -425,6 +455,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
