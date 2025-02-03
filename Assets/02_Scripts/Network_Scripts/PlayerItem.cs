@@ -1,22 +1,36 @@
-using TMPro;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+
+public enum PlayerStatus { Host, Ready, NotReady }
 
 public class PlayerItem : MonoBehaviour
 {
-    public TMP_Text playerNameText;  // 플레이어 이름을 표시할 UI 텍스트
-    public GameObject hostIcon;      // 방장 여부를 표시할 아이콘 (예: 왕관 이미지)
+    public TMP_Text usernameText;
+    public Image statusIcon;
+    public Sprite hostIcon;
+    public Sprite readyIcon;
+    public Sprite notReadyIcon;
 
-    public void SetPlayerInfo(string playerName, bool isHost)
+    public void SetPlayerInfo(string username, PlayerStatus status)
     {
-        playerNameText.text = playerName;  // 플레이어 이름 설정
+        usernameText.text = username;
+        SetStatus(status);
+    }
 
-        if (isHost)
+    public void SetStatus(PlayerStatus status)
+    {
+        switch (status)
         {
-            hostIcon.SetActive(true);  // 방장인 경우 아이콘 활성화
-        }
-        else
-        {
-            hostIcon.SetActive(false); // 방장이 아니면 비활성화
+            case PlayerStatus.Host:
+                statusIcon.sprite = hostIcon;
+                break;
+            case PlayerStatus.Ready:
+                statusIcon.sprite = readyIcon;
+                break;
+            case PlayerStatus.NotReady:
+                statusIcon.sprite = notReadyIcon;
+                break;
         }
     }
 }
