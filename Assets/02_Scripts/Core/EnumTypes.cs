@@ -28,19 +28,19 @@ namespace EnumTypes
         Stun,       // 스턴 상태. 아마도 그로기랑도 같이 쓸 수 있을 듯?
     }
 
-    [System.Serializable]
-    public enum PlayerSkillRangeType
-    {
-        None,
-        Direction,  // 플레이어 위치를 기준으로 특정 방향을 향해서 스킬이 사용됨.
-        AOE,        // 특정 위치에서 스킬이 사용됨.
-    }
+    //[System.Serializable]
+    //public enum PlayerSkillRangeType
+    //{
+    //    None,
+    //    Direction,  // 플레이어 위치를 기준으로 특정 방향을 향해서 스킬이 사용됨.
+    //    AOE,        // 특정 위치에서 스킬이 사용됨.
+    //}
 
-    [System.Serializable]
-    public enum PlayerSkillActivatedType
-    {
-        Casting,        // 스킬 시전 이전에 잠깐의 대기 시간이 있는 타입
-        Holding,        // 스킬 시전 중 계속해서 스킬이 나가는 타입
-        Immediately     // 즉발 타입
-    }
+    //[System.Serializable]
+    //public enum PlayerSkillActivatedType
+    //{
+    //    Casting,        // 스킬 시전 이전에 잠깐의 대기 시간이 있는 타입
+    //    Holding,        // 스킬 시전 중 계속해서 스킬이 나가는 타입
+    //    Immediately     // 즉발 타입
+    //}
 }

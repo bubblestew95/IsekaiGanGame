@@ -9,5 +9,5 @@ public class PlayerData : ScriptableObject
 
     public float walkSpeed = 3f;
 
-    public List<PlayerSkillData> skills = null;
+    public List<PlayerSkillBase> skills = null;
 }

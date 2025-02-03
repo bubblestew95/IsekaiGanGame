@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7624309295343067427}
   - component: {fileID: 7722578952595956294}
   - component: {fileID: 3245106476287953623}
-  - component: {fileID: 957541035213278170}
   - component: {fileID: 8910406521158013694}
+  - component: {fileID: 957541035213278170}
   m_Layer: 5
   m_Name: P_SkillJoystick
   m_TagString: Untagged
@@ -95,6 +95,25 @@ MonoBehaviour:
   images: []
   textMeshPros: []
   cooltime: {fileID: 0}
+--- !u!114 &8910406521158013694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194362624025206850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efb4833d6bac1c94bb0375fa07dc162a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handleRange: 0.4
+  deadZone: 0
+  axisOptions: 0
+  snapX: 0
+  snapY: 0
+  background: {fileID: 3931495118660762723}
+  handle: {fileID: 3286283008093132052}
 --- !u!114 &957541035213278170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,25 +159,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &8910406521158013694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 194362624025206850}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efb4833d6bac1c94bb0375fa07dc162a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  handleRange: 0.4
-  deadZone: 0
-  axisOptions: 0
-  snapX: 0
-  snapY: 0
-  background: {fileID: 3931495118660762723}
-  handle: {fileID: 3286283008093132052}
 --- !u!1 &1123577861291799162
 GameObject:
   m_ObjectHideFlags: 0

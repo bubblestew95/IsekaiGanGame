@@ -9,7 +9,7 @@ public class PlayerSkillManager
 {
     private PlayerManager playerManager = null;
 
-    private List<PlayerSkillData> skillDatas = null;
+    private List<PlayerSkillBase> skillDatas = null;
 
     private Animator animator = null;
 
@@ -18,8 +18,8 @@ public class PlayerSkillManager
     /// </summary>
     private Dictionary<SkillType, int> animatorIdMap = null;
 
+    private Dictionary<SkillType, PlayerSkillBase> skillDataMap = null;
     private Dictionary<SkillType, float> currentCoolTimeMap = null;
-    private Dictionary<SkillType, float> maxCoolTimeMap = null;
 
     #region Public Functions
 
@@ -35,13 +35,13 @@ public class PlayerSkillManager
         animator = _mng.GetComponent<Animator>();
 
         animatorIdMap = new Dictionary<SkillType, int>();
+        skillDataMap = new Dictionary<SkillType, PlayerSkillBase>();
         currentCoolTimeMap = new Dictionary<SkillType, float>();
-        maxCoolTimeMap = new Dictionary<SkillType, float>();
 
         foreach (var data in skillDatas)
         {
+            skillDataMap.Add(data.skillType, data);
             currentCoolTimeMap.Add(data.skillType, 0f);
-            maxCoolTimeMap.Add(data.skillType, data.coolTime);
         }
 
         // 우선 하드코딩으로 애니메이터 id를 캐싱함. 확장성 생각하면 나중에 수정할 것!
@@ -93,7 +93,7 @@ public class PlayerSkillManager
         }
 
         // 쿨타임 적용
-        currentCoolTimeMap[_type] = maxCoolTimeMap[_type];
+        currentCoolTimeMap[_type] = skillDataMap[_type].coolTime;
 
         return true;
     }
@@ -132,6 +132,11 @@ public class PlayerSkillManager
         }
 
         return true;
+    }
+
+    public void SkillAction(SkillType _type, int _order)
+    {
+        
     }
 
     // 백어택 체크 기술검증용 레이캐스트 함수. 나중에 실사용을 위해서 잠시 남겨놓음.

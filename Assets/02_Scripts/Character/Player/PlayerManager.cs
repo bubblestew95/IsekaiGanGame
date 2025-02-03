@@ -168,9 +168,9 @@ public class PlayerManager : MonoBehaviour
     /// <summary>
     /// 스킬 애니메이션 중 스킬 사용 타이밍 때 스킬의 효과를 씬에 적용시킨다.
     /// </summary>
-    public void PlaySkillAction()
+    public void PlaySkillAction(SkillType _type, int skillOrder)
     {
-
+        // skillMng.
     }
 
     #endregion
