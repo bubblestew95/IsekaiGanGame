@@ -21,7 +21,8 @@ public class PlayerManager : MonoBehaviour
     private PlayerData playerData = null;
     [SerializeField]
     private UIBattleUIManager battleUIManager = null;
-
+    [SerializeField]
+    private SkillUIManager skillUIManager = null;
     #endregion
 
     #region InputBuffer
@@ -70,10 +71,13 @@ public class PlayerManager : MonoBehaviour
     /// 스킬 발동을 시도한다.
     /// </summary>
     /// <param name="_skillIdx"></param>
-    public void TryUseSkill(SkillType _type, Vector3 _position)
+    public void TryUseSkill(SkillType _type)
     {
+        // 스킬 사용 지점을 스킬 UI 매니저에게서 받아온다.
+        Vector3 point = skillUIManager.GetSkillAimPoint(_type);
+
         // 스킬 발동에 성공했다면
-        if(skillMng.TryUseSkill(_type, _position))
+        if(skillMng.TryUseSkill(_type, point))
         {
             // UI에 쿨타임을 적용한다.
             if (battleUIManager != null)
@@ -85,14 +89,14 @@ public class PlayerManager : MonoBehaviour
     /// 입력을 받았을 때 입력 버퍼에 해당 입력의 스킬 타입을 넣는다.
     /// </summary>
     /// <param name="_input">입력 버퍼에 Enqueue할 스킬 타입</param>
-    //public void OnButtonInput(SkillType _input)
-    //{
-    //    skillBuffer.Enqueue(_input);
+    public void OnButtonInput(SkillType _input)
+    {
+        skillBuffer.Enqueue(_input);
 
-    //    // 만약 입력 버퍼가 비어있다가 새롭게 입력됐다면 Dequeue 시간을 측정하기 시작한다.
-    //    if (skillBuffer.Count == 1)
-    //        remainDequeueTime = checkDequeueTime;
-    //}
+        // 만약 입력 버퍼가 비어있다가 새롭게 입력됐다면 Dequeue 시간을 측정하기 시작한다.
+        if (skillBuffer.Count == 1)
+            remainDequeueTime = checkDequeueTime;
+    }
 
     /// <summary>
     /// 조이스틱 입력을 받고 움직임을 처리한다.
@@ -119,13 +123,13 @@ public class PlayerManager : MonoBehaviour
     /// 현재 스킬 입력 버퍼에서 하나를 꺼내옴.
     /// </summary>
     /// <returns>사용할 스킬의 타입</returns>
-    //public SkillType GetNextSkill()
-    //{
-    //    if (skillBuffer.TryDequeue(out SkillType nextSkillType))
-    //        return nextSkillType;
+    public SkillType GetNextSkill()
+    {
+        if (skillBuffer.TryDequeue(out SkillType nextSkillType))
+            return nextSkillType;
 
-    //    return SkillType.None;
-    //}
+        return SkillType.None;
+    }
 
     /// <summary>
     /// 스킬이 끝났을 때 호출되는 함수. 우선은 다시 대기 상태로 돌아오도록 설정.

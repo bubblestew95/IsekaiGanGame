@@ -55,13 +55,9 @@ public class UIBattleUIManager : MonoBehaviour
     {
         Vector3 point = skillUIManager.GetSkillAimPoint(_type);
 
-        // playerManager.OnButtonInput(_type);
-        playerManager.TryUseSkill(_type, point);
+        playerManager.OnButtonInput(_type);
+        // playerManager.TryUseSkill(_type);
         skillUIManager.SetSkillUIEnabled(_type, false);
-    }
-    public void OnSkillButtonExit(SkillType _type)
-    {
-
     }
 
     public void SendSkillDirectionToSkillUI(SkillType _type, float _horizontal, float _vertical)

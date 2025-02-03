@@ -16,6 +16,11 @@ public class SkillUIManager : MonoBehaviour
 
     private Dictionary<SkillType, SkillUI_Base> skillUIMap = null;
 
+    /// <summary>
+    /// 스킬 범위 혹은 스킬 사용 방향의 출력 여부를 설정한다.
+    /// </summary>
+    /// <param name="_type">스킬 타입</param>
+    /// <param name="_enabled">출력 여부</param>
     public void SetSkillUIEnabled(SkillType _type, bool _enabled)
     {
         if(skillUIMap.TryGetValue(_type, out var skillUI))
@@ -28,6 +33,12 @@ public class SkillUIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 스킬 범위 혹은 스킬 사용 방향을 입력받은 값을 통해 설정한다.
+    /// </summary>
+    /// <param name="_type">스킬 타입</param>
+    /// <param name="_horizontal">가로 입력값</param>
+    /// <param name="_vertical">세로 입력값</param>
     public void SetSkillAimPoint(SkillType _type, float _horizontal, float _vertical)
     {
         if (skillUIMap.TryGetValue(_type, out var skillUI))
@@ -40,6 +51,11 @@ public class SkillUIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 스킬이 사용될 범위 혹은 스킬 사용 방향을 리턴한다.
+    /// </summary>
+    /// <param name="_type">스킬 타입</param>
+    /// <returns>스킬 범위 or 스킬 방향(Euler Angle)</returns>
     public Vector3 GetSkillAimPoint(SkillType _type)
     {
         if (skillUIMap.TryGetValue(_type, out var skillUI))

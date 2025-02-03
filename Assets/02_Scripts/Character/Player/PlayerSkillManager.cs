@@ -116,31 +116,6 @@ public class PlayerSkillManager
         }
     }
 
-    // 백어택 체크 기술검증용 레이캐스트 함수. 나중에 실사용을 위해서 잠시 남겨놓음.
-    //public void TestRaycast()
-    //{
-    //    Debug.Log("Raycast!");
-    //    Debug.DrawLine(transform.position, transform.forward + transform.position, Color.red, 2f);
-
-    //    Ray ray = new Ray(transform.position, transform.forward);
-
-    //    RaycastHit hit;
-
-    //    if (Physics.Raycast(ray, out hit, 30f))
-    //    {
-    //        Debug.Log(hit.transform.name);
-
-    //        // 백어택 체크.
-    //        // 캐릭터의 전방 방향으로 기술이 나가게만 설정해놨음. 애초에 백어택 체크 기술들은 전부 캐릭터 전방으로 향하고
-    //        // 따라서 캐릭터의 forward 와 충돌체의 forward 의 각도로 백어택 여부를 체크하는 중.
-    //        if (Vector3.Angle(transform.forward, hit.transform.forward) < 80f)
-    //            Debug.Log("BackAttack!");
-    //    }
-    //}
-
-    #endregion
-
-    #region Private Functions
 
     /// <summary>
     /// 현재 지정한 스킬 타입의 스킬이 사용 가능한 지 체크한다.
@@ -158,6 +133,34 @@ public class PlayerSkillManager
 
         return true;
     }
+
+    // 백어택 체크 기술검증용 레이캐스트 함수. 나중에 실사용을 위해서 잠시 남겨놓음.
+    /*
+    public void TestRaycast()
+    {
+        Debug.Log("Raycast!");
+        Debug.DrawLine(transform.position, transform.forward + transform.position, Color.red, 2f);
+
+        Ray ray = new Ray(transform.position, transform.forward);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 30f))
+        {
+            Debug.Log(hit.transform.name);
+
+            // 백어택 체크.
+            // 캐릭터의 전방 방향으로 기술이 나가게만 설정해놨음. 애초에 백어택 체크 기술들은 전부 캐릭터 전방으로 향하고
+            // 따라서 캐릭터의 forward 와 충돌체의 forward 의 각도로 백어택 여부를 체크하는 중.
+            if (Vector3.Angle(transform.forward, hit.transform.forward) < 80f)
+                Debug.Log("BackAttack!");
+        }
+    }
+    */
+
+    #endregion
+
+    #region Private Functions
 
     #endregion
 }

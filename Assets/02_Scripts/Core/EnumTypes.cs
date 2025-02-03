@@ -32,8 +32,8 @@ namespace EnumTypes
     public enum PlayerSkillRangeType
     {
         None,
-        Direction,  // 특정 방향을 향해서 스킬이 사용됨.
-        AOE,        // 특정 위치로 스킬이 사용됨.
+        Direction,  // 플레이어 위치를 기준으로 특정 방향을 향해서 스킬이 사용됨.
+        AOE,        // 특정 위치에서 스킬이 사용됨.
     }
 
     [System.Serializable]

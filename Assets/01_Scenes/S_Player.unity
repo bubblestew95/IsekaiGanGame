@@ -1666,6 +1666,10 @@ PrefabInstance:
       propertyPath: skillUIManager
       value: 
       objectReference: {fileID: 696903811}
+    - target: {fileID: 4146515583710344192, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+      propertyPath: skillUIManager
+      value: 
+      objectReference: {fileID: 696903811}
     - target: {fileID: 6118636786693646415, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
       propertyPath: m_IsActive
       value: 0
