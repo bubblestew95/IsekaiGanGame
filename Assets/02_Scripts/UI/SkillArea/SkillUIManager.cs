@@ -28,7 +28,7 @@ public class SkillUIManager : MonoBehaviour
         }
     }
 
-    public void SetSkillAimPosition(SkillType _type, float _horizontal, float _vertical)
+    public void SetSkillAimPoint(SkillType _type, float _horizontal, float _vertical)
     {
         if (skillUIMap.TryGetValue(_type, out var skillUI))
         {
@@ -37,6 +37,20 @@ public class SkillUIManager : MonoBehaviour
         else
         {
             Debug.LogFormat("{0} type skill don't need to show skill area!", _type);
+        }
+    }
+
+    public Vector3 GetSkillAimPoint(SkillType _type)
+    {
+        if (skillUIMap.TryGetValue(_type, out var skillUI))
+        {
+            return skillUI.GetSkillAimPoint();
+        }
+        else
+        {
+            Debug.LogFormat("{0} type skill don't need to show skill area!", _type);
+
+            return Vector3.zero;
         }
     }
 

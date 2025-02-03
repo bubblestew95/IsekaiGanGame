@@ -16,5 +16,6 @@ MonoBehaviour:
   damage: 5
   aggro: 0
   coolTime: 5
-  rangeType: 0
+  rangeType: 1
   activatedType: 2
+  skillParticle: {fileID: 0}

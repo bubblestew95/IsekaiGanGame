@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillType: 1
   damage: 5
+  aggro: 0
   coolTime: 5
-  rangeType: 0
+  rangeType: 2
   activatedType: 2
+  skillParticle: {fileID: 7123853702983496459, guid: 493494e328c63404dbcfc3cf38fb367a, type: 3}

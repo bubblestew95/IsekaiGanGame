@@ -10,29 +10,44 @@ using StructTypes;
 /// </summary>
 public class PlayerManager : MonoBehaviour
 {
+    #region Variables
+
     [HideInInspector]
     public UnityEvent OnPlayerDead = new UnityEvent();
+
+    #region Inspector Variables
 
     [SerializeField]
     private PlayerData playerData = null;
     [SerializeField]
     private UIBattleUIManager battleUIManager = null;
 
-    private FloatingJoystick joystick = null;
+    #endregion
+
+    #region InputBuffer
 
     private Queue<SkillType> skillBuffer = new Queue<SkillType>();
     private readonly float checkDequeueTime = 0.05f;
     private float remainDequeueTime = 0f;
 
+    #endregion
+
+    #region Private Variables
+
+    private FloatingJoystick joystick = null;
     private PlayerInputManager playerInputManager = null;
     private CharacterController characterCont = null;
     private PlayerSkillManager skillMng = null;
     private StatusManager statusMng = null;
     private PlayerStateMachine stateMachine = null;
     private Animator animator = null;
-
     private int animId_Speed = 0;
 
+    #endregion
+
+    #endregion
+
+    #region Properties
     public PlayerStateMachine StateMachine
     {
         get { return stateMachine; }
@@ -47,6 +62,7 @@ public class PlayerManager : MonoBehaviour
     {
         get { return playerInputManager; }
     }
+    #endregion
 
     #region Public Functions
 
@@ -54,10 +70,10 @@ public class PlayerManager : MonoBehaviour
     /// 스킬 발동을 시도한다.
     /// </summary>
     /// <param name="_skillIdx"></param>
-    public void UseSkill(SkillType _type)
+    public void TryUseSkill(SkillType _type, Vector3 _position)
     {
         // 스킬 발동에 성공했다면
-        if(skillMng.TryUseSkill(_type))
+        if(skillMng.TryUseSkill(_type, _position))
         {
             // UI에 쿨타임을 적용한다.
             if (battleUIManager != null)
@@ -69,14 +85,14 @@ public class PlayerManager : MonoBehaviour
     /// 입력을 받았을 때 입력 버퍼에 해당 입력의 스킬 타입을 넣는다.
     /// </summary>
     /// <param name="_input">입력 버퍼에 Enqueue할 스킬 타입</param>
-    public void OnButtonInput(SkillType _input)
-    {
-        skillBuffer.Enqueue(_input);
+    //public void OnButtonInput(SkillType _input)
+    //{
+    //    skillBuffer.Enqueue(_input);
 
-        // 만약 입력 버퍼가 비어있다가 새롭게 입력됐다면 Dequeue 시간을 측정하기 시작한다.
-        if (skillBuffer.Count == 1)
-            remainDequeueTime = checkDequeueTime;
-    }
+    //    // 만약 입력 버퍼가 비어있다가 새롭게 입력됐다면 Dequeue 시간을 측정하기 시작한다.
+    //    if (skillBuffer.Count == 1)
+    //        remainDequeueTime = checkDequeueTime;
+    //}
 
     /// <summary>
     /// 조이스틱 입력을 받고 움직임을 처리한다.
@@ -103,13 +119,13 @@ public class PlayerManager : MonoBehaviour
     /// 현재 스킬 입력 버퍼에서 하나를 꺼내옴.
     /// </summary>
     /// <returns>사용할 스킬의 타입</returns>
-    public SkillType GetNextSkill()
-    {
-        if (skillBuffer.TryDequeue(out SkillType nextSkillType))
-            return nextSkillType;
+    //public SkillType GetNextSkill()
+    //{
+    //    if (skillBuffer.TryDequeue(out SkillType nextSkillType))
+    //        return nextSkillType;
 
-        return SkillType.None;
-    }
+    //    return SkillType.None;
+    //}
 
     /// <summary>
     /// 스킬이 끝났을 때 호출되는 함수. 우선은 다시 대기 상태로 돌아오도록 설정.
@@ -127,6 +143,22 @@ public class PlayerManager : MonoBehaviour
     public void SetAnimatorWalkSpeed(float _speed)
     {
         animator.SetFloat(animId_Speed, _speed);
+    }
+
+    /// <summary>
+    /// 지정한 스킬이 사용 가능한지 스킬매니저에서 알아오는 함수.
+    /// </summary>
+    /// <param name="_type">지정할 스킬의 타입</param>
+    /// <returns>사용 가능 여부</returns>
+    public bool IsSkillUsable(SkillType _type)
+    {
+        if(skillMng == null)
+        {
+            Debug.LogError("Skill Manager is not valid!");
+            return false;
+        }
+
+        return skillMng.IsSkillUsable(_type);
     }
 
     #endregion

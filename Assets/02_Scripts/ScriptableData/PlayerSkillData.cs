@@ -16,4 +16,6 @@ public class PlayerSkillData : ScriptableObject
     public PlayerSkillRangeType rangeType = PlayerSkillRangeType.None;
 
     public PlayerSkillActivatedType activatedType = PlayerSkillActivatedType.Casting;
+
+    public ParticleSystem skillParticle = null;
 }

@@ -65,6 +65,8 @@ public class ButtonSetting : MonoBehaviour
     public void ButtonDown(BaseEventData _eventData)
     {
         Debug.Log("Button Down!");
+
+        skillButtonsManager.OnSkillButtonClickDown(ButtonSkillType);
         currentSkillCoroutine = StartCoroutine(SkillHoldingCoroutine(ButtonSkillType));
     }
 
@@ -77,8 +79,6 @@ public class ButtonSetting : MonoBehaviour
 
     private IEnumerator SkillHoldingCoroutine(SkillType _type)
     {
-        skillButtonsManager.OnSkillButtonClickDown(_type);
-
         while (true)
         {
             // Debug.LogFormat("{0}, {1}", joystick.Horizontal, joystick.Vertical);

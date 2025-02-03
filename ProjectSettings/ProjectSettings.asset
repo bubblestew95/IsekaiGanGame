@@ -918,8 +918,8 @@ PlayerSettings:
   cloudProjectId: 2b8dba86-73b6-407c-a33a-5d878cdf4f16
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: IsekaiGanGame
+  organizationId: ljhunity_unity
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

@@ -970,7 +970,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 112414611408620072, guid: 87a9127ed3eb9214a93524c1edfea705, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 194362624025206850, guid: 87a9127ed3eb9214a93524c1edfea705, type: 3}
       propertyPath: m_Name
@@ -1747,6 +1747,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 902654216}
     m_Modifications:
+    - target: {fileID: 112414611408620072, guid: 87a9127ed3eb9214a93524c1edfea705, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 194362624025206850, guid: 87a9127ed3eb9214a93524c1edfea705, type: 3}
       propertyPath: m_Name
       value: Attack

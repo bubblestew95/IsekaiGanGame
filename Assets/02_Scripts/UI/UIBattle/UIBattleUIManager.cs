@@ -45,7 +45,7 @@ public class UIBattleUIManager : MonoBehaviour
             return;
         }
 
-        playerManager.OnButtonInput(_type);
+        // playerManager.OnButtonInput(_type);
     }
     public void OnSkillButtonDown(SkillType _type)
     {
@@ -53,6 +53,10 @@ public class UIBattleUIManager : MonoBehaviour
     }
     public void OnSkillButtonUp(SkillType _type)
     {
+        Vector3 point = skillUIManager.GetSkillAimPoint(_type);
+
+        // playerManager.OnButtonInput(_type);
+        playerManager.TryUseSkill(_type, point);
         skillUIManager.SetSkillUIEnabled(_type, false);
     }
     public void OnSkillButtonExit(SkillType _type)
@@ -62,7 +66,7 @@ public class UIBattleUIManager : MonoBehaviour
 
     public void SendSkillDirectionToSkillUI(SkillType _type, float _horizontal, float _vertical)
     {
-        skillUIManager.SetSkillAimPosition(_type, _horizontal, _vertical);
+        skillUIManager.SetSkillAimPoint(_type, _horizontal, _vertical);
     }
 
     //public void CooltimeListSetting(List<float> _timeList) // 평타,회피,스킬1,스킬2,스킬3 순서

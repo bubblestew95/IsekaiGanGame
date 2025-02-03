@@ -9,14 +9,16 @@ public class SkillUI_Direction : SkillUI_Base
 
     public override void AimSkill(float _horizontal, float _vertical)
     {
-        base.AimSkill(_horizontal, _vertical);
-
         SetDirection(_horizontal, _vertical);
+    }
+
+    public override Vector3 GetSkillAimPoint()
+    {
+        return arrowImagePivot.rotation.eulerAngles;
     }
 
     public override void SetEnabled(bool _enabled)
     {
-        base.SetEnabled(_enabled);
         arrowImagePivot.gameObject.SetActive(_enabled);
     }
 

@@ -59,8 +59,9 @@ public class PlayerSkillManager
     /// 스킬 사용을 시도한다.
     /// </summary>
     /// <param name="_skillIdx">사용할 스킬의 스킬 리스트 상 인덱스</param>
-    public bool TryUseSkill(SkillType _type)
+    public bool TryUseSkill(SkillType _type, Vector3 _position)
     {
+        // 사용하려는 변수들의 유효성 체크.
         if (skillDatas == null || currentCoolTimeMap == null)
         {
             Debug.LogWarning("Skill List is not valid!");
@@ -146,7 +147,7 @@ public class PlayerSkillManager
     /// </summary>
     /// <param name="_skillIdx">체크할 스킬의 타입</param>
     /// <returns></returns>
-    private bool IsSkillUsable(SkillType _type)
+    public bool IsSkillUsable(SkillType _type)
     {
         // 쿨타임 체크
         if (currentCoolTimeMap[_type] > 0f)
