@@ -568,6 +568,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 420442215}
     m_Modifications:
+    - target: {fileID: 2478744840783200460, guid: c2d78de639385854594258da18569991, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4184481997451426468, guid: c2d78de639385854594258da18569991, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4662743024038111884, guid: c2d78de639385854594258da18569991, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -705,6 +713,10 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6339808447369250042, guid: bc14e142cdd4ad14fbeecd1dde247a32, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6361416677013747869, guid: bc14e142cdd4ad14fbeecd1dde247a32, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -783,6 +795,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6361416677013747869, guid: bc14e142cdd4ad14fbeecd1dde247a32, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7852857295354882047, guid: bc14e142cdd4ad14fbeecd1dde247a32, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7852857295354882047, guid: bc14e142cdd4ad14fbeecd1dde247a32, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7979644877970717363, guid: bc14e142cdd4ad14fbeecd1dde247a32, type: 3}
@@ -1102,6 +1122,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 420442215}
     m_Modifications:
+    - target: {fileID: 2478744840783200460, guid: c2d78de639385854594258da18569991, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4184481997451426468, guid: c2d78de639385854594258da18569991, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4662743024038111884, guid: c2d78de639385854594258da18569991, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

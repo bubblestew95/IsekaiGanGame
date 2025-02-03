@@ -25,8 +25,9 @@ public class SkillUI_AOE : SkillUI_Base
     public override void SetEnabled(bool _enabled)
     {
         base.SetEnabled(_enabled);
-        targetImageObj.SetActive(enabled);
-        rangeImageObj.SetActive(enabled);
+
+        targetImageObj.SetActive(_enabled);
+        rangeImageObj.SetActive(_enabled);
     }
 
     /// <summary>
@@ -38,6 +39,11 @@ public class SkillUI_AOE : SkillUI_Base
         _pos *= maxRangeRadius;
         _pos += transform.position;
 
-        targetRectTr.position = Vector3.ClampMagnitude(_pos, maxRangeRadius);
+        targetRectTr.position = _pos;
+    }
+
+    private void Start()
+    {
+        rangeImageObj.GetComponent<RectTransform>().sizeDelta = new Vector2(maxRangeRadius, maxRangeRadius);
     }
 }
