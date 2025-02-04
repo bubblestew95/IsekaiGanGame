@@ -20,8 +20,25 @@ public class RoomManager : MonoBehaviour
     private float roomSpacing = 40f;
     private string currentRoom = "";
 
+    private string username;
+
     void Start()
     {
+        // PlayerPrefs에서 username 불러오기
+        username = PlayerPrefs.GetString("username");
+
+        if (string.IsNullOrEmpty(username))
+        {
+            //Debug.LogError("Username not found!");
+            username = "imsi";
+            Debug.Log($"imsi - Welcome : , {username}!");
+        }
+        else
+        {
+            Debug.Log($"Welcome, {username}!");
+            // 여기서 username을 사용하여 원하는 작업 수행
+        }
+
         createRoomButton.onClick.AddListener(CreateRoom);
         codeButton.interactable = false;
         leaveRoomButton.interactable = false;
@@ -44,12 +61,16 @@ public class RoomManager : MonoBehaviour
 
         roomList.Add(roomCode, newRoom); // Dictionary에 방 추가
         currentRoom = roomCode;
+
+        // 플레이어 리스트 갱신 (본인을 방장으로 추가)
+        PlayerListManager.Instance.AddPlayer(username, true);
+
         // 스크롤뷰 크기 조정
         UpdateScrollView();
 
         // UI 비활성화
         roomNameInput.interactable = false; // 방을 만들었으므로 입력창 비활성화
-        joinCodeInput.interactable=false;
+        joinCodeInput.interactable = false;
         createRoomButton.interactable = false;
         joinRoomButton.interactable = false;
         leaveRoomButton.interactable = true;
@@ -57,6 +78,7 @@ public class RoomManager : MonoBehaviour
         // Code 버튼 활성화 및 코드 표시
         codeButton.interactable = true; // Code 버튼 활성화
         codeButton.GetComponentInChildren<TMP_Text>().text = roomCode; // 버튼에 코드 표시
+
     }
     // 방 입장
     public void JoinRoom()
@@ -80,6 +102,9 @@ public class RoomManager : MonoBehaviour
                 createRoomButton.interactable = false;
                 joinRoomButton.interactable = false;
                 leaveRoomButton.interactable = true;
+
+                // 플레이어 추가
+                PlayerListManager.Instance.AddPlayer(username, false);
             }
         }
         else
@@ -98,6 +123,9 @@ public class RoomManager : MonoBehaviour
             TMP_Text playerCountText = roomList[currentRoom].transform.Find("roomPlayers").GetComponent<TMP_Text>();
             string[] count = playerCountText.text.Split('/');
             int currentPlayers = int.Parse(count[0]) - 1;
+
+            // 플레이어 제거
+            PlayerListManager.Instance.RemovePlayer(username);
 
             if (currentPlayers <= 0)
             {

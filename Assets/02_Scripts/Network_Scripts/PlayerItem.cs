@@ -12,6 +12,7 @@ public class PlayerItem : MonoBehaviour
     public Sprite readyIcon;
     public Sprite notReadyIcon;
 
+
     public void SetPlayerInfo(string username, PlayerStatus status)
     {
         usernameText.text = username;
