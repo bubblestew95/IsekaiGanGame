@@ -695,9 +695,6 @@ public class BossBT : MonoBehaviour
         yield return new WaitForSeconds(3f);
         SetAnimBool(curState, false);
 
-        // 상태를 스턴걸리기 전 상태로
-        curState = previousBehavior;
-
         if (previousBehavior != BossState.Attack8)
         {
             // 상태를 스턴걸리기 전 상태로
