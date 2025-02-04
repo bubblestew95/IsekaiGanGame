@@ -6,7 +6,12 @@ public class TestTrigger : MonoBehaviour
     {
         if (other.gameObject.tag == "BossAttack")
         {
-            float damage = other.GetComponent<BossAttackCollider>().Damage;
+            if (transform.tag == "BehindRock")
+            {
+                Debug.Log("돌뒤에 숨어서 안맞음");
+                return;
+            }
+                float damage = other.GetComponent<BossAttackCollider>().Damage;
             Debug.Log("데미지 받음" + damage);
         }
     }

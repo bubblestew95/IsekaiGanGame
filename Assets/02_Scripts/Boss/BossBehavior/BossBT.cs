@@ -41,7 +41,7 @@ public class BossBT : MonoBehaviour
         }
     }
 
-    #region BossBehavior
+    #region [BossBehavior]
     private IEnumerator Idle()
     {
         yield return null;
@@ -93,7 +93,7 @@ public class BossBT : MonoBehaviour
         SetAnimBool(curState, true);
 
         // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
         {
             if (skill.SkillData.SkillName == curState.ToString())
             {
@@ -131,7 +131,7 @@ public class BossBT : MonoBehaviour
         SetAnimBool(curState, true);
 
         // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
         {
             if (skill.SkillData.SkillName == curState.ToString())
             {
@@ -169,7 +169,7 @@ public class BossBT : MonoBehaviour
         SetAnimBool(curState, true);
 
         // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
         {
             if (skill.SkillData.SkillName == curState.ToString())
             {
@@ -207,7 +207,7 @@ public class BossBT : MonoBehaviour
         SetAnimBool(curState, true);
 
         // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
         {
             if (skill.SkillData.SkillName == curState.ToString())
             {
@@ -279,15 +279,6 @@ public class BossBT : MonoBehaviour
 
         // 애니메이션 시작
         SetAnimBool(curState, true);
-
-        // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
-        {
-            if (skill.SkillData.SkillName == curState.ToString())
-            {
-                skill.UseSkill();
-            }
-        }
 
         // 공격 5 끝
         while (true)
@@ -452,15 +443,6 @@ public class BossBT : MonoBehaviour
         // 애니메이션 시작
         SetAnimBool(curState, true);
 
-        // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
-        {
-            if (skill.SkillData.SkillName == curState.ToString())
-            {
-                skill.UseSkill();
-            }
-        }
-
         // 애니메이션 끝
         while (true)
         {
@@ -491,7 +473,7 @@ public class BossBT : MonoBehaviour
         SetAnimBool(curState, true);
 
         // 쿨타임 실행
-        foreach (BossSkill skill in bossSkillManager.Skills)
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
         {
             if (skill.SkillData.SkillName == curState.ToString())
             {
@@ -589,6 +571,7 @@ public class BossBT : MonoBehaviour
     }
     #endregion
 
+    #region [Function]
     // 애니메이션 bool값 설정
     private void SetAnimBool(BossState _state, bool _isActive)
     {
@@ -621,4 +604,5 @@ public class BossBT : MonoBehaviour
             }
         }
     }
+    #endregion
 }

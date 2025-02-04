@@ -24,7 +24,15 @@ public class BossPhaseSet : MonoBehaviour
 
     private void Start()
     {
-        BossPhase2Set();
+        mapMaterial.color = new Color(255f / 255f, 255f / 255f, 255f / 255f);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            BossPhase2Set();
+        }
     }
 
     private void BossPhase2Set()

@@ -95,7 +95,7 @@ public class BossAttackManager : MonoBehaviour
                 StartCoroutine(Stun());
                 break;
             case "SpecialAttack":
-                StartCoroutine(SpecialAttack());
+                curCoroutine = StartCoroutine(SpecialAttack());
                 break;
             default:
                 break;
@@ -390,7 +390,7 @@ public class BossAttackManager : MonoBehaviour
     // 전멸기
     private IEnumerator SpecialAttack()
     {
-        skill = bossSkillManager.RandomSkills.Find(skill => skill.SkillData.SkillName == "SpecialAttack").SkillData;
+        skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "SpecialAttack").SkillData;
 
         skillName = skill.SkillName;
         range = skill.AttackRange;
@@ -710,13 +710,13 @@ public class BossAttackManager : MonoBehaviour
     // 돌 뒤에 있다면 BehindRock으로 tag를 바꿈.
     private void CheckPlayerBehindRock()
     {
-        Vector3 bossPos = bossStateManager.Boss.transform.position;
+        Vector3 bossPos = new Vector3(bossStateManager.Boss.transform.position.x, 0.5f, bossStateManager.Boss.transform.position.z);
         LayerMask defaultLayerMask = LayerMask.GetMask("Default");
 
         // 각 플레이어한테 ray를쏴서 돌뒤에 있는지 확인
         foreach (GameObject player in bossStateManager.Players)
         {
-            Vector3 playerPos = player.transform.position;
+            Vector3 playerPos = new Vector3(player.transform.position.x, 0.5f, player.transform.position.z);
             Vector3 dir = (playerPos - bossPos).normalized;
 
             RaycastHit[] hits = Physics.RaycastAll(bossPos, dir, 100f, defaultLayerMask);
@@ -732,7 +732,6 @@ public class BossAttackManager : MonoBehaviour
                 }
                 else if (ray.collider.gameObject == player)
                 {
-                    Debug.Log("플레이어가 앞에 있음");
                     break;
                 }
             }

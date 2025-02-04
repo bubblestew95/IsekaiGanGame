@@ -7,7 +7,7 @@ public class BossSkill
     private float cooldownModifier = 1.0f;
 
     public BossSkillData SkillData {  get { return skillData; } }
-    public float CooldownModifier { set { CooldownModifier = value; } }
+    public float CooldownModifier { set { cooldownModifier = value; } }
 
 
     public BossSkill(BossSkillData _data)

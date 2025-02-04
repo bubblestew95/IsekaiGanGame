@@ -23,6 +23,14 @@ public class BossBehaviorManager : MonoBehaviour
         bossStateManager.bossStunCallback += SetStun;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            SetHP10();
+        }
+    }
+
     // 특정조건에서 랜덤한 행동을 하나 선택하는 함수
     // 사거리와 쿨타임 계산후 랜덤한 상태를 enum값으로 리턴
     private BossState GetRandomAction()
@@ -31,7 +39,7 @@ public class BossBehaviorManager : MonoBehaviour
 
         float dis = bossStateManager.GetDisWithoutY();
 
-        tmpList = bossSkillManager.IsSkillInRange(dis, bossSkillManager.Skills);
+        tmpList = bossSkillManager.IsSkillInRange(dis, bossSkillManager.RandomSkills);
         tmpList = bossSkillManager.IsSkillCooldown(tmpList);
 
         int randomIndex = UnityEngine.Random.Range(0, tmpList.Count);
@@ -61,7 +69,7 @@ public class BossBehaviorManager : MonoBehaviour
         {
             hp10Trigger = false;
             hp10Cnt++;
-            SetBossBehavior(BossState.Chase);
+            SetBossBehavior(BossState.Attack6);
             yield break;
         }
 
@@ -69,7 +77,7 @@ public class BossBehaviorManager : MonoBehaviour
         if (hp10Cnt == 4)
         {
             hp10Cnt = 0;
-            SetBossBehavior(BossState.Chase);
+            SetBossBehavior(BossState.Attack5);
             yield break;
         }
 

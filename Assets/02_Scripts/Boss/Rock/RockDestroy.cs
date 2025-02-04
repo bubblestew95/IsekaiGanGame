@@ -8,7 +8,7 @@ public class RockDestroy : MonoBehaviour
         {
             string skill = other.GetComponent<BossAttackCollider>().SkillName;
 
-            if (skill == "Attack5")
+            if (skill == "Attack5" || skill == "SpecialAttack")
             {
                 Destroy(gameObject);
             }
