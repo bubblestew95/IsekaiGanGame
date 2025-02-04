@@ -610,6 +610,67 @@ public class BossBT : MonoBehaviour
         yield return null;
     }
 
+    private IEnumerator Attack9()
+    {
+        isCoroutineRunning = true;
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 쿨타임 실행
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
+        {
+            if (skill.SkillData.SkillName == curState.ToString())
+            {
+                skill.UseSkill();
+            }
+        }
+
+        // Chase -> Attack9 넘어갔는지 check
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName(curState.ToString()))
+            {
+                break;
+            }
+            yield return null;
+        }
+
+        // Attack9이 끝났는지 Check
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName(curState.ToString()) && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                anim.SetBool("Attack9-1Flag", true);
+                break;
+            }
+            yield return null;
+        }
+
+        // Attack 9-1이 끝났는지 check
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack9-1") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                SetAnimBool(curState, false);
+                anim.SetBool("Attack9-1Flag", false);
+                break;
+            }
+            yield return null;
+        }
+
+        // 상태를 chase로 변경
+        curState = BossState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
+
+        yield return null;
+    }
+
     private IEnumerator Stun()
     {
         isCoroutineRunning = true;

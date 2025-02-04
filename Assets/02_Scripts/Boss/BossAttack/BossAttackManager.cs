@@ -14,6 +14,11 @@ public class BossAttackManager : MonoBehaviour
     [SerializeField] private DecalProjector fanFullRangeDecal;
     [SerializeField] private DecalProjector fanChargingRangeDecal;
 
+    [Header("반원 공격 관련")]
+    [SerializeField] private GameObject halfCircleSkillPos;
+    [SerializeField] private GameObject halfCircleAttackCollider;
+    [SerializeField] private DecalProjector halfCircleRangeDecal;
+
     [Header("원 공격 관련")]
     [SerializeField] private GameObject[] circleSkillPos;
     [SerializeField] private GameObject[] circleAttackColliders;
@@ -37,7 +42,8 @@ public class BossAttackManager : MonoBehaviour
     private float radius;
     private float thickness;
     private int segmentCount = 50;
-    private bool firstTime = false;
+    private bool fanFirstTime = false;
+    private bool halfCircleFirstTime = false;
 
     // 공격 콜라이더 관련
     private WaitForSeconds attackColliderTime = new WaitForSeconds(0.3f);
@@ -94,6 +100,9 @@ public class BossAttackManager : MonoBehaviour
             case "Attack8":
                 curCoroutine = StartCoroutine(Attack8());
                 break;
+            case "Attack9":
+                curCoroutine = StartCoroutine(Attack9());
+                break;
             case "Stun":
                 StartCoroutine(Stun());
                 break;
@@ -137,7 +146,7 @@ public class BossAttackManager : MonoBehaviour
         thickness = 1f;
         segmentCount = 50;
 
-        if (!firstTime)
+        if (!fanFirstTime)
         {
             Mesh fanMesh = BuildMesh();
             fanAttackCollider.GetComponent<MeshFilter>().mesh = fanMesh;
@@ -616,7 +625,77 @@ public class BossAttackManager : MonoBehaviour
 
         yield return null;
     }
-    
+
+    // 백어택
+    private IEnumerator Attack9()
+    {
+        Debug.Log("Attack9 호출됨");
+
+        skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack9").SkillData;
+
+        skillName = skill.SkillName;
+        range = skill.AttackRange;
+        damage = skill.Damage;
+        delay = skill.AttackColliderDelay / animSpd;
+
+        range = range * 2;
+
+        // 스킬위치 조정
+        Vector3 bossPosition = bossStateManager.Boss.transform.position;
+        Vector3 forwardOffset = bossStateManager.Boss.transform.forward * 2f;
+        halfCircleSkillPos.transform.position = new Vector3(bossPosition.x, 0.3f, bossPosition.z);
+
+        // 스킬 각도를 보스 각도에 맞게 설정
+        Vector3 targetDirection = bossStateManager.Boss.transform.forward;
+        halfCircleSkillPos.transform.rotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+
+        // 스킬 데미지 설정
+        halfCircleAttackCollider.GetComponent<BossAttackCollider>().Damage = damage;
+        halfCircleAttackCollider.GetComponent<BossAttackCollider>().SkillName = skillName;
+
+        // 공격 콜라이더 설정(크기, 위치, 각도 등)
+        angle = 180f;
+        radius = range / 2;
+        thickness = 1f;
+        segmentCount = 50;
+
+        if (!halfCircleFirstTime)
+        {
+            Mesh fanMesh = BuildMesh();
+            halfCircleAttackCollider.GetComponent<MeshFilter>().mesh = fanMesh;
+            halfCircleAttackCollider.GetComponent<MeshCollider>().sharedMesh = fanMesh;
+        }
+
+        // 스킬 표시
+        halfCircleRangeDecal.size = new Vector3(range, range, 1f);
+
+        yield return new WaitForSeconds(0.2f);
+
+        // 스킬 표시사라짐
+        halfCircleRangeDecal.size = new Vector3(0f, 0f, 0f);
+
+        // 스킬 차는거 표시
+        float elapseTime = 0f;
+
+        while (elapseTime < delay - 0.2f)
+        {
+            elapseTime += Time.deltaTime;
+            yield return null;
+        }
+        yield return null;
+
+        // attackCollider 활성화
+        halfCircleAttackCollider.SetActive(true);
+
+        // 파티클 재생
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, new Vector3(halfCircleAttackCollider.transform.position.x + forwardOffset.x * 0.5f, 0.5f, halfCircleAttackCollider.transform.position.z + forwardOffset.z * 0.5f));
+
+        yield return attackColliderTime;
+
+        // attackCollider 비활성화
+        halfCircleAttackCollider.SetActive(false);
+    }
+
     // 스턴 걸렸을때
     private IEnumerator Stun()
     {

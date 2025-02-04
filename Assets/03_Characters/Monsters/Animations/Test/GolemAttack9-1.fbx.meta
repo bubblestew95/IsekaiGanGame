@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 39781e616ef64c5448eb9da6e4882676
+guid: 44895813ae9bad04380f58ebe229e745
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -34,11 +34,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: GolemSwing
+      name: Attack9-1
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 80
+      lastFrame: 33
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -47,17 +47,24 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
+      heightFromFeet: 1
+      mirror: 1
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.017021276
+        functionName: PerformAttack
+        data: Attack9
+        objectReferenceParameter: {fileID: 9137032837993464747, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -521,13 +528,13 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: GolemSwing(Clone)
+    - name: GolemAttack9(Clone)
       parentName: 
       position: {x: 0.026414782, y: -0.19424605, z: 0.07372267}
       rotation: {x: -0.0022022168, y: 0.000055359473, z: 0.009884848, w: 0.99994874}
       scale: {x: 1, y: 1, z: 1}
     - name: Rig
-      parentName: GolemSwing(Clone)
+      parentName: GolemAttack9(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -779,17 +786,17 @@ ModelImporter:
     - name: B-thigh.R
       parentName: B-hips
       position: {x: 0.226557, y: -0.000003, z: 0.002005}
-      rotation: {x: 0.969804, y: 0.06270604, z: -0.21229216, w: 0.10237296}
+      rotation: {x: 0.969804, y: 0.062706076, z: -0.21229218, w: 0.102372944}
       scale: {x: 1, y: 1, z: 1}
     - name: B-shin.R
       parentName: B-thigh.R
       position: {x: -0.000001, y: 0.54126, z: -0.000002}
-      rotation: {x: 0.3263429, y: 0.07565556, z: -0.005663115, w: 0.942202}
+      rotation: {x: 0.32634303, y: 0.07565559, z: -0.0056630922, w: 0.942202}
       scale: {x: 1, y: 1, z: 1}
     - name: B-foot.R
       parentName: B-shin.R
       position: {x: 0.000004, y: 0.43243998, z: 0.000006}
-      rotation: {x: -0.5423887, y: 0.012226758, z: 0.0129218595, w: 0.83993936}
+      rotation: {x: -0.54238886, y: 0.012226744, z: 0.012921834, w: 0.83993924}
       scale: {x: 1, y: 1, z: 1}
     - name: B-toe.R
       parentName: B-foot.R
@@ -797,7 +804,7 @@ ModelImporter:
       rotation: {x: 0.00574281, y: 0.90707535, z: -0.4189635, w: 0.040631875}
       scale: {x: 1, y: 1, z: 1}
     - name: SkinnedMeshes
-      parentName: GolemSwing(Clone)
+      parentName: GolemAttack9(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
