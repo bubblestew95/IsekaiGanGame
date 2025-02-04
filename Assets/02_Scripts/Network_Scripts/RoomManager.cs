@@ -55,60 +55,75 @@ public class RoomManager : MonoBehaviour
         InvokeRepeating(nameof(RefreshRoomList), 0f, 5f); // 5초마다 자동 갱신
     }
 
-    public void CreateRoom()
+    public async void CreateRoom()
     {
         string roomName = roomNameInput.text.Trim();
         if (string.IsNullOrEmpty(roomName)) return; // 빈 값 방지
 
-        string roomCode = GenerateRoomCode(); // 랜덤한 방 코드 생성
-        if (roomList.ContainsKey(roomCode)) return; // 중복 코드 방지
+        try
+        {
+            // Lobby Service를 통해 방 생성
+            CreateLobbyOptions options = new CreateLobbyOptions
+            {
+                IsPrivate = false, // 공개 방
+                Player = new Player(
+                    id: AuthenticationService.Instance.PlayerId, // 현재 플레이어 ID
+                    data: new Dictionary<string, PlayerDataObject>
+                    {
+                    { "Username", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, username) }
+                    }
+                )
+            };
 
-        // 방 생성
-        GameObject newRoom = Instantiate(roomPrefab, roomListParent);
-        newRoom.transform.Find("roomName").GetComponent<TMP_Text>().text = roomName;
-        newRoom.transform.Find("roomPlayers").GetComponent<TMP_Text>().text = "1/4";
+            Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(roomName, maxPlayers, options);
 
-        int roomCount = roomList.Count;
+            // 방 생성 성공 시 처리
+            GameObject newRoom = Instantiate(roomPrefab, roomListParent);
+            newRoom.transform.Find("roomName").GetComponent<TMP_Text>().text = lobby.Name;
+            newRoom.transform.Find("roomPlayers").GetComponent<TMP_Text>().text = $"{lobby.Players.Count}/{maxPlayers}";
 
-        roomList.Add(roomCode, newRoom); // Dictionary에 방 추가
-        currentRoom = roomCode;
+            roomList.Add(lobby.Id, newRoom); // Dictionary에 방 추가
+            currentRoom = lobby.Id;
 
-        // 플레이어 리스트 갱신 (본인을 방장으로 추가)
-        PlayerListManager.Instance.AddPlayer(username, true);
+            // 플레이어 리스트 갱신 (본인을 방장으로 추가)
+            PlayerListManager.Instance.AddPlayer(username, true);
 
-        // 스크롤뷰 크기 조정
-        UpdateScrollView();
+            // UI 업데이트
+            roomNameInput.interactable = false;
+            joinCodeInput.interactable = false;
+            createRoomButton.interactable = false;
+            joinRoomButton.interactable = false;
+            leaveRoomButton.interactable = true;
 
-        // UI 비활성화
-        roomNameInput.interactable = false; // 방을 만들었으므로 입력창 비활성화
-        joinCodeInput.interactable = false;
-        createRoomButton.interactable = false;
-        joinRoomButton.interactable = false;
-        leaveRoomButton.interactable = true;
+            // Code 버튼 활성화 및 코드 표시
+            codeButton.interactable = true;
+            codeButton.GetComponentInChildren<TMP_Text>().text = lobby.LobbyCode;
 
-        // Code 버튼 활성화 및 코드 표시
-        codeButton.interactable = true; // Code 버튼 활성화
-        codeButton.GetComponentInChildren<TMP_Text>().text = roomCode; // 버튼에 코드 표시
-
-        CheckPlayerCount();
+            Debug.Log($"Lobby created successfully: {lobby.Id}");
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.LogError($"Failed to create lobby: {e.Message}");
+        }
     }
     // 방 입장
-    public void JoinRoom()
+    public async void JoinRoom()
     {
         string roomCode = joinCodeInput.text;
-        if (roomList.ContainsKey(roomCode))
+        if (string.IsNullOrEmpty(roomCode)) return;
+
+        try
         {
-            TMP_Text playerCountText = roomList[roomCode].transform.Find("roomPlayers").GetComponent<TMP_Text>();
-            string[] count = playerCountText.text.Split('/');
-            int currentPlayers = int.Parse(count[0]);
-            int maxPlayers = int.Parse(count[1]);
+            // Lobby Service를 통해 방 참여
+            Lobby lobby = await LobbyService.Instance.JoinLobbyByCodeAsync(roomCode);
 
-            if (currentPlayers < maxPlayers)
+            // 방 참여 성공 시 처리
+            if (roomList.ContainsKey(lobby.Id))
             {
-                currentPlayers++;
-                playerCountText.text = currentPlayers + "/4";
+                TMP_Text playerCountText = roomList[lobby.Id].transform.Find("roomPlayers").GetComponent<TMP_Text>();
+                playerCountText.text = $"{lobby.Players.Count}/{maxPlayers}";
 
-                currentRoom = roomCode;
+                currentRoom = lobby.Id;
                 roomNameInput.interactable = false;
                 joinCodeInput.interactable = false;
                 createRoomButton.interactable = false;
@@ -118,11 +133,13 @@ public class RoomManager : MonoBehaviour
                 // 플레이어 추가
                 PlayerListManager.Instance.AddPlayer(username, false);
                 CheckPlayerCount();
+
+                Debug.Log($"Joined lobby successfully: {lobby.Id}");
             }
         }
-        else
+        catch (LobbyServiceException e)
         {
-            Debug.Log("잘못된 방 코드");
+            Debug.LogError($"Failed to join lobby: {e.Message}");
         }
     }
 
