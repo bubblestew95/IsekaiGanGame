@@ -49,16 +49,15 @@ public class UIBattleUIManager : MonoBehaviour
 
         // playerManager.OnButtonInput(_type);
     }
-    public void OnSkillButtonDown(SkillSlot _slot)
+    public void OnSkillJoystickDown(SkillSlot _slot)
     {
         skillUIManager.SetSkillUIEnabled(_slot, true);
     }
-    public void OnSkillButtonUp(SkillSlot _slot)
+    public void OnSkillJoystickUp(SkillSlot _slot)
     {
         SkillPointData pointData = skillUIManager.GetSkillAimPoint(_slot);
 
         playerManager.OnButtonInput(_slot, pointData);
-        // playerManager.TryUseSkill(_type);
         skillUIManager.SetSkillUIEnabled(_slot, false);
     }
 

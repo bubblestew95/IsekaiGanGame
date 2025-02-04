@@ -62,20 +62,25 @@ public class ButtonSetting : MonoBehaviour
     {
         cooltime.SetMaxCooltime(_cooltime);
     }
-    public void ButtonDown(BaseEventData _eventData)
+    public void JoystickDown(BaseEventData _eventData)
     {
-        skillButtonsManager.OnSkillButtonClickDown(ButtonSkillType);
-        currentSkillCoroutine = StartCoroutine(SkillHoldingCoroutine(ButtonSkillType));
+        skillButtonsManager.OnSkillJoystickDown(ButtonSkillType);
+        currentSkillCoroutine = StartCoroutine(DirectionSkillHoldingCoroutine(ButtonSkillType));
+    }
+
+    public void JoystickUp(BaseEventData _eventData)
+    {
+        if(currentSkillCoroutine != null)
+            StopCoroutine(currentSkillCoroutine);
+        skillButtonsManager.OnSkillJoystickUp(ButtonSkillType);
     }
 
     public void ButtonUp(BaseEventData _eventData)
     {
-        if(currentSkillCoroutine != null)
-            StopCoroutine(currentSkillCoroutine);
-        skillButtonsManager.OnSkillButtonClickUp(ButtonSkillType);
+        skillButtonsManager.(ButtonSkillType);
     }
 
-    private IEnumerator SkillHoldingCoroutine(SkillSlot _type)
+    private IEnumerator DirectionSkillHoldingCoroutine(SkillSlot _type)
     {
         while (true)
         {

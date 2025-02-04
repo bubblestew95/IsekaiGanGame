@@ -9,7 +9,7 @@ public class SkillButtonsManager : MonoBehaviour
 
     private Dictionary<SkillSlot, ButtonSetting> skillButtonMap = null;
 
-    public void OnSkillButtonClickDown(SkillSlot _type)
+    public void OnSkillJoystickDown(SkillSlot _slot)
     {
         if (battleUIManager == null)
         {
@@ -17,10 +17,10 @@ public class SkillButtonsManager : MonoBehaviour
             return;
         }
 
-        battleUIManager.OnSkillButtonDown(_type);
+        battleUIManager.OnSkillJoystickDown(_slot);
     }
 
-    public void OnSkillButtonClickUp(SkillSlot _type)
+    public void OnSkillJoystickUp(SkillSlot _slot)
     {
         if (battleUIManager == null)
         {
@@ -28,15 +28,20 @@ public class SkillButtonsManager : MonoBehaviour
             return;
         }
 
-        battleUIManager.OnSkillButtonUp(_type);
+        battleUIManager.OnSkillJoystickUp(_slot);
     }
 
-    public void ApplyCooltime(SkillSlot _type, float _time)
+    public void OnSkillButtonUp(SkillSlot _slot)
     {
-        skillButtonMap[_type].SetCooltime(_time);
+
     }
 
-    public void SendSkillDirection(SkillSlot _type, float _horizontal, float _vertical)
+    public void ApplyCooltime(SkillSlot _slot, float _time)
+    {
+        skillButtonMap[_slot].SetCooltime(_time);
+    }
+
+    public void SendSkillDirection(SkillSlot _slot, float _horizontal, float _vertical)
     {
         if (battleUIManager == null)
         {
@@ -44,7 +49,7 @@ public class SkillButtonsManager : MonoBehaviour
             return;
         }
 
-        battleUIManager.SendSkillDirectionToSkillUI(_type, _horizontal, _vertical);
+        battleUIManager.SendSkillDirectionToSkillUI(_slot, _horizontal, _vertical);
     }
 
     private void Awake()
