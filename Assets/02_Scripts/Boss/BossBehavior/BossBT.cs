@@ -41,7 +41,7 @@ public class BossBT : MonoBehaviour
         }
     }
 
-    #region BossBehavior
+    #region [BossBehavior]
     private IEnumerator Idle()
     {
         yield return null;
@@ -93,7 +93,7 @@ public class BossBT : MonoBehaviour
         SetAnimBool(curState, true);
 
         // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
         {
             if (skill.SkillData.SkillName == curState.ToString())
             {
@@ -131,7 +131,7 @@ public class BossBT : MonoBehaviour
         SetAnimBool(curState, true);
 
         // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
         {
             if (skill.SkillData.SkillName == curState.ToString())
             {
@@ -169,7 +169,7 @@ public class BossBT : MonoBehaviour
         SetAnimBool(curState, true);
 
         // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
         {
             if (skill.SkillData.SkillName == curState.ToString())
             {
@@ -207,7 +207,7 @@ public class BossBT : MonoBehaviour
         SetAnimBool(curState, true);
 
         // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
         {
             if (skill.SkillData.SkillName == curState.ToString())
             {
@@ -279,15 +279,6 @@ public class BossBT : MonoBehaviour
 
         // 애니메이션 시작
         SetAnimBool(curState, true);
-
-        // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
-        {
-            if (skill.SkillData.SkillName == curState.ToString())
-            {
-                skill.UseSkill();
-            }
-        }
 
         // 공격 5 끝
         while (true)
@@ -396,9 +387,24 @@ public class BossBT : MonoBehaviour
         }
 
         // 가운데로 이동해서 특수패턴(전멸기)
-        // 현재 위치에서 가운데 위치로 Lerp하게 이동하면서, 점프 애니메이션 실행하면 될듯
+        // 현재 위치에서 가운데 위치로 Lerp하게 이동(15~50프레임)하면서, 점프 애니메이션 실행하면 될듯
+
+        Vector3 originPos = bossStateManager.Boss.transform.position;
+
         while (true)
         {
+
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5Jump"))
+            {
+                elapseTime += Time.deltaTime;
+
+                if (elapseTime >= 0.5f && elapseTime <= 1.6f)
+                {
+                    float t = Mathf.InverseLerp(0.5f, 1.6f, elapseTime);
+                    bossStateManager.Boss.transform.position = Vector3.Lerp(originPos, center, t);
+                }
+            }
+
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5Jump") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
                 anim.SetBool("Attack5-4Flag", true);
@@ -420,8 +426,6 @@ public class BossBT : MonoBehaviour
             yield return null;
         }
 
-
-
         // 상태를 chase로 변경
         curState = BossState.Chase;
 
@@ -438,15 +442,6 @@ public class BossBT : MonoBehaviour
 
         // 애니메이션 시작
         SetAnimBool(curState, true);
-
-        // 쿨타임 실행, 보스 공격력 설정
-        foreach (BossSkill skill in bossSkillManager.Skills)
-        {
-            if (skill.SkillData.SkillName == curState.ToString())
-            {
-                skill.UseSkill();
-            }
-        }
 
         // 애니메이션 끝
         while (true)
@@ -478,7 +473,7 @@ public class BossBT : MonoBehaviour
         SetAnimBool(curState, true);
 
         // 쿨타임 실행
-        foreach (BossSkill skill in bossSkillManager.Skills)
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
         {
             if (skill.SkillData.SkillName == curState.ToString())
             {
@@ -544,6 +539,138 @@ public class BossBT : MonoBehaviour
         yield return null;
     }
 
+    private IEnumerator Attack8()
+    {
+        isCoroutineRunning = true;
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 쿨타임 실행
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
+        {
+            if (skill.SkillData.SkillName == curState.ToString())
+            {
+                skill.UseSkill();
+            }
+        }
+
+        // Chase -> Attack8 넘어갔는지 check
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName(curState.ToString()))
+            {
+                break;
+            }
+            yield return null;
+        }
+
+        // Attack8이 끝났는지 Check
+        while (true)
+        {
+            if (CheckEndAnim(curState))
+            {
+                anim.SetBool("Attack8-1Flag", true);
+                break;
+            }
+            yield return null;
+        }
+
+        // attack8의 지속시간을 가져옴.
+        BSD_Duration attack8 = bossSkillManager.Skills
+            .Where(skill => skill.SkillData.SkillName == "Attack8")
+            .Select(skill => skill.SkillData as BSD_Duration)
+            .FirstOrDefault(bsd => bsd != null);
+
+        float duration = attack8.Duration;
+        float elapseTime = 0f;
+
+        // Attack 8-1이 끝났는지 check
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+            if (elapseTime >= duration)
+            {
+                SetAnimBool(curState, false);
+                anim.SetBool("Attack8-1Flag", false);
+                break;
+            }
+            yield return null;
+        }
+
+        // 상태를 chase로 변경
+        curState = BossState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
+
+        yield return null;
+    }
+
+    private IEnumerator Attack9()
+    {
+        isCoroutineRunning = true;
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 쿨타임 실행
+        foreach (BossSkill skill in bossSkillManager.RandomSkills)
+        {
+            if (skill.SkillData.SkillName == curState.ToString())
+            {
+                skill.UseSkill();
+            }
+        }
+
+        // Chase -> Attack9 넘어갔는지 check
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName(curState.ToString()))
+            {
+                break;
+            }
+            yield return null;
+        }
+
+        // Attack9이 끝났는지 Check
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName(curState.ToString()) && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                anim.SetBool("Attack9-1Flag", true);
+                break;
+            }
+            yield return null;
+        }
+
+        // Attack 9-1이 끝났는지 check
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack9-1") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                SetAnimBool(curState, false);
+                anim.SetBool("Attack9-1Flag", false);
+                break;
+            }
+            yield return null;
+        }
+
+        // 상태를 chase로 변경
+        curState = BossState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
+
+        yield return null;
+    }
+
     private IEnumerator Stun()
     {
         isCoroutineRunning = true;
@@ -568,14 +695,25 @@ public class BossBT : MonoBehaviour
         yield return new WaitForSeconds(3f);
         SetAnimBool(curState, false);
 
-        // 상태를 스턴걸리기 전 상태로
-        curState = previousBehavior;
+        if (previousBehavior != BossState.Attack8)
+        {
+            // 상태를 스턴걸리기 전 상태로
+            curState = previousBehavior;
+        }
+        else
+        {
+            curState = BossState.Chase;
+
+            // 패턴이 끝났음을 콜백
+            behaviorEndCallback?.Invoke();
+        }
 
         isCoroutineRunning = false;
         isStun = false;
     }
     #endregion
 
+    #region [Function]
     // 애니메이션 bool값 설정
     private void SetAnimBool(BossState _state, bool _isActive)
     {
@@ -608,4 +746,5 @@ public class BossBT : MonoBehaviour
             }
         }
     }
+    #endregion
 }

@@ -15,12 +15,21 @@ public class BossBehaviorManager : MonoBehaviour
     private bool hpHalfTrigger = false;
     private int hp10Cnt = 0;
 
+
     private void Start()
     {
         bossBT.behaviorEndCallback += () => StartCoroutine(BossPerformAction());
         bossStateManager.bossHp10Callback += SetHP10;
         bossStateManager.bossHpHalfCallback += SetHPHalf;
         bossStateManager.bossStunCallback += SetStun;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            SetHP10();
+        }
     }
 
     // 특정조건에서 랜덤한 행동을 하나 선택하는 함수
@@ -31,7 +40,7 @@ public class BossBehaviorManager : MonoBehaviour
 
         float dis = bossStateManager.GetDisWithoutY();
 
-        tmpList = bossSkillManager.IsSkillInRange(dis, bossSkillManager.Skills);
+        tmpList = bossSkillManager.IsSkillInRange(dis, bossSkillManager.RandomSkills);
         tmpList = bossSkillManager.IsSkillCooldown(tmpList);
 
         int randomIndex = UnityEngine.Random.Range(0, tmpList.Count);
@@ -61,7 +70,7 @@ public class BossBehaviorManager : MonoBehaviour
         {
             hp10Trigger = false;
             hp10Cnt++;
-            SetBossBehavior(BossState.Chase);
+            SetBossBehavior(BossState.Attack6);
             yield break;
         }
 
@@ -69,7 +78,7 @@ public class BossBehaviorManager : MonoBehaviour
         if (hp10Cnt == 4)
         {
             hp10Cnt = 0;
-            SetBossBehavior(BossState.Chase);
+            SetBossBehavior(BossState.Attack5);
             yield break;
         }
 

@@ -9,7 +9,9 @@ public enum BossState
 	Attack5,
 	Attack6,
 	Attack7,
-	Stun
+	Attack8,
+    Attack9,
+    Stun
 }
 
 public enum BossChain

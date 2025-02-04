@@ -21,10 +21,20 @@ public class BossPhaseSet : MonoBehaviour
     public Material mapMaterial;
     public GameObject phase1Particle;
     public GameObject phase2Particle;
+    public GameObject fire;
+    public GameObject tileFire;
 
     private void Start()
     {
-        BossPhase2Set();
+        mapMaterial.color = new Color(255f / 255f, 255f / 255f, 255f / 255f);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            BossPhase2Set();
+        }
     }
 
     private void BossPhase2Set()
@@ -61,5 +71,11 @@ public class BossPhaseSet : MonoBehaviour
         // 맵 파티클 변경
         phase1Particle.SetActive(false);
         phase2Particle.SetActive(true);
+
+        // 불 재생
+        fire.SetActive(true);
+
+        // 맵장판 On
+        tileFire.SetActive(true);
     }
 }

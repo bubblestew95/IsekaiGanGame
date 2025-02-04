@@ -11,6 +11,10 @@ public class ParticleManager : MonoBehaviour
     public ParticleSystem attack5;
     public ParticleSystem attack6;
     public ParticleSystem attack7;
+    public ParticleSystem attack8;
+    public ParticleSystem attack9;
+
+    public ParticleSystem phase2;
 
     private void Awake()
     {

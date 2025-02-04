@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - BossAttack
+  - FxTemporaire
+  - Rock
+  - BehindRock
+  - Fire
   layers:
   - Default
   - TransparentFX
