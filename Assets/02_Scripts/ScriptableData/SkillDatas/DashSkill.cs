@@ -23,7 +23,7 @@ public class DashSkill : PlayerSkillBase
         _player.ChangeState(PlayerStateType.Dash);
     }
 
-    public override void UseSkill(PlayerManager _player, float multiply)
+    public override void UseSkill(PlayerManager _player)
     {
         Vector3 direction = isForward ? _player.transform.forward : (_player.transform.forward * -1f);
 

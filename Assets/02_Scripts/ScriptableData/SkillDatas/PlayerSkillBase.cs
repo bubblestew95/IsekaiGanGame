@@ -22,7 +22,7 @@ public abstract class PlayerSkillBase : ScriptableObject
     /// </summary>
     /// <param name="_player">스킬을 사용하는 플레이어</param>
     /// <param name="_order">애니메이션 중 각 스킬의 데미지 배수를 다르게 처리하고 싶으면 이거 쓰면 됨.</param>
-    public virtual void UseSkill(PlayerManager _player, float multiply)
+    public virtual void UseSkill(PlayerManager _player)
     {
     }
 

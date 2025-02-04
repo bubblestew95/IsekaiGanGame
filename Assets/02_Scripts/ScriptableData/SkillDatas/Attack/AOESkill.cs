@@ -12,9 +12,9 @@ public class AOESkill : AttackSkill
     public float duration = 2f;
     public float damageTickTime = 0.5f;
 
-    public override void UseSkill(PlayerManager _player, float multiply)
+    public override void UseSkill(PlayerManager _player)
     {
-        base.UseSkill(_player, multiply);
+        base.UseSkill(_player);
         _player.StartCoroutine(TickDamageCoroutine(_player.LastSkillUsePoint));
     }
 

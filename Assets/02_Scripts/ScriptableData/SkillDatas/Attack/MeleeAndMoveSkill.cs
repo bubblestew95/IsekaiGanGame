@@ -18,9 +18,9 @@ public class MeleeAndMoveSkill : MeleeSkill
         skillMove = new PlayerSkillMove();
     }
 
-    public override void UseSkill(PlayerManager _player, float multiply)
+    public override void UseSkill(PlayerManager _player)
     {
-        base.UseSkill(_player, multiply);
+        base.UseSkill(_player);
 
         Vector3 direction = isForward ? _player.transform.forward : (_player.transform.forward * -1f);
         skillMove.StartPlayerMove(_player, moveSpeed, moveTime, direction);

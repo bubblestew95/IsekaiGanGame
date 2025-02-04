@@ -123,9 +123,9 @@ public class PlayerSkillManager
         return true;
     }
 
-    public void SkillAction(SkillSlot _type, float _multiply)
+    public void SkillAction(SkillSlot _type)
     {
-        skillDataMap[_type].UseSkill(playerManager, _multiply);
+        skillDataMap[_type].UseSkill(playerManager);
     }
 
     public PlayerSkillBase GetSkill(SkillSlot _type)

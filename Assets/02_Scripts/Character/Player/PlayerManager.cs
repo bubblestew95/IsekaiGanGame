@@ -203,9 +203,9 @@ public class PlayerManager : MonoBehaviour
     /// <summary>
     /// 스킬 애니메이션 중 스킬이 실제로 사용될 때 호출되는 함수.
     /// </summary>
-    public void UseSkill(SkillSlot _type)
+    public void UseSkill(SkillSlot _slot)
     {
-        skillMng.SkillAction(_type, 1f);
+        skillMng.SkillAction(_slot);
     }
 
     /// <summary>

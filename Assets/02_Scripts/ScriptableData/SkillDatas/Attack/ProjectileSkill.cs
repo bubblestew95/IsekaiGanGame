@@ -10,9 +10,9 @@ public class ProjectileSkill : AttackSkill
 
     public float projectileSpeed = 1f;
 
-    public override void UseSkill(PlayerManager _player, float multiply)
+    public override void UseSkill(PlayerManager _player)
     {
         // 발사체 스폰 후 정면 방향으로 발사하면 됨.
-        base.UseSkill(_player, multiply);
+        base.UseSkill(_player);
     }
 }

@@ -8,9 +8,9 @@ public class RangeSkill : AttackSkill
 {
     public float attackRange = 5f;
 
-    public override void UseSkill(PlayerManager _player, float multiply)
+    public override void UseSkill(PlayerManager _player)
     {
-        base.UseSkill(_player, multiply);
-        _player.RayAttack(damage * multiply, attackRange);
+        base.UseSkill(_player);
+        _player.RayAttack(damage, attackRange);
     }
 }
