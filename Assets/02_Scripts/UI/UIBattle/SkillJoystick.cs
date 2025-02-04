@@ -13,8 +13,6 @@ public class SkillJoystick : FixedJoystick
     {
         if(playerManager.IsSkillUsable(buttonSetting.ButtonSkillType))
         {
-            Debug.Log("TestJoystick Downd!");
-
             base.OnPointerDown(eventData);
         }
     }

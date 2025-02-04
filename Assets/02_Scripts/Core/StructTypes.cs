@@ -1,6 +1,7 @@
-using EnumTypes;
 using System;
 using UnityEngine;
+
+using EnumTypes;
 
 namespace StructTypes
 {
@@ -10,10 +11,22 @@ namespace StructTypes
         public float z;
     }
 
-    [Serializable]
+    [System.Serializable]
     public struct SkillUIData
     {
-        public SkillType skillType;
+        public SkillSlot skillType;
         public SkillUI_Base skillUI;
+    }
+
+    public struct InputBufferData
+    {
+        public SkillSlot skillType;
+        public SkillPointData pointData;
+    }
+
+    public struct SkillPointData
+    {
+        public SkillPointType type;
+        public Vector3 point;
     }
 }

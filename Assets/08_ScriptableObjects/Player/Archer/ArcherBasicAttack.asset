@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9c9e1ef27cd504f90b92ac533078fd, type: 3}
   m_Name: ArcherBasicAttack
   m_EditorClassIdentifier: 
-  skillType: 4
+  skillSlot: 3
   coolTime: 3
   skillParticle: {fileID: 0}
   damage: 5

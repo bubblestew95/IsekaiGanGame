@@ -1,6 +1,8 @@
 using UnityEngine;
 
 using EnumTypes;
+using StructTypes;
+using System.Drawing;
 
 public class SkillUI_Direction : SkillUI_Base
 {
@@ -12,9 +14,12 @@ public class SkillUI_Direction : SkillUI_Base
         SetDirection(_horizontal, _vertical);
     }
 
-    public override Vector3 GetSkillAimPoint()
+    public override SkillPointData GetSkillAimPoint()
     {
-        return arrowImagePivot.rotation.eulerAngles;
+        SkillPointData pointData = new SkillPointData();
+        pointData.type = SkillPointType.Direction;
+        pointData.point = arrowImagePivot.rotation.eulerAngles;
+        return pointData;
     }
 
     public override void SetEnabled(bool _enabled)

@@ -33358,7 +33358,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 2
     messageOptions: 0
-  - time: 0.33333334
+  - time: 0.3
     functionName: UseSkill
     data: 
     objectReferenceParameter: {fileID: 0}

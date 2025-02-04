@@ -1,4 +1,5 @@
 using EnumTypes;
+using StructTypes;
 using UnityEngine;
 
 /// <summary>
@@ -13,7 +14,7 @@ public abstract class SkillUI_Base : MonoBehaviour
     /// <summary>
     /// 지정된 스킬 범위 위치 혹은 스킬 방향을 리턴한다.
     /// </summary>
-    public abstract Vector3 GetSkillAimPoint();
+    public abstract SkillPointData GetSkillAimPoint();
 
     public abstract void SetEnabled(bool _enabled);
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bae3b6be280b39746a23ce9c6a6fbc68, type: 3}
   m_Name: ArcherBackJump
   m_EditorClassIdentifier: 
-  skillType: 2
+  skillSlot: 2
   coolTime: 3
   skillParticle: {fileID: 0}
   damage: 1

@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35540f8fa672c464792fb03c858366f2, type: 3}
   m_Name: ArcherDash
   m_EditorClassIdentifier: 
-  skillType: 5
+  skillSlot: 5
   coolTime: 3
   skillParticle: {fileID: 0}
-  dashDistance: 5
+  dashSpeed: 5
   dashTime: 1
+  isForward: 1

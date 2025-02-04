@@ -4,7 +4,7 @@ using EnumTypes;
 
 public abstract class PlayerSkillBase : ScriptableObject
 {
-    public SkillType skillType;
+    public SkillSlot skillSlot;
 
     public float coolTime = 3f;
 

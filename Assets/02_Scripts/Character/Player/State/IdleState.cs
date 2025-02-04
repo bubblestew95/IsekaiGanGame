@@ -28,11 +28,11 @@ public class IdleState : BasePlayerState
         playerMng.MoveByJoystick(joystickInputData);
 
         // 대기 상태일 때만 스킬이 사용 가능함. 스킬 사용 체크.
-        SkillType skillType = playerMng.GetNextSkill();
+        InputBufferData inputBuffer = playerMng.GetNextInput();
 
-        if (skillType != SkillType.None)
+        if (inputBuffer.skillType != SkillSlot.None)
         {
-            playerMng.TryUseSkill(skillType);
+            playerMng.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
         }
     }
 }

@@ -7,9 +7,9 @@ public class SkillButtonsManager : MonoBehaviour
 {
     private UIBattleUIManager battleUIManager = null;
 
-    private Dictionary<SkillType, ButtonSetting> skillButtonMap = null;
+    private Dictionary<SkillSlot, ButtonSetting> skillButtonMap = null;
 
-    public void OnSkillButtonClickDown(SkillType _type)
+    public void OnSkillButtonClickDown(SkillSlot _type)
     {
         if (battleUIManager == null)
         {
@@ -20,7 +20,7 @@ public class SkillButtonsManager : MonoBehaviour
         battleUIManager.OnSkillButtonDown(_type);
     }
 
-    public void OnSkillButtonClickUp(SkillType _type)
+    public void OnSkillButtonClickUp(SkillSlot _type)
     {
         if (battleUIManager == null)
         {
@@ -31,12 +31,12 @@ public class SkillButtonsManager : MonoBehaviour
         battleUIManager.OnSkillButtonUp(_type);
     }
 
-    public void ApplyCooltime(SkillType _type, float _time)
+    public void ApplyCooltime(SkillSlot _type, float _time)
     {
         skillButtonMap[_type].SetCooltime(_time);
     }
 
-    public void SendSkillDirection(SkillType _type, float _horizontal, float _vertical)
+    public void SendSkillDirection(SkillSlot _type, float _horizontal, float _vertical)
     {
         if (battleUIManager == null)
         {
@@ -50,7 +50,7 @@ public class SkillButtonsManager : MonoBehaviour
     private void Awake()
     {
         battleUIManager = GetComponentInParent<UIBattleUIManager>();
-        skillButtonMap = new Dictionary<SkillType, ButtonSetting>();
+        skillButtonMap = new Dictionary<SkillSlot, ButtonSetting>();
 
         ButtonSetting[] skillButtons = GetComponentsInChildren<ButtonSetting>();
 

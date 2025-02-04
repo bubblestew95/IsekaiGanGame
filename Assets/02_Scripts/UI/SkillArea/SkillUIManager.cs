@@ -14,14 +14,14 @@ public class SkillUIManager : MonoBehaviour
 
     public Transform debugTr = null;
 
-    private Dictionary<SkillType, SkillUI_Base> skillUIMap = null;
+    private Dictionary<SkillSlot, SkillUI_Base> skillUIMap = null;
 
     /// <summary>
     /// 스킬 범위 혹은 스킬 사용 방향의 출력 여부를 설정한다.
     /// </summary>
     /// <param name="_type">스킬 타입</param>
     /// <param name="_enabled">출력 여부</param>
-    public void SetSkillUIEnabled(SkillType _type, bool _enabled)
+    public void SetSkillUIEnabled(SkillSlot _type, bool _enabled)
     {
         if(skillUIMap.TryGetValue(_type, out var skillUI))
         {
@@ -39,7 +39,7 @@ public class SkillUIManager : MonoBehaviour
     /// <param name="_type">스킬 타입</param>
     /// <param name="_horizontal">가로 입력값</param>
     /// <param name="_vertical">세로 입력값</param>
-    public void SetSkillAimPoint(SkillType _type, float _horizontal, float _vertical)
+    public void SetSkillAimPoint(SkillSlot _type, float _horizontal, float _vertical)
     {
         if (skillUIMap.TryGetValue(_type, out var skillUI))
         {
@@ -56,7 +56,7 @@ public class SkillUIManager : MonoBehaviour
     /// </summary>
     /// <param name="_type">스킬 타입</param>
     /// <returns>스킬 범위 or 스킬 방향(Euler Angle)</returns>
-    public Vector3 GetSkillAimPoint(SkillType _type)
+    public SkillPointData GetSkillAimPoint(SkillSlot _type)
     {
         if (skillUIMap.TryGetValue(_type, out var skillUI))
         {
@@ -66,13 +66,13 @@ public class SkillUIManager : MonoBehaviour
         {
             Debug.LogFormat("{0} type skill don't need to show skill area!", _type);
 
-            return Vector3.zero;
+            return new SkillPointData();
         }
     }
 
     private void Awake()
     {
-        skillUIMap = new Dictionary<SkillType, SkillUI_Base>();
+        skillUIMap = new Dictionary<SkillSlot, SkillUI_Base>();
 
         foreach(var skillUIData in skillUIList)
         {

@@ -12,7 +12,7 @@ using EnumTypes;
 public class ButtonSetting : MonoBehaviour
 {
     [SerializeField]
-    private SkillType buttonSkillType = SkillType.None;
+    private SkillSlot buttonSkillType = SkillSlot.None;
 
     public List<Image> images = new List<Image>();
     public List<TextMeshProUGUI> textMeshPros = null;
@@ -24,7 +24,7 @@ public class ButtonSetting : MonoBehaviour
 
     private Coroutine currentSkillCoroutine = null;
 
-    public SkillType ButtonSkillType
+    public SkillSlot ButtonSkillType
     {
         get { return buttonSkillType; }
     }
@@ -55,7 +55,7 @@ public class ButtonSetting : MonoBehaviour
         ////button.onClick.AddListener(ButtonPressed);
         */
 
-        SetCooltime(0.1f);
+        SetCooltime(5f);
     }
 
     public void SetCooltime(float _cooltime)
@@ -64,21 +64,18 @@ public class ButtonSetting : MonoBehaviour
     }
     public void ButtonDown(BaseEventData _eventData)
     {
-        Debug.Log("Button Down!");
-
         skillButtonsManager.OnSkillButtonClickDown(ButtonSkillType);
         currentSkillCoroutine = StartCoroutine(SkillHoldingCoroutine(ButtonSkillType));
     }
 
     public void ButtonUp(BaseEventData _eventData)
     {
-        Debug.Log("Button Up!");
         if(currentSkillCoroutine != null)
             StopCoroutine(currentSkillCoroutine);
         skillButtonsManager.OnSkillButtonClickUp(ButtonSkillType);
     }
 
-    private IEnumerator SkillHoldingCoroutine(SkillType _type)
+    private IEnumerator SkillHoldingCoroutine(SkillSlot _type)
     {
         while (true)
         {

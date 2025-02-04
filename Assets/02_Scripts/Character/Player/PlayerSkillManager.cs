@@ -16,10 +16,10 @@ public class PlayerSkillManager
     /// <summary>
     /// 애니메이터의 각 트리거 아이디를 미리 캐싱해놓고, 이를 스킬 타입에 따라 저장해놓음.
     /// </summary>
-    private Dictionary<SkillType, int> animatorIdMap = null;
+    private Dictionary<SkillSlot, int> animatorIdMap = null;
 
-    private Dictionary<SkillType, PlayerSkillBase> skillDataMap = null;
-    private Dictionary<SkillType, float> currentCoolTimeMap = null;
+    private Dictionary<SkillSlot, PlayerSkillBase> skillDataMap = null;
+    private Dictionary<SkillSlot, float> currentCoolTimeMap = null;
 
     #region Public Functions
 
@@ -34,23 +34,23 @@ public class PlayerSkillManager
 
         animator = _mng.GetComponent<Animator>();
 
-        animatorIdMap = new Dictionary<SkillType, int>();
-        skillDataMap = new Dictionary<SkillType, PlayerSkillBase>();
-        currentCoolTimeMap = new Dictionary<SkillType, float>();
+        animatorIdMap = new Dictionary<SkillSlot, int>();
+        skillDataMap = new Dictionary<SkillSlot, PlayerSkillBase>();
+        currentCoolTimeMap = new Dictionary<SkillSlot, float>();
 
         foreach (var data in skillDatas)
         {
-            skillDataMap.Add(data.skillType, data);
-            currentCoolTimeMap.Add(data.skillType, 0f);
+            skillDataMap.Add(data.skillSlot, data);
+            currentCoolTimeMap.Add(data.skillSlot, 0f);
         }
 
         // 우선 하드코딩으로 애니메이터 id를 캐싱함. 확장성 생각하면 나중에 수정할 것!
         {
-            animatorIdMap.Add(SkillType.Skill_A, Animator.StringToHash("Skill_A"));
-            animatorIdMap.Add(SkillType.Skill_B, Animator.StringToHash("Skill_B"));
-            animatorIdMap.Add(SkillType.Skill_C, Animator.StringToHash("Skill_C"));
-            animatorIdMap.Add(SkillType.BasicAttack, Animator.StringToHash("BasicAttack"));
-            animatorIdMap.Add(SkillType.Dash, Animator.StringToHash("Dash"));
+            animatorIdMap.Add(SkillSlot.Skill_A, Animator.StringToHash("Skill_A"));
+            animatorIdMap.Add(SkillSlot.Skill_B, Animator.StringToHash("Skill_B"));
+            animatorIdMap.Add(SkillSlot.Skill_C, Animator.StringToHash("Skill_C"));
+            animatorIdMap.Add(SkillSlot.BasicAttack, Animator.StringToHash("BasicAttack"));
+            animatorIdMap.Add(SkillSlot.Dash, Animator.StringToHash("Dash"));
         }
 
     }
@@ -59,23 +59,14 @@ public class PlayerSkillManager
     /// 스킬 사용을 시도한다.
     /// </summary>
     /// <param name="_skillIdx">사용할 스킬의 스킬 리스트 상 인덱스</param>
-    public bool TryUseSkill(SkillType _type, Vector3 _position)
+    public void UseSkill(SkillSlot _type)
     {
         // 사용하려는 변수들의 유효성 체크.
         if (skillDatas == null || currentCoolTimeMap == null)
         {
             Debug.LogWarning("Skill List is not valid!");
-            return false;
+            return;
         }
-
-        // 스킬이 현재 사용 가능한지 체크함.
-        if (!IsSkillUsable(_type))
-        {
-            Debug.LogFormat("Currnet Skill type {0} is not usable!", _type);
-            return false;
-        }
-
-        Debug.Log("Use Skill!");
 
         // 스킬 사용
         if(animatorIdMap.TryGetValue(_type, out int animId))
@@ -83,7 +74,7 @@ public class PlayerSkillManager
             animator.SetTrigger(animId);
         }
 
-        if(_type == SkillType.Dash)
+        if(_type == SkillSlot.Dash)
         {
             playerManager.ChangeState(PlayerStateType.Dash);
         }
@@ -94,11 +85,9 @@ public class PlayerSkillManager
 
         // 쿨타임 적용
         currentCoolTimeMap[_type] = skillDataMap[_type].coolTime;
-
-        return true;
     }
 
-    public float GetCoolTime(SkillType _type)
+    public float GetCoolTime(SkillSlot _type)
     {
         return currentCoolTimeMap[_type];
     }
@@ -122,7 +111,7 @@ public class PlayerSkillManager
     /// </summary>
     /// <param name="_skillIdx">체크할 스킬의 타입</param>
     /// <returns></returns>
-    public bool IsSkillUsable(SkillType _type)
+    public bool IsSkillUsable(SkillSlot _type)
     {
         // 쿨타임 체크
         if (currentCoolTimeMap[_type] > 0f)
@@ -134,12 +123,12 @@ public class PlayerSkillManager
         return true;
     }
 
-    public void SkillAction(SkillType _type, float _multiply)
+    public void SkillAction(SkillSlot _type, float _multiply)
     {
         skillDataMap[_type].UseSkill(playerManager, _multiply);
     }
 
-    public PlayerSkillBase GetSkill(SkillType _type)
+    public PlayerSkillBase GetSkill(SkillSlot _type)
     {
         return skillDataMap[_type];
     }
