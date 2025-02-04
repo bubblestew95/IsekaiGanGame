@@ -3921,6 +3921,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 391796695}
     m_Modifications:
     - target: {fileID: 2131148431429031677, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: center.x
+      value: -3.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 2131148431429031677, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: center.z
+      value: 19.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 2131148431429031677, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -3956,13 +3964,25 @@ PrefabInstance:
       propertyPath: 'skillDatas.Array.data[6]'
       value: 
       objectReference: {fileID: 11400000, guid: d3c803e3a40406043acf9f143d3a846f, type: 2}
+    - target: {fileID: 5870383895420540904, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: 'skillDatas.Array.data[7]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 07ab5882cf75f9442a48510de264e691, type: 2}
+    - target: {fileID: 5870383895420540904, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: randomSkillDatas.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5870383895420540904, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: 'randomSkillDatas.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 07ab5882cf75f9442a48510de264e691, type: 2}
     - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: anims.Array.size
-      value: 9
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: anims.Array.data[0].name
@@ -3990,14 +4010,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: anims.Array.data[6].name
-      value: Attack6
+      value: Attack5-1
       objectReference: {fileID: 0}
     - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: anims.Array.data[7].name
-      value: Attack7
+      value: Attack5-2
       objectReference: {fileID: 0}
     - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: anims.Array.data[8].name
+      value: Attack5-3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: anims.Array.data[9].name
+      value: Attack6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: anims.Array.data[10].name
+      value: Attack7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: anims.Array.data[11].name
       value: Attack7-1
       objectReference: {fileID: 0}
     - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
@@ -4022,6 +4054,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: anims.Array.data[6].moveMultiplier
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: anims.Array.data[7].moveMultiplier
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: anims.Array.data[8].moveMultiplier
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: anims.Array.data[9].moveMultiplier
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6308332450445231548, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
@@ -16306,7 +16350,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1727225445}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f049d34df614ab3409f13ed9fccc9f77, type: 3}
   m_Name: 

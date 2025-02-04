@@ -396,9 +396,24 @@ public class BossBT : MonoBehaviour
         }
 
         // 가운데로 이동해서 특수패턴(전멸기)
-        // 현재 위치에서 가운데 위치로 Lerp하게 이동하면서, 점프 애니메이션 실행하면 될듯
+        // 현재 위치에서 가운데 위치로 Lerp하게 이동(15~50프레임)하면서, 점프 애니메이션 실행하면 될듯
+
+        Vector3 originPos = bossStateManager.Boss.transform.position;
+
         while (true)
         {
+
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5Jump"))
+            {
+                elapseTime += Time.deltaTime;
+
+                if (elapseTime >= 0.5f && elapseTime <= 1.6f)
+                {
+                    float t = Mathf.InverseLerp(0.5f, 1.6f, elapseTime);
+                    bossStateManager.Boss.transform.position = Vector3.Lerp(originPos, center, t);
+                }
+            }
+
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5Jump") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
                 anim.SetBool("Attack5-4Flag", true);
@@ -419,8 +434,6 @@ public class BossBT : MonoBehaviour
 
             yield return null;
         }
-
-
 
         // 상태를 chase로 변경
         curState = BossState.Chase;

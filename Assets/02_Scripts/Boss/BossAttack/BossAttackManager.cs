@@ -94,11 +94,15 @@ public class BossAttackManager : MonoBehaviour
             case "Stun":
                 StartCoroutine(Stun());
                 break;
+            case "SpecialAttack":
+                StartCoroutine(SpecialAttack());
+                break;
             default:
                 break;
         }
     }
 
+    #region [Attack]
     // 휘두르기
     private IEnumerator Attack1()
     {
@@ -367,7 +371,7 @@ public class BossAttackManager : MonoBehaviour
         // 공격 끝났는지 Check
         while (true)
         {
-            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase2") || anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5Jump"))
             {
                 break;
             }
@@ -379,6 +383,66 @@ public class BossAttackManager : MonoBehaviour
         GetComponent<BoxCollider>().size = originSize;
         GetComponent<BoxCollider>().isTrigger = false;
         bossStateManager.Boss.tag = "Untagged";
+
+        yield return null;
+    }
+
+    // 전멸기
+    private IEnumerator SpecialAttack()
+    {
+        skill = bossSkillManager.RandomSkills.Find(skill => skill.SkillData.SkillName == "SpecialAttack").SkillData;
+
+        skillName = skill.SkillName;
+        range = skill.AttackRange;
+        damage = skill.Damage;
+        delay = skill.AttackColliderDelay / animSpd;
+
+        // 스킬위치 조정
+        circleSkillPos[0].transform.position = new Vector3(bossStateManager.Boss.transform.position.x, 0.3f, bossStateManager.Boss.transform.position.z);
+
+        // 스킬 데미지 설정
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
+
+        // 공격 콜라이더 설정(크기, 위치, 각도 등)
+        circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
+
+        // 스킬 표시
+        circleFullRangeDecals[0].size = new Vector3(range, range, 1f);
+
+        // 스킬 차는거 표시
+        float elapseTime = 0f;
+
+        while (elapseTime < delay)
+        {
+            elapseTime += Time.deltaTime;
+
+            circleChargingRangeDecals[0].size = new Vector3(range * (elapseTime / delay), range * (elapseTime / delay), 1f);
+
+            yield return null;
+        }
+        yield return null;
+
+        // 사거리 표시 없에기
+        circleFullRangeDecals[0].size = new Vector3(0f, 0f, 0f);
+        circleChargingRangeDecals[0].size = new Vector3(0f, 0f, 0f);
+
+        // 플레이어 한테 레이쏴서 돌뒤 플레이어 태그 변경
+        CheckPlayerBehindRock();
+
+        // attackCollider 활성화
+        circleAttackColliders[0].SetActive(true);
+
+        // 파티클 재생
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, circleAttackColliders[0].transform.position);
+
+        yield return attackColliderTime;
+
+        // attackCollider 비활성화
+        circleAttackColliders[0].SetActive(false);
+
+        // 태그 변경
+        ResetTag();
 
         yield return null;
     }
@@ -518,7 +582,9 @@ public class BossAttackManager : MonoBehaviour
 
         yield return null;
     }
+    #endregion
 
+    #region [Function]
     // 부채꼴 모양 만듦.
     private Mesh BuildMesh()
     {
@@ -640,4 +706,46 @@ public class BossAttackManager : MonoBehaviour
         bossStateManager.Boss.tag = "Untagged";
     }
 
+    // 전멸기 돌뒤에 있는지 check
+    // 돌 뒤에 있다면 BehindRock으로 tag를 바꿈.
+    private void CheckPlayerBehindRock()
+    {
+        Vector3 bossPos = bossStateManager.Boss.transform.position;
+        LayerMask defaultLayerMask = LayerMask.GetMask("Default");
+
+        // 각 플레이어한테 ray를쏴서 돌뒤에 있는지 확인
+        foreach (GameObject player in bossStateManager.Players)
+        {
+            Vector3 playerPos = player.transform.position;
+            Vector3 dir = (playerPos - bossPos).normalized;
+
+            RaycastHit[] hits = Physics.RaycastAll(bossPos, dir, 100f, defaultLayerMask);
+
+            System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+            foreach (RaycastHit ray in hits)
+            {
+                if (ray.collider.CompareTag("Rock"))
+                {
+                    player.tag = "BehindRock";
+                    break;
+                }
+                else if (ray.collider.gameObject == player)
+                {
+                    Debug.Log("플레이어가 앞에 있음");
+                    break;
+                }
+            }
+        }
+    }
+
+    // 태그 리셋
+    private void ResetTag()
+    {
+        foreach (GameObject player in bossStateManager.Players)
+        {
+            player.tag = "Untagged";
+        }
+    }
+    #endregion
 }
