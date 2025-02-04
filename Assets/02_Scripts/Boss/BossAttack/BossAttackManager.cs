@@ -91,6 +91,9 @@ public class BossAttackManager : MonoBehaviour
             case "Attack7":
                 curCoroutine = StartCoroutine(Attack7());
                 break;
+            case "Attack8":
+                curCoroutine = StartCoroutine(Attack8());
+                break;
             case "Stun":
                 StartCoroutine(Stun());
                 break;
@@ -566,6 +569,52 @@ public class BossAttackManager : MonoBehaviour
         circleAttackColliders[0].SetActive(false);
 
 
+    }
+
+    // 돌진
+    private IEnumerator Attack8()
+    {
+        BSD_Duration skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack8").SkillData as BSD_Duration;
+
+        skillName = skill.SkillName;
+        damage = skill.Damage;
+        duration = skill.Duration;
+
+        // 스킬 데미지 설정
+        GetComponent<BossAttackCollider>().Damage = damage;
+        GetComponent<BossAttackCollider>().SkillName = skillName;
+
+        // 공격 콜라이더 설정(크기, 위치, 각도 등)
+        GetComponent<BoxCollider>().isTrigger = true;
+        Vector3 originSize = GetComponent<BoxCollider>().size;
+        GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
+        bossStateManager.Boss.tag = "BossAttack";
+
+        // 공격 끝났는지 Check
+        while (true)
+        {
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+            {
+                break;
+            }
+            yield return null;
+        }
+
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+            {
+                break;
+            }
+            yield return null;
+        }
+
+        // 공격 끝난후
+        GetComponent<BoxCollider>().size = originSize;
+        GetComponent<BoxCollider>().isTrigger = false;
+        bossStateManager.Boss.tag = "Untagged";
+
+        yield return null;
     }
     
     // 스턴 걸렸을때

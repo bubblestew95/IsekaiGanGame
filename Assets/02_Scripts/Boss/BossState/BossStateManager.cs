@@ -27,6 +27,7 @@ public class BossStateManager : MonoBehaviour
     private float curHp;
     private bool[] hpCheck = new bool[5];
     private GameObject randomTarget;
+    private BossAttackCollider attackCollider;
 
     private void Awake()
     {
@@ -35,6 +36,12 @@ public class BossStateManager : MonoBehaviour
         hpCheck[2] = false;
         hpCheck[3] = false;
         hpCheck[4] = false;
+        attackCollider = GetComponent<BossAttackCollider>();
+    }
+
+    private void Start()
+    {
+        attackCollider.rockCollisionCallback += BossStun;
     }
 
     private void Update()

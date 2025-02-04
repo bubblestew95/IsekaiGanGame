@@ -15,6 +15,7 @@ public class BossBehaviorManager : MonoBehaviour
     private bool hpHalfTrigger = false;
     private int hp10Cnt = 0;
 
+
     private void Start()
     {
         bossBT.behaviorEndCallback += () => StartCoroutine(BossPerformAction());

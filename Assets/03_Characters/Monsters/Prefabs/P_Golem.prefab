@@ -2097,6 +2097,7 @@ GameObject:
   - component: {fileID: 6308332450445231548}
   - component: {fileID: 6055016002681168014}
   - component: {fileID: 4155994505806969654}
+  - component: {fileID: 6881833285181368674}
   m_Layer: 0
   m_Name: P_Golem
   m_TagString: Untagged
@@ -2203,6 +2204,8 @@ MonoBehaviour:
   nvAgent: {fileID: 7853676516811975558}
   bossStateManager: {fileID: 7796279537819312077}
   bossSkillManager: {fileID: 5870383895420540904}
+  bossAttackManager: {fileID: 6308332450445231548}
+  center: {x: -3.66, y: 0, z: 19.58}
 --- !u!114 &7796279537819312077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2223,6 +2226,7 @@ MonoBehaviour:
   - {fileID: 0}
   boss: {fileID: 9137032837993464747}
   chainTime: 0
+  bossSkin: {fileID: 2492541278023546289}
 --- !u!114 &7072979799601489313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2256,7 +2260,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd3d6572d64c2264497d088b9f93c351, type: 2}
   - {fileID: 11400000, guid: cf8626b247602994a907d0330ea20ff7, type: 2}
   - {fileID: 11400000, guid: 1b7db082af116d84198df3f0f32732db, type: 2}
-  - {fileID: 11400000, guid: 5a20ce182ee82dc43a67a0b17bf58955, type: 2}
+  - {fileID: 11400000, guid: c8166c002daa74c4498eb551cf3d2f12, type: 2}
+  - {fileID: 11400000, guid: d3c803e3a40406043acf9f143d3a846f, type: 2}
+  - {fileID: 11400000, guid: 07ab5882cf75f9442a48510de264e691, type: 2}
+  randomSkillDatas:
+  - {fileID: 11400000, guid: dbf5295b2ce3c8243bdceea2e81ac41b, type: 2}
+  - {fileID: 11400000, guid: 73384f9db3a402541be3cb24c7df29b1, type: 2}
+  - {fileID: 11400000, guid: dd3d6572d64c2264497d088b9f93c351, type: 2}
+  - {fileID: 11400000, guid: cf8626b247602994a907d0330ea20ff7, type: 2}
+  - {fileID: 11400000, guid: d3c803e3a40406043acf9f143d3a846f, type: 2}
 --- !u!114 &6308332450445231548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2296,6 +2308,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  P_Stone: {fileID: 8783306491908617939, guid: f02116c209ecd9e488fc4d2cd8996133, type: 3}
+  rightHand: {fileID: 5687910676681446485}
 --- !u!114 &6055016002681168014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2310,12 +2324,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 2550935751187727211}
   anims:
+  - name: Attack1
+    moveMultiplier: 1
+  - name: Attack2
+    moveMultiplier: 1
+  - name: Attack3
+    moveMultiplier: 1
   - name: Attack4
     moveMultiplier: 1
   - name: Attack4-1
     moveMultiplier: 0
   - name: Attack5
+    moveMultiplier: 2
+  - name: Attack5-1
+    moveMultiplier: 2
+  - name: Attack5-2
+    moveMultiplier: 2
+  - name: Attack5-3
+    moveMultiplier: 2
+  - name: Attack6
     moveMultiplier: 1
+  - name: Attack7
+    moveMultiplier: 0
+  - name: Attack7-1
+    moveMultiplier: 0
 --- !u!114 &4155994505806969654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2328,3 +2360,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e79c78659d5efd42bee0b4c4abe52ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6881833285181368674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9137032837993464747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f049d34df614ab3409f13ed9fccc9f77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bossAttackManager: {fileID: 6308332450445231548}
+  bossSkillManager: {fileID: 5870383895420540904}
+  bossBT: {fileID: 2131148431429031677}
+  bossNvAgent: {fileID: 7853676516811975558}
+  bossAnim: {fileID: 2550935751187727211}
+  bossSpd: 1.5
+  bossCooldown: 0.8
+  bossPatternDelay: 1
+  bossAnimSpd: 1.5
+  bossMat: {fileID: 2100000, guid: ef19a33ea54164d4591aae0ee4485fb1, type: 2}
+  bossBody: {fileID: 4894762259405688390}
+  bossHead: {fileID: 3981553585818097539}
+  bossJaw: {fileID: 8172300059767236553}
+  mapMaterial: {fileID: 2100000, guid: 93caadf4359ae8143aad35b3145d31af, type: 2}
+  phase1Particle: {fileID: 0}
+  phase2Particle: {fileID: 0}

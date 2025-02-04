@@ -9,6 +9,7 @@ public enum BossState
 	Attack5,
 	Attack6,
 	Attack7,
+	Attack8,
 	Stun
 }
 
