@@ -6,8 +6,9 @@ using EnumTypes;
 [CreateAssetMenu(fileName = "DashSkill", menuName = "Scriptable Objects/Player Skill/Dash")]
 public class DashSkill : PlayerSkillBase
 {
-    public float dashDistance = 5f;
+    public float dashSpeed = 5f;
     public float dashTime = 1f;
+    public bool isForward = true;
 
     private PlayerSkillMove skillMove = null;
 
@@ -16,11 +17,17 @@ public class DashSkill : PlayerSkillBase
         skillMove = new PlayerSkillMove();
     }
 
+    public override void StartSkill(PlayerManager _player)
+    {
+        base.StartSkill(_player);
+        _player.ChangeState(PlayerStateType.Dash);
+    }
+
     public override void UseSkill(PlayerManager _player, float multiply)
     {
-        _player.ChangeState(PlayerStateType.Dash);
+        Vector3 direction = isForward ? _player.transform.forward : (_player.transform.forward * -1f);
 
-        skillMove.StartPlayerMove(_player, dashDistance, dashTime);
+        skillMove.StartPlayerMove(_player, dashSpeed, dashTime, direction);
     }
 
     public override void EndSkill(PlayerManager _player)

@@ -7,8 +7,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MeleeAndMoveSkill", menuName = "Scriptable Objects/Player Skill/MeleeAndMove")]
 public class MeleeAndMoveSkill : MeleeSkill
 {
-    public float moveDistance = 1f;
+    public float moveSpeed = 1f;
     public float moveTime = 1f;
+    public bool isForward = true;
 
     private PlayerSkillMove skillMove = null;
 
@@ -21,6 +22,7 @@ public class MeleeAndMoveSkill : MeleeSkill
     {
         base.UseSkill(_player, multiply);
 
-        skillMove.StartPlayerMove(_player, moveDistance, moveTime);
+        Vector3 direction = isForward ? _player.transform.forward : (_player.transform.forward * -1f);
+        skillMove.StartPlayerMove(_player, moveSpeed, moveTime, direction);
     }
 }

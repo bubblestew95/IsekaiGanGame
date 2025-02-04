@@ -4,12 +4,13 @@ using EnumTypes;
 
 public abstract class AttackSkill : PlayerSkillBase
 {
-    float damage = 1f;
-    float aggro = 1f;
+    public float damage = 1f;
+    public float aggro = 1f;
 
-    public override void UseSkill(PlayerManager _player, float multiply)
+    public override void StartSkill(PlayerManager _player)
     {
-        _player.ChangeState(PlayerStateType.Action);
+        base.StartSkill(_player);
+        _player.ChangeState(PlayerStateType.Dash);
     }
 
     public override void EndSkill(PlayerManager _player)

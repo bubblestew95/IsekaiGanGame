@@ -3,13 +3,16 @@ using UnityEngine;
 
 public class PlayerSkillMove
 {
-    private float moveDistance = 2f;
+    private float moveSpeed = 1f;
     private float moveTime = 1f;
+    private Vector3 moveDirection = Vector3.zero;
 
-    public Coroutine StartPlayerMove(PlayerManager _player, float _dist, float _time)
+    public Coroutine StartPlayerMove(PlayerManager _player, float _dist, float _time, Vector3 _direction)
     {
-        moveDistance = _dist;
+        moveSpeed = _dist;
         moveTime = _time;
+        moveDirection = _direction;
+
         return _player.StartCoroutine(MoveCoroutine(_player));
     }
 
@@ -20,7 +23,7 @@ public class PlayerSkillMove
 
         while (currentTime <= moveTime)
         {
-            // characterCont.Move()
+            characterCont.Move(moveDirection * moveSpeed * Time.deltaTime);
             currentTime += Time.deltaTime;
             yield return null;
         }

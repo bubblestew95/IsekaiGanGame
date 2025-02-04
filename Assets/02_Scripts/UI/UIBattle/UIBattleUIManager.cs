@@ -5,19 +5,20 @@ using EnumTypes;
 
 public class UIBattleUIManager : MonoBehaviour
 {
+    [SerializeField]
+    private SkillUIManager skillUIManager = null;
+
     public PlayerManager playerManager = null;
     public List<UIHpsManager> hpList = new List<UIHpsManager>();
     public List<UIBossHpsManager> bossHpList = new List<UIBossHpsManager>();
     public List<UIWarningManager> warningList = new List<UIWarningManager>();
     public List <ButtonSetting> buttonList = new List<ButtonSetting>();
-    public FloatingJoystick joyStick = null;
-    // public List<float> cooltimeList = new List<float>(); //평타,회피,스킬1,스킬2,스킬3 순서
+
+    private SkillButtonsManager skillButtonsManager = null;
 
     public int bossMaxHp = 1;
     public int playerMaxHp = 1;
 
-    private SkillButtonsManager skillButtonsManager = null;
-    private SkillUIManager skillUIManager = null;
 
     private void Awake()
     {
@@ -25,12 +26,10 @@ public class UIBattleUIManager : MonoBehaviour
         bossHpList = GetComponentsInChildren<UIBossHpsManager>().ToList();
         warningList = GetComponentsInChildren<UIWarningManager>().ToList();
         buttonList = GetComponentsInChildren<ButtonSetting>().ToList();
-        joyStick = GetComponentInChildren<FloatingJoystick>();
 
         SetupAllUI();
 
         skillButtonsManager = GetComponentInChildren<SkillButtonsManager>();
-        skillUIManager = transform.parent.GetComponentInChildren<SkillUIManager>();
     }
 
     /// <summary>

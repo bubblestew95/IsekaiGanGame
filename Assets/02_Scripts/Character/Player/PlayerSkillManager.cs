@@ -139,6 +139,11 @@ public class PlayerSkillManager
         skillDataMap[_type].UseSkill(playerManager, _multiply);
     }
 
+    public PlayerSkillBase GetSkill(SkillType _type)
+    {
+        return skillDataMap[_type];
+    }
+
     // 백어택 체크 기술검증용 레이캐스트 함수. 나중에 실사용을 위해서 잠시 남겨놓음.
     /*
     public void TestRaycast()

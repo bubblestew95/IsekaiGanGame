@@ -23,6 +23,9 @@ public class PlayerManager : MonoBehaviour
     private UIBattleUIManager battleUIManager = null;
     [SerializeField]
     private SkillUIManager skillUIManager = null;
+
+    [SerializeField]
+    private Transform rangeAttackStartTr = null;
     #endregion
 
     #region InputBuffer
@@ -41,6 +44,7 @@ public class PlayerManager : MonoBehaviour
     private PlayerSkillManager skillMng = null;
     private StatusManager statusMng = null;
     private PlayerStateMachine stateMachine = null;
+    private PlayerAttackManager attackManager = null;
     private Animator animator = null;
     private int animId_Speed = 0;
 
@@ -63,27 +67,14 @@ public class PlayerManager : MonoBehaviour
     {
         get { return playerInputManager; }
     }
+
+    public Transform RangeAttackStartTr
+    {
+        get { return rangeAttackStartTr; }
+    }
     #endregion
 
     #region Public Functions
-
-    /// <summary>
-    /// 스킬 발동을 시도한다.
-    /// </summary>
-    /// <param name="_skillIdx"></param>
-    public void TryUseSkill(SkillType _type)
-    {
-        // 스킬 사용 지점을 스킬 UI 매니저에게서 받아온다.
-        Vector3 point = skillUIManager.GetSkillAimPoint(_type);
-
-        // 스킬 발동에 성공했다면
-        if(skillMng.TryUseSkill(_type, point))
-        {
-            // UI에 쿨타임을 적용한다.
-            if (battleUIManager != null)
-                battleUIManager.ApplyCooltime(_type, skillMng.GetCoolTime(_type));
-        }
-    }
 
     /// <summary>
     /// 입력을 받았을 때 입력 버퍼에 해당 입력의 스킬 타입을 넣는다.
@@ -120,26 +111,6 @@ public class PlayerManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 현재 스킬 입력 버퍼에서 하나를 꺼내옴.
-    /// </summary>
-    /// <returns>사용할 스킬의 타입</returns>
-    public SkillType GetNextSkill()
-    {
-        if (skillBuffer.TryDequeue(out SkillType nextSkillType))
-            return nextSkillType;
-
-        return SkillType.None;
-    }
-
-    /// <summary>
-    /// 스킬이 끝났을 때 호출되는 함수. 우선은 다시 대기 상태로 돌아오도록 설정.
-    /// </summary>
-    public void EndSkill()
-    {
-        ChangeState(PlayerStateType.Idle);
-    }
-
-    /// <summary>
     /// 현재 플레이어의 동작 상태를 변경한다.
     /// </summary>
     /// <param name="_type">변경하고자 하는 동작 상태.</param>
@@ -151,6 +122,67 @@ public class PlayerManager : MonoBehaviour
     public void SetAnimatorWalkSpeed(float _speed)
     {
         animator.SetFloat(animId_Speed, _speed);
+    }
+
+    #region Skill Functions
+
+    /// <summary>
+    /// 스킬 발동을 시도한다.
+    /// </summary>
+    /// <param name="_skillIdx"></param>
+    public void TryUseSkill(SkillType _type)
+    {
+        // 스킬 사용 지점을 스킬 UI 매니저에게서 받아온다.
+        Vector3 point = skillUIManager.GetSkillAimPoint(_type);
+
+        // 스킬 발동에 성공했다면
+        if (skillMng.TryUseSkill(_type, point))
+        {
+            // UI에 쿨타임을 적용한다.
+            if (battleUIManager != null)
+                battleUIManager.ApplyCooltime(_type, skillMng.GetCoolTime(_type));
+        }
+    }
+
+    /// <summary>
+    /// 현재 스킬 입력 버퍼에서 하나를 꺼내옴.
+    /// </summary>
+    /// <returns>사용할 스킬의 타입</returns>
+    public SkillType GetNextSkill()
+    {
+        if (skillBuffer.TryDequeue(out SkillType nextSkillType))
+            return nextSkillType;
+
+        return SkillType.None;
+    }
+    
+    public PlayerSkillBase GetSkill(SkillType _type)
+    {
+        return skillMng.GetSkill(_type);
+    }
+
+    /// <summary>
+    /// 스킬 애니메이션이 시작할 때 호출되는 함수.
+    /// </summary>
+    public void StartSkill(SkillType _type)
+    {
+        GetSkill(_type).StartSkill(this);
+    }
+
+    /// <summary>
+    /// 스킬 애니메이션이 정상적으로 끝났을 때 호출되는 함수. 
+    /// </summary>
+    public void EndSkill(SkillType _type)
+    {
+        GetSkill(_type).EndSkill(this);
+    }
+
+    /// <summary>
+    /// 스킬 애니메이션 중 스킬 사용 타이밍 때 스킬의 효과를 씬에 적용시킨다.
+    /// </summary>
+    public void UseSkill(SkillType _type)
+    {
+        skillMng.SkillAction(_type, 1f);
     }
 
     /// <summary>
@@ -169,13 +201,16 @@ public class PlayerManager : MonoBehaviour
         return skillMng.IsSkillUsable(_type);
     }
 
-    /// <summary>
-    /// 스킬 애니메이션 중 스킬 사용 타이밍 때 스킬의 효과를 씬에 적용시킨다.
-    /// </summary>
-    public void PlaySkillAction(SkillType _type, float _multiply)
+    #endregion
+
+    #region Attack Functions
+
+    public void RayAttack(float _damage, float _maxDistance)
     {
-        skillMng.SkillAction(_type, _multiply);
+        attackManager.RayAttack(_damage, _maxDistance);
     }
+
+    #endregion
 
     #endregion
 
@@ -229,6 +264,9 @@ public class PlayerManager : MonoBehaviour
 
         playerInputManager = new PlayerInputManager();
         playerInputManager.Init(FindAnyObjectByType<FloatingJoystick>());
+
+        attackManager = new PlayerAttackManager();
+        attackManager.Init(this);
 
         animator = GetComponent<Animator>();
 
