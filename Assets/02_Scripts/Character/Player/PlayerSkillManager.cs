@@ -134,9 +134,9 @@ public class PlayerSkillManager
         return true;
     }
 
-    public void SkillAction(SkillType _type, int _order)
+    public void SkillAction(SkillType _type, float _multiply)
     {
-        
+        skillDataMap[_type].UseSkill(playerManager, _multiply);
     }
 
     // 백어택 체크 기술검증용 레이캐스트 함수. 나중에 실사용을 위해서 잠시 남겨놓음.

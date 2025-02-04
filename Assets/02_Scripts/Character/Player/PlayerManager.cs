@@ -139,6 +139,10 @@ public class PlayerManager : MonoBehaviour
         ChangeState(PlayerStateType.Idle);
     }
 
+    /// <summary>
+    /// 현재 플레이어의 동작 상태를 변경한다.
+    /// </summary>
+    /// <param name="_type">변경하고자 하는 동작 상태.</param>
     public void ChangeState(PlayerStateType _type)
     {
         StateMachine.ChangeState(_type);
@@ -168,9 +172,9 @@ public class PlayerManager : MonoBehaviour
     /// <summary>
     /// 스킬 애니메이션 중 스킬 사용 타이밍 때 스킬의 효과를 씬에 적용시킨다.
     /// </summary>
-    public void PlaySkillAction(SkillType _type, int skillOrder)
+    public void PlaySkillAction(SkillType _type, float _multiply)
     {
-        // skillMng.
+        skillMng.SkillAction(_type, _multiply);
     }
 
     #endregion

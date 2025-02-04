@@ -73,7 +73,8 @@ public class ButtonSetting : MonoBehaviour
     public void ButtonUp(BaseEventData _eventData)
     {
         Debug.Log("Button Up!");
-        StopCoroutine(currentSkillCoroutine);
+        if(currentSkillCoroutine != null)
+            StopCoroutine(currentSkillCoroutine);
         skillButtonsManager.OnSkillButtonClickUp(ButtonSkillType);
     }
 
