@@ -80,6 +80,8 @@ public class PlayerManager : MonoBehaviour
 
     #region Public Functions
 
+    #region Input, State Functions
+
     /// <summary>
     /// 입력을 받았을 때 입력 버퍼에 해당 입력의 스킬 타입을 넣는다.
     /// </summary>
@@ -131,6 +133,8 @@ public class PlayerManager : MonoBehaviour
     {
         animator.SetFloat(animId_Speed, _speed);
     }
+
+    #endregion
 
     #region Skill Functions
 
@@ -226,9 +230,23 @@ public class PlayerManager : MonoBehaviour
 
     #region Attack Functions
 
-    public void RayAttack(float _damage, float _maxDistance)
+    /// <summary>
+    /// 플레이어의 정면 방향으로 보스에게 데미지를 가하는 레이를 발사함.
+    /// </summary>
+    /// <param name="_damage"></param>
+    /// <param name="_maxDistance"></param>
+    public void RayAttack(int _damage, float _maxDistance)
     {
         attackManager.RayAttack(_damage, _maxDistance);
+    }
+
+    /// <summary>
+    /// 플레이어가 데미지를 받음.
+    /// </summary>
+    /// <param name="_damage"></param>
+    public void TakeDamage(int _damage)
+    {
+        statusMng.OnDamaged(_damage);
     }
 
     #endregion
