@@ -4,7 +4,7 @@ using EnumTypes;
 
 public abstract class AttackSkill : PlayerSkillBase
 {
-    public float damage = 1f;
+    public int damage = 1;
     public float aggro = 1f;
 
     public override void StartSkill(PlayerManager _player)

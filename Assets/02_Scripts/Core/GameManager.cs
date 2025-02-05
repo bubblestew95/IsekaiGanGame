@@ -2,19 +2,47 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    #region Singleton Variable, Properties
     private static GameManager instance = null;
 
     public static GameManager Instance
     {
         get { return instance; }
     }
+    #endregion
+
+    #region Inspector Variables
+    #endregion
+
+    #region Private Variables
 
     private GameObject bossObject = null;
+
+    #endregion
+
 
     #region Public Functions
     public Transform GetBossTransform()
     {
         return bossObject.transform;
+    }
+
+    /// <summary>
+    /// 플레이어가 보스에게 데미지를 가함.
+    /// </summary>
+    /// <param name="_damageSource">보스에게 데미지를 주는 플레이어</param>
+    public void DamageToBoss(PlayerManager _damageSource, int _damage)
+    {
+
+    }
+
+    /// <summary>
+    /// 보스가 플레이어에게 데미지를 가함.
+    /// </summary>
+    /// <param name="_damageReceiver"></param>
+    public void DamageToPlayer(PlayerManager _damageReceiver, int _damage)
+    {
+        _damageReceiver.TakeDamage(_damage);
     }
 
     #endregion
