@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class DamageParticle : MonoBehaviour
 {
     public ParticleSystem P_Particle;
-    public Vector3 particlePos;
+    public BossStateManager bossStateManager;
     public ParticleSystem[] digitParticles;
     public List<Sprite> numberSprites;
     public float damage;
@@ -33,8 +34,10 @@ public class DamageParticle : MonoBehaviour
 
     private void SetupAndPlayParticles()
     {
+        // new Vector3(bossStateManager.Boss.transform.position.x, 3f, bossStateManager.Boss.transform.position.z - 1f)
+
         // 파티클 시스템 생성
-        ParticleSystem particle = Instantiate(P_Particle, particlePos, Quaternion.identity);
+        ParticleSystem particle = Instantiate(P_Particle, new Vector3(bossStateManager.Boss.transform.position.x, bossStateManager.Boss.transform.position.y + 1f, bossStateManager.Boss.transform.position.z), Quaternion.identity);
 
         // 파티클 시스템 자식들 가져옴.
         digitParticles = particle.GetComponentsInChildren<ParticleSystem>().Where(ps => ps != particle).ToArray();
