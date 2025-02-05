@@ -21,7 +21,7 @@ public class PlayerAttackManager
         }
     }
 
-    public void MeleeAttack(int _damage, float _aggro)
+    public void AddDamageToBoss(int _damage, float _aggro)
     {
         GameManager.Instance.DamageToBoss(playerManager, _damage, _aggro);
     }

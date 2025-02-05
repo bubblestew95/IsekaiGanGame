@@ -239,13 +239,9 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     /// <param name="_damage"></param>
     /// <param name="_maxDistance"></param>
-    public void RayAttack(int _damage, float _aggro, float _maxDistance)
+    public void ShootDamageRay(int _damage, float _aggro, float _maxDistance)
     {
         attackManager.RayAttack(_damage, _aggro, _maxDistance);
-    }
-    public void MeleeAttack(int _damage, float _aggro)
-    {
-
     }
 
     public void EnableMeleeAttack()
@@ -270,6 +266,11 @@ public class PlayerManager : MonoBehaviour
     public void TakeDamage(int _damage)
     {
         statusMng.OnDamaged(_damage);
+    }
+
+    public void AddDamageToBoss(int _damage, float _aggro)
+    {
+        attackManager.AddDamageToBoss(_damage, _aggro);
     }
 
     #endregion

@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 116dc890688cd89408144612362381ab, type: 3}
-  m_Name: Warrior_Skill_B_Taunt
+  m_Script: {fileID: 11500000, guid: 35540f8fa672c464792fb03c858366f2, type: 3}
+  m_Name: MageDash
   m_EditorClassIdentifier: 
-  skillSlot: 2
-  coolTime: 5
+  skillSlot: 5
+  coolTime: 3
   skillParticle: {fileID: 0}
-  damage: 1
-  aggro: 20
+  dashSpeed: 7
+  dashTime: 0.5
+  isForward: 1

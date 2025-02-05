@@ -11,6 +11,6 @@ public class RangeSkill : AttackSkill
     public override void UseSkill(PlayerManager _player)
     {
         base.UseSkill(_player);
-        _player.RayAttack(damage, aggro, attackRange);
+        _player.ShootDamageRay(damage, aggro, attackRange);
     }
 }
