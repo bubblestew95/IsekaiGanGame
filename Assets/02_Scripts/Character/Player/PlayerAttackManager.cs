@@ -9,7 +9,7 @@ public class PlayerAttackManager
         playerManager = _playerManager;
     }
 
-    public void RayAttack(float _damage, float _maxDistance)
+    public void RayAttack(int _damage, float _maxDistance)
     {
         Transform startTr = playerManager.RangeAttackStartTr;
         Ray ray = new Ray(startTr.position, playerManager.transform.forward);
@@ -17,7 +17,7 @@ public class PlayerAttackManager
 
         if (Physics.Raycast(ray, out hit, _maxDistance))
         {
-            Debug.Log(hit.transform.name);
+            GameManager.Instance.DamageToBoss(playerManager, _damage);
         }
     }
 
