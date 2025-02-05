@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     /// <param name="_damageSource">보스에게 데미지를 주는 플레이어</param>
     public void DamageToBoss(PlayerManager _damageSource, int _damage, float _aggro)
     {
-
+        Debug.LogFormat("Player deal to boss! damage : {0}, aggro : {1}", _damage, _aggro);
     }
 
     /// <summary>

@@ -15,23 +15,23 @@ public class AOESkill : AttackSkill
     public override void UseSkill(PlayerManager _player)
     {
         base.UseSkill(_player);
-        _player.StartCoroutine(TickDamageCoroutine(_player.LastSkillUsePoint));
+        _player.StartCoroutine(TickDamageCoroutine(_player));
     }
 
-    private IEnumerator TickDamageCoroutine(Vector3 _damagePos)
+    private IEnumerator TickDamageCoroutine(PlayerManager _player)
     {
         float currentTime = 0f;
         WaitForSeconds waitSec = new WaitForSeconds(damageTickTime);
+        Vector3 damagePos = _player.LastSkillUsePoint;
+        Ray ray = new Ray(damagePos, Vector3.up);
 
-        Ray ray = new Ray(_damagePos, Vector3.up);
-
-        while(currentTime <= duration)
+        while (currentTime <= duration)
         {
-            Collider[] hits = Physics.OverlapSphere(_damagePos, attackAreaRadius);
+            Collider[] hits = Physics.OverlapSphere(damagePos, attackAreaRadius);
             // 충돌이 검출됐을 경우
             foreach (Collider hitCollider in hits)
             {
-                Debug.Log(hitCollider.gameObject.name);
+                _player.AddDamageToBoss(damage, aggro);
             }
 
             yield return waitSec;

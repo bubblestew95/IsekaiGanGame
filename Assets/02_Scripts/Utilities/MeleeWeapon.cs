@@ -32,7 +32,7 @@ public class MeleeWeapon : MonoBehaviour
         {
             ++currentHitCount;
 
-            playerManager.MeleeAttack(damage, aggro);
+            playerManager.AddDamageToBoss(damage, aggro);
         }
     }
 }

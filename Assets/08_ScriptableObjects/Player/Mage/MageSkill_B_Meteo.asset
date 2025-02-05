@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d270f1fa16eead478b97a024e6f739a, type: 3}
-  m_Name: Warrior_Skill_A_Bigbang
+  m_Script: {fileID: 11500000, guid: 08c93cc379f4303418b48b7281b9bf72, type: 3}
+  m_Name: MageSkill_B_Meteo
   m_EditorClassIdentifier: 
-  skillSlot: 1
+  skillSlot: 2
   coolTime: 3
   skillParticle: {fileID: 0}
-  damage: 3
-  aggro: 5
-  maxRange: 1
+  damage: 1
+  aggro: 1
+  maxRange: 5
   attackAreaRadius: 1
   duration: 2
   damageTickTime: 0.5

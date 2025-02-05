@@ -10912,6 +10912,7 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: acdbef012a391a0419e3f3e3023cdc21, type: 2}
   battleUIManager: {fileID: 4146408885389238575}
   rangeAttackStartTr: {fileID: 3783926205617964531}
+  meleeWeapon: {fileID: 0}
 --- !u!114 &2131632820310466139
 MonoBehaviour:
   m_ObjectHideFlags: 0

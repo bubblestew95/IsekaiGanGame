@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08c93cc379f4303418b48b7281b9bf72, type: 3}
-  m_Name: Archer_Skill_A_ArrowRain
+  m_Name: ArcherSkill_A_ArrowRain
   m_EditorClassIdentifier: 
   skillSlot: 1
   coolTime: 10
