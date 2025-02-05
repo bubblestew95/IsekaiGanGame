@@ -52,27 +52,18 @@ public class BossStateManager : MonoBehaviour
         }
     }
 
-    // 공격이 들어왔을때
-    private void OnTriggerEnter(Collider _playerAttack)
-    {
-        // 추가로 고려해야 하는 상황
-        // 1. 네트워크 동기화
-        // 2. 플레이어별 데미지 check를 위한 구성
-        // 3. 플레이어별 어그로 check
-
-        // 플레이어 어택의 공격력을 가져옴.
-
-        // 해당 공격력만큼 보스피를 하락
-
-        // 만약 체인어택 공격이라면 상태이상 리스트에 추가
-
-    }
-
     // 데미지만큼 hp에서 하락시킴.
     private void TakeDamage(float _damage)
     {
         if (curHp <= 0) return;
 
+        // 플레이어 어그로, 데미지 수치 등록
+        RegisterDamageAndAggro();
+
+        // 상태이상 추가
+        // AddChainList();
+
+        // 데미지를 입힘
         curHp -= _damage;
 
         if (curHp <= 0)
@@ -81,9 +72,14 @@ public class BossStateManager : MonoBehaviour
             bossDieCallback?.Invoke();
         }
 
+        // 현재 hp콜백(현재 피에 따라 패턴 설정)
         CheckHpCallback();
 
         // UI에 보스체력 동기화 시키는 코드 필요
+
+
+        // 어그로 플레이어 설정하는 함수
+        GetHighestAggroTarget();
     }
 
     // 특정 hp이하일때 마다 콜백을 던짐
@@ -175,5 +171,24 @@ public class BossStateManager : MonoBehaviour
     public void BossStun()
     {
         bossStunCallback?.Invoke();
+    }
+
+    // 어그로 수치 초기화 하는 함수
+    private void ResetAggro()
+    {
+
+    }
+
+
+    // 플레이어의 데미지, 어그로 수치 관리하는 함수
+    private void RegisterDamageAndAggro()
+    {
+
+    }
+
+    // 현재 어그로 수치 기준으로 어그로 대상 판별하는 함수
+    private void GetHighestAggroTarget()
+    {
+
     }
 }

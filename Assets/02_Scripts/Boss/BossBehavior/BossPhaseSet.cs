@@ -1,8 +1,13 @@
+using System.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class BossPhaseSet : MonoBehaviour
 {
+    public delegate void BossPhaseSetDelegate();
+    public BossPhaseSetDelegate SetTreeFireCallback;
+
     [SerializeField] private BossAttackManager bossAttackManager;
     [SerializeField] private BossSkillManager bossSkillManager;
     [SerializeField] private BossBT bossBT;
@@ -23,21 +28,15 @@ public class BossPhaseSet : MonoBehaviour
     public GameObject phase2Particle;
     public GameObject fire;
     public GameObject tileFire;
+    public GameObject bossFire1;
+    public GameObject bossFire2;
 
     private void Start()
     {
-        mapMaterial.color = new Color(255f / 255f, 255f / 255f, 255f / 255f);
+        mapMaterial.SetFloat("_Range", 0f);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            BossPhase2Set();
-        }
-    }
-
-    private void BossPhase2Set()
+    public void BossPhase2Set()
     {
         // 이동속도
         // 보스의 navMesh 변경
@@ -58,24 +57,57 @@ public class BossPhaseSet : MonoBehaviour
         // 패턴 행동속도 배속한만큼 보스공격 보이는것도 수정
         bossAttackManager.AnimSpd = bossAnimSpd;
 
-        // 보스 패턴에 불 이펙트 추가
-
         // 보스 Mat 변경
         bossBody.GetComponent<Renderer>().material = bossMat;
         bossHead.GetComponent<Renderer>().material = bossMat;
         bossJaw.GetComponent<Renderer>().material = bossMat;
 
         // 맵 색깔 변경
-        mapMaterial.color = new Color(255f / 255f, 56f / 255f, 63f / 255f);
+        StartCoroutine(ChangeColor());
 
         // 맵 파티클 변경
         phase1Particle.SetActive(false);
         phase2Particle.SetActive(true);
 
-        // 불 재생
-        fire.SetActive(true);
+        // 보스 몸에 불이펙트 추가
+        bossFire1.SetActive(true);
+        bossFire2.SetActive(true);
+    }
 
-        // 맵장판 On
-        tileFire.SetActive(true);
+    private IEnumerator ChangeColor()
+    {
+        float elapseTime = 0f;
+        float newValue = 0f;
+
+        bool once = true;
+        bool once2 = true;
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+            newValue = Mathf.Lerp(0f, 100f, elapseTime / 5f);
+
+            mapMaterial.SetFloat("_Range", newValue);
+
+            if (newValue >= 25f && once)
+            {
+                once = false;
+                // 네모불 재생
+                fire.SetActive(true);
+            }
+
+            if (newValue >= 30f && once2)
+            {
+                once2 = false;
+                SetTreeFireCallback?.Invoke();
+            }
+
+            if (elapseTime >= 5f)
+            {
+                // 맵장판 On
+                tileFire.SetActive(true);
+                break;
+            }
+            yield return null;
+        }
     }
 }
