@@ -6,6 +6,13 @@ public class Phase2Tree : MonoBehaviour
     public GameObject fire2;
     public GameObject fire3;
 
+    public BossPhaseSet bossPhase2Set;
+
+    private void Start()
+    {
+        bossPhase2Set.SetTreeFireCallback += SetOn;
+    }
+
     private void SetOn()
     {
         fire1.SetActive(true);

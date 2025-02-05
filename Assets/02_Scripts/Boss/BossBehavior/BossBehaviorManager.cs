@@ -26,9 +26,14 @@ public class BossBehaviorManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             SetHP10();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SetHPHalf();
         }
     }
 
@@ -86,7 +91,7 @@ public class BossBehaviorManager : MonoBehaviour
         if (hpHalfTrigger)
         {
             hpHalfTrigger = false;
-            SetBossBehavior(BossState.Chase);
+            SetBossBehavior(BossState.Phase2);
             yield break;
         }
 

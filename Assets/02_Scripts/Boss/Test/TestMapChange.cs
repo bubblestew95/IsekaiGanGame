@@ -1,7 +1,5 @@
 using System.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class TestMapChange : MonoBehaviour
 {

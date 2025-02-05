@@ -11,6 +11,7 @@ public enum BossState
 	Attack7,
 	Attack8,
     Attack9,
+	Phase2,
     Stun
 }
 

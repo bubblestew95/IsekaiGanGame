@@ -32,7 +32,7 @@ public class BossPhase2Cam : MonoBehaviour
         }
     }
 
-    private IEnumerator MoveCam()
+    public IEnumerator MoveCam()
     {
         origin = Cam.localPosition;
         target = new Vector3(0, 13f, -13f);
@@ -56,7 +56,7 @@ public class BossPhase2Cam : MonoBehaviour
         }
     }
 
-    private IEnumerator ReturnCam()
+    public IEnumerator ReturnCam()
     {
         origin = Cam.localPosition;
         target = new Vector3(0f, 12f, -7f);
@@ -80,7 +80,7 @@ public class BossPhase2Cam : MonoBehaviour
         }
     }
 
-    private IEnumerator ShakeCam()
+    public IEnumerator ShakeCam()
     {
         float elapseTime = 0f;
 

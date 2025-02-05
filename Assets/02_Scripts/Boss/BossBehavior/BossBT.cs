@@ -16,6 +16,8 @@ public class BossBT : MonoBehaviour
     [SerializeField] private BossSkillManager bossSkillManager;
     [SerializeField] private BossAttackManager bossAttackManager;
     [SerializeField] private Vector3 center;
+    [SerializeField] private BossPhase2Cam phase2Cam;
+    [SerializeField] private BossPhaseSet phase2Set;
 
     private bool isCoroutineRunning = false;
     private bool isStun = false;
@@ -710,6 +712,92 @@ public class BossBT : MonoBehaviour
 
         isCoroutineRunning = false;
         isStun = false;
+    }
+
+    private IEnumerator Phase2()
+    {
+        isCoroutineRunning = true;
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 가운데로 이동해서 쿠와왕
+        // 현재 위치에서 가운데 위치로 Lerp하게 이동(15~50프레임)하면서, 점프 애니메이션 실행하면 될듯
+        Vector3 originPos = bossStateManager.Boss.transform.position;
+
+        float elapseTime = 0f;
+        bool once = true;
+
+        Quaternion targetRotation = Quaternion.Euler(0, -180, 0);
+
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Phase2"))
+            {
+                // 카메라 움직이고
+                if (once)
+                {
+                    once = false;
+                    StartCoroutine(phase2Cam.MoveCam());
+                }
+
+                // 보스 가운대로 설정하고
+                elapseTime += Time.deltaTime;
+                if (elapseTime >= 0.5f && elapseTime <= 1.6f)
+                {
+                    float t = Mathf.InverseLerp(0.5f, 1.6f, elapseTime);
+                    bossStateManager.Boss.transform.position = Vector3.Lerp(originPos, center, t);
+
+                    bossStateManager.Boss.transform.rotation = Quaternion.Slerp(bossStateManager.Boss.transform.rotation, targetRotation, t);
+                }
+            }
+
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Phase2") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                anim.SetBool("Phase2Flag", false);
+                anim.SetBool("Phase2-1Flag", true);
+                break;
+            }
+
+            yield return null;
+        }
+
+        once = true;
+
+        // 쿠와왕
+        while (true)
+        {
+            // 쿠와왕 하는 타이밍
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Phase2-1") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.2f && once)
+            {
+                // 카메라 흔들기
+                once = false;
+                StartCoroutine(phase2Cam.ShakeCam());
+
+                // Map Material 변경(여기서 Fire네모, 나무에 Fire생성하는 작업까지), 보스 Mat 변경, 보스 Fire이펙트, 맵장판 파티클 생성하는것도 설정, 보스 2페이즈로 세팅하는것까지 
+                phase2Set.BossPhase2Set();
+            }
+
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Phase2-1") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                // 카메라 원상복귀
+                StartCoroutine(phase2Cam.ReturnCam());
+
+                anim.SetBool("Phase2-1Flag", false);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 상태를 chase로 변경
+        curState = BossState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
     }
     #endregion
 
