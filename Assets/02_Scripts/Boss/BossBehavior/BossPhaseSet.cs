@@ -23,6 +23,8 @@ public class BossPhaseSet : MonoBehaviour
     public GameObject phase2Particle;
     public GameObject fire;
     public GameObject tileFire;
+    public GameObject bossFire1;
+    public GameObject bossFire2;
 
     private void Start()
     {
@@ -77,5 +79,9 @@ public class BossPhaseSet : MonoBehaviour
 
         // ∏ ¿Â∆« On
         tileFire.SetActive(true);
+
+        // ∫∏Ω∫ ∏ˆø° ∫“¿Ã∆Â∆Æ √ﬂ∞°
+        bossFire1.SetActive(true);
+        bossFire2.SetActive(true);
     }
 }

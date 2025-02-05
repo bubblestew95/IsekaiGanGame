@@ -28,14 +28,13 @@ public class DamageParticle : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            SetupAndPlayParticles();
+            SetupAndPlayParticles(damage);
         }
     }
 
-    private void SetupAndPlayParticles()
+    // 데미지에 맞는 파티클 실행
+    private void SetupAndPlayParticles(float _damage)
     {
-        // new Vector3(bossStateManager.Boss.transform.position.x, 3f, bossStateManager.Boss.transform.position.z - 1f)
-
         // 파티클 시스템 생성
         ParticleSystem particle = Instantiate(P_Particle, new Vector3(bossStateManager.Boss.transform.position.x, bossStateManager.Boss.transform.position.y + 1f, bossStateManager.Boss.transform.position.z), Quaternion.identity);
 
@@ -50,7 +49,7 @@ public class DamageParticle : MonoBehaviour
         }
 
         // 데미지에 맞게 스프라이트 설정
-        SetDamage(damage);
+        SetDamage(_damage);
 
         // 파티클 재생
         particle.Play();
