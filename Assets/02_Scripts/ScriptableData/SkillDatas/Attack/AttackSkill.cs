@@ -10,7 +10,8 @@ public abstract class AttackSkill : PlayerSkillBase
     public override void StartSkill(PlayerManager _player)
     {
         base.StartSkill(_player);
-        _player.ChangeState(PlayerStateType.Dash);
+
+        _player.ChangeState(PlayerStateType.Action);
     }
 
     public override void EndSkill(PlayerManager _player)

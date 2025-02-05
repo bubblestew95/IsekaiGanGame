@@ -24,6 +24,8 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField]
     private Transform rangeAttackStartTr = null;
+    [SerializeField]
+    private MeleeWeapon meleeWeapon = null;
     #endregion
 
     #region InputBuffer
@@ -126,6 +128,7 @@ public class PlayerManager : MonoBehaviour
     /// <param name="_type">변경하고자 하는 동작 상태.</param>
     public void ChangeState(PlayerStateType _type)
     {
+        Debug.LogFormat("Player State Change To {0}.", _type);
         StateMachine.ChangeState(_type);
     }
 
@@ -199,6 +202,7 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     public void EndSkill(SkillSlot _type)
     {
+        Debug.LogFormat("End Skill type {0}", _type);
         GetSkill(_type).EndSkill(this);
     }
 
@@ -235,9 +239,28 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     /// <param name="_damage"></param>
     /// <param name="_maxDistance"></param>
-    public void RayAttack(int _damage, float _maxDistance)
+    public void RayAttack(int _damage, float _aggro, float _maxDistance)
     {
-        attackManager.RayAttack(_damage, _maxDistance);
+        attackManager.RayAttack(_damage, _aggro, _maxDistance);
+    }
+    public void MeleeAttack(int _damage, float _aggro)
+    {
+
+    }
+
+    public void EnableMeleeAttack()
+    {
+        meleeWeapon.SetTriggerEnabled(true);
+    }
+
+    public void DisableMeleeAttack()
+    {
+        meleeWeapon.SetTriggerEnabled(false);
+    }
+
+    public Vector3 GetMeleeWeaponPostion()
+    {
+        return meleeWeapon.transform.position;
     }
 
     /// <summary>
