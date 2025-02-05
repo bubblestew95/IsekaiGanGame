@@ -10827,7 +10827,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &494462
 Transform:
   m_ObjectHideFlags: 0
@@ -10910,6 +10910,7 @@ MonoBehaviour:
       m_Calls: []
   playerData: {fileID: 11400000, guid: 733398d73c3c22a4aa9a391cc7f2ea49, type: 2}
   battleUIManager: {fileID: 4146408885389238575}
+  rangeAttackStartTr: {fileID: 0}
 --- !u!1 &179126
 GameObject:
   m_ObjectHideFlags: 0

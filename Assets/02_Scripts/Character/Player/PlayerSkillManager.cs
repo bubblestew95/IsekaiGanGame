@@ -74,15 +74,6 @@ public class PlayerSkillManager
             animator.SetTrigger(animId);
         }
 
-        if(_type == SkillSlot.Dash)
-        {
-            playerManager.ChangeState(PlayerStateType.Dash);
-        }
-        else
-        {
-            playerManager.ChangeState(PlayerStateType.Action);
-        }
-
         // 쿨타임 적용
         currentCoolTimeMap[_type] = skillDataMap[_type].coolTime;
     }

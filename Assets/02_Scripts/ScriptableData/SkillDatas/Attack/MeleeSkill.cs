@@ -9,5 +9,14 @@ public class MeleeSkill : AttackSkill
     public override void UseSkill(PlayerManager _player)
     {
         base.UseSkill(_player);
+
+        _player.EnableMeleeAttack();
+    }
+
+    public override void EndSkill(PlayerManager _player)
+    {
+        base.EndSkill(_player);
+
+        _player.DisableMeleeAttack();
     }
 }
