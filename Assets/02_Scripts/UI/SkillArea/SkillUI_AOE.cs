@@ -25,7 +25,7 @@ public class SkillUI_AOE : SkillUI_Base
     public override SkillPointData GetSkillAimPoint()
     {
         SkillPointData pointData = new SkillPointData();
-        pointData.type = SkillPointType.Area;
+        pointData.type = SkillPointType.Position;
         pointData.point = targetRectTr.position;
         return pointData;
     }

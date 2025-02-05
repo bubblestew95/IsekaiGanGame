@@ -35,6 +35,6 @@ namespace EnumTypes
     {
         None = 0,   // 사용 지점을 지정하지 않는 스킬.
         Direction,  // 방향을 지정하고 사용하는 스킬.
-        Area,       // 특정 범위를 지정하고 사용하는 스킬.
+        Position,       // 위치를 지정하고 사용하는 스킬.
     }
 }

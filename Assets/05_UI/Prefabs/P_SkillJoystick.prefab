@@ -133,7 +133,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 3245106476287953623}
           m_TargetAssemblyTypeName: ButtonSetting, Assembly-CSharp
-          m_MethodName: ButtonDown
+          m_MethodName: JoystickDown
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -149,7 +149,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 3245106476287953623}
           m_TargetAssemblyTypeName: ButtonSetting, Assembly-CSharp
-          m_MethodName: ButtonUp
+          m_MethodName: JoystickUp
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

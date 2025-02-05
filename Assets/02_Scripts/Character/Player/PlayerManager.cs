@@ -147,7 +147,7 @@ public class PlayerManager : MonoBehaviour
         if (skillMng.IsSkillUsable(_type))
         {
             // 캐릭터를 포인트로 지정한 방향을 보도록 한다.
-            if (_point.type == SkillPointType.Area)
+            if (_point.type == SkillPointType.Position || _point.type == SkillPointType.None)
             {
                 transform.LookAt(_point.point);
             }
@@ -157,6 +157,7 @@ public class PlayerManager : MonoBehaviour
             }
 
             skillMng.UseSkill(_type);
+
             // UI에 쿨타임을 적용한다.
             if (battleUIManager != null)
                 battleUIManager.ApplyCooltime(_type, skillMng.GetCoolTime(_type));

@@ -77,7 +77,7 @@ public class ButtonSetting : MonoBehaviour
 
     public void ButtonUp(BaseEventData _eventData)
     {
-        skillButtonsManager.(ButtonSkillType);
+        skillButtonsManager.OnSkillButtonUp(ButtonSkillType);
     }
 
     private IEnumerator DirectionSkillHoldingCoroutine(SkillSlot _type)

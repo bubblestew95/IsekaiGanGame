@@ -33,7 +33,7 @@ public class SkillButtonsManager : MonoBehaviour
 
     public void OnSkillButtonUp(SkillSlot _slot)
     {
-
+        battleUIManager.OnSkillButtonUp(_slot);
     }
 
     public void ApplyCooltime(SkillSlot _slot, float _time)
