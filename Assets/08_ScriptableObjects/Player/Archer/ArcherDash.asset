@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db5ce20329354ab4790360e86adb07fc, type: 3}
+  m_Script: {fileID: 11500000, guid: 35540f8fa672c464792fb03c858366f2, type: 3}
   m_Name: ArcherDash
   m_EditorClassIdentifier: 
-  skillType: 5
-  damage: 0
-  coolTime: 10
-  rangeType: 0
-  activatedType: 2
+  skillSlot: 5
+  coolTime: 3
+  skillParticle: {fileID: 0}
+  dashSpeed: 5
+  dashTime: 1
+  isForward: 1

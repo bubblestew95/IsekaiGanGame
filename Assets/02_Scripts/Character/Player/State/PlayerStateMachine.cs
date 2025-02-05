@@ -40,12 +40,17 @@ public class PlayerStateMachine
     /// <param name="_stateType">변화하고자 하는 상태 타입</param>
     public void ChangeState(PlayerStateType _stateType)
     {
+        BasePlayerState nextState = GetState(_stateType);
+
+        // 만약 바꾸려는 상태가 현재 상태와 동일한 상태라면 아무 행동도 안 하고 리턴.
+        if (nextState == CurrentState)
+            return;
+
         // 먼저 현재 상태를 종료함.
         if (CurrentState != null)
             currentState.OnExitState();
 
         // 다음 상태로 전환.
-        BasePlayerState nextState = GetState(_stateType);
         if (nextState != null)
         {
             currentState = nextState;

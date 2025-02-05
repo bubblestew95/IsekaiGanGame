@@ -1,6 +1,7 @@
 using UnityEngine;
 
 using EnumTypes;
+using StructTypes;
 
 public class SkillUI_AOE : SkillUI_Base
 {
@@ -18,14 +19,19 @@ public class SkillUI_AOE : SkillUI_Base
 
     public override void AimSkill(float _horizontal, float _vertical)
     {
-        base.AimSkill(_horizontal, _vertical);
-
         SetTargetPosition(new Vector3(_horizontal, defaultY, _vertical));
     }
+
+    public override SkillPointData GetSkillAimPoint()
+    {
+        SkillPointData pointData = new SkillPointData();
+        pointData.type = SkillPointType.Position;
+        pointData.point = targetRectTr.position;
+        return pointData;
+    }
+
     public override void SetEnabled(bool _enabled)
     {
-        base.SetEnabled(_enabled);
-
         targetImageObj.SetActive(_enabled);
         rangeImageObj.SetActive(_enabled);
     }

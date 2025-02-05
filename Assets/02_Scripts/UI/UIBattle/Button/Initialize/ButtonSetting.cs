@@ -12,7 +12,7 @@ using EnumTypes;
 public class ButtonSetting : MonoBehaviour
 {
     [SerializeField]
-    private SkillType buttonSkillType = SkillType.None;
+    private SkillSlot buttonSkillType = SkillSlot.None;
 
     public List<Image> images = new List<Image>();
     public List<TextMeshProUGUI> textMeshPros = null;
@@ -24,7 +24,7 @@ public class ButtonSetting : MonoBehaviour
 
     private Coroutine currentSkillCoroutine = null;
 
-    public SkillType ButtonSkillType
+    public SkillSlot ButtonSkillType
     {
         get { return buttonSkillType; }
     }
@@ -55,33 +55,44 @@ public class ButtonSetting : MonoBehaviour
         ////button.onClick.AddListener(ButtonPressed);
         */
 
-        SetCooltime(0.1f);
+        SetCooltime(5f);
     }
 
     public void SetCooltime(float _cooltime)
     {
         cooltime.SetMaxCooltime(_cooltime);
     }
-    public void ButtonDown(BaseEventData _eventData)
+    public void JoystickDown(BaseEventData _eventData)
     {
-        Debug.Log("Button Down!");
-        currentSkillCoroutine = StartCoroutine(SkillHoldingCoroutine(ButtonSkillType));
+        skillButtonsManager.OnSkillJoystickDown(ButtonSkillType);
+        currentSkillCoroutine = StartCoroutine(DirectionSkillHoldingCoroutine(ButtonSkillType));
     }
 
+    public void JoystickUp(BaseEventData _eventData)
+    {
+        if(currentSkillCoroutine != null)
+            StopCoroutine(currentSkillCoroutine);
+        skillButtonsManager.OnSkillJoystickUp(ButtonSkillType);
+    }
+
+    /// <summary>
+    /// 버튼 타입의 스킬이 눌러졌다가 때질 때 호출됨.
+    /// </summary>
+    /// <param name="_eventData"></param>
     public void ButtonUp(BaseEventData _eventData)
     {
-        Debug.Log("Button Up!");
-        StopCoroutine(currentSkillCoroutine);
-        skillButtonsManager.OnSkillButtonClickUp(ButtonSkillType);
+        skillButtonsManager.OnSkillButtonUp(ButtonSkillType);
     }
 
-    private IEnumerator SkillHoldingCoroutine(SkillType _type)
+    /// <summary>
+    /// 지정한 스킬의 조이스틱 좌표 값을 상위 매니저에게 계속해서 보내는 코루틴.
+    /// </summary>
+    /// <param name="_type">지정하고자 하는 스킬.</param>
+    /// <returns></returns>
+    private IEnumerator DirectionSkillHoldingCoroutine(SkillSlot _type)
     {
-        skillButtonsManager.OnSkillButtonClickDown(_type);
-
         while (true)
         {
-            // Debug.LogFormat("{0}, {1}", joystick.Horizontal, joystick.Vertical);
             skillButtonsManager.SendSkillDirection(_type, joystick.Horizontal, joystick.Vertical);
 
             yield return null;

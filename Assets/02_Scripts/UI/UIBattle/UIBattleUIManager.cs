@@ -2,22 +2,26 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using EnumTypes;
+using StructTypes;
 
 public class UIBattleUIManager : MonoBehaviour
 {
+    [SerializeField]
+    private SkillUIManager skillUIManager = null;
+    [SerializeField]
+    private SkillButtonsManager skillButtonsManager = null;
+
     public PlayerManager playerManager = null;
     public List<UIHpsManager> hpList = new List<UIHpsManager>();
     public List<UIBossHpsManager> bossHpList = new List<UIBossHpsManager>();
     public List<UIWarningManager> warningList = new List<UIWarningManager>();
     public List <ButtonSetting> buttonList = new List<ButtonSetting>();
-    public FloatingJoystick joyStick = null;
-    // public List<float> cooltimeList = new List<float>(); //평타,회피,스킬1,스킬2,스킬3 순서
+
+
 
     public int bossMaxHp = 1;
     public int playerMaxHp = 1;
 
-    private SkillButtonsManager skillButtonsManager = null;
-    private SkillUIManager skillUIManager = null;
 
     private void Awake()
     {
@@ -25,19 +29,17 @@ public class UIBattleUIManager : MonoBehaviour
         bossHpList = GetComponentsInChildren<UIBossHpsManager>().ToList();
         warningList = GetComponentsInChildren<UIWarningManager>().ToList();
         buttonList = GetComponentsInChildren<ButtonSetting>().ToList();
-        joyStick = GetComponentInChildren<FloatingJoystick>();
 
         SetupAllUI();
 
-        skillButtonsManager = GetComponentInChildren<SkillButtonsManager>();
-        skillUIManager = transform.parent.GetComponentInChildren<SkillUIManager>();
+        // skillButtonsManager = GetComponentInChildren<SkillButtonsManager>();
     }
 
     /// <summary>
     /// 입력받은 스킬 버튼을 플레이어 매니저에게 전달한다.
     /// </summary>
-    /// <param name="_type">입력받은 스킬 버튼의 스킬 타입</param>
-    public void OnClickedSkillButton(SkillType _type)
+    /// <param name="_slot">입력받은 스킬 버튼의 스킬 타입</param>
+    public void OnClickedSkillButton(SkillSlot _slot)
     {
         if (playerManager == null)
         {
@@ -45,24 +47,31 @@ public class UIBattleUIManager : MonoBehaviour
             return;
         }
 
-        playerManager.OnButtonInput(_type);
+        // playerManager.OnButtonInput(_type);
     }
-    public void OnSkillButtonDown(SkillType _type)
+    public void OnSkillJoystickDown(SkillSlot _slot)
     {
-        skillUIManager.SetSkillUIEnabled(_type, true);
+        skillUIManager.SetSkillUIEnabled(_slot, true);
     }
-    public void OnSkillButtonUp(SkillType _type)
+    public void OnSkillJoystickUp(SkillSlot _slot)
     {
-        skillUIManager.SetSkillUIEnabled(_type, false);
-    }
-    public void OnSkillButtonExit(SkillType _type)
-    {
+        SkillPointData pointData = skillUIManager.GetSkillAimPoint(_slot);
 
+        playerManager.OnButtonInput(_slot, pointData);
+        skillUIManager.SetSkillUIEnabled(_slot, false);
+    }
+    public void OnSkillButtonUp(SkillSlot _slot)
+    {
+        SkillPointData pointData = skillUIManager.GetSkillAimPoint(_slot);
+        pointData.type = SkillPointType.None;
+        pointData.point = GameManager.Instance.GetBossTransform().position;
+
+        playerManager.OnButtonInput(_slot, pointData);
     }
 
-    public void SendSkillDirectionToSkillUI(SkillType _type, float _horizontal, float _vertical)
+    public void SendSkillDirectionToSkillUI(SkillSlot _slot, float _horizontal, float _vertical)
     {
-        skillUIManager.SetSkillAimPosition(_type, _horizontal, _vertical);
+        skillUIManager.SetSkillAimPoint(_slot, _horizontal, _vertical);
     }
 
     //public void CooltimeListSetting(List<float> _timeList) // 평타,회피,스킬1,스킬2,스킬3 순서
@@ -96,10 +105,10 @@ public class UIBattleUIManager : MonoBehaviour
     /// <summary>
     /// 지정한 타입의 스킬 버튼에 쿨타임 UI를 적용한다.
     /// </summary>
-    /// <param name="_type">지정할 스킬 타입</param>
+    /// <param name="_slot">지정할 스킬 타입</param>
     /// <param name="_time">쿨타임 시간</param>
-    public void ApplyCooltime(SkillType _type, float _time)
+    public void ApplyCooltime(SkillSlot _slot, float _time)
     {
-        skillButtonsManager.ApplyCooltime(_type, _time);
+        skillButtonsManager.ApplyCooltime(_slot, _time);
     }
 }

@@ -15,8 +15,8 @@ MonoBehaviour:
   maxHp: 100
   walkSpeed: 3
   skills:
-  - {fileID: 11400000, guid: 6a092f1f92229334890ab3cfddba7e9f, type: 2}
-  - {fileID: 11400000, guid: 8d6f4f0de711b724a8c5b082ee23dc79, type: 2}
-  - {fileID: 11400000, guid: 1a298ea8c5d59184784e51b43d38251f, type: 2}
-  - {fileID: 11400000, guid: 29dcce7ff1c331c48a493c978068b3ed, type: 2}
-  - {fileID: 11400000, guid: 31145fc8ed9e99047b94e896cc4b1c8b, type: 2}
+  - {fileID: 11400000, guid: 80bb2f5d6853141458d13eab9d046ce7, type: 2}
+  - {fileID: 11400000, guid: 9e1508392fed7064f85c1cf98b0cc22e, type: 2}
+  - {fileID: 11400000, guid: 5147a80dec0719143ab085cd535048c3, type: 2}
+  - {fileID: 11400000, guid: 9f695ea0ff0ae574f9dd3e40678c6623, type: 2}
+  - {fileID: 11400000, guid: 0ad98c280b7f10f40aca49269f80dbbe, type: 2}
