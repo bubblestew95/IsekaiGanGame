@@ -75,16 +75,24 @@ public class ButtonSetting : MonoBehaviour
         skillButtonsManager.OnSkillJoystickUp(ButtonSkillType);
     }
 
+    /// <summary>
+    /// 버튼 타입의 스킬이 눌러졌다가 때질 때 호출됨.
+    /// </summary>
+    /// <param name="_eventData"></param>
     public void ButtonUp(BaseEventData _eventData)
     {
         skillButtonsManager.OnSkillButtonUp(ButtonSkillType);
     }
 
+    /// <summary>
+    /// 지정한 스킬의 조이스틱 좌표 값을 상위 매니저에게 계속해서 보내는 코루틴.
+    /// </summary>
+    /// <param name="_type">지정하고자 하는 스킬.</param>
+    /// <returns></returns>
     private IEnumerator DirectionSkillHoldingCoroutine(SkillSlot _type)
     {
         while (true)
         {
-            // Debug.LogFormat("{0}, {1}", joystick.Horizontal, joystick.Vertical);
             skillButtonsManager.SendSkillDirection(_type, joystick.Horizontal, joystick.Vertical);
 
             yield return null;

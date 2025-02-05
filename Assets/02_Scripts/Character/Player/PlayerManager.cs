@@ -21,8 +21,6 @@ public class PlayerManager : MonoBehaviour
     private PlayerData playerData = null;
     [SerializeField]
     private UIBattleUIManager battleUIManager = null;
-    [SerializeField]
-    private SkillUIManager skillUIManager = null;
 
     [SerializeField]
     private Transform rangeAttackStartTr = null;
@@ -38,7 +36,6 @@ public class PlayerManager : MonoBehaviour
 
     #region Private Variables
 
-    private FloatingJoystick joystick = null;
     private PlayerInputManager playerInputManager = null;
     private CharacterController characterCont = null;
     private PlayerSkillManager skillMng = null;
