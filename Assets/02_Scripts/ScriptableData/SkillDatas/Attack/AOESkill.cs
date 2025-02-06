@@ -27,7 +27,7 @@ public class AOESkill : AttackSkill
         Ray ray = new Ray(damagePos, Vector3.up);
         while (currentTime <= duration)
         {
-            Collider[] hits = Physics.OverlapSphere(damagePos, attackAreaRadius);
+            Collider[] hits = Physics.OverlapSphere(damagePos, attackAreaRadius, bossLayerMask);
             // 충돌이 검출됐을 경우
             foreach (Collider hitCollider in hits)
             {

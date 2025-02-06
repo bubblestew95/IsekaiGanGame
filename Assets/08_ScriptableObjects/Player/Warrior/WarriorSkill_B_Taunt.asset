@@ -9,11 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 116dc890688cd89408144612362381ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 46e08dddccf65294ba014c8d4d4d7433, type: 3}
   m_Name: WarriorSkill_B_Taunt
   m_EditorClassIdentifier: 
   skillSlot: 2
-  coolTime: 5
+  coolTime: 10
   skillParticle: {fileID: 0}
   damage: 1
   aggro: 20
+  isBackattackEnable: 0
+  backAttackTimes: 3
+  attackAreaRadius: 3

@@ -10,6 +10,13 @@ public abstract class AttackSkill : PlayerSkillBase
     public bool isBackattackEnable = false;
     public int backAttackTimes = 3;
 
+    protected int bossLayerMask = 0;
+
+    protected void OnEnable()
+    {
+        bossLayerMask = LayerMask.NameToLayer("Boss");
+    }
+
     public override void StartSkill(PlayerManager _player)
     {
         base.StartSkill(_player);
