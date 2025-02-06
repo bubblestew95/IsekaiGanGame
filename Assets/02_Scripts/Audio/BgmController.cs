@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class BgmController : MonoBehaviour
     public BgmVictory bgmVictory = null;
     public AudioSource curPlayingAudio = null;
     public List<AudioSource> audioList = null;
+    public float maxVolumeSound = 1;//볼륨 올리는거 최대치
+    private bool isFading = false;  // 상태 관리 변수
     private void Awake()
     {
         audioList = GetComponentsInChildren<AudioSource>().ToList(); // 전체 오디오 리스트
@@ -68,33 +71,36 @@ public class BgmController : MonoBehaviour
         // 현재 오디오를 멈추고
         if (curPlayingAudio)
         {
-            curPlayingAudio.Stop();
+            StartCoroutine(FadeOutAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 아웃
         }
         //캐릭터 테마 재생
         curPlayingAudio = bgmCharacterThemes[curCharacterIndex].GetComponent<AudioSource>();
         curPlayingAudio.Play();
+        StartCoroutine(FadeInAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 인
     }
     private void PlayBossBgm()      //보스 테마 재생
     {
         // 현재 오디오를 멈추고
         if (curPlayingAudio)
         {
-            curPlayingAudio.Stop();
+            StartCoroutine(FadeOutAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 아웃
         }
         //보스 테마 재생
         curPlayingAudio = bgmBossThemes[curBgmBossIndex].GetComponent<AudioSource>();
         curPlayingAudio.Play();
+        StartCoroutine(FadeInAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 인
     }
     public void PlayBossRageBgm()        //보스 테마 인덱스+1 재생
     {
         // 현재 오디오를 멈추고
         if (curPlayingAudio)
         {
-            curPlayingAudio.Stop();
+            StartCoroutine(FadeOutAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 아웃
         }
         //보스 테마 인덱스+1 재생
         curPlayingAudio = bgmBossThemes[curBgmBossIndex+1].GetComponent<AudioSource>();
         curPlayingAudio.Play();
+        StartCoroutine(FadeInAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 인
     }
 
     private void PlayVictory()
@@ -102,20 +108,27 @@ public class BgmController : MonoBehaviour
         // 현재 오디오를 멈추고
         if (curPlayingAudio)
         {
-            curPlayingAudio.Stop();
+            StartCoroutine(FadeOutAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 아웃
         }
         curPlayingAudio = bgmVictory.GetComponent<AudioSource>();
         curPlayingAudio.Play();
+        StartCoroutine(FadeInAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 인
     } // 승리 bgm 재생
     private void PlayDefeat()
     {
+        // 이미 페이드 중이라면 예외 처리
+        if (isFading)
+        {
+            return; // 현재 페이드가 진행 중이라면 함수를 종료하고 다시 시작하지 않음
+        }
         // 현재 오디오를 멈추고
         if (curPlayingAudio)
         {
-            curPlayingAudio.Stop();
+            StartCoroutine(FadeOutAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 아웃
         }
         curPlayingAudio = bgmDefeat.GetComponent<AudioSource>();
         curPlayingAudio.Play();
+        StartCoroutine(FadeInAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 인
     } // 패배 bgm 재생
     #endregion
     #region 볼륨컨트롤
@@ -129,9 +142,43 @@ public class BgmController : MonoBehaviour
         float volume = _level/100;
         foreach (AudioSource audioSource in audioList)
         {
-            audioSource.volume = volume;
+            audioSource.volume = volume * maxVolumeSound;
         }
     } //  1~100 까지 실수를 받아서 볼륨제어
+
+    private IEnumerator FadeOutAudio(AudioSource audioSource, float duration)
+    {
+        isFading = true; // 페이드 시작
+        float startVolume = audioSource.volume;
+
+        // 오디오 볼륨을 서서히 줄여서 0으로 만듬
+        while (audioSource.volume > 0)
+        {
+            audioSource.volume -= startVolume * Time.deltaTime / duration;
+            yield return null;
+        }
+
+        // 볼륨을 0으로 설정하고 오디오를 멈춤
+        audioSource.Stop();
+        audioSource.volume = startVolume; // 다음에 재생할 때 볼륨을 원래대로 되돌림
+        isFading = false; // 페이드 완료
+    }
+    private IEnumerator FadeInAudio(AudioSource audioSource, float duration)
+    {
+        isFading = true; // 페이드 시작
+        audioSource.volume = 0; // 처음엔 볼륨을 0으로 설정
+
+        // 볼륨을 서서히 증가시킴
+        while (audioSource.volume < 1)
+        {
+            audioSource.volume += Time.deltaTime / duration;
+            yield return null;
+        }
+
+        // 볼륨을 완전히 max로 설정
+        audioSource.volume = maxVolumeSound;
+        isFading = false; // 페이드 완료
+    }
     #endregion
     #region excited Level Controll 보스 흥분도에 따른 bgm 음정 로우패스 필터 변화, 보스 피가 적을 수 록 증가하게 만들어주세요
     public void ExcitedLevel(float _level)
