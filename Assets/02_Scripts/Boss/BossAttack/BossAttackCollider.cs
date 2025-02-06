@@ -28,7 +28,7 @@ public class BossAttackCollider : MonoBehaviour
             GameManager.Instance.DamageToPlayer(other.gameObject.GetComponent<PlayerManager>(), damage);
         }
 
-        if (skillName == "Attack8" && other.tag == "Rock")
+        if (skillName == "Attack8" && other.tag == "Rock" && gameObject.tag == "BossAttack")
         {
             rockCollisionCallback?.Invoke();
         }

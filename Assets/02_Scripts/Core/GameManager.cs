@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
     public void DamageToPlayer(PlayerManager _damageReceiver, int _damage)
     {
         _damageReceiver.TakeDamage(_damage);
-        UpdateBossHpUI(_damageReceiver);
+        // UpdateBossHpUI(_damageReceiver);
     }
 
     #endregion
