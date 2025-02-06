@@ -8,13 +8,27 @@ public class ProjectileSkill : AttackSkill
 {
     public GameObject projectilePrefab = null;
 
+    public float projectileDuration = 3f;
     public float projectileSpeed = 1f;
 
     public override void UseSkill(PlayerManager _player)
     {
-        // 발사체 스폰 후 정면 방향으로 발사하면 됨.
+        // 발사체 스폰 후 정면 방향으로 발사.
         base.UseSkill(_player);
 
-        GameObject projectile = Instantiate(projectilePrefab);
+        GameObject projectileObj = Instantiate
+            (
+            projectilePrefab, 
+            _player.RangeAttackStartTr.position, 
+            _player.transform.rotation
+            );
+
+        if(projectileObj != null)
+        {
+            var projectile = projectileObj.GetComponent<Projectile>();
+
+            projectile.Init(_player, damage, aggro);
+            projectile.ShootProjectile(projectileDuration, projectileSpeed);
+        }
     }
 }
