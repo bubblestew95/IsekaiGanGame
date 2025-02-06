@@ -108,6 +108,9 @@ public class BossAttackManager : MonoBehaviour
             case "SpecialAttack":
                 curCoroutine = StartCoroutine(SpecialAttack());
                 break;
+            case "Die":
+                StartCoroutine(Die());
+                break;
             default:
                 break;
         }
@@ -332,7 +335,7 @@ public class BossAttackManager : MonoBehaviour
         GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
-        GetComponent<BoxCollider>().isTrigger = true;
+        // GetComponent<BoxCollider>().isTrigger = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
         GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
         bossStateManager.Boss.tag = "BossAttack";
@@ -358,7 +361,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 공격 끝난후
         GetComponent<BoxCollider>().size = originSize;
-        GetComponent<BoxCollider>().isTrigger = false;
+        // GetComponent<BoxCollider>().isTrigger = false;
         bossStateManager.Boss.tag = "Untagged";
 
         yield return null;
@@ -377,7 +380,7 @@ public class BossAttackManager : MonoBehaviour
         GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
-        GetComponent<BoxCollider>().isTrigger = true;
+        // GetComponent<BoxCollider>().isTrigger = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
         GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
         bossStateManager.Boss.tag = "BossAttack";
@@ -395,7 +398,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 공격 끝난후
         GetComponent<BoxCollider>().size = originSize;
-        GetComponent<BoxCollider>().isTrigger = false;
+        // GetComponent<BoxCollider>().isTrigger = false;
         bossStateManager.Boss.tag = "Untagged";
 
         yield return null;
@@ -596,7 +599,7 @@ public class BossAttackManager : MonoBehaviour
         GetComponent<BossAttackCollider>().SkillName = skillName;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
-        GetComponent<BoxCollider>().isTrigger = true;
+        // GetComponent<BoxCollider>().isTrigger = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
         GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
         bossStateManager.Boss.tag = "BossAttack";
@@ -622,7 +625,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 공격 끝난후
         GetComponent<BoxCollider>().size = originSize;
-        GetComponent<BoxCollider>().isTrigger = false;
+        // GetComponent<BoxCollider>().isTrigger = false;
         bossStateManager.Boss.tag = "Untagged";
 
         yield return null;
@@ -709,6 +712,18 @@ public class BossAttackManager : MonoBehaviour
 
         // 현재 돌 삭제
         Destroy(curStone);
+
+        yield return null;
+    }
+
+    // 죽었을때
+    private IEnumerator Die()
+    {
+        // 현재 실행중인 코루틴 종료
+        StopCoroutine(curCoroutine);
+
+        // 공격 초기화
+        InitAttack();
 
         yield return null;
     }

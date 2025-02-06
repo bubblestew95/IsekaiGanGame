@@ -22,6 +22,7 @@ public class BossBehaviorManager : MonoBehaviour
         bossStateManager.bossHp10Callback += SetHP10;
         bossStateManager.bossHpHalfCallback += SetHPHalf;
         bossStateManager.bossStunCallback += SetStun;
+        bossStateManager.bossDieCallback += SetDie;
     }
 
     private void Update()
@@ -47,6 +48,7 @@ public class BossBehaviorManager : MonoBehaviour
 
         tmpList = bossSkillManager.IsSkillInRange(dis, bossSkillManager.RandomSkills);
         tmpList = bossSkillManager.IsSkillCooldown(tmpList);
+        tmpList = bossSkillManager.CheckBackAttack(tmpList, bossStateManager.Players, bossStateManager.Boss);
 
         int randomIndex = UnityEngine.Random.Range(0, tmpList.Count);
 
@@ -115,5 +117,11 @@ public class BossBehaviorManager : MonoBehaviour
     private void SetStun()
     {
         SetBossBehavior(BossState.Stun);
+    }
+
+    // 보스가 죽었을떄
+    private void SetDie()
+    {
+        SetBossBehavior(BossState.Die);
     }
 }

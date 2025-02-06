@@ -22,13 +22,13 @@ public class BossAttackCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" && gameObject.tag == "BossAttack")
         {
             // 플레이어 데미지 입도록 설정
             GameManager.Instance.DamageToPlayer(other.gameObject.GetComponent<PlayerManager>(), damage);
         }
 
-        if (skillName == "Attack8" && other.tag == "Rock")
+        if (skillName == "Attack8" && other.tag == "Rock" && gameObject.tag == "BossAttack")
         {
             rockCollisionCallback?.Invoke();
         }

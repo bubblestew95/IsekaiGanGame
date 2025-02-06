@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BossSkillManager : MonoBehaviour
@@ -59,5 +60,72 @@ public class BossSkillManager : MonoBehaviour
             }
         }
         return availList;
+    }
+
+    // 백어택 가능한지 Check
+    public List<BossSkill> CheckBackAttack(List<BossSkill> _skills, GameObject[] _players, GameObject _boss)
+    {
+        int cnt = 0;
+
+        List<GameObject> playerInRange = new List<GameObject>();
+
+        // 1. 범위안에 2명이상 있는지 check
+        foreach (GameObject player in _players)
+        {
+            if (CheckDisXZ(player.transform.position, _boss.transform.position) <= skills.FirstOrDefault(skill => skill.SkillData.SkillName == "Attack9").SkillData.AttackRange)
+            {
+                cnt++;
+                playerInRange.Add(player);
+            }
+        }
+
+        if (cnt <= 2)
+        {
+            _skills.RemoveAll(skill => skill.SkillData.SkillName == "Attack9");
+            return _skills;
+        }
+
+        bool plus = false;
+        bool minus = false;
+        float value = 0f;
+
+        // 2. 범위안에 Player에 대해서 Vector3.Dot값을 계산해서, +와 -가 둘다 존재하는지 check
+        foreach(GameObject player in playerInRange)
+        {
+            value = CheckBehindObject(_boss.transform, player.transform);
+
+            if (value > 0f) plus = true;
+
+            if (value < 0f) minus = true;
+        }
+
+        // 존재한다면 그냥 리턴
+        if (plus && minus)
+        {
+            return _skills;
+        }
+        else // 존재 안하면 빼고 리턴
+        {
+            _skills.RemoveAll(skill => skill.SkillData.SkillName == "Attack9");
+            return _skills;
+        }
+
+    }
+
+    // 두 위치 거리 계산
+    private float CheckDisXZ(Vector3 _pos1, Vector3 _pos2)
+    {
+        Vector2 pos1 = new Vector2(_pos1.x, _pos1.z);
+        Vector2 pos2 = new Vector2(_pos2.x, _pos2.z);
+
+        return Vector2.Distance(pos1, pos2);
+    }
+
+    // 앞인지 뒤인지 계산
+    private float CheckBehindObject(Transform _bossTr, Transform _playerTr)
+    {
+        Vector3 toPlayer = _playerTr.position - _bossTr.position;
+
+        return Vector3.Dot(toPlayer.normalized, -_bossTr.forward);
     }
 }

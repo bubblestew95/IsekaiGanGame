@@ -21,6 +21,7 @@ public class BossBT : MonoBehaviour
 
     private bool isCoroutineRunning = false;
     private bool isStun = false;
+    private bool isDie = false;
     private BossState previousBehavior;
     private float patternDelay = 2f;
     private Coroutine curCoroutine;
@@ -30,6 +31,16 @@ public class BossBT : MonoBehaviour
 
     private void Update()
     {
+        // 죽었을때
+        if (curState == BossState.Die && !isDie)
+        {
+            StopCoroutine(curCoroutine);
+            StartCoroutine(curState.ToString());
+
+            isDie = true;
+        }
+
+        // 스턴 걸렸을때
         if (curState == BossState.Stun && !isStun)
         {
             StopCoroutine(curCoroutine);
@@ -37,6 +48,7 @@ public class BossBT : MonoBehaviour
             isStun = true;
         }
 
+        // 아무것도 아닐때
         if (!isCoroutineRunning)
         {
             curCoroutine = StartCoroutine(curState.ToString());
@@ -799,6 +811,13 @@ public class BossBT : MonoBehaviour
         behaviorEndCallback?.Invoke();
 
         isCoroutineRunning = false;
+    }
+
+    private IEnumerator Die()
+    {
+        anim.Play("Die");
+
+        yield return null;
     }
     #endregion
 

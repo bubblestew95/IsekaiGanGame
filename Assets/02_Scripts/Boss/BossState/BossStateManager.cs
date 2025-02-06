@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using Mono.Cecil.Cil;
 
 public class BossStateManager : MonoBehaviour
 {
@@ -29,37 +30,50 @@ public class BossStateManager : MonoBehaviour
     private List<BossChain> activeChain = new List<BossChain>();
     private bool[] hpCheck = new bool[9];
     private GameObject randomTarget;
-    private BossAttackCollider attackCollider;
+    private float[] playerDamage = new float[4];
+    private float[] playerAggro = new float[4];
+    private float bestAggro;
 
     // 찾아서 넣는거
     private DamageParticle damageParticle;
     private UIBossHpsManager bossHpUI;
+    private BossAttackCollider attackCollider;
 
     private void Awake()
     {
-        hpCheck[0] = false;
-        hpCheck[1] = false;
-        hpCheck[2] = false;
-        hpCheck[3] = false;
-        hpCheck[4] = false; 
-        hpCheck[5] = false;
-        hpCheck[6] = false;
-        hpCheck[7] = false;
-        hpCheck[8] = false;
+        for (int i = 0; i < hpCheck.Length; i++)
+        {
+            hpCheck[i] = false;
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            playerDamage[i] = 0;
+            playerAggro[i] = 0;
+        }
+
+        bestAggro = 0f;
+
         attackCollider = GetComponent<BossAttackCollider>();
 
         curHp = maxHp;
 
+        // 
         damageParticle = FindFirstObjectByType<DamageParticle>();
         bossHpUI = FindFirstObjectByType<UIBossHpsManager>();
     }
 
     private void Start()
     {
+        // 공격8 스턴 콜백
         attackCollider.rockCollisionCallback += BossStun;
 
+        // ui초기 설정
         bossHpUI.SetMaxHp(maxHp);
         bossHpUI.HpBarUIUpdate();
+
+        // 초반 aggro 0이여서 세팅하는 함수
+        GetHighestAggroTarget();
     }
 
     private void Update()
@@ -237,19 +251,60 @@ public class BossStateManager : MonoBehaviour
     // 어그로 수치 초기화 하는 함수
     private void ResetAggro()
     {
-
+        for (int i = 0; i < playerAggro.Length; i++)
+        {
+            playerAggro[i] = 0f;
+        }
     }
 
 
     // 플레이어의 데미지, 어그로 수치 관리하는 함수
     private void RegisterDamageAndAggro(PlayerManager _player, int _damage, float _aggro)
     {
+        if (_player == null) return;
 
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (players[i] == _player.gameObject)
+            {
+                playerDamage[i] += _damage;
+                playerAggro[i] += _aggro;
+            }
+        }
     }
 
     // 현재 어그로 수치 기준으로 어그로 대상 판별하는 함수
     private void GetHighestAggroTarget()
     {
+        // 전부 어그로 0일때 -> 랜덤 1명 아무나 aggro 10으로 만들고 aggroPlayer 상태로
+        foreach (float aggro in playerAggro)
+        {
+            if (aggro == 0f)
+            {
+                continue;
+            }
+            else
+            {
+                int num = Random.Range(0, players.Length);
+                playerAggro[num] = 10f;
+                aggroPlayer = players[num];
+                return;
+            }
+        }
 
+        int aggroPlayerIndex = 0;
+
+        // 기존의 어그로 왕보다 어그로가 1.2배 크면 어그로 바뀜
+        for (int i = 0; i < players.Length;i++)
+        {
+            if (bestAggro * 1.2f <= playerAggro[i])
+            {
+                bestAggro = playerAggro[i];
+                aggroPlayerIndex = i;
+            }
+        }
+
+        // 어그로 플레이어 변경
+        aggroPlayer = players[aggroPlayerIndex];
     }
 }
