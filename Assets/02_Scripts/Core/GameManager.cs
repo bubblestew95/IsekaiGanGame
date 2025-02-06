@@ -36,9 +36,10 @@ public class GameManager : MonoBehaviour
     /// 플레이어가 보스에게 데미지와 어그로 수치를 더함.
     /// </summary>
     /// <param name="_damageSource">보스에게 데미지를 주는 플레이어</param>
-    public void DamageToBoss(PlayerManager _damageSource, int _damage, float _aggro)
+    public void DamageToBoss(PlayerManager _damageReceiver, int _damage, float _aggro)
     {
         Debug.LogFormat("Player deal to boss! damage : {0}, aggro : {1}", _damage, _aggro);
+        bossStateManager.TakeDamage(_damageReceiver, _damage, _aggro);
     }
 
     /// <summary>

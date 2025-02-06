@@ -33,7 +33,7 @@ public class BossAttackManager : MonoBehaviour
     private BossSkillData skill;
     private string skillName;
     private float range;
-    private float damage;
+    private int damage;
     private float delay;
     private float duration;
 
@@ -841,7 +841,7 @@ public class BossAttackManager : MonoBehaviour
     private void CheckPlayerBehindRock()
     {
         Vector3 bossPos = new Vector3(bossStateManager.Boss.transform.position.x, 0.5f, bossStateManager.Boss.transform.position.z);
-        LayerMask defaultLayerMask = LayerMask.GetMask("Default");
+        LayerMask defaultLayerMask = LayerMask.GetMask("Player");
 
         // 각 플레이어한테 ray를쏴서 돌뒤에 있는지 확인
         foreach (GameObject player in bossStateManager.Players)
@@ -873,7 +873,7 @@ public class BossAttackManager : MonoBehaviour
     {
         foreach (GameObject player in bossStateManager.Players)
         {
-            player.tag = "Untagged";
+            player.tag = "Player";
         }
     }
     #endregion

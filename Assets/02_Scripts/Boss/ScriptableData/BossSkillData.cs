@@ -15,9 +15,9 @@ public class BossSkillData : ScriptableObject
 
 
     [SerializeField]
-    private float damage;
+    private int damage;
 
-    public float Damage { get { return damage; } }
+    public int Damage { get { return damage; } }
 
     [SerializeField]
     private float minRange;
