@@ -762,7 +762,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Spear-Attack-R1
+      name: AssassinSkill_B_Start
       takeName: Take 001
       internalID: 0
       firstFrame: 0
@@ -798,7 +798,7 @@ ModelImporter:
       maskSource: {fileID: 101100000, guid: 4ebc95c8618479f4d8251c7dafa10029, type: 2}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Spear-Attack-R1 (1)
+      name: AssassinSkill_B_Loop
       takeName: Take 001
       internalID: 1330560709220880345
       firstFrame: 4
@@ -827,7 +827,7 @@ ModelImporter:
       maskSource: {fileID: 101100000, guid: 4ebc95c8618479f4d8251c7dafa10029, type: 2}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Spear-Attack-R1 (2)
+      name: AssassinSkill_B_End
       takeName: Take 001
       internalID: -3312781290333015552
       firstFrame: 14
