@@ -19,4 +19,4 @@ MonoBehaviour:
   aggro: 20
   isBackattackEnable: 0
   backAttackTimes: 3
-  attackAreaRadius: 3
+  attackAreaRadius: 5
