@@ -63,12 +63,12 @@ public class BossStateManager : MonoBehaviour
     }
 
     // 데미지만큼 hp에서 하락시킴.
-    private void TakeDamage(float _damage, float _aggro)
+    public void TakeDamage(PlayerManager _player, int _damage, float _aggro)
     {
         if (curHp <= 0) return;
 
         // 플레이어 어그로, 데미지 수치 등록
-        RegisterDamageAndAggro();
+        RegisterDamageAndAggro(_player, _damage, _aggro);
 
         // 상태이상 추가
         // AddChainList();
@@ -223,7 +223,7 @@ public class BossStateManager : MonoBehaviour
 
 
     // 플레이어의 데미지, 어그로 수치 관리하는 함수
-    private void RegisterDamageAndAggro()
+    private void RegisterDamageAndAggro(PlayerManager _player, int _damage, float _aggro)
     {
 
     }

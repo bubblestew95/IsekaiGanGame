@@ -5,10 +5,10 @@ public class BossAttackCollider : MonoBehaviour
     public delegate void AttackColliderDelegate();
     public AttackColliderDelegate rockCollisionCallback;
 
-    private float damage = 0f;
+    private int damage = 0;
     private string skillName = string.Empty;
 
-    public float Damage 
+    public int Damage 
     { 
         get { return damage; } 
         set { damage = value; } 
@@ -25,6 +25,7 @@ public class BossAttackCollider : MonoBehaviour
         if (other.gameObject.layer == LayerMask.GetMask("Player"))
         {
             // 플레이어 데미지 입도록 설정
+            GameManager.Instance.DamageToPlayer(other.gameObject.GetComponent<PlayerManager>(), damage);
         }
 
         if (skillName == "Attack8" && other.tag == "Rock")
