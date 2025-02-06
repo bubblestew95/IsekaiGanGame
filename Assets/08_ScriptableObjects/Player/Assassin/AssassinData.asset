@@ -14,4 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 100
   walkSpeed: 5
-  skills: []
+  skills:
+  - {fileID: 11400000, guid: b20b29e2de3b2e34ab7f5f9300a8cebe, type: 2}
+  - {fileID: 11400000, guid: 4dd7d1dabb92d5f4c988adcdbe6c0e3e, type: 2}
+  - {fileID: 11400000, guid: a96d2823e2d1bda4b817504ade42fd43, type: 2}
+  - {fileID: 11400000, guid: 5edc500516c782c47b9418ae5fb075d8, type: 2}
+  - {fileID: 11400000, guid: 237b578559875ea448b642043e81bdd1, type: 2}

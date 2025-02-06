@@ -17,6 +17,8 @@ MonoBehaviour:
   skillParticle: {fileID: 0}
   damage: 2
   aggro: 1
+  isBackattackEnable: 1
+  backAttackTimes: 3
   attackRange: 3
   moveSpeed: 6
   moveTime: 0.4
