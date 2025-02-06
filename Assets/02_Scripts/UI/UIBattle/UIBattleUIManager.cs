@@ -72,11 +72,13 @@ public class UIBattleUIManager : MonoBehaviour
     public void UpdatePlayerHp()
     {
         ui_PlayerHp.SetCurrentHp(playerManager.StatusManager.CurrentHp);
+        ui_PlayerHp.HpBarUIUpdate();
     }
 
     public void UpdateBossHp()
     {
-
+        ui_BossHp.SetCurrentHp(GameManager.Instance.GetBossHp());
+        ui_BossHp.HpBarUIUpdate();
     }
 
     /// <summary>

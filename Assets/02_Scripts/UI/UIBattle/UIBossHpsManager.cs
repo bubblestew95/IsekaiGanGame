@@ -22,12 +22,16 @@ public class UIBossHpsManager : MonoBehaviour
         textMeshPro.raycastTarget = false;
     }
 
-    
     public void SetMaxHp(int _maxHp)
     {
         maxHp = _maxHp;
         curHp = _maxHp;
     } // 최대체력 설정 그리고 최대체력 수치를 현재체력 수치로 만드는 함수 
+
+    public void SetCurrentHp(int _curHp)
+    {
+        curHp = Mathf.Clamp(_curHp, 0, maxHp);
+    }
     public void BossDamage(int _Damage)
     {
         if (IsAlive())
@@ -39,6 +43,7 @@ public class UIBossHpsManager : MonoBehaviour
             }
         }
     } //데미지 주는 함수
+
     public void HpBarUIUpdate()
     {
         textMeshPro.text = (curHp + "/" + maxHp); // 텍스트 업데이트 "현재체력/최대체력"

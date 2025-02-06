@@ -36,10 +36,14 @@ public class GameManager : MonoBehaviour
     /// 플레이어가 보스에게 데미지와 어그로 수치를 더함.
     /// </summary>
     /// <param name="_damageSource">보스에게 데미지를 주는 플레이어</param>
-    public void DamageToBoss(PlayerManager _damageReceiver, int _damage, float _aggro)
+    public void DamageToBoss(PlayerManager _damageGiver, int _damage, float _aggro)
     {
         Debug.LogFormat("Player deal to boss! damage : {0}, aggro : {1}", _damage, _aggro);
-        bossStateManager.TakeDamage(_damageReceiver, _damage, _aggro);
+        bossStateManager.TakeDamage(_damageGiver, _damage, _aggro);
+
+        // UI 동기화
+        // 추후 멀티 연동할 때 이 부분은 아마도 수정해야 할 듯?
+        UpdatePlayerHpUI(_damageGiver);
     }
 
     /// <summary>
@@ -49,11 +53,24 @@ public class GameManager : MonoBehaviour
     public void DamageToPlayer(PlayerManager _damageReceiver, int _damage)
     {
         _damageReceiver.TakeDamage(_damage);
+        UpdateBossHpUI(_damageReceiver);
     }
 
     #endregion
 
     #region Private Functions
+
+
+    private void UpdatePlayerHpUI(PlayerManager _player)
+    {
+        _player.BattleUIManager.UpdatePlayerHp();
+    }
+
+    private void UpdateBossHpUI(PlayerManager _player)
+    {
+        _player.BattleUIManager.UpdateBossHp();
+    }
+
     #endregion
 
     #region Unity Callbacks
