@@ -12,8 +12,6 @@ public class SkillUIManager : MonoBehaviour
     [SerializeField]
     private List<SkillUIData> skillUIList = null;
 
-    public Transform debugTr = null;
-
     private Dictionary<SkillSlot, SkillUI_Base> skillUIMap = null;
 
     /// <summary>
