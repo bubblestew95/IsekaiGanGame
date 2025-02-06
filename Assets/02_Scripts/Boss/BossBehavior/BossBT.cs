@@ -444,6 +444,7 @@ public class BossBT : MonoBehaviour
 
         // 애니메이션 시작
         SetAnimBool(curState, true);
+        // anim.SetBool("Attack6Flag", true);
 
         // 애니메이션 끝
         while (true)

@@ -17,20 +17,23 @@ public class BossStateManager : MonoBehaviour
     [SerializeField] private GameObject boss;
     [SerializeField] public float chainTime;
     [SerializeField] private GameObject bossSkin;
-    [SerializeField] private float maxHp;
-    [SerializeField] private float curHp;
+    [SerializeField] private int maxHp;
+    [SerializeField] private int curHp;
 
     public GameObject Boss {get {return boss;}}
     public GameObject BossSkin { get { return bossSkin; } }
     public GameObject[] Players {get {return players;}}
-    public float MaxHp { get { return maxHp; } }
-    public float CurHp { get { return curHp; } }
+    public int MaxHp { get { return maxHp; } }
+    public int CurHp { get { return curHp; } }
 
     private List<BossChain> activeChain = new List<BossChain>();
     private bool[] hpCheck = new bool[9];
     private GameObject randomTarget;
     private BossAttackCollider attackCollider;
+
+    // 찾아서 넣는거
     private DamageParticle damageParticle;
+    private UIBossHpsManager bossHpUI;
 
     private void Awake()
     {
@@ -46,19 +49,29 @@ public class BossStateManager : MonoBehaviour
         attackCollider = GetComponent<BossAttackCollider>();
 
         curHp = maxHp;
+
+        damageParticle = FindFirstObjectByType<DamageParticle>();
+        bossHpUI = FindFirstObjectByType<UIBossHpsManager>();
     }
 
     private void Start()
     {
         attackCollider.rockCollisionCallback += BossStun;
-        damageParticle = FindFirstObjectByType<DamageParticle>();
+
+        bossHpUI.SetMaxHp(maxHp);
+        bossHpUI.HpBarUIUpdate();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             BossStun();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            TakeDamage(null, 10, 10);
         }
     }
 
@@ -90,12 +103,18 @@ public class BossStateManager : MonoBehaviour
 
         // 보스 피격 파티클 실행
         damageParticle.SetupAndPlayParticles(_damage);
+
+        // 보스 UI설정
+        bossHpUI.BossDamage(_damage);
+        bossHpUI.HpBarUIUpdate();
     }
 
     // 특정 hp이하일때 마다 콜백을 던짐
     private void CheckHpCallback()
     {
-        float hp = (curHp / maxHp) * 100f;
+        float hp = ((float)curHp / (float)maxHp) * 100f;
+
+        Debug.Log("현재 hp" + hp);
 
         if (hp <= 90f && !hpCheck[0])
         {
