@@ -12,12 +12,14 @@ using System;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Lobbies;
 using System.Collections.Generic;
+using System.Collections;
 
 
 public class RelayManager : MonoBehaviour
 {
     public static RelayManager Instance { get; private set; }
     private string joinCode;
+    private Coroutine keepAliveCoroutine;
 
     private void Awake()
     {
@@ -67,7 +69,7 @@ public class RelayManager : MonoBehaviour
                 return null;
             }
 
-            string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             if (string.IsNullOrEmpty(joinCode))
             {
                 Debug.LogError("Relay 생성 실패: Join Code가 반환되지 않음.");
@@ -108,6 +110,12 @@ public class RelayManager : MonoBehaviour
                 Debug.LogWarning("Lobby ID가 없습니다. RelayJoinCode를 업데이트할 수 없습니다.");
             }
 
+            //  Keep-Alive 시작
+            if (keepAliveCoroutine == null)
+            {
+                keepAliveCoroutine = StartCoroutine(SendKeepAlive());
+            }
+
             return joinCode;
         }
         catch (RelayServiceException e)
@@ -125,30 +133,36 @@ public class RelayManager : MonoBehaviour
 
 
     // 클라이언트가 Relay에 참가
+    // Relay 연결 후 Keep-Alive 시작
     public async Task<bool> JoinRelay(string joinCode)
     {
         try
         {
-            // Relay 세션 참가
-            JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
-            Debug.Log($"Joined Relay with code: {joinCode}");
-
-            // Netcode의 UnityTransport에 Relay 데이터 적용
+            JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
             UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetRelayServerData(
-                joinAllocation.RelayServer.IpV4, // IP
-                (ushort)joinAllocation.RelayServer.Port, // Port
-                joinAllocation.AllocationIdBytes, // Allocation ID
-                joinAllocation.Key, // Key
-                joinAllocation.ConnectionData, // Connection Data
-                joinAllocation.HostConnectionData // Host Connection Data
+                allocation.RelayServer.IpV4,
+                (ushort)allocation.RelayServer.Port,
+                allocation.AllocationIdBytes,
+                allocation.Key,
+                allocation.ConnectionData,
+                allocation.HostConnectionData
             );
+
+            NetworkManager.Singleton.StartClient();
+            Debug.Log("Joined Relay successfully!");
+
+            //  Keep-Alive 시작
+            if (keepAliveCoroutine == null)
+            {
+                keepAliveCoroutine = StartCoroutine(SendKeepAlive());
+            }
 
             return true;
         }
         catch (RelayServiceException e)
         {
-            Debug.LogError($"Failed to join Relay session: {e.Message}");
+            Debug.LogError($"Relay 참가 실패: {e.Message}");
             return false;
         }
     }
@@ -161,8 +175,9 @@ public class RelayManager : MonoBehaviour
             writer.WriteValueSafe(message);
             NetworkManager.Singleton.CustomMessagingManager.SendNamedMessageToAll("OnRelayMessage", writer);
         }
-        Debug.Log($"Message broadcasted to clients: {message}");
+        Debug.Log($"[RelayManager] 모든 클라이언트에 메시지 전송: {message}");
     }
+
 
     public async Task TransferHostAndLeave(string currentRoom)
     {
@@ -203,4 +218,17 @@ public class RelayManager : MonoBehaviour
         }
     }
 
+
+    private IEnumerator SendKeepAlive()
+    {
+        while (true)
+        {
+            if (NetworkManager.Singleton.IsConnectedClient)
+            {
+                Debug.Log("Sending Keep-Alive packet to prevent timeout...");
+                NetworkManager.Singleton.CustomMessagingManager.SendNamedMessage("KeepAlive", NetworkManager.ServerClientId, new FastBufferWriter(1, Allocator.Temp));
+            }
+            yield return new WaitForSeconds(10); // 10초마다 Keep-Alive 패킷 전송
+        }
+    }
 }
