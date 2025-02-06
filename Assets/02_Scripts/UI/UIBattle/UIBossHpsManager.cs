@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -10,9 +11,13 @@ public class UIBossHpsManager : MonoBehaviour
     public int curHp = 0;
     private List<Image> images = new List<Image>();
     private TextMeshProUGUI textMeshPro = null;
-
+    public RectTransform rectTransform = null; // 흔들릴 RectTransform
+    public float shakeAmount = 3f;     // 흔드는 강도
+    public float shakeDuration = 0.5f;  // 흔드는 시간
     private void Awake()
     {
+        // rectTransform을 이 오브젝트의 RectTransform으로 설정
+        rectTransform = GetComponent<RectTransform>();
         images = GetComponentsInChildren<Image>().ToList();
         textMeshPro = GetComponentInChildren<TextMeshProUGUI>();
         foreach (Image img in images)
@@ -51,7 +56,24 @@ public class UIBossHpsManager : MonoBehaviour
         float hpRatio = (float)curHp / (float)maxHp;
         newCurHP.x = hpRatio * newCurHP.x;  // X 값만 변경
         images[images.Count - 1].rectTransform.sizeDelta = newCurHP;  // 변경된 sizeDelta 적용
+        StartCoroutine(Shake());
     }//UI 표시 함수
+    IEnumerator Shake()
+    {
+        Vector3 originalPos = rectTransform.localPosition;  // 원래 위치를 저장
+
+        float elapsed = 0f;  // 경과 시간
+        while (elapsed < shakeDuration)
+        {
+            float xOffset = Random.Range(-shakeAmount, shakeAmount); // 좌우로 랜덤한 값
+            rectTransform.localPosition = originalPos + new Vector3(xOffset, 0f, 0f); // 위치 변경
+
+            elapsed += Time.deltaTime; // 시간 증가
+            yield return null; // 한 프레임 기다림
+        }
+
+        rectTransform.localPosition = originalPos; // 원래 위치로 복원
+    }
     #region 상태 체크
     public bool IsAlive()
     {
