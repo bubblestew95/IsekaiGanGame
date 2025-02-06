@@ -6,11 +6,20 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "RangeSkill", menuName = "Scriptable Objects/Player Skill/Range")]
 public class RangeSkill : AttackSkill
 {
+    [Header("Range Skill")]
     public float attackRange = 5f;
 
     public override void UseSkill(PlayerManager _player)
     {
         base.UseSkill(_player);
-        _player.ShootDamageRay(damage, aggro, attackRange);
+
+        Transform startTr = _player.RangeAttackStartTr;
+        Ray ray = new Ray(startTr.position, _player.transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, attackRange))
+        {
+            GameManager.Instance.DamageToBoss(_player, DamageCalculate(_player), aggro);
+        }
     }
 }

@@ -16,6 +16,12 @@ public class MeleeWeapon : MonoBehaviour
 
     private SphereCollider attackTrigger = null;
 
+    public void Init(int _damage, float _aggro)
+    {
+        damage = _damage;
+        aggro = _aggro;
+    }
+
     public void SetTriggerEnabled(bool _enable)
     {
         attackTrigger.enabled = _enable;

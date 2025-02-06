@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f2d3149454034142b2ef6cef854d4a9, type: 3}
   m_Name: WarriorData
   m_EditorClassIdentifier: 
-  maxHp: 100
+  maxHp: 120
   walkSpeed: 3
   skills:
   - {fileID: 11400000, guid: ac1ce17dff93c654f81b7584e893063b, type: 2}

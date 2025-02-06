@@ -6,6 +6,7 @@ using EnumTypes;
 [CreateAssetMenu(fileName = "DashSkill", menuName = "Scriptable Objects/Player Skill/Dash")]
 public class DashSkill : PlayerSkillBase
 {
+    [Header("Dash Skill")]
     public float dashSpeed = 5f;
     public float dashTime = 1f;
     public bool isForward = true;

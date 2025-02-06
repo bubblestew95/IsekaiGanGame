@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "RangeHoldingSkill", menuName = "Scriptable Objects/Player Skill/RangeHolding")]
 public class RangeHoldingSkill : AttackSkill
 {
+    [Header("Range Holding Skill")]
     public float duration = 2f;
     public float damageTickTime = 0.5f;
     public float maxDistance = 5f;
@@ -34,7 +35,7 @@ public class RangeHoldingSkill : AttackSkill
         {
             if(Physics.Raycast(ray, out hit, maxDistance))
             {
-                _player.AddDamageToBoss(damage, aggro);
+                _player.AddDamageToBoss(DamageCalculate(_player), aggro);
             }
 
             yield return waitSec;

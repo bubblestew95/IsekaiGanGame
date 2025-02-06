@@ -129,7 +129,8 @@ public class PlayerManager : MonoBehaviour
         if (currentSpeed == 0f)
             return;
 
-        transform.rotation = Quaternion.LookRotation(moveVector);
+        if(moveVector != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(moveVector);
     }
 
     /// <summary>
@@ -243,18 +244,7 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     #region Attack Functions
-
-    /// <summary>
-    /// 플레이어의 정면 방향으로 보스에게 데미지를 가하는 레이를 발사함.
-    /// </summary>
-    /// <param name="_damage"></param>
-    /// <param name="_maxDistance"></param>
-    public void ShootDamageRay(int _damage, float _aggro, float _maxDistance)
-    {
-        attackManager.RayAttack(_damage, _aggro, _maxDistance);
-    }
-
-    public void EnableMeleeAttack()
+    public void EnableMeleeAttack(int _damage, float aggro)
     {
         meleeWeapon.SetTriggerEnabled(true);
     }
@@ -281,6 +271,16 @@ public class PlayerManager : MonoBehaviour
     public void AddDamageToBoss(int _damage, float _aggro)
     {
         attackManager.AddDamageToBoss(_damage, _aggro);
+    }
+
+    public bool IsPlayerBehindBoss()
+    {
+        if (Vector3.Angle(transform.forward, GameManager.Instance.GetBossTransform().forward) < 80f)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     #endregion

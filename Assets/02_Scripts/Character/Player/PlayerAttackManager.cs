@@ -9,18 +9,6 @@ public class PlayerAttackManager
         playerManager = _playerManager;
     }
 
-    public void RayAttack(int _damage, float _aggro, float _maxDistance)
-    {
-        Transform startTr = playerManager.RangeAttackStartTr;
-        Ray ray = new Ray(startTr.position, playerManager.transform.forward);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, _maxDistance))
-        {
-            GameManager.Instance.DamageToBoss(playerManager, _damage, _aggro);
-        }
-    }
-
     public void AddDamageToBoss(int _damage, float _aggro)
     {
         GameManager.Instance.DamageToBoss(playerManager, _damage, _aggro);

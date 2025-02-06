@@ -17,4 +17,6 @@ MonoBehaviour:
   skillParticle: {fileID: 0}
   damage: 1
   aggro: 1
+  isBackattackEnable: 1
+  backAttackTimes: 3
   attackRange: 4

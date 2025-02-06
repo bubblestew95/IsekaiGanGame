@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ProjectileSkill", menuName = "Scriptable Objects/Player Skill/Projectile")]
 public class ProjectileSkill : AttackSkill
 {
+    [Header("Projectile Skill")]
     public GameObject projectilePrefab = null;
 
     public float projectileDuration = 3f;
