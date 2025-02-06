@@ -77,6 +77,17 @@ public class BgmController : MonoBehaviour
         curPlayingAudio = bgmCharacterThemes[curCharacterIndex].GetComponent<AudioSource>();
         curPlayingAudio.Play();
         StartCoroutine(FadeInAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 인
+        // 캐릭터 테마가 끝난 후 보스 테마 자동 재생
+        StartCoroutine(PlayBossBgmAfterDelay(curPlayingAudio.clip.length));
+
+    }
+    private IEnumerator PlayBossBgmAfterDelay(float delay)
+    {
+        // 캐릭터 테마의 길이만큼 대기
+        yield return new WaitForSeconds(delay);
+
+        // 캐릭터 테마가 끝났다면 보스 테마 재생
+        PlayBossBgm();
     }
     private void PlayBossBgm()      //보스 테마 재생
     {
