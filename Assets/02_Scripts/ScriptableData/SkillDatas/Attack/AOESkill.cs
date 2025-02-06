@@ -28,8 +28,6 @@ public class AOESkill : AttackSkill
 
         while (currentTime <= duration)
         {
-            FindAnyObjectByType<DebugHelper>().SpawnDebugSphere(damagePos, attackAreaRadius);
-
             Collider[] hits = Physics.OverlapSphere(damagePos, attackAreaRadius, bossLayerMask);
             // 충돌이 검출됐을 경우
             foreach (Collider hitCollider in hits)
