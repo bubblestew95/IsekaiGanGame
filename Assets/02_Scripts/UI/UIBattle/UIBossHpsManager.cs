@@ -56,7 +56,7 @@ public class UIBossHpsManager : MonoBehaviour
         float hpRatio = (float)curHp / (float)maxHp;
         newCurHP.x = hpRatio * newCurHP.x;  // X 값만 변경
         images[images.Count - 1].rectTransform.sizeDelta = newCurHP;  // 변경된 sizeDelta 적용
-        StartCoroutine(Shake());
+        StartCoroutine(Shake());//보스체력바 흔들기
     }//UI 표시 함수
     IEnumerator Shake()
     {
