@@ -17,7 +17,7 @@ public class RangeSkill : AttackSkill
         Ray ray = new Ray(startTr.position, _player.transform.forward);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, attackRange))
+        if (Physics.Raycast(ray, out hit, attackRange, bossLayerMask))
         {
             GameManager.Instance.DamageToBoss(_player, DamageCalculate(_player), aggro);
         }

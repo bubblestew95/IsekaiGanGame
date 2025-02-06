@@ -27,6 +27,8 @@ public class StatusManager
         playerMng = _playerMng;
         maxHp = _playerMng.PlayerData.maxHp;
         currentHp = maxHp;
+        currentStatusEffects = new List<StatusEffectType>();
+
     }
 
     public void SetCurrentHp(int _hp)
