@@ -12,6 +12,16 @@ public class StatusManager
     private int maxHp = 0;
     private int currentHp = 0;
 
+    public int MaxHp
+    {
+        get { return maxHp; }
+    }
+
+    public int CurrentHp
+    {
+        get { return currentHp; }
+    }
+
     public void Init(PlayerManager _playerMng)
     {
         playerMng = _playerMng;

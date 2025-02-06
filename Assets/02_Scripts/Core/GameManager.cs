@@ -27,6 +27,11 @@ public class GameManager : MonoBehaviour
         return bossObject.transform;
     }
 
+    public int GetBossHp()
+    {
+        return -1;
+    }
+
     /// <summary>
     /// 플레이어가 보스에게 데미지와 어그로 수치를 더함.
     /// </summary>
