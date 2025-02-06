@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ParticleManager : MonoBehaviour
@@ -38,15 +39,33 @@ public class ParticleManager : MonoBehaviour
         }
     }
 
-    public void PlayParticleSetParent(ParticleSystem particle, Vector3 position, GameObject _parents)
+    public void PlayParticle(ParticleSystem particle, Vector3 position, Quaternion _rotation)
+    {
+        if (particle != null)
+        {
+            ParticleSystem newParticle = Instantiate(particle, position, _rotation);
+            newParticle.Play();
+            Destroy(newParticle.gameObject, newParticle.main.duration + newParticle.main.startLifetime.constantMax); // 파티클 자동 삭제
+        }
+    }
+
+    public void PlayParticleSetParent(ParticleSystem particle, Vector3 position, GameObject _parents, float _duration)
     {
         if (particle != null)
         {
             ParticleSystem newParticle = Instantiate(particle, position, Quaternion.identity);
             newParticle.gameObject.transform.SetParent(_parents.transform);
             newParticle.Play();
-            Destroy(newParticle.gameObject, newParticle.main.duration + newParticle.main.startLifetime.constantMax); // 파티클 자동 삭제
+
+            StartCoroutine(DestoryParticle(newParticle, _duration));
         }
+    }
+
+    private IEnumerator DestoryParticle(ParticleSystem _particle, float _duration)
+    {
+        yield return new WaitForSeconds(_duration);
+
+        Destroy(_particle.gameObject);
     }
 }
 

@@ -320,7 +320,7 @@ public class BossAttackManager : MonoBehaviour
         circleAttackColliders[0].SetActive(true);
 
         // 파티클 재생
-        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack3, circleAttackColliders[0].transform.position);
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack3, circleAttackColliders[0].transform.position, Quaternion.Euler(-90f, 0f, 0f));
 
         yield return attackColliderTime;
 
@@ -358,6 +358,8 @@ public class BossAttackManager : MonoBehaviour
             }
             yield return null;
         }
+
+        // ParticleManager.Instance.PlayParticleSetParent(ParticleManager.Instance.attack4, bossStateManager.Boss.transform.position, bossStateManager.Boss, duration + 1f);
 
         while (true)
         {

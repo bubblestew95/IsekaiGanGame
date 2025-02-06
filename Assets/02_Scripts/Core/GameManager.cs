@@ -44,14 +44,14 @@ public class GameManager : MonoBehaviour
 
         // UI 동기화
         // 추후 멀티 연동할 때 이 부분은 아마도 수정해야 할 듯?
-        UpdatePlayerHpUI(_damageGiver);
+        // UpdatePlayerHpUI(_damageGiver);
     }
 
     /// <summary>
     /// 보스가 플레이어에게 데미지를 가함.
     /// </summary>
     /// <param name="_damageReceiver"></param>
-    public void DamageToPlayer(PlayerManager _damageReceiver, int _damage)
+    public void DamageToPlayer(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDis)
     {
         _damageReceiver.TakeDamage(_damage);
         UpdatePlayerHpUI(_damageReceiver);
