@@ -25,9 +25,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _RECEIVESHADOWS_OFF
-  - _RECEIVE_SHADOWS_OFF
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -101,7 +99,7 @@ Material:
     - _AlphaCutoff: 0.5
     - _AlphaToMask: 0
     - _Alpha_Mask_Power: 0.5
-    - _Animation: 1
+    - _Animation: 4.28
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -112,7 +110,7 @@ Material:
     - _Debug: 0
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _Distortion: 0.096
+    - _Distortion: 0.179
     - _DistortionDepthFade: 0.5
     - _DistortionDepthFadePower: 2
     - _DistortionNormalStrength: 1
@@ -130,10 +128,10 @@ Material:
     - _InnerRadialDistortionMaskAlphaInfluence: 1
     - _InnerRadialDistortionMaskAlphaPower: 0.23
     - _InnerRadialDistortionMaskHardness: 0
-    - _InnerRadialDistortionMaskPower: 1
+    - _InnerRadialDistortionMaskPower: 0.35
     - _InnerRadialDistortionMaskRadius: 1
-    - _InnerRadialDistortionMaskasAlpha: 0
-    - _InnerRadialDistortionMaskasAlphaPower: 0.01
+    - _InnerRadialDistortionMaskasAlpha: 1
+    - _InnerRadialDistortionMaskasAlphaPower: 10
     - _InnerRadialDistortionMasktoAlpha: 1
     - _Inner_Feather: 0.5
     - _Inner_Radius: 1
@@ -153,14 +151,14 @@ Material:
     - _Outer_Remap_Min: 0
     - _Parallax: 0.005
     - _ParticleAnimation: 2
-    - _ParticleRandomize: 0.2412162
+    - _ParticleRandomize: 0
     - _Particle_Animation: 1
     - _Power: 1
     - _QueueControl: 0
     - _QueueOffset: 0
     - _RadialAlphaMaskEdgeFade: 0
-    - _RadialAlphaMaskFeather: 0.1
-    - _RadialAlphaMaskPower: 0.1
+    - _RadialAlphaMaskFeather: 0.881
+    - _RadialAlphaMaskPower: 1
     - _RadialAlphaMaskRemapMax: 0.085
     - _Radial_Alpha_Mask_Edge_Fade: 0.1
     - _Radial_Alpha_Mask_Max: 0.1
@@ -175,7 +173,7 @@ Material:
     - _Radial_Distortion_Mask_Power_2: 1
     - _Radial_Distortion_Mask_Power_3: 1
     - _Radial_Mask_Power: 5
-    - _ReceiveShadows: 0
+    - _ReceiveShadows: 1
     - _ShockwaveNormalStrength: 0.1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0

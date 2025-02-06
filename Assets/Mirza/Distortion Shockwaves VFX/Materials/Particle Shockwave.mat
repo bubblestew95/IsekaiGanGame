@@ -112,7 +112,7 @@ Material:
     - _Debug: 0
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _Distortion: 0.09
+    - _Distortion: 0.189
     - _DistortionDepthFade: 5.84
     - _DistortionDepthFadePower: 6.72
     - _DistortionNormalStrength: 52.33
@@ -156,8 +156,8 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _RadialAlphaMaskEdgeFade: 0
-    - _RadialAlphaMaskFeather: 0
-    - _RadialAlphaMaskPower: 0.1
+    - _RadialAlphaMaskFeather: 0.735
+    - _RadialAlphaMaskPower: 1
     - _RadialAlphaMaskRemapMax: 0.085
     - _Radial_Alpha_Mask_Edge_Fade: 0.1
     - _Radial_Alpha_Mask_Max: 0.1
