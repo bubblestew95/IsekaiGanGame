@@ -14,7 +14,7 @@ public abstract class AttackSkill : PlayerSkillBase
 
     protected void OnEnable()
     {
-        bossLayerMask = LayerMask.NameToLayer("Boss");
+        bossLayerMask = 1 << LayerMask.NameToLayer("Boss");
     }
 
     public override void StartSkill(PlayerManager _player)
