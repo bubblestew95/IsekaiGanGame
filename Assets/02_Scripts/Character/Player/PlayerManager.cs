@@ -48,6 +48,8 @@ public class PlayerManager : MonoBehaviour
     private int animId_Speed = 0;
 
     private Vector3 lastSkillUsePoint = Vector3.zero;
+
+    private InputBufferData nullInputBuffer = new InputBufferData();
     #endregion
 
     #endregion
@@ -109,6 +111,21 @@ public class PlayerManager : MonoBehaviour
         // 만약 입력 버퍼가 비어있다가 새롭게 입력됐다면 Dequeue 시간을 측정하기 시작한다.
         if (skillBuffer.Count == 1)
             remainDequeueTime = checkDequeueTime;
+    }
+
+    /// <summary>
+    /// 현재 스킬 입력 버퍼에서 하나를 꺼내옴.
+    /// </summary>
+    /// <returns>사용할 스킬의 타입</returns>
+    public InputBufferData GetNextInput()
+    {
+        if (skillBuffer.TryDequeue(out InputBufferData nextBuffer))
+        {
+            lastSkillUsePoint = nextBuffer.pointData.point;
+            return nextBuffer;
+        }
+
+        return nullInputBuffer;
     }
 
     /// <summary>
@@ -179,22 +196,6 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 현재 스킬 입력 버퍼에서 하나를 꺼내옴.
-    /// </summary>
-    /// <returns>사용할 스킬의 타입</returns>
-    public InputBufferData GetNextInput()
-    {
-        if (skillBuffer.TryDequeue(out InputBufferData nextBuffer))
-        {
-            lastSkillUsePoint = nextBuffer.pointData.point;
-            return nextBuffer;
-        }
-
-        lastSkillUsePoint = Vector3.zero;
-        return new InputBufferData();
-    }
-    
     public PlayerSkillBase GetSkill(SkillSlot _slot)
     {
         return skillMng.GetSkill(_slot);
