@@ -83,6 +83,11 @@ public class PlayerManager : MonoBehaviour
         get { return statusMng; }
     }
 
+    public UIBattleUIManager BattleUIManager
+    {
+        get { return battleUIManager; }
+    }
+
     #endregion
 
     #region Public Functions

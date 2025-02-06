@@ -29,6 +29,11 @@ public class UIHpsManager : MonoBehaviour
         curHp = _maxHp;
     } // 최대체력 설정 그리고 최대체력 수치를 현재체력 수치로 만드는 함수 
 
+    public void SetCurrentHp(int _hp)
+    {
+        curHp = Mathf.Clamp(_hp, 0, maxHp);
+    }
+
     public void Damage(int _Damage)
     {
         if (IsAlive())

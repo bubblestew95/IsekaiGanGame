@@ -19,7 +19,6 @@ public class UIBattleUIManager : MonoBehaviour
     public int bossMaxHp = 1;
     public int playerMaxHp = 1;
 
-
     private void Awake()
     {
         ui_PlayerHp = GetComponentInChildren<UIHpsManager>();
@@ -32,20 +31,7 @@ public class UIBattleUIManager : MonoBehaviour
         SetupAllUI();
     }
 
-    /// <summary>
-    /// 입력받은 스킬 버튼을 플레이어 매니저에게 전달한다.
-    /// </summary>
-    /// <param name="_slot">입력받은 스킬 버튼의 스킬 타입</param>
-    //public void OnClickedSkillButton(SkillSlot _slot)
-    //{
-    //    if (playerManager == null)
-    //    {
-    //        Debug.LogWarning("Player Manager is Null!");
-    //        return;
-    //    }
-
-    //    // playerManager.OnButtonInput(_type);
-    //}
+    #region Skill Button, Joysticks
     public void OnSkillJoystickDown(SkillSlot _slot)
     {
         skillUIManager.SetSkillUIEnabled(_slot, true);
@@ -70,14 +56,7 @@ public class UIBattleUIManager : MonoBehaviour
     {
         skillUIManager.SetSkillAimPoint(_slot, _horizontal, _vertical);
     }
-
-    //public void CooltimeListSetting(List<float> _timeList) // 평타,회피,스킬1,스킬2,스킬3 순서
-    //{
-    //    for (int i = 0; i < _timeList.Count; i++)
-    //    {
-    //        cooltimeList[i] = _timeList[i];
-    //    }
-    //}
+    #endregion
 
     public void SetupAllUI() // 전체적으로 한번 싹 정하고 시작
     {
@@ -88,6 +67,16 @@ public class UIBattleUIManager : MonoBehaviour
         ui_PlayerHp.HpBarUIUpdate();
 
         ui_disconnect.ReConnection(); // 연결 오류 UI 비활성화
+    }
+
+    public void UpdatePlayerHp()
+    {
+        ui_PlayerHp.SetCurrentHp(playerManager.StatusManager.CurrentHp);
+    }
+
+    public void UpdateBossHp()
+    {
+
     }
 
     /// <summary>
