@@ -17,17 +17,20 @@ public class BossStateManager : MonoBehaviour
     [SerializeField] private GameObject boss;
     [SerializeField] public float chainTime;
     [SerializeField] private GameObject bossSkin;
+    [SerializeField] private float maxHp;
+    [SerializeField] private float curHp;
 
     public GameObject Boss {get {return boss;}}
     public GameObject BossSkin { get { return bossSkin; } }
     public GameObject[] Players {get {return players;}}
+    public float MaxHp { get { return maxHp; } }
+    public float CurHp { get { return curHp; } }
 
     private List<BossChain> activeChain = new List<BossChain>();
-    private float maxHp;
-    private float curHp;
-    private bool[] hpCheck = new bool[5];
+    private bool[] hpCheck = new bool[9];
     private GameObject randomTarget;
     private BossAttackCollider attackCollider;
+    private DamageParticle damageParticle;
 
     private void Awake()
     {
@@ -35,13 +38,20 @@ public class BossStateManager : MonoBehaviour
         hpCheck[1] = false;
         hpCheck[2] = false;
         hpCheck[3] = false;
-        hpCheck[4] = false;
+        hpCheck[4] = false; 
+        hpCheck[5] = false;
+        hpCheck[6] = false;
+        hpCheck[7] = false;
+        hpCheck[8] = false;
         attackCollider = GetComponent<BossAttackCollider>();
+
+        curHp = maxHp;
     }
 
     private void Start()
     {
         attackCollider.rockCollisionCallback += BossStun;
+        damageParticle = FindFirstObjectByType<DamageParticle>();
     }
 
     private void Update()
@@ -53,7 +63,7 @@ public class BossStateManager : MonoBehaviour
     }
 
     // 데미지만큼 hp에서 하락시킴.
-    private void TakeDamage(float _damage)
+    private void TakeDamage(float _damage, float _aggro)
     {
         if (curHp <= 0) return;
 
@@ -75,11 +85,11 @@ public class BossStateManager : MonoBehaviour
         // 현재 hp콜백(현재 피에 따라 패턴 설정)
         CheckHpCallback();
 
-        // UI에 보스체력 동기화 시키는 코드 필요
-
-
         // 어그로 플레이어 설정하는 함수
         GetHighestAggroTarget();
+
+        // 보스 피격 파티클 실행
+        damageParticle.SetupAndPlayParticles(_damage);
     }
 
     // 특정 hp이하일때 마다 콜백을 던짐
@@ -123,6 +133,38 @@ public class BossStateManager : MonoBehaviour
         {
             hpCheck[4] = true;
             bossHpHalfCallback?.Invoke();
+        }
+        else if (hp <= 40f && !hpCheck[5])
+        {
+            hpCheck[5] = true;
+            bossHp10Callback?.Invoke();
+
+            randomTarget = RandomPlayer();
+            bossRandomTargetCallback?.Invoke(randomTarget);
+        }
+        else if (hp <= 30f && !hpCheck[6])
+        {
+            hpCheck[6] = true;
+            bossHp10Callback?.Invoke();
+
+            randomTarget = RandomPlayer();
+            bossRandomTargetCallback?.Invoke(randomTarget);
+        }
+        else if (hp <= 20f && !hpCheck[7])
+        {
+            hpCheck[7] = true;
+            bossHp10Callback?.Invoke();
+
+            randomTarget = RandomPlayer();
+            bossRandomTargetCallback?.Invoke(randomTarget);
+        }
+        else if (hp <= 10f && !hpCheck[8])
+        {
+            hpCheck[8] = true;
+            bossHp10Callback?.Invoke();
+
+            randomTarget = RandomPlayer();
+            bossRandomTargetCallback?.Invoke(randomTarget);
         }
     }
 

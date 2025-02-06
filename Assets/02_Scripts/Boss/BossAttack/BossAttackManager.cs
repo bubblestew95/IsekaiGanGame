@@ -199,7 +199,10 @@ public class BossAttackManager : MonoBehaviour
         foreach (GameObject skillPos in circleSkillPos)
         {
             skillPos.transform.position = new Vector3(bossStateManager.Players[cnt].transform.position.x, 0.3f, bossStateManager.Players[cnt].transform.position.z);
-            cnt++;
+            if (bossStateManager.Players.Length != 1)
+            {
+                cnt++;
+            }
         }
 
         // 스킬 데미지 설정
