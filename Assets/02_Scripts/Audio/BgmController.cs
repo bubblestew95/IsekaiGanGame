@@ -85,7 +85,7 @@ public class BgmController : MonoBehaviour
         curPlayingAudio = bgmBossThemes[curBgmBossIndex].GetComponent<AudioSource>();
         curPlayingAudio.Play();
     }
-    private void PlayBossRageBgm()        //보스 테마 인덱스+1 재생
+    public void PlayBossRageBgm()        //보스 테마 인덱스+1 재생
     {
         // 현재 오디오를 멈추고
         if (curPlayingAudio)
