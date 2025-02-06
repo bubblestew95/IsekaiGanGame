@@ -14,5 +14,7 @@ public class ProjectileSkill : AttackSkill
     {
         // 발사체 스폰 후 정면 방향으로 발사하면 됨.
         base.UseSkill(_player);
+
+        GameObject projectile = Instantiate(projectilePrefab);
     }
 }
