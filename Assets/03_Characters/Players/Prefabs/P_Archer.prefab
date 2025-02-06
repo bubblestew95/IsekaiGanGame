@@ -10824,7 +10824,7 @@ GameObject:
   - component: {fileID: 2131632820310466139}
   m_Layer: 9
   m_Name: P_Archer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13800,7 +13800,7 @@ Transform:
   m_Children:
   - {fileID: 4554398382176959353}
   m_Father: {fileID: 497262}
-  m_LocalEulerAnglesHint: {x: 9.069894, y: -1.1068373, z: 163.312}
+  m_LocalEulerAnglesHint: {x: -6.625597, y: -7.9467044, z: 167.48851}
 --- !u!1001 &3467913445669204437
 PrefabInstance:
   m_ObjectHideFlags: 0
