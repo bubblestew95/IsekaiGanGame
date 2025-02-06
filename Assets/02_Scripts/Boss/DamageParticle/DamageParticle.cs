@@ -33,7 +33,7 @@ public class DamageParticle : MonoBehaviour
     }
 
     // 데미지에 맞는 파티클 실행
-    private void SetupAndPlayParticles(float _damage)
+    public void SetupAndPlayParticles(float _damage)
     {
         // 파티클 시스템 생성
         ParticleSystem particle = Instantiate(P_Particle, new Vector3(bossStateManager.Boss.transform.position.x, bossStateManager.Boss.transform.position.y + 1f, bossStateManager.Boss.transform.position.z), Quaternion.identity);
