@@ -14,7 +14,7 @@ public class ParticleManager : MonoBehaviour
     public ParticleSystem attack8;
     public ParticleSystem attack9;
 
-    public ParticleSystem phase2;
+    public ParticleSystem SpecialAttack;
 
     private void Awake()
     {
@@ -33,6 +33,17 @@ public class ParticleManager : MonoBehaviour
         if (particle != null)
         {
             ParticleSystem newParticle = Instantiate(particle, position, Quaternion.identity);
+            newParticle.Play();
+            Destroy(newParticle.gameObject, newParticle.main.duration + newParticle.main.startLifetime.constantMax); // 파티클 자동 삭제
+        }
+    }
+
+    public void PlayParticleSetParent(ParticleSystem particle, Vector3 position, GameObject _parents)
+    {
+        if (particle != null)
+        {
+            ParticleSystem newParticle = Instantiate(particle, position, Quaternion.identity);
+            newParticle.gameObject.transform.SetParent(_parents.transform);
             newParticle.Play();
             Destroy(newParticle.gameObject, newParticle.main.duration + newParticle.main.startLifetime.constantMax); // 파티클 자동 삭제
         }

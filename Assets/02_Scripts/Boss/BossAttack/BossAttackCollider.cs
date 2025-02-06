@@ -7,6 +7,7 @@ public class BossAttackCollider : MonoBehaviour
 
     private int damage = 0;
     private string skillName = string.Empty;
+    private float knockBackDistance = 0f;
 
     public int Damage 
     { 
@@ -18,6 +19,12 @@ public class BossAttackCollider : MonoBehaviour
     {
         get { return skillName; }
         set { skillName = value; }
+    }
+
+    public float KnockBackDistance
+    {
+        get { return knockBackDistance; }
+        set { knockBackDistance = value; }
     }
 
     private void OnTriggerEnter(Collider other)

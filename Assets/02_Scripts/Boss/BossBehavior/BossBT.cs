@@ -749,11 +749,12 @@ public class BossBT : MonoBehaviour
         {
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Phase2"))
             {
-                // 카메라 움직이고
+                // 카메라 움직이고, 브금 변경 콜백
                 if (once)
                 {
                     once = false;
                     StartCoroutine(phase2Cam.MoveCam());
+                    phase2BehaviorEndCallback?.Invoke();
                 }
 
                 // 보스 가운대로 설정하고
@@ -799,7 +800,6 @@ public class BossBT : MonoBehaviour
                 StartCoroutine(phase2Cam.ReturnCam());
 
                 anim.SetBool("Phase2-1Flag", false);
-                phase2BehaviorEndCallback?.Invoke();
                 break;
             }
 

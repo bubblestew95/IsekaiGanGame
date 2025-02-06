@@ -36,6 +36,7 @@ public class BossAttackManager : MonoBehaviour
     private int damage;
     private float delay;
     private float duration;
+    private float knockBackDis;
 
     // 부채꼴 생성 관련
     private float angle;
@@ -126,6 +127,7 @@ public class BossAttackManager : MonoBehaviour
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay / animSpd;
+        knockBackDis = skill.KnockbackDistance;
 
         range = range * 2;
 
@@ -141,6 +143,7 @@ public class BossAttackManager : MonoBehaviour
         // 스킬 데미지 설정
         fanAttackCollider.GetComponent<BossAttackCollider>().Damage = damage;
         fanAttackCollider.GetComponent<BossAttackCollider>().SkillName = skillName;
+        fanAttackCollider.GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         angle = 90f;
@@ -195,6 +198,7 @@ public class BossAttackManager : MonoBehaviour
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay / animSpd;
+        knockBackDis = skill.KnockbackDistance;
 
         int cnt = 0;
 
@@ -215,6 +219,7 @@ public class BossAttackManager : MonoBehaviour
             attackCollider.transform.localScale = new Vector3(range, 0.5f, range);
             attackCollider.GetComponent<BossAttackCollider>().Damage = damage;
             attackCollider.GetComponent<BossAttackCollider>().SkillName = skillName;
+            attackCollider.GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
         }
 
         // 스킬 표시
@@ -278,6 +283,7 @@ public class BossAttackManager : MonoBehaviour
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay / animSpd;
+        knockBackDis = skill.KnockbackDistance;
 
         // 스킬위치 조정
         circleSkillPos[0].transform.position = new Vector3(bossStateManager.Boss.transform.position.x, 0.3f, bossStateManager.Boss.transform.position.z);
@@ -285,6 +291,7 @@ public class BossAttackManager : MonoBehaviour
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
         circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
@@ -329,10 +336,12 @@ public class BossAttackManager : MonoBehaviour
         skillName = skill.SkillName;
         damage = skill.Damage;
         duration = skill.Duration;
+        knockBackDis = skill.KnockbackDistance;
 
         // 스킬 데미지 설정
         GetComponent<BossAttackCollider>().Damage = damage;
         GetComponent<BossAttackCollider>().SkillName = skillName;
+        GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         // GetComponent<BoxCollider>().isTrigger = true;
@@ -374,10 +383,12 @@ public class BossAttackManager : MonoBehaviour
 
         skillName = skill.SkillName;
         damage = skill.Damage;
+        knockBackDis = skill.KnockbackDistance;
 
         // 스킬 데미지 설정
         GetComponent<BossAttackCollider>().Damage = damage;
         GetComponent<BossAttackCollider>().SkillName = skillName;
+        GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         // GetComponent<BoxCollider>().isTrigger = true;
@@ -413,6 +424,7 @@ public class BossAttackManager : MonoBehaviour
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay / animSpd;
+        knockBackDis = skill.KnockbackDistance;
 
         // 스킬위치 조정
         circleSkillPos[0].transform.position = new Vector3(bossStateManager.Boss.transform.position.x, 0.3f, bossStateManager.Boss.transform.position.z);
@@ -420,6 +432,7 @@ public class BossAttackManager : MonoBehaviour
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
         circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
@@ -451,7 +464,7 @@ public class BossAttackManager : MonoBehaviour
         circleAttackColliders[0].SetActive(true);
 
         // 파티클 재생
-        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack5, circleAttackColliders[0].transform.position);
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.SpecialAttack, circleAttackColliders[0].transform.position);
 
         yield return attackColliderTime;
 
@@ -473,6 +486,7 @@ public class BossAttackManager : MonoBehaviour
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay / animSpd;
+        knockBackDis = skill.KnockbackDistance;
 
         // 스킬위치 조정
         circleSkillPos[0].transform.position = new Vector3(randomTarget.transform.position.x, 0.3f, randomTarget.transform.position.z);
@@ -480,6 +494,7 @@ public class BossAttackManager : MonoBehaviour
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
         circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
@@ -540,6 +555,7 @@ public class BossAttackManager : MonoBehaviour
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay / animSpd;
+        knockBackDis = skill.KnockbackDistance;
 
         // 스킬위치 조정
         circleSkillPos[0].transform.position = new Vector3(bossStateManager.aggroPlayer.transform.position.x, 0.3f, bossStateManager.aggroPlayer.transform.position.z);
@@ -547,6 +563,7 @@ public class BossAttackManager : MonoBehaviour
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
         circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
@@ -593,10 +610,12 @@ public class BossAttackManager : MonoBehaviour
         skillName = skill.SkillName;
         damage = skill.Damage;
         duration = skill.Duration;
+        knockBackDis = skill.KnockbackDistance;
 
         // 스킬 데미지 설정
         GetComponent<BossAttackCollider>().Damage = damage;
         GetComponent<BossAttackCollider>().SkillName = skillName;
+        GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         // GetComponent<BoxCollider>().isTrigger = true;
@@ -642,6 +661,7 @@ public class BossAttackManager : MonoBehaviour
         range = skill.AttackRange;
         damage = skill.Damage;
         delay = skill.AttackColliderDelay / animSpd;
+        knockBackDis = skill.KnockbackDistance;
 
         range = range * 2;
 
@@ -657,6 +677,7 @@ public class BossAttackManager : MonoBehaviour
         // 스킬 데미지 설정
         halfCircleAttackCollider.GetComponent<BossAttackCollider>().Damage = damage;
         halfCircleAttackCollider.GetComponent<BossAttackCollider>().SkillName = skillName;
+        halfCircleAttackCollider.GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         angle = 180f;
