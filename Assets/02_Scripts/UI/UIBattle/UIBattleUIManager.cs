@@ -22,9 +22,9 @@ public class UIBattleUIManager : MonoBehaviour
 
     private void Awake()
     {
-        UIHpsManager ui_PlayerHp = GetComponentInChildren<UIHpsManager>();
-        UIBossHpsManager ui_BossHp = GetComponentInChildren<UIBossHpsManager>();
-        UIWarningManager ui_disconnect = GetComponentInChildren<UIWarningManager>();
+        ui_PlayerHp = GetComponentInChildren<UIHpsManager>();
+        ui_BossHp = GetComponentInChildren<UIBossHpsManager>();
+        ui_disconnect = GetComponentInChildren<UIWarningManager>();
     }
 
     private void Start()
