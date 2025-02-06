@@ -413,9 +413,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb19f2c345b38e4fa1aee33efec1894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonSkillType: 0
   images: []
   textMeshPros: []
-  button: {fileID: 0}
   cooltime: {fileID: 0}
 --- !u!1 &1104005065135161988
 GameObject:
@@ -1192,9 +1192,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb19f2c345b38e4fa1aee33efec1894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonSkillType: 0
   images: []
   textMeshPros: []
-  button: {fileID: 0}
   cooltime: {fileID: 0}
 --- !u!1 &3364944419301081637
 GameObject:
@@ -7115,9 +7115,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb19f2c345b38e4fa1aee33efec1894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonSkillType: 0
   images: []
   textMeshPros: []
-  button: {fileID: 8541506088332512456}
   cooltime: {fileID: 0}
 --- !u!1 &5758725221495443921
 GameObject:
@@ -7675,7 +7675,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -21.22583, y: 16}
+  m_AnchoredPosition: {x: -21, y: 40}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 0}
 --- !u!225 &7404303915985389094
@@ -8490,12 +8490,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a7a025050abd0479b8ebf3cf37ffa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hpList: []
-  bossHpList: []
-  warningList: []
-  buttonList: []
-  joyStick: {fileID: 0}
-  cooltimeList: []
+  skillUIManager: {fileID: 0}
+  skillButtonsManager: {fileID: 0}
+  playerManager: {fileID: 0}
   bossMaxHp: 1
   playerMaxHp: 1
 --- !u!1 &8006339919685914553
@@ -8915,9 +8912,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb19f2c345b38e4fa1aee33efec1894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonSkillType: 0
   images: []
   textMeshPros: []
-  button: {fileID: 0}
   cooltime: {fileID: 0}
 --- !u!1 &8850652440943405327
 GameObject:
@@ -8971,9 +8968,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb19f2c345b38e4fa1aee33efec1894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonSkillType: 0
   images: []
   textMeshPros: []
-  button: {fileID: 0}
   cooltime: {fileID: 0}
 --- !u!1001 &1152064809829640436
 PrefabInstance:
