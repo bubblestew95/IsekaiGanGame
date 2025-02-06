@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "RangeSkill", menuName = "Scriptable Objects/Player Skill/Range")]
 public class RangeSkill : AttackSkill
 {
+    [Header("Range Skill")]
     public float attackRange = 5f;
 
     public override void UseSkill(PlayerManager _player)

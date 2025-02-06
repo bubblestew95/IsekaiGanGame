@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "RangeHoldingSkill", menuName = "Scriptable Objects/Player Skill/RangeHolding")]
 public class RangeHoldingSkill : AttackSkill
 {
+    [Header("Range Holding Skill")]
     public float duration = 2f;
     public float damageTickTime = 0.5f;
     public float maxDistance = 5f;

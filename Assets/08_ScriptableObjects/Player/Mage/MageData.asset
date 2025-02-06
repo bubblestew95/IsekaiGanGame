@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f2d3149454034142b2ef6cef854d4a9, type: 3}
   m_Name: MageData
   m_EditorClassIdentifier: 
-  maxHp: 100
-  walkSpeed: 3
+  maxHp: 80
+  walkSpeed: 2.5
   skills:
   - {fileID: 11400000, guid: 3465e183684068441b444b3eebc5f998, type: 2}
   - {fileID: 11400000, guid: d133b61f8a031ce4ca9c3cd76ace0738, type: 2}

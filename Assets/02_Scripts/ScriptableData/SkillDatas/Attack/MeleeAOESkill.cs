@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MeleeAOESkill", menuName = "Scriptable Objects/Player Skill/MeleeAOESkill")]
 public class MeleeAOESkill : AttackSkill
 {
+    [Header("Melee AOE Skill")]
     public float attackAreaRadius = 1f;
     public float duration = 2f;
     public float damageTickTime = 0.5f;

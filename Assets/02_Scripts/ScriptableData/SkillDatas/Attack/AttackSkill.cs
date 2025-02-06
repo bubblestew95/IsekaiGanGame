@@ -4,8 +4,11 @@ using EnumTypes;
 
 public abstract class AttackSkill : PlayerSkillBase
 {
+    [Header("Attack Skill")]
     public int damage = 1;
     public float aggro = 1f;
+    public bool isBackattackEnable = false;
+    public float backAttackTimes = 3f;
 
     public override void StartSkill(PlayerManager _player)
     {

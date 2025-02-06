@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: AssassinData
   m_EditorClassIdentifier: 
   maxHp: 100
-  walkSpeed: 3
+  walkSpeed: 5
   skills: []

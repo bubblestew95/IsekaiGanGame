@@ -7,6 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "AOESkill", menuName = "Scriptable Objects/Player Skill/AOE")]
 public class AOESkill : AttackSkill
 {
+    [Header("AOE Skill")]
     public float maxRange = 5f;
     public float attackAreaRadius = 1f;
     public float duration = 2f;

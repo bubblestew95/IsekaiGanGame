@@ -7,6 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MeleeAndMoveSkill", menuName = "Scriptable Objects/Player Skill/MeleeAndMove")]
 public class MeleeAndMoveSkill : MeleeSkill
 {
+    [Header("Melee Move Skill")]
     public float moveSpeed = 1f;
     public float moveTime = 1f;
     public bool isForward = true;

@@ -4,10 +4,9 @@ using EnumTypes;
 
 public abstract class PlayerSkillBase : ScriptableObject
 {
+    [Header("Skill Base")]
     public SkillSlot skillSlot;
-
     public float coolTime = 3f;
-
     public ParticleSystem skillParticle = null;
 
     /// <summary>
