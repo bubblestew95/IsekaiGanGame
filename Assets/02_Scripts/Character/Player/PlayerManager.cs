@@ -244,8 +244,9 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
     #region Attack Functions
-    public void EnableMeleeAttack(int _damage, float aggro)
+    public void EnableMeleeAttack(int _damage, float _aggro)
     {
+        meleeWeapon.Init(_damage, _aggro);
         meleeWeapon.SetTriggerEnabled(true);
     }
 

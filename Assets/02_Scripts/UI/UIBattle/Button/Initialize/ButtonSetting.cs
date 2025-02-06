@@ -55,7 +55,7 @@ public class ButtonSetting : MonoBehaviour
         ////button.onClick.AddListener(ButtonPressed);
         */
 
-        SetCooltime(5f);
+        SetCooltime(0.2f);
     }
 
     public void SetCooltime(float _cooltime)

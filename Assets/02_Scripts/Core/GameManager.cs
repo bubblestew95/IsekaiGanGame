@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     public void DamageToBoss(PlayerManager _damageGiver, int _damage, float _aggro)
     {
         Debug.LogFormat("Player deal to boss! damage : {0}, aggro : {1}", _damage, _aggro);
+
         bossStateManager.TakeDamage(_damageGiver, _damage, _aggro);
 
         // UI µø±‚»≠
