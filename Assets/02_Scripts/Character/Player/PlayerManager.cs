@@ -78,6 +78,11 @@ public class PlayerManager : MonoBehaviour
         get { return lastSkillUsePoint; }
     }
 
+    public StatusManager StatusManager
+    {
+        get { return statusMng; }
+    }
+
     #endregion
 
     #region Public Functions

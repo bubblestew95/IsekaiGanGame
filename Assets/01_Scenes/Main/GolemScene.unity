@@ -283,7 +283,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 567
+    m_Bits: 1591
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1672,7 +1672,7 @@ GameObject:
   m_Component:
   - component: {fileID: 255726085}
   - component: {fileID: 255726084}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FanSkillFullRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1768,7 +1768,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 282500485}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleAttack2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1804,6 +1804,10 @@ PrefabInstance:
     - target: {fileID: 1884747205189362, guid: 1b85934f3ab9f88409e04178ece71a05, type: 3}
       propertyPath: m_Name
       value: FireBall
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884747205189362, guid: 1b85934f3ab9f88409e04178ece71a05, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1884747205189362, guid: 1b85934f3ab9f88409e04178ece71a05, type: 3}
       propertyPath: m_IsActive
@@ -2295,7 +2299,7 @@ GameObject:
   - component: {fileID: 377791612}
   - component: {fileID: 377791611}
   - component: {fileID: 377791610}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleAttackCylinder2
   m_TagString: BossAttack
   m_Icon: {fileID: 0}
@@ -2441,7 +2445,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 391796695}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2880,6 +2884,42 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 391796695}
     m_Modifications:
+    - target: {fileID: 314718902643700201, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 529022429967717506, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 575386136525220119, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 600553000710421651, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 672128878036508440, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1318275722637602916, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1394116128410409204, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1754561711790141405, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1994438827218754061, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 2131148431429031677, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: phase2Cam
       value: 
@@ -2888,6 +2928,106 @@ PrefabInstance:
       propertyPath: phase2Set
       value: 
       objectReference: {fileID: 1827377927}
+    - target: {fileID: 2290035617505245488, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2429958201350415155, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2466852477022785313, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492541278023546289, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515804459858140851, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2830948742708986929, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3197274497531889720, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3271135866090306280, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3709212158630739670, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3865022489330578954, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3870122871164040702, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981553585818097539, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4092929681620228229, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4580454651124258520, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4668084406934189880, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4894762259405688390, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5086027055484947428, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5132056692939066762, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5172277771474601706, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5231435032811886240, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5245827662355493295, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5301355668034939435, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5351548965462669731, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5522351310473618473, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5586973146189954352, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5870383895420540904, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: skillDatas.Array.size
       value: 10
@@ -2916,6 +3056,14 @@ PrefabInstance:
       propertyPath: 'randomSkillDatas.Array.data[6]'
       value: 
       objectReference: {fileID: 11400000, guid: dbc9f10c2f6ebfe48874b1f0a908dbdb, type: 2}
+    - target: {fileID: 5945006505919783481, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6019583406718748346, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: anims.Array.size
       value: 16
@@ -2951,6 +3099,14 @@ PrefabInstance:
     - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: anims.Array.data[15].moveMultiplier
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6159736519589396270, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6270384574194351708, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6308332450445231548, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: fanSkillPos
@@ -3044,6 +3200,14 @@ PrefabInstance:
       propertyPath: 'circleChargingRangeDecals.Array.data[3]'
       value: 
       objectReference: {fileID: 1541110615}
+    - target: {fileID: 6337909305865175121, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6516616218790500869, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6881833285181368674, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: fire
       value: 
@@ -3072,6 +3236,30 @@ PrefabInstance:
       propertyPath: phase2Particle
       value: 
       objectReference: {fileID: 1005370971}
+    - target: {fileID: 6902343158740413203, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7172054065682223753, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7241421225311494595, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7448349961852534745, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7516934838263057130, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7780549433350168615, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7796279537819312077, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: aggroPlayer
       value: 
@@ -3096,6 +3284,34 @@ PrefabInstance:
       propertyPath: 'players.Array.data[3]'
       value: 
       objectReference: {fileID: 46774829}
+    - target: {fileID: 8014419699095953150, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8080520090764213336, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8112175339513584811, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8172300059767236553, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8197148775336768591, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356315962979815933, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8427702251024427960, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8468617057500289297, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.34
@@ -3136,9 +3352,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8552536850030865583, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8608893377333890529, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8782911401852535387, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8850597482612616638, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9090375643620856191, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 9137032837993464747, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: m_Name
       value: P_Golem
+      objectReference: {fileID: 0}
+    - target: {fileID: 9137032837993464747, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4135,7 +4375,7 @@ GameObject:
   m_Component:
   - component: {fileID: 646617313}
   - component: {fileID: 646617314}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleSkillFullRange2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4951,7 +5191,7 @@ GameObject:
   - component: {fileID: 825374994}
   - component: {fileID: 825374993}
   - component: {fileID: 825374992}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleAttackCylinder1
   m_TagString: BossAttack
   m_Icon: {fileID: 0}
@@ -5132,7 +5372,7 @@ GameObject:
   - component: {fileID: 859857116}
   - component: {fileID: 859857115}
   - component: {fileID: 859857114}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HalfCircleAttackCollider
   m_TagString: BossAttack
   m_Icon: {fileID: 0}
@@ -5946,7 +6186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 951336456}
   - component: {fileID: 951336457}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleSkillFullRange4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6126,7 +6366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1001781947}
   - component: {fileID: 1001781948}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HalfCircleRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7092,7 +7332,7 @@ GameObject:
   - component: {fileID: 1154390704}
   - component: {fileID: 1154390703}
   - component: {fileID: 1154390702}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleAttackCylinder4
   m_TagString: BossAttack
   m_Icon: {fileID: 0}
@@ -7210,7 +7450,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1165666647}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HalfCircleAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7582,7 +7822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1197672310}
   - component: {fileID: 1197672311}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleSkillFullRange3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8230,7 +8470,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1305607234}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FanAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8464,7 +8704,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1390151677}
   - component: {fileID: 1390151678}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ParticleManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8610,7 +8850,7 @@ GameObject:
   - component: {fileID: 1408095210}
   - component: {fileID: 1408095213}
   - component: {fileID: 1408095214}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FanAttackCollider
   m_TagString: BossAttack
   m_Icon: {fileID: 0}
@@ -9138,7 +9378,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1441425364}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleAttack3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9388,7 +9628,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1541110614}
   - component: {fileID: 1541110615}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleSkillChargeRange4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9575,7 +9815,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1566495078}
   - component: {fileID: 1566495079}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleSkillFullRange1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9662,7 +9902,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1581145780}
   - component: {fileID: 1581145781}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleSkillChargeRange3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9717,7 +9957,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1581225971}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleAttack4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10193,7 +10433,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1641361595}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10418,7 +10658,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1705586746}
   - component: {fileID: 1705586748}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleSkillChargeRange1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10473,7 +10713,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1709970456}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12160,6 +12400,10 @@ PrefabInstance:
       value: FireBall
       objectReference: {fileID: 0}
     - target: {fileID: 1884747205189362, guid: 1b85934f3ab9f88409e04178ece71a05, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884747205189362, guid: 1b85934f3ab9f88409e04178ece71a05, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -12740,7 +12984,7 @@ GameObject:
   - component: {fileID: 2001272531}
   - component: {fileID: 2001272530}
   - component: {fileID: 2001272529}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleAttackCylinder3
   m_TagString: BossAttack
   m_Icon: {fileID: 0}
@@ -13143,7 +13387,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2030923804}
   - component: {fileID: 2030923805}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: CircleSkillChargeRange2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13698,7 +13942,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2112377714}
   - component: {fileID: 2112377716}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FanSkillChargeRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}

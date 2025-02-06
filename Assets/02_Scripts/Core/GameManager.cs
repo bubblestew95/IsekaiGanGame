@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     #region Private Variables
 
-    private GameObject bossObject = null;
+    private BossStateManager bossStateManager = null;
 
     #endregion
 
@@ -24,7 +24,12 @@ public class GameManager : MonoBehaviour
     #region Public Functions
     public Transform GetBossTransform()
     {
-        return bossObject.transform;
+        return bossStateManager.transform;
+    }
+
+    public int GetBossHp()
+    {
+        return -1;
     }
 
     /// <summary>
@@ -67,7 +72,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        bossObject = FindAnyObjectByType<BossBT>().gameObject;
+        bossStateManager = FindAnyObjectByType<BossStateManager>();
     }
 
     #endregion
