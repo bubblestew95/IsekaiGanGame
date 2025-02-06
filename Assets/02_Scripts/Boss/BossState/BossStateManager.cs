@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using Mono.Cecil.Cil;
 
 public class BossStateManager : MonoBehaviour
 {
@@ -33,6 +32,7 @@ public class BossStateManager : MonoBehaviour
     private float[] playerDamage = new float[4];
     private float[] playerAggro = new float[4];
     private float bestAggro;
+    private bool isPhase2 = false;
 
     // 찾아서 넣는거
     private DamageParticle damageParticle;
@@ -321,8 +321,10 @@ public class BossStateManager : MonoBehaviour
     {
         float hp = ((float)curHp / (float)maxHp);
 
-        if (hp >= 0.5f)
+        if (hp >= 0.5f && !isPhase2)
         {
+            if (((1 - hp) * 2) >= 1f) return 1f; 
+
             return (1 - hp) * 2;
         }
         else
@@ -335,6 +337,7 @@ public class BossStateManager : MonoBehaviour
     private void ChangePhase2BGM()
     {
         bgmController.ExcitedLevel(0);
-        bgmController.PlayBossRageBgm(); 
+        bgmController.PlayBossRageBgm();
+        isPhase2 = true;
     }
 }

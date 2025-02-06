@@ -40,4 +40,9 @@ public class BossSkillData : ScriptableObject
 
     public float AttackColliderDelay { get { return attackColliderDelay; } }
 
+    [SerializeField]
+    private float knockbackDistance;
+
+    public float KnockbackDistance { get { return knockbackDistance; } }
+
 }

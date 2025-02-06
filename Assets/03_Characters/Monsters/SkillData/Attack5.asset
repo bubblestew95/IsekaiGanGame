@@ -19,3 +19,4 @@ MonoBehaviour:
   maxRange: 100
   attackRange: 0
   attackColliderDelay: 0
+  knockbackDistance: 2
