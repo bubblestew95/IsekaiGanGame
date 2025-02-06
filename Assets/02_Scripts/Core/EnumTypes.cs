@@ -37,4 +37,12 @@ namespace EnumTypes
         Direction,  // 방향을 지정하고 사용하는 스킬.
         Position,       // 위치를 지정하고 사용하는 스킬.
     }
+
+    public enum CharacterClass
+    {
+        Warrior, // 전사
+        Mage, // 법사
+        Archer, // 궁수
+        Thief // 도적
+    }
 }

@@ -8,6 +8,7 @@ public class BossBT : MonoBehaviour
 {
     public delegate void BTDelegate();
     public BTDelegate behaviorEndCallback;
+    public BTDelegate phase2BehaviorEndCallback;
 
     [SerializeField] public BossState curState;
     [SerializeField] private Animator anim;
@@ -798,6 +799,7 @@ public class BossBT : MonoBehaviour
                 StartCoroutine(phase2Cam.ReturnCam());
 
                 anim.SetBool("Phase2-1Flag", false);
+                phase2BehaviorEndCallback?.Invoke();
                 break;
             }
 

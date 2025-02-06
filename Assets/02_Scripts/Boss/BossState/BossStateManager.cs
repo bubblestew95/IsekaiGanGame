@@ -37,7 +37,9 @@ public class BossStateManager : MonoBehaviour
     // 찾아서 넣는거
     private DamageParticle damageParticle;
     private UIBossHpsManager bossHpUI;
+    private BgmController bgmController;
     private BossAttackCollider attackCollider;
+    private BossBT bossBT;
 
     private void Awake()
     {
@@ -61,12 +63,15 @@ public class BossStateManager : MonoBehaviour
         // 
         damageParticle = FindFirstObjectByType<DamageParticle>();
         bossHpUI = FindFirstObjectByType<UIBossHpsManager>();
+        bgmController = FindFirstObjectByType<BgmController>();
+        bossBT = FindAnyObjectByType<BossBT>();
     }
 
     private void Start()
     {
         // 공격8 스턴 콜백
         attackCollider.rockCollisionCallback += BossStun;
+        bossBT.phase2BehaviorEndCallback += ChangePhase2BGM;
 
         // ui초기 설정
         bossHpUI.SetMaxHp(maxHp);
@@ -121,6 +126,9 @@ public class BossStateManager : MonoBehaviour
         // 보스 UI설정
         bossHpUI.BossDamage(_damage);
         bossHpUI.HpBarUIUpdate();
+
+        // 보스 브금 설정
+        bgmController.ExcitedLevel(ChangeHpToExciteLevel());
     }
 
     // 특정 hp이하일때 마다 콜백을 던짐
@@ -306,5 +314,27 @@ public class BossStateManager : MonoBehaviour
 
         // 어그로 플레이어 변경
         aggroPlayer = players[aggroPlayerIndex];
+    }
+
+    // hp 1페이즈일때 0~1, 2페이즈 일때 0~1
+    private float ChangeHpToExciteLevel()
+    {
+        float hp = ((float)curHp / (float)maxHp);
+
+        if (hp >= 0.5f)
+        {
+            return (1 - hp) * 2;
+        }
+        else
+        {
+            return 1 - hp * 2;
+        }
+    }
+
+    // 페이즈 바뀔때 브금 바꾸고 ExcitedLevel 바꿈.
+    private void ChangePhase2BGM()
+    {
+        bgmController.ExcitedLevel(0);
+        bgmController.PlayBossRageBgm(); 
     }
 }
