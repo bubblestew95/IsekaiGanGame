@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a428ded449c114408461f8e3d2c7de3, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e9c9e1ef27cd504f90b92ac533078fd, type: 3}
   m_Name: MageSkill_A_Flame
   m_EditorClassIdentifier: 
   skillSlot: 1
@@ -17,6 +17,6 @@ MonoBehaviour:
   skillParticle: {fileID: 0}
   damage: 1
   aggro: 1
-  duration: 2
-  damageTickTime: 0.5
-  maxDistance: 5
+  isBackattackEnable: 0
+  backAttackTimes: 3
+  attackRange: 5
