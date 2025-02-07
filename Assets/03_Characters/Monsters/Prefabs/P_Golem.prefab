@@ -1800,7 +1800,7 @@ GameObject:
   m_Component:
   - component: {fileID: 565950463579664464}
   - component: {fileID: 6572184628513710127}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HitCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2463,6 +2463,7 @@ MonoBehaviour:
   boss: {fileID: 9137032837993464747}
   chainTime: 0
   bossSkin: {fileID: 2492541278023546289}
+  hitCollider: {fileID: 6572184628513710127}
   maxHp: 1000
   curHp: 1000
 --- !u!114 &7072979799601489313

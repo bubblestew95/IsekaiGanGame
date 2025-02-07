@@ -2809,18 +2809,10 @@ PrefabInstance:
       propertyPath: phase2Particle
       value: 
       objectReference: {fileID: 1005370971}
-    - target: {fileID: 7647388448322865425, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 7796279537819312077, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: aggroPlayer
       value: 
       objectReference: {fileID: 649004582}
-    - target: {fileID: 7796279537819312077, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
-      propertyPath: hitCollider
-      value: 
-      objectReference: {fileID: 1088496709}
     - target: {fileID: 7796279537819312077, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: 'players.Array.data[0]'
       value: 
@@ -6319,11 +6311,6 @@ Transform:
   - {fileID: 1301516558}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1088496709 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 6572184628513710127, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
-  m_PrefabInstance: {fileID: 457395388}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1099779399 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8172849020746995793, guid: 2af5562ce69fc2d448481a1587a352a5, type: 3}
