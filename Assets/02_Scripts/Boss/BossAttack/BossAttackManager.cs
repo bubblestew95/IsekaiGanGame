@@ -117,6 +117,16 @@ public class BossAttackManager : MonoBehaviour
         }
     }
 
+    private void Attack8Particle()
+    {
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack8, bossStateManager.Boss.transform.position);
+    }
+
+    private void Attack4Particle()
+    {
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack4, bossStateManager.Boss.transform.position);
+    }
+
     #region [Attack]
     // »÷µŒ∏£±‚
     private IEnumerator Attack1()

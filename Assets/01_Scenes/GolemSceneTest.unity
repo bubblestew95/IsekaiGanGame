@@ -8784,16 +8784,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e06ace272750b94184d242b4bcaa040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack1: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
+  attack1: {fileID: 4810726212148235539, guid: 201b3a739c2f3c942a341d61b32a9e2d, type: 3}
   attack2: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
-  attack3: {fileID: 4271093393614929224, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
-  attack4: {fileID: 4772634663558126228, guid: e1385af346f4e624eb313ec1ea4fcd7e, type: 3}
+  attack3: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
+  attack4: {fileID: 4810726212148235539, guid: 75a06b1c2411662488e14d2f88daceef, type: 3}
   attack5: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
   attack6: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
-  attack7: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
+  attack7: {fileID: 198738731738625552, guid: 21461e6c060baf044ac3e717ed4170cb, type: 3}
   attack8: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
   attack9: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
-  SpecialAttack: {fileID: 4593184484909914550, guid: 2e1e9506f5904a64b81744324fb7cd50, type: 3}
+  SpecialAttack: {fileID: 198399678132347108, guid: 045d5fbbf8161ea478959fe3c8e41207, type: 3}
 --- !u!1 &1392663073 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8172849020746995793, guid: 2af5562ce69fc2d448481a1587a352a5, type: 3}
