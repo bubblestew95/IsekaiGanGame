@@ -452,6 +452,10 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2354821613029669478, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: moveJoystick
+      value: 
+      objectReference: {fileID: 6312712458556734569}
+    - target: {fileID: 2354821613029669478, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: skillUIManager
       value: 
       objectReference: {fileID: 1319068782244972857}
@@ -661,6 +665,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7938309828721989989, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
   m_PrefabInstance: {fileID: 2955911434112101020}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6312712458556734569 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9123944579655046901, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+  m_PrefabInstance: {fileID: 2955911434112101020}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a47f546fc70ec8428172694e78e4288, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8573845552895087374 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6915816896417479058, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}

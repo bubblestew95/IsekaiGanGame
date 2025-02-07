@@ -2,11 +2,12 @@ using UnityEngine;
 
 using EnumTypes;
 using StructTypes;
+using Unity.Netcode;
 
 public class IdleState : BasePlayerState
 {
     private JoystickInputData joystickInputData;
-
+    private NetworkObject networkObj = null;
     public IdleState(PlayerManager playerMng) : base(playerMng)
     {
         stateType = PlayerStateType.Idle;
@@ -14,7 +15,8 @@ public class IdleState : BasePlayerState
 
     public override void OnEnterState()
     {
-        
+        networkObj = playerMng.GetComponent<NetworkObject>();
+
     }
 
     public override void OnExitState()
@@ -24,6 +26,9 @@ public class IdleState : BasePlayerState
 
     public override void OnUpdateState()
     {
+        if (!networkObj.IsOwner)
+            return;
+
         // 대기 상태일 때만 움직일 수 있음.
         playerMng.InputManager.GetJoystickInputValue(out joystickInputData);
         playerMng.MoveByJoystick(joystickInputData);
