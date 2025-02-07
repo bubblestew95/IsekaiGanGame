@@ -270,6 +270,16 @@ public class PlayerManager : MonoBehaviour
         statusMng.OnDamaged(_damage);
     }
 
+    public void MovePlayer(Vector3 _attackOriginPos, float _distance)
+    {
+        Vector3 startPos = new Vector3(_attackOriginPos.x, 0f, _attackOriginPos.z);
+        Vector3 endPos = new Vector3(transform.position.x, 0f, transform.position.z);
+
+        Vector3 direction = (startPos - endPos).normalized;
+
+        characterCont.Move(direction *  _distance);
+    }
+
     public void AddDamageToBoss(int _damage, float _aggro)
     {
         attackManager.AddDamageToBoss(_damage, _aggro);
