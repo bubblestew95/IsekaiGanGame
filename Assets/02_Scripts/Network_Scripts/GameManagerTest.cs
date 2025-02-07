@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class GameManagerTest : NetworkBehaviour
 {
-    public GameObject prefabA; // Client 0이 조작할 오브젝트
-    public GameObject prefabB; // Client 1이 조작할 오브젝트
-    public GameObject sharedPrefabC; // 모든 클라이언트가 볼 수 있는 공용 오브젝트
+    public GameObject p_Warrior; // Client 0이 조작할 오브젝트
+    public GameObject p_Archor; // Client 1이 조작할 오브젝트
+    public GameObject p_Golem; // 모든 클라이언트가 볼 수 있는 공용 오브젝트
 
     private void Start()
     {
@@ -13,6 +13,15 @@ public class GameManagerTest : NetworkBehaviour
         {
             SpawnPlayerControlledObjects();
             SpawnSharedObject();
+        }
+        else
+        {
+            Debug.Log("[Client] 서버에서 스폰된 오브젝트를 대기 중...");
+        }
+
+        if (IsOwner)
+        {
+            Debug.Log($"[Game Scene] 내 ClientId: {NetworkManager.Singleton.LocalClientId}");
         }
     }
 
@@ -41,16 +50,55 @@ public class GameManagerTest : NetworkBehaviour
 
     private void SpawnSharedObject()
     {
-        GameObject sharedInstance = Instantiate(sharedPrefabC);
+        if (p_Golem == null)
+        {
+            Debug.LogError("[Server] p_Golem 프리팹이 지정되지 않았습니다!");
+            return;
+        }
+
+        GameObject sharedInstance = Instantiate(p_Golem);
         NetworkObject networkObject = sharedInstance.GetComponent<NetworkObject>();
 
-        // 모든 클라이언트에서 볼 수 있도록 동기화
-        networkObject.Spawn();
-        Debug.Log("[Server] 공용 오브젝트 C가 스폰되었습니다.");
+        if (networkObject != null)
+        {
+            networkObject.Spawn();
+            Debug.Log("[Server] 공용 오브젝트 C가 스폰되었습니다.");
+        }
+        else
+        {
+            Debug.LogError("[Server] 공용 오브젝트 C에 NetworkObject가 없습니다!");
+        }
     }
+
 
     private GameObject GetPlayerObjectForClient(ulong clientId)
     {
-        return clientId % 2 == 0 ? prefabA : prefabB; // 짝수 ID → A, 홀수 ID → B
+        //clientId % 2 == 0 ? p_Warrior : p_Archor; // 짝수 ID → A, 홀수 ID → B
+
+        GameObject obj = clientId % 2 == 0 ? p_Warrior : p_Archor;
+
+        if (obj == null)
+        {
+            Debug.LogError($"[Server] 클라이언트 {clientId}에 할당할 프리팹이 존재하지 않습니다!");
+        }
+
+        return obj;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        // 클라이언트가 다시 연결되면 소유권 재설정
+        if (IsOwner)
+        {
+            RequestOwnershipServerRpc(NetworkManager.Singleton.LocalClientId);
+        }
+    }
+    [ServerRpc]
+    private void RequestOwnershipServerRpc(ulong clientId, ServerRpcParams rpcParams = default)
+    {
+        NetworkObject.ChangeOwnership(clientId);
+        Debug.Log($"Client {clientId} 에게 소유권 변경 완료!");
     }
 }

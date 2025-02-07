@@ -39,6 +39,8 @@ public class RoomManager : NetworkBehaviour
     private string username;
     private bool isInitialized = false;
 
+
+
     //private bool IsHost = false;
 
     private HashSet<string> previousPlayerIDs = new HashSet<string>(); // 기존 플레이어 ID 저장
@@ -93,9 +95,10 @@ public class RoomManager : NetworkBehaviour
         await InitializeServices(); // Unity Services 초기화
         // PlayerPrefs에서 username 불러오기
         username = PlayerPrefs.GetString("username");
+
         //ClientId, 임시Id매핑
-        PersistentNetworkManager.Instance.RegisterPlayer(
-            NetworkManager.Singleton.LocalClientId, AuthenticationService.Instance.PlayerId);
+        //PersistentNetworkManager.Instance.RegisterPlayer(
+        //    NetworkManager.Singleton.LocalClientId, AuthenticationService.Instance.PlayerId);
 
         if (string.IsNullOrEmpty(username))
         {

@@ -15,17 +15,16 @@ public class PersistentNetworkManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(NetworkManager.Singleton.gameObject);// 씬 전환 후에도 유지
+            DontDestroyOnLoad(gameObject); // 씬 전환 시 NetworkManager 유지
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
         }
         else
         {
             Destroy(gameObject);
         }
-
-        // Netcode에서 클라이언트 연결 이벤트 등록
-        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
     }
+
 
     private void OnDestroy()
     {
@@ -38,12 +37,39 @@ public class PersistentNetworkManager : MonoBehaviour
 
     private void OnClientConnected(ulong clientId)
     {
-        if (AuthenticationService.Instance.IsSignedIn)
+        Debug.Log($"[PersistentNetworkManager] 클라이언트 연결됨 - clientId: {clientId}");
+
+        if (NetworkManager.Singleton.IsServer)
         {
-            string playerId = AuthenticationService.Instance.PlayerId;
-            RegisterPlayer(clientId, playerId);
+            Debug.Log($"[PersistentNetworkManager] 서버 감지됨. Host ClientId: {NetworkManager.Singleton.LocalClientId}");
+            clientId = 0; // Host는 항상 ClientId 0으로 설정
+        }
+
+        string playerId = AuthenticationService.Instance.PlayerId;
+
+        if (!clientIdToPlayerId.ContainsKey(clientId))
+        {
+            clientIdToPlayerId[clientId] = playerId;
+            Debug.Log($"[PersistentNetworkManager] 등록 완료 - clientId: {clientId}, PlayerId: {playerId}");
+        }
+
+        // 클라이언트에게 playerId 동기화
+        SendPlayerIdToClientRpc(clientId, playerId);
+    }
+
+
+
+    [ClientRpc]
+    private void SendPlayerIdToClientRpc(ulong clientId, string playerId)
+    {
+        if (!NetworkManager.Singleton.IsServer)
+        {
+            clientIdToPlayerId[clientId] = playerId;
+            Debug.Log($"[PersistentNetworkManager] 클라이언트에서 PlayerId 업데이트 완료 - clientId: {clientId}, PlayerId: {playerId}");
         }
     }
+
+
 
     private void OnClientDisconnected(ulong clientId)
     {
@@ -69,6 +95,9 @@ public class PersistentNetworkManager : MonoBehaviour
         {
             return playerId;
         }
+
+        Debug.LogError($"[PersistentNetworkManager] GetPlayerId() 실패: clientId {clientId}에 해당하는 PlayerId 없음.");
         return "Unknown";
     }
+
 }
