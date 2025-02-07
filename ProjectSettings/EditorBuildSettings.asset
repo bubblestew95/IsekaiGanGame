@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/01_Scenes/LJH/LobbyTest2.unity
     guid: 4678ce2fbf4f64846804fa62ee7780af
+  - enabled: 1
+    path: Assets/01_Scenes/LJH/GameTest.unity
+    guid: a95c70bc12355374e97e68e55443ff5a
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 99f9c9493070a9d4c979a8fec7c5a8d3, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

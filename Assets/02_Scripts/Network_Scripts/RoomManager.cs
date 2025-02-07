@@ -12,8 +12,10 @@ using Unity.Netcode;
 using System;
 using Unity.Services.Matchmaker.Models;
 using Player = Unity.Services.Lobbies.Models.Player;
+using System.Runtime.CompilerServices;
+using Unity.Services.Qos.V2.Models;
 
-public class RoomManager : MonoBehaviour
+public class RoomManager : NetworkBehaviour
 {
     public static RoomManager Instance { get; private set; }
 
@@ -26,6 +28,7 @@ public class RoomManager : MonoBehaviour
     public Button join_CodeRoomButton; // Join 버튼
     public Button leaveRoomButton; // Join 버튼
     public Button codeButton; // Code 복사 버튼
+    public Button readyButton; //ready 버튼
     public RectTransform contentRect; // Scroll View의 Content 크기 조절
     public string gameSceneName = "GameTest"; // 다음 씬 이름
 
@@ -36,6 +39,8 @@ public class RoomManager : MonoBehaviour
 
     private string username;
     private bool isInitialized = false;
+
+    //private bool IsHost = false;
 
     private HashSet<string> previousPlayerIDs = new HashSet<string>(); // 기존 플레이어 ID 저장
 
@@ -133,6 +138,7 @@ public class RoomManager : MonoBehaviour
 
     public async void CreateRoom()
     {
+
         if (!isInitialized)
         {
             Debug.LogError("Unity Services가 초기화되지 않았습니다!");
@@ -195,6 +201,8 @@ public class RoomManager : MonoBehaviour
                 }
                 Debug.Log($"[CreateRoom] 플레이어 확인: Player ID = {player.Id}, Username = {playerUsername}");
             }
+
+            readyButton.gameObject.SetActive(true);
             roomNameInput.interactable = false;
             joinCodeInput.interactable = false;
             createRoomButton.interactable = false;
@@ -202,6 +210,16 @@ public class RoomManager : MonoBehaviour
             codeButton.GetComponentInChildren<TMP_Text>().text = lobby.LobbyCode;
             codeButton.interactable = true;
             leaveRoomButton.interactable = true;
+
+            // 방 생성자는 자동으로 Host가 됨
+            if (NetworkManager.Singleton.IsHost)
+            {
+                Debug.Log("[CreateRoom] 현재 플레이어는 HOST 입니다.");
+            }
+            else
+            {
+                Debug.Log("[CreateRoom] 현재 플레이어는 클라이언트 입니다.");
+            }
 
             // 방 생성 후 1초 대기 후 RefreshRoomList 실행
             await RefreshRoomList();
@@ -255,7 +273,6 @@ public class RoomManager : MonoBehaviour
             Debug.Log($"[JoinRoom] 플레이어 데이터 업데이트 완료: {username}");
 
             // 최신 Lobby 정보 가져오기
-            await Task.Delay(1000);
             lobby = await LobbyService.Instance.GetLobbyAsync(lobby.Id);
 
             // 모든 플레이어의 `Username` 출력 (정상적으로 갱신되는지 확인)
@@ -281,14 +298,27 @@ public class RoomManager : MonoBehaviour
                 return;
             }
 
+            readyButton.gameObject.SetActive(true);
             roomNameInput.interactable = false;
             joinCodeInput.interactable = false;
             createRoomButton.interactable = false;
             join_CodeRoomButton.interactable = false;
             codeButton.interactable = true;
             leaveRoomButton.interactable = true;
+            //readyButton.SetActive(true);
 
             SetCurrentRoom(lobby.Id);
+
+            // 호스트인지 여부 확인
+            if (NetworkManager.Singleton.IsHost)
+            {
+                Debug.Log("[JoinRoom] 현재 플레이어는 HOST 입니다.");
+            }
+            else
+            {
+                Debug.Log("[JoinRoom] 현재 플레이어는 클라이언트 입니다.");
+            }
+
             await RefreshRoomList();
             UpdateRoomUI(lobby);
 
@@ -349,6 +379,140 @@ public class RoomManager : MonoBehaviour
             playerCountText.text = $"{playerCount}/{maxPlayers}";
         }
     }
+
+    public async void OnReadyButtonClick()
+    {
+        if (string.IsNullOrEmpty(currentRoom))
+        {
+            Debug.LogError("[Ready] 현재 방이 없습니다!");
+            return;
+        }
+
+        try
+        {
+            string playerId = AuthenticationService.Instance.PlayerId;
+
+            // Ready 상태를 서버에 저장
+            await LobbyService.Instance.UpdatePlayerAsync(currentRoom, playerId, new UpdatePlayerOptions
+            {
+                Data = new Dictionary<string, PlayerDataObject>
+            {
+                {
+                    "Ready", new PlayerDataObject(
+                        visibility: PlayerDataObject.VisibilityOptions.Member,
+                        value: "True")
+                }
+            }
+            });
+
+            Debug.Log("[Ready] 플레이어 Ready 상태 업데이트 완료!");
+
+            // 모든 클라이언트에게 Ready 상태 알리기
+            NotifyPlayersReady(playerId);
+
+            // Ready 상태 확인 후 씬 전환
+            await CheckAllPlayersReady();
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.LogError($"[Ready] Ready 상태 업데이트 실패: {e.Message}");
+        }
+    }
+
+    [ClientRpc]
+    private void NotifyPlayersReadyClientRpc(string playerId)
+    {
+        if (!IsServer) // 서버는 이미 상태를 알고 있으므로 클라이언트만 업데이트
+        {
+            Debug.Log($"[Ready] 플레이어 {playerId}가 Ready 상태가 되었습니다.");
+            PlayerListManager.Instance.UpdatePlayerReadyState(playerId, true);
+        }
+    }
+
+    private void NotifyPlayersReady(string playerId)
+    {
+        if (IsServer)
+        {
+            NotifyPlayersReadyClientRpc(playerId);
+        }
+    }
+
+
+
+    public async Task CheckAllPlayersReady()
+    {
+        try
+        {
+            //  최신 Lobby 데이터 가져오기
+            Lobby lobby = await LobbyService.Instance.GetLobbyAsync(currentRoom);
+
+            int totalPlayers = lobby.Players.Count;
+            int readyCount = 0;
+
+            foreach (var player in lobby.Players)
+            {
+                if (player.Data.ContainsKey("Ready") && player.Data["Ready"].Value == "True")
+                {
+                    readyCount++;
+                }
+            }
+
+            Debug.Log($"[Ready] 현재 Ready한 플레이어 수: {readyCount}/{totalPlayers}");
+
+            //  모든 입장한 플레이어가 Ready 상태이면 씬 전환
+            if (readyCount == totalPlayers && totalPlayers > 1)
+            {
+                Debug.Log("[Ready] 모든 플레이어가 Ready 상태입니다! 다음 씬으로 이동!");
+
+                if (NetworkManager.Singleton.IsHost)
+                {
+                    Debug.Log("IsHost진입");
+                    LoadNextSceneServerRpc();
+                }
+            }
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.LogError($"[Ready] Ready 상태 확인 실패: {e.Message}");
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void LoadNextSceneServerRpc()
+    {
+        Debug.Log("[Ready] LoadNextSceneServerRpc() 실행됨");
+        LoadNextSceneClientRpc();
+    }
+
+    [ClientRpc]
+    private void LoadNextSceneClientRpc()
+    {
+        Debug.Log("[Ready] LoadNextSceneClientRpc() 실행됨");
+        SceneManager.LoadScene(gameSceneName);
+    }
+
+
+
+    //private void LoadNextScene()
+    //{
+    //    if (IsHost)
+    //    {
+    //        Debug.Log("[Ready] 모든 플레이어가 Ready 상태! 네트워크 오브젝트 정리 후 씬 전환!");
+
+    //        foreach (var playerObject in FindObjectsOfType<NetworkObject>())
+    //        {
+    //            if (playerObject.IsSpawned)
+    //            {
+    //                playerObject.Despawn();
+    //                Debug.Log($"[Ready] 네트워크 오브젝트 제거: {playerObject.name}");
+    //            }
+    //        }
+    //    }
+
+    //    SceneManager.LoadScene("GameTest");
+    //}
+
+
 
     // Room UI 업데이트
     private void UpdateRoomUI(Lobby lobby)
