@@ -570,7 +570,7 @@ public class BossAttackManager : MonoBehaviour
         knockBackDis = skill.KnockbackDistance;
 
         // 스킬위치 조정
-        circleSkillPos[0].transform.position = new Vector3(bossStateManager.aggroPlayer.transform.position.x, 0.3f, bossStateManager.aggroPlayer.transform.position.z);
+        circleSkillPos[0].transform.position = new Vector3(bossStateManager.AggroPlayer.transform.position.x, 0.3f, bossStateManager.AggroPlayer.transform.position.z);
 
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;

@@ -75,7 +75,7 @@ public class BossBT : MonoBehaviour
         // 상태가 바뀌고 or 1초마다 콜백 
         while (true)
         {
-            nvAgent.SetDestination(bossStateManager.aggroPlayer.transform.position);
+            nvAgent.SetDestination(bossStateManager.AggroPlayer.transform.position);
             elapseTime += Time.deltaTime;
 
             if (curState != BossState.Chase)
@@ -265,7 +265,7 @@ public class BossBT : MonoBehaviour
         while (true)
         {
             // 어그로 플레이어 따라다님
-            nvAgent.SetDestination(bossStateManager.aggroPlayer.transform.position);
+            nvAgent.SetDestination(bossStateManager.AggroPlayer.transform.position);
 
             elapseTime += Time.deltaTime;
             if (elapseTime >= duration)

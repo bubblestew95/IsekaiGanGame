@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using Unity.Netcode;
 
-public class BossStateManager : MonoBehaviour
+public class BossStateManager : NetworkBehaviour
 {
     public delegate void BossStateDelegate();
     public delegate void BossStateDelegate2(GameObject _target);
@@ -12,7 +13,7 @@ public class BossStateManager : MonoBehaviour
     public BossStateDelegate bossStunCallback;
     public BossStateDelegate2 bossRandomTargetCallback;
 
-    [SerializeField] public GameObject aggroPlayer;
+    [SerializeField] private GameObject aggroPlayer;
     [SerializeField] private GameObject[] players;
     [SerializeField] private GameObject boss;
     [SerializeField] public float chainTime;
@@ -22,11 +23,13 @@ public class BossStateManager : MonoBehaviour
     [SerializeField] private int curHp;
 
     public GameObject Boss {get {return boss;}}
+    public GameObject AggroPlayer { get { return aggroPlayer; } }
     public GameObject BossSkin { get { return bossSkin; } }
     public GameObject[] Players {get {return players;}}
     public int MaxHp { get { return maxHp; } }
     public int CurHp { get { return curHp; } }
     public BoxCollider HitCollider { get { return hitCollider; } }
+
 
     private List<BossChain> activeChain = new List<BossChain>();
     private bool[] hpCheck = new bool[9];
@@ -71,6 +74,9 @@ public class BossStateManager : MonoBehaviour
 
     private void Start()
     {
+        // 임시용 플레이어 가져오는 코루틴
+        StartCoroutine(GetPlayer());
+
         // 공격8 스턴 콜백
         attackCollider.rockCollisionCallback += BossStun;
         bossBT.phase2BehaviorEndCallback += ChangePhase2BGM;
@@ -286,20 +292,23 @@ public class BossStateManager : MonoBehaviour
     // 현재 어그로 수치 기준으로 어그로 대상 판별하는 함수
     private void GetHighestAggroTarget()
     {
+        bool allAggroZero = true;
+
         // 전부 어그로 0일때 -> 랜덤 1명 아무나 aggro 10으로 만들고 aggroPlayer 상태로
         foreach (float aggro in playerAggro)
         {
-            if (aggro == 0f)
+            if (aggro != 0f)
             {
-                continue;
+                allAggroZero = false;
             }
-            else
-            {
-                int num = Random.Range(0, players.Length);
-                playerAggro[num] = 10f;
-                aggroPlayer = players[num];
-                return;
-            }
+        }
+
+        if (allAggroZero)
+        {
+            int num = Random.Range(0, players.Length);
+            playerAggro[num] = 10f;
+            aggroPlayer = players[num];
+            return;
         }
 
         int aggroPlayerIndex = 0;
@@ -341,5 +350,26 @@ public class BossStateManager : MonoBehaviour
         bgmController.ExcitedLevel(0);
         bgmController.PlayBossRageBgm();
         isPhase2 = true;
+    }
+
+    // 플레이어 생성후 호출되는 함수
+    private IEnumerator GetPlayer()
+    {
+        yield return new WaitForSeconds(3f);
+
+        Debug.Log("플레이어 정보 가져옴 실행됨");
+
+        PlayerManager[] managers = FindObjectsByType<PlayerManager>(FindObjectsSortMode.None);
+
+        int num = 0;
+
+        foreach (PlayerManager player in managers)
+        {
+            players[num++] = player.gameObject;
+        }
+
+        GetHighestAggroTarget();
+
+        bossBT.curState = BossState.Chase;
     }
 }
