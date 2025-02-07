@@ -34,4 +34,10 @@ public class PlayerItem : MonoBehaviour
                 break;
         }
     }
+
+    public void SetReadyState(bool isReady)
+    {
+        //readyIndicator.SetActive(isReady);
+    }
+
 }
