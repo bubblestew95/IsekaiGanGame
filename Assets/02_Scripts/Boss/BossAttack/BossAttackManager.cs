@@ -403,7 +403,7 @@ public class BossAttackManager : MonoBehaviour
         GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
-        // GetComponent<BoxCollider>().isTrigger = true;
+        GetComponent<BoxCollider>().enabled = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
         GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
         bossStateManager.Boss.tag = "BossAttack";
@@ -421,7 +421,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 공격 끝난후
         GetComponent<BoxCollider>().size = originSize;
-        // GetComponent<BoxCollider>().isTrigger = false;
+        GetComponent<BoxCollider>().enabled = false;
         bossStateManager.Boss.tag = "Untagged";
 
         yield return null;

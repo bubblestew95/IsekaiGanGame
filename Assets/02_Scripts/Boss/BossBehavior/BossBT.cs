@@ -514,7 +514,7 @@ public class BossBT : MonoBehaviour
             {
                 // boss의 skin을 사라지게 하기, collider도 잠시 비활성화
                 bossStateManager.BossSkin.SetActive(false);
-                bossStateManager.Boss.GetComponent<BoxCollider>().enabled = false;
+                bossStateManager.HitCollider.enabled = false;
 
                 // boss의 Tr을 공격위치로 옮기기
                 bossStateManager.Boss.transform.position = bossAttackManager.CircleSkillPos[0].transform.position;
@@ -525,7 +525,7 @@ public class BossBT : MonoBehaviour
                 // 애니메이션 재생 및 skin, collider 활성화
                 anim.SetBool("Attack7-1Flag", true);
                 bossStateManager.BossSkin.SetActive(true);
-                bossStateManager.Boss.GetComponent<BoxCollider>().enabled = true;
+                bossStateManager.HitCollider.enabled = true; ;
                 break;
             }
             yield return null;
@@ -700,7 +700,8 @@ public class BossBT : MonoBehaviour
         nvAgent.speed = 3f;
         bossStateManager.Boss.transform.position = new Vector3(bossStateManager.Boss.transform.position.x, 0f, bossStateManager.Boss.transform.position.z);
         bossStateManager.BossSkin.SetActive(true);
-        bossStateManager.Boss.GetComponent<BoxCollider>().enabled = true;
+        bossStateManager.HitCollider.enabled = true;
+        bossStateManager.Boss.tag = "Untagged";
         nvAgent.ResetPath();
 
         // 스턴 애니메이션 강제 재생

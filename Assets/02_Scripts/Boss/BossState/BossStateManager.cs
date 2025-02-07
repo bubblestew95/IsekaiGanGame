@@ -17,6 +17,7 @@ public class BossStateManager : MonoBehaviour
     [SerializeField] private GameObject boss;
     [SerializeField] public float chainTime;
     [SerializeField] private GameObject bossSkin;
+    [SerializeField] private BoxCollider hitCollider;
     [SerializeField] private int maxHp;
     [SerializeField] private int curHp;
 
@@ -25,6 +26,7 @@ public class BossStateManager : MonoBehaviour
     public GameObject[] Players {get {return players;}}
     public int MaxHp { get { return maxHp; } }
     public int CurHp { get { return curHp; } }
+    public BoxCollider HitCollider { get { return hitCollider; } }
 
     private List<BossChain> activeChain = new List<BossChain>();
     private bool[] hpCheck = new bool[9];
