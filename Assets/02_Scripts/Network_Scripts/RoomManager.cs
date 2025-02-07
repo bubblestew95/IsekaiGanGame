@@ -96,10 +96,6 @@ public class RoomManager : NetworkBehaviour
         // PlayerPrefs에서 username 불러오기
         username = PlayerPrefs.GetString("username");
 
-        //ClientId, 임시Id매핑
-        //PersistentNetworkManager.Instance.RegisterPlayer(
-        //    NetworkManager.Singleton.LocalClientId, AuthenticationService.Instance.PlayerId);
-
         if (string.IsNullOrEmpty(username))
         {
             //Debug.LogError("Username not found!");
@@ -112,9 +108,6 @@ public class RoomManager : NetworkBehaviour
             // 여기서 username을 사용하여 원하는 작업 수행
         }
 
-        //createRoomButton.onClick.AddListener(CreateRoom);
-        //joinRoomButton.onClick.AddListener(JoinRoom);
-        //leaveRoomButton.onClick.AddListener(LeaveRoom);
         codeButton.interactable = false;
         leaveRoomButton.interactable = false;
 
@@ -136,7 +129,7 @@ public class RoomManager : NetworkBehaviour
         if (command == "UpdateRoom" && messageParts.Length == 3)
         {
             Debug.Log($"[Relay 메시지 처리] {roomId}의 인원 수 업데이트: {playerCount}/4");
-            UpdateRoomPlayerCountClientRpc(roomId, playerCount);
+            UpdateRoomPlayerCountServerRpc(roomId, playerCount);
         }
     }
 
@@ -529,6 +522,7 @@ public class RoomManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void UpdateRoomPlayerCountServerRpc(string roomId, int playerCount)
     {
+        Debug.Log($"[ServerRpc] {roomId}의 인원 수 업데이트: {playerCount}/4");
         UpdateRoomPlayerCountClientRpc(roomId, playerCount);
     }
 
