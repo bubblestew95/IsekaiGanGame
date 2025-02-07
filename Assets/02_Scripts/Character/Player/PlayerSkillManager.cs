@@ -4,6 +4,7 @@ using UnityEngine;
 
 using EnumTypes;
 using UnityEditor.VersionControl;
+using StructTypes;
 
 public class PlayerSkillManager
 {
@@ -125,29 +126,32 @@ public class PlayerSkillManager
         return skillDataMap[_type];
     }
 
-    // 백어택 체크 기술검증용 레이캐스트 함수. 나중에 실사용을 위해서 잠시 남겨놓음.
-    /*
-    public void TestRaycast()
+    /// <summary>
+    /// 스킬 발동을 시도한다.
+    /// </summary>
+    /// <param name="_skillIdx"></param>
+    public void TryUseSkill(SkillSlot _type, SkillPointData _point)
     {
-        Debug.Log("Raycast!");
-        Debug.DrawLine(transform.position, transform.forward + transform.position, Color.red, 2f);
-
-        Ray ray = new Ray(transform.position, transform.forward);
-
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 30f))
+        // 스킬 발동에 성공했다면
+        if (IsSkillUsable(_type))
         {
-            Debug.Log(hit.transform.name);
+            // 캐릭터를 포인트로 지정한 방향을 보도록 한다.
+            if (_point.type == SkillPointType.Position || _point.type == SkillPointType.None)
+            {
+                playerManager.transform.LookAt(_point.point);
+            }
+            else
+            {
+                playerManager.transform.rotation = Quaternion.Euler(_point.point);
+            }
 
-            // 백어택 체크.
-            // 캐릭터의 전방 방향으로 기술이 나가게만 설정해놨음. 애초에 백어택 체크 기술들은 전부 캐릭터 전방으로 향하고
-            // 따라서 캐릭터의 forward 와 충돌체의 forward 의 각도로 백어택 여부를 체크하는 중.
-            if (Vector3.Angle(transform.forward, hit.transform.forward) < 80f)
-                Debug.Log("BackAttack!");
+            UseSkill(_type);
+
+            // UI에 쿨타임을 적용한다.
+            if (playerManager.BattleUIManager != null)
+                playerManager.BattleUIManager.ApplyCooltime(_type, GetCoolTime(_type));
         }
     }
-    */
 
     #endregion
 

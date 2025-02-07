@@ -47,7 +47,7 @@ public class UIBattleUIManager : MonoBehaviour
     {
         SkillPointData pointData = skillUIManager.GetSkillAimPoint(_slot);
 
-        playerManager.OnButtonInput(_slot, pointData);
+        playerManager.InputManager.OnButtonInput(_slot, pointData);
         skillUIManager.SetSkillUIEnabled(_slot, false);
     }
     public void OnSkillButtonUp(SkillSlot _slot)
@@ -56,7 +56,7 @@ public class UIBattleUIManager : MonoBehaviour
         pointData.type = SkillPointType.None;
         pointData.point = GameManager.Instance.GetBossTransform().position;
 
-        playerManager.OnButtonInput(_slot, pointData);
+        playerManager.InputManager.OnButtonInput(_slot, pointData);
     }
 
     public void SendSkillDirectionToSkillUI(SkillSlot _slot, float _horizontal, float _vertical)

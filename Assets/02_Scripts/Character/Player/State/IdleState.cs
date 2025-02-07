@@ -21,7 +21,7 @@ public class IdleState : BasePlayerState
 
     public override void OnExitState()
     {
-        playerMng.SetAnimatorWalkSpeed(0f);
+        playerMng.AnimationManager.SetAnimatorWalkSpeed(0f);
     }
 
     public override void OnUpdateState()
@@ -34,11 +34,11 @@ public class IdleState : BasePlayerState
         playerMng.MoveByJoystick(joystickInputData);
 
         // 대기 상태일 때만 스킬이 사용 가능함. 스킬 사용 체크.
-        InputBufferData inputBuffer = playerMng.GetNextInput();
+        InputBufferData inputBuffer = playerMng.InputManager.GetNextInput();
 
         if (inputBuffer.skillType != SkillSlot.None)
         {
-            playerMng.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
+            playerMng.SkillManager.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
         }
     }
 }

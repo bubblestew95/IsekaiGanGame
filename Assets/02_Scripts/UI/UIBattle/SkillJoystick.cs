@@ -11,7 +11,7 @@ public class SkillJoystick : FixedJoystick
 
     public override void OnPointerDown(PointerEventData eventData)
     {
-        if(playerManager.IsSkillUsable(buttonSetting.ButtonSkillType))
+        if(playerManager.SkillManager.IsSkillUsable(buttonSetting.ButtonSkillType))
         {
             base.OnPointerDown(eventData);
         }
