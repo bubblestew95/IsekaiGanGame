@@ -30,15 +30,30 @@ public class CopyCode : MonoBehaviour
 
     void CopyTextToClipboardAndroid(string text)
     {
-        // 안드로이드에서 클립보드 복사하는 코드
-        using (AndroidJavaClass clipboardClass = new AndroidJavaClass("android.content.ClipboardManager"))
-        using (AndroidJavaObject currentActivity = GetCurrentActivity())
-        using (AndroidJavaObject clipboard = currentActivity.Call<AndroidJavaObject>("getSystemService", "clipboard"))
+        try
         {
-            AndroidJavaObject clip = new AndroidJavaObject("android.content.ClipData", "label", text);
-            clipboard.Call("setPrimaryClip", clip);
+            using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            using (AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
+            using (AndroidJavaObject context = currentActivity.Call<AndroidJavaObject>("getApplicationContext"))
+            using (AndroidJavaObject clipboardManager = context.Call<AndroidJavaObject>("getSystemService", "clipboard"))
+            using (AndroidJavaClass clipDataClass = new AndroidJavaClass("android.content.ClipData"))
+            {
+                using (AndroidJavaObject clipData = clipDataClass.CallStatic<AndroidJavaObject>("newPlainText", "label", text))
+                {
+                    clipboardManager.Call("setPrimaryClip", clipData);
+                }
+            }
+
+            Debug.Log("텍스트가 클립보드에 복사되었습니다: " + text);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("클립보드 복사 중 오류 발생: " + e.Message);
         }
     }
+
+
+
 
     AndroidJavaObject GetCurrentActivity()
     {
