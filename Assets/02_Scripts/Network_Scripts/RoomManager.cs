@@ -10,10 +10,7 @@ using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Netcode;
 using System;
-using Unity.Services.Matchmaker.Models;
 using Player = Unity.Services.Lobbies.Models.Player;
-using System.Runtime.CompilerServices;
-using Unity.Services.Qos.V2.Models;
 
 public class RoomManager : NetworkBehaviour
 {
