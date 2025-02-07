@@ -321,7 +321,7 @@ public class BossStateManager : MonoBehaviour
     {
         float hp = ((float)curHp / (float)maxHp);
 
-        if (hp >= 0.5f && !isPhase2)
+        if (!isPhase2)
         {
             if (((1 - hp) * 2) >= 1f) return 1f; 
 

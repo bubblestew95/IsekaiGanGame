@@ -117,6 +117,16 @@ public class BossAttackManager : MonoBehaviour
         }
     }
 
+    private void Attack8Particle()
+    {
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack8, bossStateManager.Boss.transform.position);
+    }
+
+    private void Attack4Particle()
+    {
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack4, bossStateManager.Boss.transform.position);
+    }
+
     #region [Attack]
     // 휘두르기
     private IEnumerator Attack1()
@@ -344,7 +354,7 @@ public class BossAttackManager : MonoBehaviour
         GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
-        // GetComponent<BoxCollider>().isTrigger = true;
+        GetComponent<BoxCollider>().enabled = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
         GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
         bossStateManager.Boss.tag = "BossAttack";
@@ -372,7 +382,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 공격 끝난후
         GetComponent<BoxCollider>().size = originSize;
-        // GetComponent<BoxCollider>().isTrigger = false;
+        GetComponent<BoxCollider>().enabled = false;
         bossStateManager.Boss.tag = "Untagged";
 
         yield return null;
@@ -620,7 +630,7 @@ public class BossAttackManager : MonoBehaviour
         GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
-        // GetComponent<BoxCollider>().isTrigger = true;
+        GetComponent<BoxCollider>().enabled = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
         GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
         bossStateManager.Boss.tag = "BossAttack";
@@ -646,7 +656,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 공격 끝난후
         GetComponent<BoxCollider>().size = originSize;
-        // GetComponent<BoxCollider>().isTrigger = false;
+        GetComponent<BoxCollider>().enabled = false;
         bossStateManager.Boss.tag = "Untagged";
 
         yield return null;
