@@ -36,7 +36,7 @@ public class StatusManager
         currentHp = Mathf.Clamp(_hp, 0, maxHp);
 
         if (currentHp <= 0)
-            playerMng.OnPlayerDead?.Invoke();
+            playerMng.ChangeState(PlayerStateType.Death);
     }
 
     public void SetMaxHp(int _maxHp)

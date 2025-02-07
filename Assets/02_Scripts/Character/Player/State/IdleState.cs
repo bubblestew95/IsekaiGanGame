@@ -9,6 +9,7 @@ public class IdleState : BasePlayerState
 
     public IdleState(PlayerManager playerMng) : base(playerMng)
     {
+        stateType = PlayerStateType.Idle;
     }
 
     public override void OnEnterState()
