@@ -10,6 +10,8 @@ public class UIBattleUIManager : MonoBehaviour
     private SkillUIManager skillUIManager = null;
     [SerializeField]
     private SkillButtonsManager skillButtonsManager = null;
+    [SerializeField]
+    private FloatingJoystick moveJoystick = null;
 
     public PlayerManager playerManager = null;
     private UIHpsManager ui_PlayerHp = null;
@@ -18,6 +20,11 @@ public class UIBattleUIManager : MonoBehaviour
 
     public int bossMaxHp = 1;
     public int playerMaxHp = 1;
+
+    public FloatingJoystick MoveJoystick
+    {
+        get { return moveJoystick; }
+    }
 
     private void Awake()
     {

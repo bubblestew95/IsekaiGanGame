@@ -10820,11 +10820,12 @@ GameObject:
   - component: {fileID: 494462}
   - component: {fileID: 9563318}
   - component: {fileID: 6093684178934932082}
+  - component: {fileID: -2836398782895520287}
   - component: {fileID: 4146515583710344192}
   - component: {fileID: 2131632820310466139}
-  - component: {fileID: -2836398782895520287}
   - component: {fileID: -287821195716040168}
   - component: {fileID: 2380477239008008822}
+  - component: {fileID: -8549285457553216154}
   m_Layer: 9
   m_Name: P_Archer
   m_TagString: Player
@@ -10888,7 +10889,7 @@ CharacterController:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Height: 1.72
   m_Radius: 0.5
@@ -10897,37 +10898,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.8, z: 0}
---- !u!114 &4146515583710344192
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 179124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bfa38ae7095fa64aa2e58d734226279, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnPlayerDead:
-    m_PersistentCalls:
-      m_Calls: []
-  playerData: {fileID: 11400000, guid: acdbef012a391a0419e3f3e3023cdc21, type: 2}
-  battleUIManager: {fileID: 4146408885389238575}
-  rangeAttackStartTr: {fileID: 3783926205617964531}
-  meleeWeapon: {fileID: 0}
---- !u!114 &2131632820310466139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 179124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90a88b3501676794bbaba1a9e2f8a27e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-2836398782895520287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10953,6 +10923,38 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &4146515583710344192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bfa38ae7095fa64aa2e58d734226279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  OnPlayerDead:
+    m_PersistentCalls:
+      m_Calls: []
+  playerData: {fileID: 11400000, guid: acdbef012a391a0419e3f3e3023cdc21, type: 2}
+  battleUIManager: {fileID: 4146408885389238575}
+  rangeAttackStartTr: {fileID: 3783926205617964531}
+  meleeWeapon: {fileID: 0}
+--- !u!114 &2131632820310466139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a88b3501676794bbaba1a9e2f8a27e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-287821195716040168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11002,6 +11004,92 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  moveSpeed: 5
+--- !u!114 &-8549285457553216154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -321355254
+    DestinationState: -138704604
+    TransitionDuration: 0.25
+    TriggerNameHash: 1971686547
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -321355254
+    DestinationState: -996513721
+    TransitionDuration: 0.25
+    TriggerNameHash: -326312663
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -321355254
+    DestinationState: 594994841
+    TransitionDuration: 0.25
+    TriggerNameHash: -1761810982
+    TransitionIndex: 3
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -321355254
+    DestinationState: 995914302
+    TransitionDuration: 0.25
+    TriggerNameHash: 995914302
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -321355254
+    DestinationState: 1487463361
+    TransitionDuration: 0.25
+    TriggerNameHash: -1685328449
+    TransitionIndex: 5
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -354315882
+    DestinationState: -138704604
+    TransitionDuration: 0.25
+    TriggerNameHash: 1971686547
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -354315882
+    DestinationState: -996513721
+    TransitionDuration: 0.25
+    TriggerNameHash: -326312663
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -354315882
+    DestinationState: 594994841
+    TransitionDuration: 0.25
+    TriggerNameHash: -1761810982
+    TransitionIndex: 3
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -354315882
+    DestinationState: 995914302
+    TransitionDuration: 0.25
+    TriggerNameHash: 995914302
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -354315882
+    DestinationState: 1487463361
+    TransitionDuration: 0.25
+    TriggerNameHash: -1685328449
+    TransitionIndex: 5
+  m_Animator: {fileID: 9563318}
 --- !u!1 &179126
 GameObject:
   m_ObjectHideFlags: 0
@@ -13887,6 +13975,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 494462}
     m_Modifications:
     - target: {fileID: 696791365309157626, guid: d9e58625f8178804e94f613990ab58c0, type: 3}
+      propertyPath: moveJoystick
+      value: 
+      objectReference: {fileID: 7474781790119202236}
+    - target: {fileID: 696791365309157626, guid: d9e58625f8178804e94f613990ab58c0, type: 3}
       propertyPath: playerManager
       value: 
       objectReference: {fileID: 4146515583710344192}
@@ -13934,6 +14026,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerUI
       objectReference: {fileID: 0}
+    - target: {fileID: 7436998486931864826, guid: d9e58625f8178804e94f613990ab58c0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13948,6 +14044,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 12a7a025050abd0479b8ebf3cf37ffa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7474781790119202236 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6312712458556734569, guid: d9e58625f8178804e94f613990ab58c0, type: 3}
+  m_PrefabInstance: {fileID: 3467913445669204437}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a47f546fc70ec8428172694e78e4288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &8455501795847099227 stripped

@@ -5,11 +5,13 @@ using UnityEngine.Events;
 
 using EnumTypes;
 using StructTypes;
+using Unity.Netcode;
+using Unity.Netcode.Components;
 
 /// <summary>
 /// 플레이어 캐릭터를 총괄적으로 관리하는 매니저.
 /// </summary>
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : NetworkBehaviour
 {
     #region Variables
 
@@ -46,6 +48,7 @@ public class PlayerManager : MonoBehaviour
     private PlayerStateMachine stateMachine = null;
     private PlayerAttackManager attackManager = null;
     private PlayerAnimationManager animationManager = null;
+    private PlayerNetworkController networkController = null;
     private Animator animator = null;
 
     private int animId_Speed = 0;
@@ -96,6 +99,11 @@ public class PlayerManager : MonoBehaviour
     public PlayerAnimationManager AnimationManager
     {
         get { return animationManager; }
+    }
+
+    public PlayerNetworkController NetworkController
+    {
+        get { return networkController; }
     }
 
     #endregion
@@ -386,13 +394,16 @@ public class PlayerManager : MonoBehaviour
         statusMng.Init(this);
 
         playerInputManager = new PlayerInputManager();
-        playerInputManager.Init(FindAnyObjectByType<FloatingJoystick>());
+        playerInputManager.Init(battleUIManager.MoveJoystick);
 
         attackManager = new PlayerAttackManager();
         attackManager.Init(this);
 
         animationManager = new PlayerAnimationManager();
         animationManager.Init(this);
+
+        networkController = new PlayerNetworkController();
+        networkController.Init(this);
 
         animator = GetComponent<Animator>();
 
@@ -404,6 +415,13 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         stateMachine.ChangeState(PlayerStateType.Idle);
+
+        if (GetComponent<NetworkObject>().IsOwner)
+        {
+            battleUIManager.transform.parent.gameObject.SetActive(true);
+            characterCont.enabled = true;
+        }
+
     }
 
     private void Update()
@@ -412,8 +430,6 @@ public class PlayerManager : MonoBehaviour
 
         // 현재 상태에 따른 행동을 업데이트한다.
         stateMachine.UpdateState();
-
-        // MoveByJoystick();
 
         skillMng.DecreaseCoolTimes(Time.deltaTime);
     }

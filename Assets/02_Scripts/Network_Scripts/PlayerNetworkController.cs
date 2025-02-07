@@ -1,16 +1,28 @@
+using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
-public class PlayerNetworkController : MonoBehaviour
+public class PlayerNetworkController
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private PlayerManager playerManager = null;
+    private NetworkAnimator networkAnimator = null;
+    private NetworkObject networkObject = null;
+
+    public void Init(PlayerManager _playerManager)
     {
-        
+        playerManager = _playerManager;
+        networkAnimator = playerManager.GetComponent<NetworkAnimator>();
+        networkObject = playerManager.GetComponent<NetworkObject>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetNetworkAnimatorTrigger(int _hashId)
     {
-        
+        if(networkAnimator == null)
+        {
+            Debug.Log("Network Animator is not valid!");
+            return;
+        }
+
+        networkAnimator.SetTrigger(_hashId);
     }
 }
