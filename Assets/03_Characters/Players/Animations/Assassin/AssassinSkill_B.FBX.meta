@@ -802,7 +802,7 @@ ModelImporter:
       takeName: Take 001
       internalID: 1330560709220880345
       firstFrame: 4
-      lastFrame: 14
+      lastFrame: 18.4
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -830,7 +830,7 @@ ModelImporter:
       name: AssassinSkill_B_End
       takeName: Take 001
       internalID: -3312781290333015552
-      firstFrame: 14
+      firstFrame: 18.4
       lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
