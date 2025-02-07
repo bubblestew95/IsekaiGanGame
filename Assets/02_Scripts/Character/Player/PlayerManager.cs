@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -44,7 +45,9 @@ public class PlayerManager : MonoBehaviour
     private StatusManager statusMng = null;
     private PlayerStateMachine stateMachine = null;
     private PlayerAttackManager attackManager = null;
+    private PlayerAnimationManager animationManager = null;
     private Animator animator = null;
+
     private int animId_Speed = 0;
 
     private Vector3 lastSkillUsePoint = Vector3.zero;
@@ -88,6 +91,11 @@ public class PlayerManager : MonoBehaviour
     public UIBattleUIManager BattleUIManager
     {
         get { return battleUIManager; }
+    }
+
+    public PlayerAnimationManager AnimationManager
+    {
+        get { return animationManager; }
     }
 
     #endregion
@@ -265,19 +273,26 @@ public class PlayerManager : MonoBehaviour
     /// 플레이어가 데미지를 받음.
     /// </summary>
     /// <param name="_damage"></param>
-    public void TakeDamage(int _damage)
+    public void TakeDamage(int _damage, Vector3 _attackOriginPos, float _distance)
     {
+        if(stateMachine.CurrentState.StateType == PlayerStateType.Damaged
+            ||
+            stateMachine.CurrentState.StateType == PlayerStateType.Death
+            ||
+            stateMachine.CurrentState.StateType == PlayerStateType.Dash)
+        {
+            Debug.Log("Player is not damageable!");
+            return;
+        }
+
         statusMng.OnDamaged(_damage);
+        MovePlayer(_attackOriginPos, _distance);
+        ChangeState(PlayerStateType.Damaged);
     }
 
     public void MovePlayer(Vector3 _attackOriginPos, float _distance)
     {
-        Vector3 startPos = new Vector3(_attackOriginPos.x, 0f, _attackOriginPos.z);
-        Vector3 endPos = new Vector3(transform.position.x, 0f, transform.position.z);
-
-        Vector3 direction = (startPos - endPos).normalized;
-
-        characterCont.Move(direction *  _distance);
+        StartCoroutine(KnockBackCoroutine(_attackOriginPos, _distance));
     }
 
     public void AddDamageToBoss(int _damage, float _aggro)
@@ -311,7 +326,7 @@ public class PlayerManager : MonoBehaviour
         stateMachine.AddState(PlayerStateType.Idle, new IdleState(this));
         stateMachine.AddState(PlayerStateType.Action, new ActionState(this));
         stateMachine.AddState(PlayerStateType.Death, new DeathState(this));
-        stateMachine.AddState(PlayerStateType.Stagger, new StaggerState(this));
+        stateMachine.AddState(PlayerStateType.Damaged, new DamagedState(this));
         stateMachine.AddState(PlayerStateType.Dash, new DashState(this));
     }
 
@@ -332,6 +347,30 @@ public class PlayerManager : MonoBehaviour
 
     }
 
+    #region Coroutines
+
+    private IEnumerator KnockBackCoroutine(Vector3 _attackOriginPos, float _distance)
+    {
+        float knockbackTime = 0.5f;
+        float currentTime = 0f;
+        float speed = _distance / knockbackTime;
+
+        Vector3 direction =  transform.position - _attackOriginPos;
+        direction.y = 0f;
+        direction.Normalize();
+
+        Debug.LogFormat("Direction : {0}, speed : {1}", direction, speed);
+
+        while (currentTime <= knockbackTime)
+        {
+            characterCont.Move(direction * speed * Time.deltaTime);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    #endregion
+
     #endregion
 
     #region Unity Callback
@@ -351,6 +390,9 @@ public class PlayerManager : MonoBehaviour
 
         attackManager = new PlayerAttackManager();
         attackManager.Init(this);
+
+        animationManager = new PlayerAnimationManager();
+        animationManager.Init(this);
 
         animator = GetComponent<Animator>();
 

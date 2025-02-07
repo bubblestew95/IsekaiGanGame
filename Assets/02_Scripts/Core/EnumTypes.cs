@@ -15,7 +15,7 @@ namespace EnumTypes
     public enum PlayerStateType
     {
         Idle,       // 이동 및 대기 
-        Stagger,    // 피격
+        Damaged,    // 피격
         Action,     // 액션을 취하는 중 (공격, 부활, 상호작용 등등)
         Dash,       // 회피
         Death       // 사망
