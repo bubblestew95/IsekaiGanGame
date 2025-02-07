@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Netcode;
 using System;
+using Unity.Services.Matchmaker.Models;
+using Player = Unity.Services.Lobbies.Models.Player;
 
 public class RoomManager : MonoBehaviour
 {
@@ -88,8 +90,6 @@ public class RoomManager : MonoBehaviour
         // PlayerPrefs에서 username 불러오기
         username = PlayerPrefs.GetString("username");
 
-        //NetworkManager.Singleton.CustomMessagingManager.RegisterNamedMessageHandler("OnRelayMessage", OnRelayMessageReceived);
-
         if (string.IsNullOrEmpty(username))
         {
             //Debug.LogError("Username not found!");
@@ -108,15 +108,6 @@ public class RoomManager : MonoBehaviour
         codeButton.interactable = false;
         leaveRoomButton.interactable = false;
 
-        
-
-        //InvokeRepeating(nameof(RefreshRoomList), 0f, 15f); // 5초마다 자동 갱신
-
-        //while (true)
-        //{
-        //    await UpdateLobbyPlayerList();
-        //    await Task.Delay(3000); // 3초마다 최신 플레이어 리스트 확인
-        //}
     }
 
     // Relay에서 메시지를 수신하고 RoomList 갱신
@@ -148,20 +139,12 @@ public class RoomManager : MonoBehaviour
             return;
         }
 
-        //if (!string.IsNullOrEmpty(currentRoom))
-        //{
-        //    Debug.LogWarning("이미 방에 입장한 상태입니다.");
-        //    return;
-        //}
-
         string roomName = roomNameInput.text.Trim();
         if (string.IsNullOrEmpty(roomName))
         {
             Debug.LogWarning("방 이름을 입력하세요.");
             return;
         }
-
-
 
         try
         {
@@ -172,69 +155,55 @@ public class RoomManager : MonoBehaviour
                 Debug.LogError("Relay 생성 실패");
                 return;
             }
+            Debug.Log($"Relay 생성 완료: {relayJoinCode}");
 
-            CreateLobbyOptions options = new CreateLobbyOptions
-            {
-                IsPrivate = false,
-                Player = new Player(AuthenticationService.Instance.PlayerId),
-                Data = new Dictionary<string, DataObject>
+            // 올바르게 수정된 CreateLobbyOptions
+            CreateLobbyOptions options = new CreateLobbyOptions();
+            options.IsPrivate = false;
+            options.Player = new Player(
+                id: AuthenticationService.Instance.PlayerId,
+                data: new Dictionary<string, PlayerDataObject>
                 {
-                    { "Username", new DataObject(DataObject.VisibilityOptions.Member, username) },
-                    { "RelayJoinCode", new DataObject(DataObject.VisibilityOptions.Member, relayJoinCode) }
+                    {
+                        "Username", new PlayerDataObject(
+                            visibility: PlayerDataObject.VisibilityOptions.Member,
+                            value: username)
+                    }
                 }
+            );
+            options.Data = new Dictionary<string, DataObject>
+            {
+                { "RelayJoinCode", new DataObject(DataObject.VisibilityOptions.Member, relayJoinCode) }
             };
 
-            Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(roomName, 4, options);
+
+            Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(roomName, maxPlayers, options);
+            // 방 코드 버튼 활성화 및 코드 표시
             SetCurrentRoom(lobby.Id);
 
-            if (!string.IsNullOrEmpty(lobby.LobbyCode))
-            {
-                codeButton.GetComponentInChildren<TMP_Text>().text = lobby.LobbyCode;
-                Debug.Log($"Lobby 생성됨: {lobby.LobbyCode}");
-                
+            UpdateRoomUI(lobby); Debug.Log($"[CreateRoom] 방 생성 성공! ID: {lobby.Id}");
+            Debug.Log($"[CreateRoom] 방 데이터 확인: RelayJoinCode = {lobby.Data["RelayJoinCode"].Value}");
 
-            }
-            else
+            // 플레이어 데이터 확인 (방장)
+            foreach (var player in lobby.Players)
             {
-                Debug.LogError("Lobby 생성 후 코드가 반환되지 않았습니다!");
-            }
+                string playerUsername = "알 수 없음";
 
-            // 최신 데이터를 가져오기 (최대 3회 재시도, 2초 간격)
-            int maxAttempts = 3;
-            for (int attempt = 0; attempt < maxAttempts; attempt++)
-            {
-                await Task.Delay(2000);
-                try
+                if (player.Data != null && player.Data.ContainsKey("Username"))
                 {
-                    lobby = await LobbyService.Instance.GetLobbyAsync(lobby.Id);
-                    if (lobby.Data != null) break;
+                    playerUsername = player.Data["Username"].Value;
                 }
-                catch (LobbyServiceException e)
-                {
-                    Debug.LogError($"Lobby 데이터를 가져오는 중 오류 발생: {e.Message}");
-                }
+                Debug.Log($"[CreateRoom] 플레이어 확인: Player ID = {player.Id}, Username = {playerUsername}");
             }
-
-            if (lobby.Data == null)
-            {
-                Debug.LogError("Lobby 데이터를 가져오지 못했습니다.");
-                return;
-            }
-
-
-
-            UpdateRoomUI(lobby);
-            Debug.Log($"방 생성 성공: {lobby.Id}");
-            Debug.Log($"방 데이터: {lobby.Data}");
             roomNameInput.interactable = false;
             joinCodeInput.interactable = false;
             createRoomButton.interactable = false;
             join_CodeRoomButton.interactable = false;
+            codeButton.GetComponentInChildren<TMP_Text>().text = lobby.LobbyCode;
             codeButton.interactable = true;
             leaveRoomButton.interactable = true;
 
             // 방 생성 후 1초 대기 후 RefreshRoomList 실행
-            await Task.Delay(1000);
             await RefreshRoomList();
         }
         catch (Exception e)
@@ -259,110 +228,51 @@ public class RoomManager : MonoBehaviour
             return;
         }
 
-
-
         try
         {
-            Lobby lobby = null;
-            int maxAttempts = 3;
-
-            for (int attempt = 0; attempt < maxAttempts; attempt++)
-            {
-                try
-                {
-                    lobby = await LobbyService.Instance.JoinLobbyByCodeAsync(roomCode);
-                    Debug.Log($"방 아이디 찾음 : ({lobby.Id})");
-                    Debug.Log($"방 데이터 : ({lobby.Data})");
-                    if (lobby != null) break;
-                }
-                catch (LobbyServiceException)
-                {
-                    Debug.LogWarning($"Lobby 조회 실패. 재시도 중... ({attempt + 1}/{maxAttempts})");
-                    await Task.Delay(1000);
-                }
-            }
-
+            Lobby lobby = await LobbyService.Instance.JoinLobbyByCodeAsync(roomCode);
             if (lobby == null)
             {
-                Debug.LogError("Lobby를 찾을 수 없습니다! Room Code가 정확한지 확인하세요.");
-                return;
-            }
-            //if (!await WaitForRelayJoinCode(lobby.Id))
-            //{
-                
-            //    Debug.LogError("RelayJoinCode를 가져올 수 없어 방 입장 실패.");
-            //    return;
-            //}
-
-            // lobby.Data가 null이면 최신 데이터 가져오기 시도
-            int retryDataFetch = 3;
-            while (lobby.Data == null && retryDataFetch > 0)
-            {
-                Debug.LogWarning("Lobby 데이터가 null입니다. 다시 시도합니다...");
-                await Task.Delay(1000);
-                var newLobby = await LobbyService.Instance.GetLobbyAsync(lobby.Id);
-                if (newLobby != null) lobby = newLobby;
-                retryDataFetch--;
-            }
-
-            // 여전히 null이면 오류 처리
-            if (lobby.Data == null)
-            {
-                Debug.LogError("Lobby 데이터를 불러오지 못했습니다. 다시 시도하세요.");
+                Debug.LogError("[JoinRoom] Lobby를 찾을 수 없습니다!");
                 return;
             }
 
-            // 신규 플레이어 확인 및 콘솔에 출력
+            Debug.Log($"[JoinRoom] 방 참가 성공! Lobby ID: {lobby.Id}");
+
+            //  참가한 클라이언트의 데이터를 `UpdatePlayerAsync()`를 사용하여 추가
+            await LobbyService.Instance.UpdatePlayerAsync(lobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions
+            {
+                Data = new Dictionary<string, PlayerDataObject>
+            {
+                {
+                    "Username", new PlayerDataObject(
+                        visibility: PlayerDataObject.VisibilityOptions.Member,
+                        value: username)
+                }
+            }
+            });
+
+            Debug.Log($"[JoinRoom] 플레이어 데이터 업데이트 완료: {username}");
+
+            // 최신 Lobby 정보 가져오기
+            await Task.Delay(1000);
+            lobby = await LobbyService.Instance.GetLobbyAsync(lobby.Id);
+
+            // 모든 플레이어의 `Username` 출력 (정상적으로 갱신되는지 확인)
             foreach (var player in lobby.Players)
             {
-                string username = "알 수 없음"; // 기본값 설정
+                string playerUsername = "알 수 없음";
 
-                //  `player.Data`가 null인지 먼저 확인
-                if (player.Data == null)
+                if (player.Data != null && player.Data.ContainsKey("Username"))
                 {
-                    Debug.LogWarning($" 플레이어 {player.Id}의 데이터가 없습니다! (player.Data == null)");
-                    continue; // 다음 플레이어로 넘어감
+                    playerUsername = player.Data["Username"].Value;
                 }
-
-                if (player.Data.ContainsKey("Username"))
-                {
-                    username = player.Data["Username"].Value;
-                }
-                else
-                {
-                    Debug.LogWarning($"플레이어 {player.Id}의 Username 데이터가 없습니다!");
-                }
-
-                Debug.Log($"[Lobby] 플레이어 참가 확인: Player ID = {player.Id}, Username = {username}");
+                Debug.Log($"[CreateRoom] 플레이어 확인: Player ID = {player.Id}, Username = {playerUsername}");
             }
 
-
-
-            // RelayJoinCode가 설정될 때까지 최대 3초 대기
-            int relayWaitAttempts = 3;
-            while (relayWaitAttempts > 0)
-            {
-                if (lobby.Data.ContainsKey("RelayJoinCode") && !string.IsNullOrEmpty(lobby.Data["RelayJoinCode"].Value))
-                {
-                    break; // RelayJoinCode가 존재하면 루프 종료
-                }
-
-                Debug.LogWarning("RelayJoinCode가 아직 동기화되지 않았습니다. 다시 시도합니다...");
-                await Task.Delay(1000);
-                var updatedLobby = await LobbyService.Instance.GetLobbyAsync(lobby.Id);
-                if (updatedLobby != null) lobby = updatedLobby;
-                relayWaitAttempts--;
-            }
-
-            // RelayJoinCode가 없으면 종료
-            if (!lobby.Data.ContainsKey("RelayJoinCode") || string.IsNullOrEmpty(lobby.Data["RelayJoinCode"].Value))
-            {
-                Debug.LogError("RelayJoinCode가 존재하지 않거나 비어 있습니다.");
-                return;
-            }
-
+            //relay 참가
             string relayJoinCode = lobby.Data["RelayJoinCode"].Value;
-            Debug.Log($"[JoinRoom] RelayJoinCode 확인 완료: {relayJoinCode}");
+            Debug.Log($"RelayJoinCode 확인 완료: {relayJoinCode}");
 
             bool relaySuccess = await RelayManager.Instance.JoinRelay(relayJoinCode);
             if (!relaySuccess)
@@ -382,8 +292,6 @@ public class RoomManager : MonoBehaviour
             await RefreshRoomList();
             UpdateRoomUI(lobby);
 
-
-
             Debug.Log($"방 참가 성공: {lobby.Id}");
         }
         catch (LobbyServiceException e)
@@ -391,12 +299,6 @@ public class RoomManager : MonoBehaviour
             Debug.LogError($"방 참가 실패: {e.Message}");
         }
     }
-
-
-
-
-
-
 
 
     // 방 퇴장
