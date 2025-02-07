@@ -11,6 +11,8 @@ using Unity.Services.Authentication;
 using Unity.Netcode;
 using System;
 using Player = Unity.Services.Lobbies.Models.Player;
+using Unity.Services.Matchmaker.Models;
+using UnityEditor.PackageManager;
 
 public class RoomManager : NetworkBehaviour
 {
@@ -91,6 +93,9 @@ public class RoomManager : NetworkBehaviour
         await InitializeServices(); // Unity Services 초기화
         // PlayerPrefs에서 username 불러오기
         username = PlayerPrefs.GetString("username");
+        //ClientId, 임시Id매핑
+        PersistentNetworkManager.Instance.RegisterPlayer(
+            NetworkManager.Singleton.LocalClientId, AuthenticationService.Instance.PlayerId);
 
         if (string.IsNullOrEmpty(username))
         {
@@ -485,30 +490,8 @@ public class RoomManager : NetworkBehaviour
     private void LoadNextSceneClientRpc()
     {
         Debug.Log("[Ready] LoadNextSceneClientRpc() 실행됨");
-        SceneManager.LoadScene(gameSceneName);
+        NetworkManager.Singleton.SceneManager.LoadScene(gameSceneName, LoadSceneMode.Single);
     }
-
-
-
-    //private void LoadNextScene()
-    //{
-    //    if (IsHost)
-    //    {
-    //        Debug.Log("[Ready] 모든 플레이어가 Ready 상태! 네트워크 오브젝트 정리 후 씬 전환!");
-
-    //        foreach (var playerObject in FindObjectsOfType<NetworkObject>())
-    //        {
-    //            if (playerObject.IsSpawned)
-    //            {
-    //                playerObject.Despawn();
-    //                Debug.Log($"[Ready] 네트워크 오브젝트 제거: {playerObject.name}");
-    //            }
-    //        }
-    //    }
-
-    //    SceneManager.LoadScene("GameTest");
-    //}
-
 
 
     // Room UI 업데이트
