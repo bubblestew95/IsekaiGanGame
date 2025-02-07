@@ -9,7 +9,7 @@ public class DeathState : BasePlayerState
 
     public override void OnEnterState()
     {
-        
+        playerMng.AnimationManager.PlayDeathAnimation();
     }
 
     public override void OnExitState()
