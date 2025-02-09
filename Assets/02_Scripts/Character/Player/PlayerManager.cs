@@ -17,15 +17,21 @@ public class PlayerManager : NetworkBehaviour
 
         #region Inspector Variables
 
+    [Header("References")]
     [SerializeField]
     private PlayerData playerData = null;
     [SerializeField]
     private UIBattleUIManager battleUIManager = null;
 
+    [Header("Attack Settings")]
     [SerializeField]
     private Transform rangeAttackStartTr = null;
     [SerializeField]
     private MeleeWeapon meleeWeapon = null;
+
+    [Header("Multi Settings")]
+    [SerializeField]
+    private bool isLocalGame = false;
 
         #endregion
 
@@ -48,7 +54,7 @@ public class PlayerManager : NetworkBehaviour
 
     private CharacterController characterController = null;
 
-            #endregion
+        #endregion
 
         #endregion
 
@@ -70,6 +76,12 @@ public class PlayerManager : NetworkBehaviour
     {
         get { return meleeWeapon; }
     }
+
+    public bool IsLocalGame
+    { 
+        get { return isLocalGame; } 
+    }
+
 
         #region Manager References
 
@@ -227,10 +239,13 @@ public class PlayerManager : NetworkBehaviour
 
     private void Start()
     {
+        // 기본 상태를 대기 상태로 설정한다.
         stateMachine.ChangeState(PlayerStateType.Idle);
 
-        if (GetComponent<NetworkObject>().IsOwner)
+        // 로컬 게임이거나, 네트워크 오브젝트의 소유자일 경우에만 활성화한다.
+        if (isLocalGame || GetComponent<NetworkObject>().IsOwner)
         {
+            // 전투 UI를 활성화하고, 캐릭터 컨트롤러를 활성화한다.
             battleUIManager.transform.parent.gameObject.SetActive(true);
             characterController.enabled = true;
 

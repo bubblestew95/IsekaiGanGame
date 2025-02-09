@@ -12,14 +12,12 @@ public class UIBattleUIManager : MonoBehaviour
     private SkillButtonsManager skillButtonsManager = null;
     [SerializeField]
     private FloatingJoystick moveJoystick = null;
+    [SerializeField]
+    private PlayerManager playerManager = null;
 
-    public PlayerManager playerManager = null;
     private UIHpsManager ui_PlayerHp = null;
     private UIBossHpsManager ui_BossHp = null;
     private UIWarningManager ui_disconnect = null;
-
-    public int bossMaxHp = 1;
-    public int playerMaxHp = 1;
 
     public FloatingJoystick MoveJoystick
     {
@@ -39,6 +37,7 @@ public class UIBattleUIManager : MonoBehaviour
     }
 
     #region Skill Button, Joysticks
+
     public void OnSkillJoystickDown(SkillSlot _slot)
     {
         skillUIManager.SetSkillUIEnabled(_slot, true);
@@ -63,6 +62,7 @@ public class UIBattleUIManager : MonoBehaviour
     {
         skillUIManager.SetSkillAimPoint(_slot, _horizontal, _vertical);
     }
+
     #endregion
 
     public void SetupAllUI() // 전체적으로 한번 싹 정하고 시작
