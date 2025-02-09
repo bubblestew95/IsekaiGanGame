@@ -10,13 +10,13 @@ public class MeleeSkill : AttackSkill
     {
         base.UseSkill(_player);
 
-        _player.EnableMeleeAttack(DamageCalculate(_player), aggro);
+        _player.AttackManager.AddDamageToBoss(DamageCalculate(_player), aggro);
     }
 
     public override void EndSkill(PlayerManager _player)
     {
         base.EndSkill(_player);
 
-        _player.DisableMeleeAttack();
+        _player.AttackManager.DisableMeleeAttack();
     }
 }

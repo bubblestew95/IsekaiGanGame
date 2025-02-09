@@ -32,7 +32,7 @@ public class AOESkill : AttackSkill
             // 충돌이 검출됐을 경우
             foreach (Collider hitCollider in hits)
             {
-                _player.AddDamageToBoss(DamageCalculate(_player), aggro);
+                _player.AttackManager.AddDamageToBoss(DamageCalculate(_player), aggro);
             }
 
             yield return waitSec;

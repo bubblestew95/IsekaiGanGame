@@ -43,10 +43,6 @@ public class SkillUIManager : MonoBehaviour
         {
             skillUI.AimSkill(_horizontal,_vertical);
         }
-        else
-        {
-            Debug.LogFormat("{0} type skill don't need to show skill area!", _type);
-        }
     }
 
     /// <summary>
