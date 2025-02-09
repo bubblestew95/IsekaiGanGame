@@ -60,6 +60,7 @@ public class RelayManager : MonoBehaviour
     {
         try
         {
+            Debug.Log("[RelayManager] Relay 서버 생성 요청...");
             // Relay 할당 요청
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers);
 
@@ -76,7 +77,7 @@ public class RelayManager : MonoBehaviour
                 return null;
             }
 
-            Debug.Log($"Relay created with join code: {joinCode}");
+            Debug.Log($"[RelayManager] Relay 생성 성공 - JoinCode: {joinCode}");
 
             // Netcode의 UnityTransport에 Relay 데이터 적용
             UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();

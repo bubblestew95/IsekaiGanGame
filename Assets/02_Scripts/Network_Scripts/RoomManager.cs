@@ -13,6 +13,9 @@ using System;
 using Player = Unity.Services.Lobbies.Models.Player;
 using Unity.Services.Matchmaker.Models;
 using UnityEditor.PackageManager;
+using Unity.Collections;
+using Unity.Netcode.Transports.UTP;
+using Unity.Networking.Transport.Relay;
 
 public class RoomManager : NetworkBehaviour
 {
@@ -74,23 +77,67 @@ public class RoomManager : NetworkBehaviour
             Debug.LogError("RoomManager: RelayManager 인스턴스가 존재하지 않습니다!");
             return;
         }
-        while (NetworkManager.Singleton == null)
+        if (NetworkManager.Singleton == null)
         {
-            Debug.LogWarning("RoomManager: NetworkManager.Singleton이 아직 초기화되지 않음, 대기 중...");
-            await Task.Delay(100);
+            Debug.LogError("[RoomManager] NetworkManager가 존재하지 않습니다!");
         }
-        // OnServerStarted 이벤트 등록
-        NetworkManager.Singleton.OnServerStarted += () =>
-        {
-            if (NetworkManager.Singleton.CustomMessagingManager == null)
-            {
-                Debug.LogError("RoomManager: CustomMessagingManager가 초기화되지 않았습니다!");
-                return;
-            }
 
-            Debug.Log("RoomManager: CustomMessagingManager 초기화 완료");
-            NetworkManager.Singleton.CustomMessagingManager.RegisterNamedMessageHandler("OnRelayMessage", OnRelayMessageReceived);
-        };
+        Debug.Log($"[RoomManager] 현재 NetworkManager 상태 - IsServer: {NetworkManager.Singleton.IsServer}, IsClient: {NetworkManager.Singleton.IsClient}, IsHost: {NetworkManager.Singleton.IsHost}");
+
+        // 최신 Unity 6에서 Relay 활성화 여부 확인
+        //UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        //if (transport == null)
+        //{
+        //    Debug.LogError("[RoomManager] UnityTransport가 존재하지 않습니다!");
+        //    return;
+        //}
+
+        //// Relay 서버 데이터 확인
+        //RelayServerData relayData;
+        //if (!transport.TryGetRelayServerData(out relayData))
+        //{
+        //    Debug.LogError("[RoomManager] Relay 서버 데이터가 설정되지 않았습니다! 서버 시작을 중단합니다.");
+        //    return;
+        //}
+
+        Debug.Log("[RoomManager] Relay 설정 확인 완료! StartHost() 실행 가능");
+
+
+        //while (NetworkManager.Singleton == null)
+        //{
+        //    Debug.LogWarning("RoomManager: NetworkManager.Singleton이 아직 초기화되지 않음, 대기 중...");
+        //    await Task.Delay(100);
+        //}
+
+        // 서버가 이미 실행 중이라면 즉시 핸들러 등록
+        if (NetworkManager.Singleton.IsServer)
+        {
+            Debug.Log("[RoomManager] 현재 서버 상태 - 이미 실행 중 (핸들러 즉시 등록)");
+            RegisterRelayMessageHandler();
+        }
+        else
+        {
+            // 서버 시작 후 실행되도록 이벤트 등록
+            Debug.Log("[RoomManager] 현재 서버가 아님. OnServerStarted 이벤트 등록 대기");
+            NetworkManager.Singleton.OnServerStarted += () =>
+            {
+                Debug.Log("[RoomManager] OnServerStarted 이벤트 실행됨!");
+                RegisterRelayMessageHandler();
+            };
+        }
+
+        // OnServerStarted 이벤트 등록
+        //NetworkManager.Singleton.OnServerStarted += () =>
+        //{
+        //    if (NetworkManager.Singleton == null || NetworkManager.Singleton.CustomMessagingManager == null)
+        //    {
+        //        Debug.LogError("RoomManager: NetworkManager 또는 CustomMessagingManager가 초기화되지 않았습니다!");
+        //        return;
+        //    }
+
+        //    Debug.Log("RoomManager: CustomMessagingManager 초기화 완료");
+        //    NetworkManager.Singleton.CustomMessagingManager.RegisterNamedMessageHandler("OnRelayMessage", OnRelayMessageReceived);
+        //};
 
         await InitializeServices(); // Unity Services 초기화
         // PlayerPrefs에서 username 불러오기
@@ -113,25 +160,48 @@ public class RoomManager : NetworkBehaviour
 
     }
 
+
+    void RegisterRelayMessageHandler()
+    {
+        if (NetworkManager.Singleton.CustomMessagingManager == null)
+        {
+            Debug.LogError("[RoomManager] CustomMessagingManager가 존재하지 않습니다!");
+            return;
+        }
+
+        Debug.Log("[RoomManager] CustomMessagingManager 초기화 완료 - 메시지 핸들러 등록 중...");
+        NetworkManager.Singleton.CustomMessagingManager.RegisterNamedMessageHandler("OnRelayMessage", OnRelayMessageReceived);
+    }
+
     // Relay에서 메시지를 수신하고 RoomList 갱신
     private void OnRelayMessageReceived(ulong clientId, FastBufferReader reader)
     {
-        reader.ReadValueSafe(out string message);
-        Debug.Log($"[Relay 메시지 수신] {message}");
+        Debug.Log($"[Relay 메시지 수신 - 서버] 메시지 수신 시작 (clientId: {clientId})");
+
+        ushort messageLength;
+        reader.ReadValueSafe(out messageLength); // 문자열 길이 먼저 읽기
+
+        byte[] messageBytes = new byte[messageLength];
+        reader.ReadBytesSafe(ref messageBytes, messageLength); // 문자열 데이터를 읽기
+
+        string message = System.Text.Encoding.UTF8.GetString(messageBytes); // UTF8로 변환
+
+        Debug.Log($"[Relay 메시지 수신 - 서버] 클라이언트({clientId})로부터 메시지 수신: {message}");
 
         string[] messageParts = message.Split('|');
-        if (messageParts.Length < 2) return;
+        if (messageParts.Length < 3) return;
 
         string command = messageParts[0];
         string roomId = messageParts[1];
         int playerCount = int.Parse(messageParts[2]);
 
-        if (command == "UpdateRoom" && messageParts.Length == 3)
+        if (command == "UpdateRoom")
         {
-            Debug.Log($"[Relay 메시지 처리] {roomId}의 인원 수 업데이트: {playerCount}/4");
+            Debug.Log($"[Relay 메시지 처리] {roomId}의 인원 수 업데이트: {playerCount}/{maxPlayers}");
             UpdateRoomPlayerCountServerRpc(roomId, playerCount);
         }
     }
+
 
 
     public async void CreateRoom()
@@ -295,6 +365,7 @@ public class RoomManager : NetworkBehaviour
                 Debug.LogError("Relay 참가 실패!");
                 return;
             }
+            SendMessageToServer($"UpdateRoom|{lobby.Id}|{lobby.Players.Count}");
 
             readyButton.gameObject.SetActive(true);
             roomNameInput.interactable = false;
@@ -352,6 +423,7 @@ public class RoomManager : NetworkBehaviour
                 Debug.Log("방에서 나갔으며, 새로운 유저가 입장 가능.");
             }
 
+
             roomNameInput.interactable = true;
             joinCodeInput.interactable = true;
             createRoomButton.interactable = true;
@@ -367,6 +439,25 @@ public class RoomManager : NetworkBehaviour
             Debug.LogError($"방 나가기 실패: {e.Message}");
         }
     }
+
+    public void SendMessageToServer(string message)
+    {
+        Debug.Log($"[Relay] 서버로 메시지 전송: {message}");
+
+        using (FastBufferWriter writer = new FastBufferWriter(1024, Allocator.Temp))
+        {
+            writer.WriteValueSafe((ushort)message.Length);
+            writer.WriteBytesSafe(System.Text.Encoding.UTF8.GetBytes(message));
+
+            Debug.Log($"[Relay] 서버 ID: {NetworkManager.ServerClientId}");
+            NetworkManager.Singleton.CustomMessagingManager.SendNamedMessage("OnRelayMessage", NetworkManager.ServerClientId, writer);
+        }
+    }
+
+
+
+
+
 
     //특정 방의 인원 수 업데이트
     private void UpdateRoomPlayerCount(string roomId, int playerCount)
@@ -522,18 +613,19 @@ public class RoomManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void UpdateRoomPlayerCountServerRpc(string roomId, int playerCount)
     {
-        Debug.Log($"[ServerRpc] {roomId}의 인원 수 업데이트: {playerCount}/4");
+        Debug.Log($"UpdateRoomPlayerCount [ServerRpc] {roomId}의 인원 수 업데이트: {playerCount}/{maxPlayers}");
         UpdateRoomPlayerCountClientRpc(roomId, playerCount);
     }
 
     [ClientRpc]
     private void UpdateRoomPlayerCountClientRpc(string roomId, int playerCount)
     {
+        Debug.Log($"UpdateRoomPlayerCount [ClientRpc] {roomId}의 인원 수 업데이트 완료 (클라이언트 {NetworkManager.Singleton.LocalClientId}): {playerCount}/{maxPlayers}");
         if (roomList.ContainsKey(roomId))
         {
             TMP_Text playerCountText = roomList[roomId].transform.Find("roomPlayers").GetComponent<TMP_Text>();
-            playerCountText.text = $"{playerCount}/4";
-            Debug.Log($"[ClientRpc] {roomId}의 인원 수 업데이트: {playerCount}/4");
+            playerCountText.text = $"{playerCount}/{maxPlayers}";
+            Debug.Log($"[ClientRpc] {roomId}의 인원 수 업데이트: {playerCount}/{maxPlayers}");
         }
     }
 
@@ -597,7 +689,7 @@ public class RoomManager : NetworkBehaviour
         if (roomList.ContainsKey(currentRoom))
         {
             TMP_Text playerCountText = roomList[currentRoom].transform.Find("roomPlayers").GetComponent<TMP_Text>();
-            if (playerCountText.text == "4/4")
+            if (playerCountText.text == $"{maxPlayers}/{maxPlayers}")
             {
                 Debug.Log("4명 입장 완료! 게임 씬으로 이동");
                 SceneManager.LoadScene(gameSceneName);
@@ -650,7 +742,7 @@ public class RoomManager : NetworkBehaviour
                 if (roomList.ContainsKey(lobby.Id))
                 {
                     TMP_Text playerCountText = roomList[lobby.Id].transform.Find("roomPlayers").GetComponent<TMP_Text>();
-                    playerCountText.text = $"{lobby.Players.Count}/4";
+                    playerCountText.text = $"{lobby.Players.Count}/{lobby.MaxPlayers}";
                 }
                 else
                 {
