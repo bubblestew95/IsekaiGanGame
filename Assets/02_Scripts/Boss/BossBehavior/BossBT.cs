@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Linq;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BossBT : MonoBehaviour
+public class BossBT : NetworkBehaviour
 {
     public delegate void BTDelegate();
     public BTDelegate behaviorEndCallback;
-    public BTDelegate phase2BehaviorEndCallback;
+    public BTDelegate phase2BehaviorStartCallback;
 
     [SerializeField] public BossState curState;
     [SerializeField] private Animator anim;
@@ -32,27 +33,30 @@ public class BossBT : MonoBehaviour
 
     private void Update()
     {
-        // 죽었을때
-        if (curState == BossState.Die && !isDie)
+        if (IsServer)
         {
-            StopCoroutine(curCoroutine);
-            StartCoroutine(curState.ToString());
+            // 죽었을때
+            if (curState == BossState.Die && !isDie)
+            {
+                StopCoroutine(curCoroutine);
+                StartCoroutine(curState.ToString());
 
-            isDie = true;
-        }
+                isDie = true;
+            }
 
-        // 스턴 걸렸을때
-        if (curState == BossState.Stun && !isStun)
-        {
-            StopCoroutine(curCoroutine);
-            StartCoroutine(curState.ToString());
-            isStun = true;
-        }
+            // 스턴 걸렸을때
+            if (curState == BossState.Stun && !isStun)
+            {
+                StopCoroutine(curCoroutine);
+                StartCoroutine(curState.ToString());
+                isStun = true;
+            }
 
-        // 아무것도 아닐때
-        if (!isCoroutineRunning)
-        {
-            curCoroutine = StartCoroutine(curState.ToString());
+            // 아무것도 아닐때
+            if (!isCoroutineRunning)
+            {
+                curCoroutine = StartCoroutine(curState.ToString());
+            }
         }
     }
 
@@ -457,7 +461,6 @@ public class BossBT : MonoBehaviour
 
         // 애니메이션 시작
         SetAnimBool(curState, true);
-        // anim.SetBool("Attack6Flag", true);
 
         // 애니메이션 끝
         while (true)
@@ -512,20 +515,15 @@ public class BossBT : MonoBehaviour
         {
             if (CheckEndAnim(curState))
             {
-                // boss의 skin을 사라지게 하기, collider도 잠시 비활성화
-                bossStateManager.BossSkin.SetActive(false);
-                bossStateManager.HitCollider.enabled = false;
-
-                // boss의 Tr을 공격위치로 옮기기
-                bossStateManager.Boss.transform.position = bossAttackManager.CircleSkillPos[0].transform.position;
+                Attack7BeforeClientRpc();
 
                 // 몇초있다가 (총 공격 delay에서 내려찍는데 까지 걸리는 시간을 뻄)
                 yield return new WaitForSeconds(bossAttackManager.Delay - 1.1f);
 
+                Attack7AfterClientRpc();
+
                 // 애니메이션 재생 및 skin, collider 활성화
                 anim.SetBool("Attack7-1Flag", true);
-                bossStateManager.BossSkin.SetActive(true);
-                bossStateManager.HitCollider.enabled = true; ;
                 break;
             }
             yield return null;
@@ -699,10 +697,10 @@ public class BossBT : MonoBehaviour
         ResetAnimBool();
         nvAgent.speed = 3f;
         bossStateManager.Boss.transform.position = new Vector3(bossStateManager.Boss.transform.position.x, 0f, bossStateManager.Boss.transform.position.z);
-        bossStateManager.BossSkin.SetActive(true);
-        bossStateManager.HitCollider.enabled = true;
-        bossStateManager.Boss.tag = "Untagged";
         nvAgent.ResetPath();
+
+        // 동기화 해야하는거
+        StunSyncClientRpc();
 
         // 스턴 애니메이션 강제 재생
         anim.Play("Stun");
@@ -750,12 +748,12 @@ public class BossBT : MonoBehaviour
         {
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Phase2"))
             {
-                // 카메라 움직이고, 브금 변경 콜백
+                
                 if (once)
                 {
                     once = false;
-                    StartCoroutine(phase2Cam.MoveCam());
-                    phase2BehaviorEndCallback?.Invoke();
+                    // 카메라 움직이고, 브금 변경 콜백
+                    Phase2StartClientRpc();
                 }
 
                 // 보스 가운대로 설정하고
@@ -789,10 +787,7 @@ public class BossBT : MonoBehaviour
             {
                 // 카메라 흔들기
                 once = false;
-                StartCoroutine(phase2Cam.ShakeCam());
-
-                // Map Material 변경(여기서 Fire네모, 나무에 Fire생성하는 작업까지), 보스 Mat 변경, 보스 Fire이펙트, 맵장판 파티클 생성하는것도 설정, 보스 2페이즈로 세팅하는것까지 
-                phase2Set.BossPhase2Set();
+                Phase2RoarClientRpc();
             }
 
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Phase2-1") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
@@ -858,4 +853,62 @@ public class BossBT : MonoBehaviour
         }
     }
     #endregion
+
+    #region [ClientRpc]
+
+    [ClientRpc]
+    private void Attack7BeforeClientRpc()
+    {
+        // boss의 skin을 사라지게 하기, collider도 잠시 비활성화
+        bossStateManager.BossSkin.SetActive(false);
+        bossStateManager.HitCollider.enabled = false;
+
+        // boss의 Tr을 공격위치로 옮기기
+        bossStateManager.Boss.transform.position = bossAttackManager.CircleSkillPos[0].transform.position;
+    }
+
+    [ClientRpc]
+    private void Attack7AfterClientRpc()
+    {
+        bossStateManager.BossSkin.SetActive(true);
+        bossStateManager.HitCollider.enabled = true; ;
+    }
+
+    // 스턴 상태 동기화
+    [ClientRpc]
+    private void StunSyncClientRpc()
+    {
+        bossStateManager.BossSkin.SetActive(true);
+        bossStateManager.HitCollider.enabled = true;
+        bossStateManager.Boss.tag = "Untagged";
+    }
+
+    // 카메라 움직이고, 브금 변경 콜백
+    [ClientRpc]
+    private void Phase2StartClientRpc()
+    {
+        StartCoroutine(phase2Cam.MoveCam());
+        phase2BehaviorStartCallback?.Invoke();
+    }
+
+    // 쿠와왕할때 동기화 시킬것들
+    [ClientRpc]
+    private void Phase2RoarClientRpc()
+    {
+        // 카메라 흔들기
+        StartCoroutine(phase2Cam.ShakeCam());
+
+        // Map Material 변경(여기서 Fire네모, 나무에 Fire생성하는 작업까지), 보스 Mat 변경, 보스 Fire이펙트, 맵장판 파티클 생성하는것도 설정, 보스 2페이즈로 세팅하는것까지 
+        phase2Set.BossPhase2Set();
+    }
+
+    // 페이즈2 끝나고
+    [ClientRpc]
+    private void Phase2EndClientRpc()
+    {
+        // 카메라 원상복귀
+        StartCoroutine(phase2Cam.ReturnCam());
+    }
+    #endregion
+
 }

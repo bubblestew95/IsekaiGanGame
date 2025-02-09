@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.LogFormat("Player deal to boss! damage : {0}, aggro : {1}", _damage, _aggro);
 
-        bossStateManager.TakeDamage(_damageGiver, _damage, _aggro);
+        // bossStateManager.TakeDamage(_damageGiver, _damage, _aggro);
 
         // UI 동기화
         // 추후 멀티 연동할 때 이 부분은 아마도 수정해야 할 듯?

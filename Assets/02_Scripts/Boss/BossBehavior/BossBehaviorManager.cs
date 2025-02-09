@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class BossBehaviorManager : MonoBehaviour
+public class BossBehaviorManager : NetworkBehaviour
 {
     [SerializeField] private BossStateManager bossStateManager;
     [SerializeField] private BossSkillManager bossSkillManager;
@@ -18,23 +19,13 @@ public class BossBehaviorManager : MonoBehaviour
 
     private void Start()
     {
-        bossBT.behaviorEndCallback += () => StartCoroutine(BossPerformAction());
-        bossStateManager.bossHp10Callback += SetHP10;
-        bossStateManager.bossHpHalfCallback += SetHPHalf;
-        bossStateManager.bossStunCallback += SetStun;
-        bossStateManager.bossDieCallback += SetDie;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (IsServer)
         {
-            SetHP10();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SetHPHalf();
+            bossBT.behaviorEndCallback += () => StartCoroutine(BossPerformAction());
+            bossStateManager.bossHp10Callback += SetHP10;
+            bossStateManager.bossHpHalfCallback += SetHPHalf;
+            bossStateManager.bossStunCallback += SetStun;
+            bossStateManager.bossDieCallback += SetDie;
         }
     }
 

@@ -74,6 +74,7 @@ public class BossAttackManager : MonoBehaviour
 
     private void PerformAttack(string _state)
     {
+        Debug.Log(_state + "호출됨");
         switch (_state)
         {
             case "Attack1":
@@ -157,7 +158,7 @@ public class BossAttackManager : MonoBehaviour
 
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         angle = 90f;
-        radius = range/2;
+        radius = range / 2;
         thickness = 1f;
         segmentCount = 50;
 
@@ -216,10 +217,10 @@ public class BossAttackManager : MonoBehaviour
         foreach (GameObject skillPos in circleSkillPos)
         {
             skillPos.transform.position = new Vector3(bossStateManager.Players[cnt].transform.position.x, 0.3f, bossStateManager.Players[cnt].transform.position.z);
-            if (bossStateManager.Players.Length != 1)
-            {
-                cnt++;
-            }
+
+            cnt++;
+
+            if (cnt == bossStateManager.Players.Length) break;
         }
 
         // 스킬 데미지 설정
