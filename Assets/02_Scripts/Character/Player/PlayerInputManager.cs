@@ -1,22 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+
 using UnityEngine;
 
 using StructTypes;
-using System.Collections.Generic;
 using EnumTypes;
 
 public class PlayerInputManager
 {
+    private PlayerManager playerManager = null;
+
     /// <summary>
     /// 가상 조이스틱 컴포넌트 지정.
     /// </summary>
     private FloatingJoystick joystick = null;
 
+    #region Input Buffer
+
     private Queue<InputBufferData> skillBuffer = new Queue<InputBufferData>();
     private readonly float checkDequeueTime = 0.05f;
     private float remainDequeueTime = 0f;
+    private InputBufferData nullInputBuffer = new InputBufferData();
+
+    #endregion
 
     private Vector3 lastSkillUsePoint = Vector3.zero;
-    private InputBufferData nullInputBuffer = new InputBufferData();
 
     public Vector3 LastSkillUsePoint
     {
@@ -25,11 +33,17 @@ public class PlayerInputManager
 
     #region Public Func
 
-    public void Init(FloatingJoystick _joystick)
+    public void Init(PlayerManager _playerManager)
     {
-        joystick = _joystick;
+        playerManager = _playerManager;
+
+        joystick = _playerManager.BattleUIManager.MoveJoystick;
     }
 
+    /// <summary>
+    /// 가상 조이스틱의 입력 값을 받아온다.
+    /// </summary>
+    /// <param name="_inputData">가상 조이스틱의 입력 값을 저장할 구조체의 참조</param>
     public void GetJoystickInputValue(out JoystickInputData _inputData)
     {
         _inputData.x = joystick.Horizontal;
@@ -39,17 +53,9 @@ public class PlayerInputManager
     /// <summary>
     /// 정해진 시간마다 스킬 입력 버퍼에서 입력를 하나씩 빼서 삭제하는 처리를 한다.
     /// </summary>
-    public void PopSkillInputBuffer()
+    public void StartInputBufferPop()
     {
-        if (skillBuffer.Count > 0 && remainDequeueTime > 0f)
-            remainDequeueTime -= Time.deltaTime;
-
-        if (remainDequeueTime <= 0f)
-        {
-            remainDequeueTime = checkDequeueTime;
-            if (skillBuffer.Count > 0)
-                skillBuffer.Dequeue();
-        }
+        playerManager.StartCoroutine(PopInputBufferCoroutine());
     }
 
     /// <summary>
@@ -83,5 +89,28 @@ public class PlayerInputManager
 
         return nullInputBuffer;
     }
+
+    private IEnumerator PopInputBufferCoroutine()
+    {
+        float remainTime = 0f;
+
+        while(true)
+        {
+            // 입력 버퍼가 비어있지 않고, Dequeue 시간이 남아있을 때만 시간을 감소시킨다.
+            if (skillBuffer.Count > 0 && remainTime > 0f)
+                remainTime -= Time.deltaTime;
+
+            // Dequeue 시간이 다 되었을 때 Dequeue를 시도한다.
+            if (remainTime <= 0f)
+            {
+                remainTime = checkDequeueTime;
+
+                // Dequeue 시도
+                if (skillBuffer.Count > 0)
+                    skillBuffer.Dequeue();
+            }
+        }
+    }
+
     #endregion
 }

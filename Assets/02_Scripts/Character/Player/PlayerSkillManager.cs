@@ -3,7 +3,6 @@ using System.Linq;
 using UnityEngine;
 
 using EnumTypes;
-using UnityEditor.VersionControl;
 using StructTypes;
 
 public class PlayerSkillManager
@@ -121,7 +120,7 @@ public class PlayerSkillManager
         skillDataMap[_type].UseSkill(playerManager);
     }
 
-    public PlayerSkillBase GetSkill(SkillSlot _type)
+    public PlayerSkillBase GetSkillData(SkillSlot _type)
     {
         return skillDataMap[_type];
     }
@@ -152,10 +151,6 @@ public class PlayerSkillManager
                 playerManager.BattleUIManager.ApplyCooltime(_type, GetCoolTime(_type));
         }
     }
-
-    #endregion
-
-    #region Private Functions
 
     #endregion
 }

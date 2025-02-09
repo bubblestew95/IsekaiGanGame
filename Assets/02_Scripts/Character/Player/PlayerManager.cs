@@ -46,8 +46,7 @@ public class PlayerManager : NetworkBehaviour
 
             #region Components
 
-    private CharacterController characterCont = null;
-    private Animator animator = null;
+    private CharacterController characterController = null;
 
             #endregion
 
@@ -146,7 +145,7 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public void StartSkill(SkillSlot _type)
     {
-        skillManager.GetSkill(_type).StartSkill(this);
+        skillManager.GetSkillData(_type).StartSkill(this);
     }
 
     /// <summary>
@@ -155,7 +154,7 @@ public class PlayerManager : NetworkBehaviour
     public void EndSkill(SkillSlot _type)
     {
         Debug.LogFormat("End Skill type {0}", _type);
-        skillManager.GetSkill(_type).EndSkill(this);
+        skillManager.GetSkillData(_type).EndSkill(this);
     }
 
     /// <summary>
@@ -198,7 +197,7 @@ public class PlayerManager : NetworkBehaviour
         statusManager.Init(this);
 
         playerInputManager = new PlayerInputManager();
-        playerInputManager.Init(battleUIManager.MoveJoystick);
+        playerInputManager.Init(this);
 
         attackManager = new PlayerAttackManager();
         attackManager.Init(this);
@@ -219,8 +218,7 @@ public class PlayerManager : NetworkBehaviour
 
     private void Awake()
     {
-        characterCont = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
+        characterController = GetComponent<CharacterController>();
 
         InitStates();
 
@@ -234,14 +232,15 @@ public class PlayerManager : NetworkBehaviour
         if (GetComponent<NetworkObject>().IsOwner)
         {
             battleUIManager.transform.parent.gameObject.SetActive(true);
-            characterCont.enabled = true;
+            characterController.enabled = true;
+
+            // 입력 버퍼의 갱신을 시작한다.
+            InputManager.StartInputBufferPop();
         }
     }
 
     private void Update()
     {
-        InputManager.PopSkillInputBuffer();
-
         // 현재 상태에 따른 행동을 업데이트한다.
         stateMachine.UpdateState();
 
