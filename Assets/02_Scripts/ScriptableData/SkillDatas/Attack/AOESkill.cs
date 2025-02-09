@@ -24,7 +24,7 @@ public class AOESkill : AttackSkill
     {
         float currentTime = 0f;
         WaitForSeconds waitSec = new WaitForSeconds(damageTickTime);
-        Vector3 damagePos = _player.LastSkillUsePoint;
+        Vector3 damagePos = _player.InputManager.LastSkillUsePoint;
 
         while (currentTime <= duration)
         {

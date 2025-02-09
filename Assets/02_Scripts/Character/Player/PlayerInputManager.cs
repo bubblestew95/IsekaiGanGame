@@ -18,6 +18,11 @@ public class PlayerInputManager
     private Vector3 lastSkillUsePoint = Vector3.zero;
     private InputBufferData nullInputBuffer = new InputBufferData();
 
+    public Vector3 LastSkillUsePoint
+    {
+        get { return lastSkillUsePoint; }
+    }
+
     #region Public Func
 
     public void Init(FloatingJoystick _joystick)
@@ -32,7 +37,7 @@ public class PlayerInputManager
     }
 
     /// <summary>
-    /// 정해진 시간마다 스킬 입력 버퍼에서 입력를 하나씩 빼내는 처리를 한다.
+    /// 정해진 시간마다 스킬 입력 버퍼에서 입력를 하나씩 빼서 삭제하는 처리를 한다.
     /// </summary>
     public void PopSkillInputBuffer()
     {

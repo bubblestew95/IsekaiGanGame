@@ -40,6 +40,7 @@ public class PlayerManager : NetworkBehaviour
     private PlayerAttackManager attackManager = null;
     private PlayerAnimationManager animationManager = null;
     private PlayerNetworkController networkController = null;
+    private PlayerMovementManager movementManager = null;
 
             #endregion
 
@@ -47,12 +48,6 @@ public class PlayerManager : NetworkBehaviour
 
     private CharacterController characterCont = null;
     private Animator animator = null;
-
-            #endregion
-
-            #region Variables
-
-    private Vector3 lastSkillUsePoint = Vector3.zero;
 
             #endregion
 
@@ -70,11 +65,6 @@ public class PlayerManager : NetworkBehaviour
     public Transform RangeAttackStartTr
     {
         get { return rangeAttackStartTr; }
-    }
-
-    public Vector3 LastSkillUsePoint
-    {
-        get { return lastSkillUsePoint; }
     }
 
     public MeleeWeapon PlayerMeleeWeapon
@@ -124,35 +114,18 @@ public class PlayerManager : NetworkBehaviour
         get { return attackManager; }
     }
 
+    public PlayerMovementManager MovementManager
+    {
+        get { return movementManager; }
+    }
+
         #endregion
 
     #endregion
 
     #region Public Functions
 
-        #region Move, State Functions
-
-    /// <summary>
-    /// 조이스틱 입력을 받고 움직임을 처리한다.
-    /// </summary>
-    public void MoveByJoystick(JoystickInputData _inputData)
-    {
-        float speed = playerData.walkSpeed;
-
-        Vector3 moveVector = new Vector3(_inputData.x, 0f, _inputData.z) * speed * Time.deltaTime;
-
-        characterCont.Move(moveVector);
-
-        float currentSpeed = moveVector.sqrMagnitude;
-
-        AnimationManager.SetAnimatorWalkSpeed(currentSpeed);
-
-        if (currentSpeed == 0f)
-            return;
-
-        if(moveVector != Vector3.zero)
-            transform.rotation = Quaternion.LookRotation(moveVector);
-    }
+        #region State Functions
 
     /// <summary>
     /// 현재 플레이어의 동작 상태를 변경한다.
@@ -235,6 +208,9 @@ public class PlayerManager : NetworkBehaviour
 
         networkController = new PlayerNetworkController();
         networkController.Init(this);
+
+        movementManager = new PlayerMovementManager();
+        movementManager.Init(this);
     }
 
     #endregion
@@ -260,7 +236,6 @@ public class PlayerManager : NetworkBehaviour
             battleUIManager.transform.parent.gameObject.SetActive(true);
             characterCont.enabled = true;
         }
-
     }
 
     private void Update()

@@ -31,7 +31,7 @@ public class IdleState : BasePlayerState
 
         // 대기 상태일 때만 움직일 수 있음.
         playerMng.InputManager.GetJoystickInputValue(out joystickInputData);
-        playerMng.MoveByJoystick(joystickInputData);
+        playerMng.MovementManager.MoveByJoystick(joystickInputData);
 
         // 대기 상태일 때만 스킬이 사용 가능함. 스킬 사용 체크.
         InputBufferData inputBuffer = playerMng.InputManager.GetNextInput();
