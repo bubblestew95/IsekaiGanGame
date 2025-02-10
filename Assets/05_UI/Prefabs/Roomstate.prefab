@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3512836335298608719}
   - component: {fileID: 5106284455541022597}
   - component: {fileID: 4977743009466468435}
+  - component: {fileID: -8794906554338028683}
   m_Layer: 5
   m_Name: Roomstate
   m_TagString: Untagged
@@ -92,6 +93,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomNameText: {fileID: 7721316215249960755}
   playerCountText: {fileID: 1563347662377684182}
+--- !u!114 &-8794906554338028683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3461473019176190780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
 --- !u!1 &3583412446978919615
 GameObject:
   m_ObjectHideFlags: 0

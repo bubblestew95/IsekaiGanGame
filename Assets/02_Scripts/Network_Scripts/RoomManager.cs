@@ -423,6 +423,7 @@ public class RoomManager : NetworkBehaviour
 
         try
         {
+            Debug.Log($"[JoinSelectedRoom] 방 참가 요청: {currentRoom}");
             // 선택된 Room ID를 사용하여 입장
             Lobby lobby = await LobbyService.Instance.GetLobbyAsync(currentRoom);
             if (lobby == null)
@@ -523,10 +524,20 @@ public class RoomManager : NetworkBehaviour
         }
     }
 
+    public void OnRoomItemClicked(RoomItem clickedRoom)
+    {
+        if (clickedRoom == null)
+        {
+            Debug.LogError("[RoomManager] 클릭된 RoomItem이 null입니다!");
+            return;
+        }
 
+        string selectedRoomId = clickedRoom.GetRoomId();
+        Debug.Log($"[RoomManager] 선택된 방 ID: {selectedRoomId}");
 
-
-
+        // 현재 선택된 방 ID 업데이트
+        SetCurrentRoom(selectedRoomId);
+    }
 
     //특정 방의 인원 수 업데이트
     private void UpdateRoomPlayerCount(string roomId, int playerCount)
@@ -853,42 +864,68 @@ public class RoomManager : NetworkBehaviour
             QueryLobbiesOptions options = new QueryLobbiesOptions
             {
                 Filters = new List<QueryFilter>
-            {
-                new QueryFilter(QueryFilter.FieldOptions.AvailableSlots, "0", QueryFilter.OpOptions.GT)
-            }
+                {
+                    new QueryFilter(QueryFilter.FieldOptions.AvailableSlots, "0", QueryFilter.OpOptions.GT)
+                }
             };
 
             QueryResponse response = await LobbyService.Instance.QueryLobbiesAsync(options);
 
+
+            //foreach (var lobby in response.Results)
+            //{
+            //    if (roomList.ContainsKey(lobby.Id))
+            //    {
+            //        // RoomItem 프리팹 생성
+            //        TMP_Text playerCountText = roomList[lobby.Id].transform.Find("roomPlayers").GetComponent<TMP_Text>();
+            //        playerCountText.text = $"{lobby.Players.Count}/{lobby.MaxPlayers}";
+
+
+            //        // SetRoomInfo 호출 및 디버그 로그 확인
+            //        //roomItem.SetRoomInfo(lobby.Id, lobby.Name, lobby.Players.Count, lobby.MaxPlayers);
+            //    }
+            //    else
+            //    {
+            //        GameObject newRoom = Instantiate(roomPrefab, roomListParent);
+            //        newRoom.transform.Find("roomName").GetComponent<TMP_Text>().text = lobby.Name;
+            //        newRoom.transform.Find("roomPlayers").GetComponent<TMP_Text>().text = $"{lobby.Players.Count}/4";
+            //        roomList.Add(lobby.Id, newRoom);
+            //    }
+            //}
             foreach (var lobby in response.Results)
             {
-                if (roomList.ContainsKey(lobby.Id))
+                if (!roomList.ContainsKey(lobby.Id))
                 {
-                    TMP_Text playerCountText = roomList[lobby.Id].transform.Find("roomPlayers").GetComponent<TMP_Text>();
-                    playerCountText.text = $"{lobby.Players.Count}/{lobby.MaxPlayers}";
+                    // RoomItem 프리팹 생성
+                    GameObject newRoom = Instantiate(roomPrefab, roomListParent);
+                    RoomItem roomItem = newRoom.GetComponent<RoomItem>();
+
+                    // SetRoomInfo 호출 및 디버그 로그 확인
+                    roomItem.SetRoomInfo(lobby.Id, lobby.Name, lobby.Players.Count, lobby.MaxPlayers);
+
+                    roomList.Add(lobby.Id, newRoom);
                 }
                 else
                 {
-                    GameObject newRoom = Instantiate(roomPrefab, roomListParent);
-                    newRoom.transform.Find("roomName").GetComponent<TMP_Text>().text = lobby.Name;
-                    newRoom.transform.Find("roomPlayers").GetComponent<TMP_Text>().text = $"{lobby.Players.Count}/4";
-                    roomList.Add(lobby.Id, newRoom);
+                    // 이미 존재하는 방의 플레이어 수 갱신
+                    TMP_Text playerCountText = roomList[lobby.Id].transform.Find("roomPlayers").GetComponent<TMP_Text>();
+                    playerCountText.text = $"{lobby.Players.Count}/{lobby.MaxPlayers}";
                 }
             }
 
             //  현재 호스트가 속한 방을 따로 갱신
-            if (!string.IsNullOrEmpty(currentRoom))
-            {
-                Lobby myLobby = await LobbyService.Instance.GetLobbyAsync(currentRoom);
-                if (myLobby != null)
-                {
-                    if (roomList.ContainsKey(currentRoom))
-                    {
-                        TMP_Text playerCountText = roomList[currentRoom].transform.Find("roomPlayers").GetComponent<TMP_Text>();
-                        playerCountText.text = $"{myLobby.Players.Count}/4";
-                    }
-                }
-            }
+            //if (!string.IsNullOrEmpty(currentRoom))
+            //{
+            //    Lobby myLobby = await LobbyService.Instance.GetLobbyAsync(currentRoom);
+            //    if (myLobby != null)
+            //    {
+            //        if (roomList.ContainsKey(currentRoom))
+            //        {
+            //            TMP_Text playerCountText = roomList[currentRoom].transform.Find("roomPlayers").GetComponent<TMP_Text>();
+            //            playerCountText.text = $"{myLobby.Players.Count}/4";
+            //        }
+            //    }
+            //}
         }
         catch (LobbyServiceException e)
         {
