@@ -12,16 +12,31 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Inspector Variables
+
+    [SerializeField]
+    private bool isLocalGame = false;
+
     #endregion
 
     #region Private Variables
 
     private BossStateManager bossStateManager = null;
+    private NetworkGameManager networkGameManager = null;
+
+    #endregion
+
+    #region Properties
+
+    public bool IsLocalGame
+    {
+        get { return isLocalGame; }
+    }
 
     #endregion
 
 
     #region Public Functions
+
     public Transform GetBossTransform()
     {
         return bossStateManager.transform;
@@ -48,22 +63,36 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 보스가 플레이어에게 데미지를 가함.
+    /// 플레이어가 데미지를 받음.
+    /// </summary>
+    /// <param name="_damageReceiver">데미지를 받은 플레이어</param>
+    public void DamageToPlayer
+        (PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDist)
+    {
+        // 로컬 게임일 경우
+        if (IsLocalGame)
+        {
+            ApplyDamageToPlayer(_damageReceiver, _damage, _attackPos, _knockBackDist);
+        }
+        // 멀티 게임일 경우
+        else
+        {
+            networkGameManager.SendPlayerHittedToServer(_damageReceiver, _damage, _attackPos, _knockBackDist);
+        }
+    }
+
+    /// <summary>
+    /// 실제로 플레이어에게 데미지를 적용하는 함수.
     /// </summary>
     /// <param name="_damageReceiver"></param>
-    public void DamageToPlayer(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDis)
+    /// <param name="_damage"></param>
+    /// <param name="_attackPos"></param>
+    /// <param name="_knockBackDist"></param>
+    public void ApplyDamageToPlayer
+        (PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDist)
     {
-        _damageReceiver.AttackManager.TakeDamage(_damage, _attackPos, _knockBackDis);
-
+        _damageReceiver.AttackManager.TakeDamage(_damage, _attackPos, _knockBackDist);
         UpdatePlayerHpUI(_damageReceiver);
-    }
-
-    public void DamageToBoss_Multi(ulong _clientId, int _damage, float _aggro)
-    {
-    }
-
-    public void DamageToPlayer_Multi(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDis)
-    {
     }
 
     #endregion
@@ -101,6 +130,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         bossStateManager = FindAnyObjectByType<BossStateManager>();
+        networkGameManager = FindAnyObjectByType<NetworkGameManager>();
     }
 
     #endregion
