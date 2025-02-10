@@ -57,7 +57,7 @@ public class GameManager : NetworkBehaviour
 
         ulong clientId = _damageGiver.GetComponent<NetworkObject>().OwnerClientId;
 
-        if (_damageGiver.IsClient)
+        if (true)//(_damageGiver.IsClient)
         {
             DamageToBoss_Multi(clientId, _damage, _aggro);
         }

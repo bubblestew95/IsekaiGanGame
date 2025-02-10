@@ -78,7 +78,7 @@ public class NetworkGameManager : NetworkBehaviour
     {
         if(multiPlayersMap.TryGetValue(_cliendId, out PlayerManager playerManager))
         {
-            GameManager.Instance.ApplyDamageToPlayer(playerManager, _damage, _attackPos, _knockbackDist);
+            // GameManager.Instance.ApplyDamageToPlayer(playerManager, _damage, _attackPos, _knockbackDist);
         }
     }
 
@@ -95,7 +95,7 @@ public class NetworkGameManager : NetworkBehaviour
     {
         if (multiPlayersMap.TryGetValue(_cliendId, out PlayerManager playerManager))
         {
-            GameManager.Instance.ApplyDamageToBoss(playerManager, _damage, _aggro);
+            // GameManager.Instance.ApplyDamageToBoss(playerManager, _damage, _aggro);
         }
     }
 

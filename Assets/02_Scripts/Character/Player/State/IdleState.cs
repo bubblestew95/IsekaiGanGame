@@ -18,7 +18,7 @@ public class IdleState : BasePlayerState
     public override void OnEnterState()
     {
         networkObj = playerManager.GetComponent<NetworkObject>();
-        isLocalGame = GameManager.Instance.IsLocalGame;
+        // isLocalGame = GameManager.Instance.IsLocalGame;
     }
 
     public override void OnExitState()
