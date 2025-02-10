@@ -11,7 +11,7 @@ public class NetworkGameManager : NetworkBehaviour
 
     #region Public Functions
 
-    public void SendPlayerHittedToServer
+    public void OnPlayerDamaged
         (PlayerManager _playerManager, int _damage, Vector3 _attackPos, float _knockbackDist)
     {
         ulong cliendId = _playerManager.GetComponent<NetworkObject>().OwnerClientId;
@@ -24,6 +24,13 @@ public class NetworkGameManager : NetworkBehaviour
 
         #region Client To Server RPC
 
+    /// <summary>
+    /// 플레이어가 데미지를 받았음을 서버에게 알린다.
+    /// </summary>
+    /// <param name="_cliendId"></param>
+    /// <param name="_damage"></param>
+    /// <param name="_attackPos"></param>
+    /// <param name="_knockbackDist"></param>
     [Rpc(SendTo.Server)]
     private void PlayerDamagedRpc
         (ulong _cliendId, int _damage, Vector3 _attackPos, float _knockbackDist)
@@ -35,6 +42,13 @@ public class NetworkGameManager : NetworkBehaviour
 
         #region Server To Client RPC
 
+    /// <summary>
+    /// 서버에서 특정 플레이어에게 데미지를 적용하도록 모든 클라이언트에게 명령한다.
+    /// </summary>
+    /// <param name="_cliendId"></param>
+    /// <param name="_damage"></param>
+    /// <param name="_attackPos"></param>
+    /// <param name="_knockbackDist"></param>
     [Rpc(SendTo.Everyone)]
     private void ApplyDamageToPlayerRpc
         (ulong _cliendId, int _damage, Vector3 _attackPos, float _knockbackDist)

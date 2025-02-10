@@ -77,7 +77,8 @@ public class GameManager : MonoBehaviour
         // 멀티 게임일 경우
         else
         {
-            networkGameManager.SendPlayerHittedToServer(_damageReceiver, _damage, _attackPos, _knockBackDist);
+            // 네트워크 게임 매니저에게 플레이어가 데미지를 받았음을 알린다.
+            networkGameManager.OnPlayerDamaged(_damageReceiver, _damage, _attackPos, _knockBackDist);
         }
     }
 
