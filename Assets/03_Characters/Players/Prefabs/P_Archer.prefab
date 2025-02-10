@@ -10825,6 +10825,7 @@ GameObject:
   - component: {fileID: 2131632820310466139}
   - component: {fileID: -287821195716040168}
   - component: {fileID: -8549285457553216154}
+  - component: {fileID: 768737984502602709}
   m_Layer: 9
   m_Name: P_Archer
   m_TagString: Player
@@ -10909,7 +10910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1027924000
+  GlobalObjectIdHash: 3803652227
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -10934,12 +10935,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bfa38ae7095fa64aa2e58d734226279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
   playerData: {fileID: 11400000, guid: acdbef012a391a0419e3f3e3023cdc21, type: 2}
   battleUIManager: {fileID: 4146408885389238575}
   rangeAttackStartTr: {fileID: 3783926205617964531}
   meleeWeapon: {fileID: 0}
-  isLocalGame: 0
 --- !u!114 &2131632820310466139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10952,6 +10951,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90a88b3501676794bbaba1a9e2f8a27e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleDataList: []
 --- !u!114 &-287821195716040168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11073,6 +11073,23 @@ MonoBehaviour:
     TriggerNameHash: -1685328449
     TransitionIndex: 5
   m_Animator: {fileID: 9563318}
+--- !u!114 &768737984502602709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a88b3501676794bbaba1a9e2f8a27e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleDataList:
+  - particleName: ArrowRain
+    particlePrefab: {fileID: 2232111375016833989, guid: 7f80baed94a37294fa07eb5faf2668c7, type: 3}
+  - particleName: BackJump
+    particlePrefab: {fileID: 1141330259687333427, guid: 833991be4f51dc7439d6474656e963a7, type: 3}
 --- !u!1 &179126
 GameObject:
   m_ObjectHideFlags: 0
@@ -13948,7 +13965,7 @@ Transform:
   m_Children:
   - {fileID: 4554398382176959353}
   m_Father: {fileID: 497262}
-  m_LocalEulerAnglesHint: {x: -6.625597, y: -7.9467044, z: 167.48851}
+  m_LocalEulerAnglesHint: {x: 11.506557, y: -5.391297, z: 160.79976}
 --- !u!1001 &3467913445669204437
 PrefabInstance:
   m_ObjectHideFlags: 0

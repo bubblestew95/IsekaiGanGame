@@ -80,7 +80,7 @@ public class PlayerParticleController : MonoBehaviour
 
         SpawnParticle(particlePrefab,
             playerManager.AttackManager.RangeAttackTransform.position,
-            playerManager.AttackManager.RangeAttackTransform.rotation);
+            playerManager.transform.rotation);
     }
 
     private void SpawnParticle(GameObject _prefab, Vector3 _position, Quaternion _rotation)

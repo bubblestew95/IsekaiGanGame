@@ -16591,6 +16591,7 @@ GameObject:
   - component: {fileID: 2566862019923990714}
   - component: {fileID: 1735406565476749645}
   - component: {fileID: 4635323897246943225}
+  - component: {fileID: 814338709902927514}
   m_Layer: 9
   m_Name: P_Magician
   m_TagString: Player
@@ -16675,7 +16676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 822026061
+  GlobalObjectIdHash: 1302284663
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -16700,14 +16701,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bfa38ae7095fa64aa2e58d734226279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  OnPlayerDead:
-    m_PersistentCalls:
-      m_Calls: []
   playerData: {fileID: 11400000, guid: b1065aad03ec5d04887fa6139c19d48a, type: 2}
   battleUIManager: {fileID: 4141917459939949546}
   rangeAttackStartTr: {fileID: 3359624500367141553}
   meleeWeapon: {fileID: 0}
+--- !u!114 &814338709902927514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7514786493872156022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a88b3501676794bbaba1a9e2f8a27e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleDataList:
+  - particleName: MeteorAura
+    particlePrefab: {fileID: 3280519133390621005, guid: 83d8b73ebbb3c6342aee040c4ff245a1, type: 3}
+  - particleName: Meteor
+    particlePrefab: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+  - particleName: FlameThrower
+    particlePrefab: {fileID: 8400424712307853490, guid: efa44bbb7410de0459f8b24e062b9482, type: 3}
 --- !u!1 &7617502916217710384
 GameObject:
   m_ObjectHideFlags: 0
