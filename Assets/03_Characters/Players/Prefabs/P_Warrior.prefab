@@ -209,6 +209,7 @@ GameObject:
   - component: {fileID: 6102925824277653354}
   - component: {fileID: -2252394323271902163}
   - component: {fileID: 2948108365831047824}
+  - component: {fileID: -7532033392060990961}
   m_Layer: 9
   m_Name: P_Warrior
   m_TagString: Player
@@ -293,7 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 312981802
+  GlobalObjectIdHash: 3969461586
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -318,12 +319,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bfa38ae7095fa64aa2e58d734226279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
   playerData: {fileID: 11400000, guid: 9d4d5139111222842a09ca82cd7da42a, type: 2}
   battleUIManager: {fileID: 3805999972285357715}
   rangeAttackStartTr: {fileID: 0}
   meleeWeapon: {fileID: 8597105898812681551}
-  isLocalGame: 0
 --- !u!114 &6102925824277653354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,6 +456,19 @@ MonoBehaviour:
     TriggerNameHash: -1761810982
     TransitionIndex: 5
   m_Animator: {fileID: 8322631880830459007}
+--- !u!114 &-7532033392060990961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1733868696496733154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f24119f1edcc2b84498ea1ca494768c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &2221377582622383236
 GameObject:
   m_ObjectHideFlags: 0

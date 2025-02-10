@@ -26,7 +26,7 @@ public class BossBT : NetworkBehaviour
     private bool isDie = false;
     private BossState previousBehavior;
     private float patternDelay = 2f;
-    private Coroutine curCoroutine;
+    public Coroutine curCoroutine;
 
     public float PatternDelay { get { return patternDelay; } set { patternDelay = value; } }
 

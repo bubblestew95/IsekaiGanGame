@@ -2737,9 +2737,29 @@ PrefabInstance:
       value: 1120013972
       objectReference: {fileID: 0}
     - target: {fileID: 2131148431429031677, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2131148431429031677, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: phase2Cam
       value: 
       objectReference: {fileID: 7551530356836386421}
+    - target: {fileID: 4155994505806969654, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5870383895420540904, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6308332450445231548, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6308332450445231548, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: fanSkillPos
       value: 
@@ -2841,6 +2861,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 899497084}
     - target: {fileID: 6881833285181368674, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6881833285181368674, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: phase1Particle
       value: 
       objectReference: {fileID: 788523580}
@@ -2848,6 +2872,14 @@ PrefabInstance:
       propertyPath: phase2Particle
       value: 
       objectReference: {fileID: 1005370971}
+    - target: {fileID: 7072979799601489313, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7796279537819312077, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7796279537819312077, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: aggroPlayer
       value: 
@@ -2899,6 +2931,10 @@ PrefabInstance:
     - target: {fileID: 9137032837993464747, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: m_Name
       value: P_Golem
+      objectReference: {fileID: 0}
+    - target: {fileID: 9137032837993464747, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3035,6 +3071,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d9498b218a4534b96a376815ed7120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &467294348 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8172849020746995793, guid: 2af5562ce69fc2d448481a1587a352a5, type: 3}
@@ -5368,7 +5405,6 @@ GameObject:
   m_Component:
   - component: {fileID: 882385688}
   - component: {fileID: 882385687}
-  - component: {fileID: 882385690}
   - component: {fileID: 882385689}
   m_Layer: 0
   m_Name: GameManagerTest
@@ -5430,34 +5466,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 882385685}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 418daee5a5763ab498711b2188ce53f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 587fa5dc697d9b54a84bb6bad258e920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &882385690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 882385685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce20b68e6601bac49b2a560b3778404e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  Characters:
+  prefabs:
   - {fileID: 179124, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
   - {fileID: 1733868696496733154, guid: 2c3b4b44c561d204987227d0d14da915, type: 3}
   - {fileID: 179124, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
   - {fileID: 7514786493872156022, guid: ade512d1f4c03314c9f8baabb487f1fc, type: 3}
-  SpwanTr:
+  spwanTr:
   - {fileID: 210764692}
   - {fileID: 1228246667}
   - {fileID: 471659402}
   - {fileID: 1408371289}
-  Players:
+  players:
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
 --- !u!1 &891663425

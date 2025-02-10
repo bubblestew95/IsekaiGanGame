@@ -7,12 +7,7 @@ public class FollowCamera : MonoBehaviour
 
     private void Awake()
     {
-        // CheckNetworkSync.loadingFinishCallback += FindPlayerObjectForClient;
-    }
-
-    private void Start()
-    {
-        playerManager = FindAnyObjectByType<PlayerManager>();
+        FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += FindPlayerObjectForClient;
     }
 
     private void Update()

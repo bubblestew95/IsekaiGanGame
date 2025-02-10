@@ -72,6 +72,8 @@ public class BossSkillManager : MonoBehaviour
         // 1. 범위안에 2명이상 있는지 check
         foreach (GameObject player in _players)
         {
+            if (player == null) continue;
+
             if (CheckDisXZ(player.transform.position, _boss.transform.position) <= skills.FirstOrDefault(skill => skill.SkillData.SkillName == "Attack9").SkillData.AttackRange)
             {
                 cnt++;
