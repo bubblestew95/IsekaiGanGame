@@ -33,6 +33,8 @@ public class BossBehaviorManager : NetworkBehaviour
     // 사거리와 쿨타임 계산후 랜덤한 상태를 enum값으로 리턴
     private BossState GetRandomAction()
     {
+        Debug.Log("GetRandomAction실행됨");
+
         tmpList.Clear();
 
         float dis = bossStateManager.GetDisWithoutY();
@@ -60,6 +62,8 @@ public class BossBehaviorManager : NetworkBehaviour
     // 보스가 특정행동 하도록 최종실행시키는 함수
     private IEnumerator BossPerformAction()
     {
+        Debug.Log("BossPerformAction실행됨");
+
         // 패턴 후 딜레이
         yield return delay1f;
 

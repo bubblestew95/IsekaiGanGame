@@ -24,31 +24,31 @@ public class BossStateManager : NetworkBehaviour
     public BoxCollider HitCollider { get { return hitCollider; } }
 
     // 보스 상태 관련 변수들
-    private List<BossChain> activeChain = new List<BossChain>();
-    private bool[] hpCheck = new bool[9];
-    private GameObject randomTarget;
-    private float bestAggro = 0f;
-    private bool isPhase2 = false;
-    private int maxHp = 100;
-    private float chainTime = 0f;
-    private GameObject[] players;
-    private GameObject aggroPlayer;
+    public List<BossChain> activeChain = new List<BossChain>();
+    public bool[] hpCheck = new bool[9];
+    public GameObject randomTarget;
+    public float bestAggro = 0f;
+    public bool isPhase2 = false;
+    public int maxHp = 100;
+    public float chainTime = 0f;
+    public GameObject[] players;
+    public GameObject aggroPlayer;
 
     // 네트워크로 동기화 할것들
-    private NetworkVariable<int> aggroPlayerIndex = new NetworkVariable<int>(-1);
-    private NetworkVariable<int> curHp = new NetworkVariable<int>(-1);
-    private NetworkList<float> playerDamage = new NetworkList<float>();
-    private NetworkList<float> playerAggro = new NetworkList<float>();
+    public NetworkVariable<int> aggroPlayerIndex = new NetworkVariable<int>(-1);
+    public NetworkVariable<int> curHp = new NetworkVariable<int>(-1);
+    public NetworkList<float> playerDamage = new NetworkList<float>();
+    public NetworkList<float> playerAggro = new NetworkList<float>();
 
     // 가져와서 넣는거
-    private DamageParticle damageParticle;
-    private UIBossHpsManager bossHpUI;
-    private BgmController bgmController;
-    private BossAttackCollider attackCollider;
-    private BossBT bossBT;
-    private GameObject boss;
-    private GameObject bossSkin;
-    private BoxCollider hitCollider;
+    public DamageParticle damageParticle;
+    public UIBossHpsManager bossHpUI;
+    public BgmController bgmController;
+    public BossAttackCollider attackCollider;
+    public BossBT bossBT;
+    public GameObject boss;
+    public GameObject bossSkin;
+    public BoxCollider hitCollider;
 
     private void Awake()
     {
@@ -77,9 +77,11 @@ public class BossStateManager : NetworkBehaviour
 
 
     // 서버에서만 데미지 받는 함수 실행
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void BossDamageReceiveServerRpc(ulong _clientId, int _damage, float _aggro)
     {
+        Debug.Log("데미지 받음 실행됨");
+
         if (curHp.Value <= 0) return;
 
         // 데미지, 어그로 세팅(공유되는 변수에 저장)
@@ -112,6 +114,10 @@ public class BossStateManager : NetworkBehaviour
     [ClientRpc]
     private void SetAggroPlayerClientRpc(int _num)
     {
+        Debug.LogWarning("SetAggroPlayerClientRpc 실행됨");
+
+        Debug.LogWarning("SetAggroPlayerClientRpc의 num : " + _num);
+
         aggroPlayer = players[_num];
     }
 
@@ -271,6 +277,8 @@ public class BossStateManager : NetworkBehaviour
 
         for (int i = 0; i < players.Length; i++)
         {
+            if (players[i] == null) continue;
+
             if (players[i].GetComponent<NetworkObject>().OwnerClientId == _clientId)
             {
                 playerDamage[i] += _damage;
@@ -295,7 +303,14 @@ public class BossStateManager : NetworkBehaviour
 
         if (allAggroZero)
         {
-            int num = UnityEngine.Random.Range(0, players.Length);
+            int len = 0;
+
+            foreach (GameObject player in players)
+            {
+                if (player != null) len++;
+            }
+
+            int num = UnityEngine.Random.Range(0, len);
             playerAggro[num] = 10f;
             aggroPlayerIndex.Value = num;
             SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
@@ -405,6 +420,7 @@ public class BossStateManager : NetworkBehaviour
 
         SetPlayerMulti();
 
+        bossBT.curState = BossState.Chase;
     }
 
     // 콜백 설정
@@ -421,9 +437,6 @@ public class BossStateManager : NetworkBehaviour
 
         // 초반 aggro 0이여서 세팅하는 함수
         GetHighestAggroTarget();
-
-        bossBT.curState = BossState.Chase;
-
     }
     #endregion
 

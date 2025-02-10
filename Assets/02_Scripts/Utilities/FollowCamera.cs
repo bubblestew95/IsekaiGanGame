@@ -10,11 +10,6 @@ public class FollowCamera : MonoBehaviour
         FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += FindPlayerObjectForClient;
     }
 
-    private void Start()
-    {
-        playerManager = FindAnyObjectByType<PlayerManager>();
-    }
-
     private void Update()
     {
         transform.position = playerManager.transform.position;

@@ -21,8 +21,8 @@ public class NetworkGameManager : NetworkBehaviour
     // 플레이어 생성 관련 변수들
     [SerializeField] private GameObject[] prefabs = new GameObject[4];
     [SerializeField] private Transform[] spwanTr = new Transform[4];
-    private GameObject[] players = new GameObject[4];
-    private ulong[] objectId;
+    public GameObject[] players = new GameObject[4];
+    private ulong[] objectId = new ulong[4];
 
     public GameObject[] Players { get { return players; } }
 
@@ -74,7 +74,10 @@ public class NetworkGameManager : NetworkBehaviour
 
         foreach (GameObject player in players)
         {
-            objectId[_cnt++] = player.GetComponent<NetworkObject>().NetworkObjectId;
+            if (player == null) continue;
+
+            objectIds[_cnt++] = player.GetComponent<NetworkObject>().NetworkObjectId;
+            
         }
 
         return objectIds;
@@ -191,7 +194,7 @@ public class NetworkGameManager : NetworkBehaviour
     #region [ServerStart]
 
     // 플레이어 전부 네트워크 상에서 스폰됬는지 확인하는 함수
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void CheckPlayerSpawnServerRpc()
     {
         playerCnt++;

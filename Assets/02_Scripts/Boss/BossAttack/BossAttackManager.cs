@@ -216,6 +216,8 @@ public class BossAttackManager : MonoBehaviour
         // 스킬위치 조정
         foreach (GameObject skillPos in circleSkillPos)
         {
+            if (bossStateManager.Players[cnt] == null) continue;
+
             skillPos.transform.position = new Vector3(bossStateManager.Players[cnt].transform.position.x, 0.3f, bossStateManager.Players[cnt].transform.position.z);
 
             cnt++;
