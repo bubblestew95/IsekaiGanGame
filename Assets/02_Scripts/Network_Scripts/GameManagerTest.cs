@@ -5,6 +5,8 @@ public class GameManagerTest : NetworkBehaviour
 {
     public GameObject p_Warrior; // Client 0이 조작할 오브젝트
     public GameObject p_Archor; // Client 1이 조작할 오브젝트
+    public GameObject p_Assassin; // Client 2이 조작할 오브젝트
+    public GameObject p_Magician; // Client 3이 조작할 오브젝트
     public GameObject p_Golem; // 모든 클라이언트가 볼 수 있는 공용 오브젝트
 
     private void Start()
@@ -13,7 +15,7 @@ public class GameManagerTest : NetworkBehaviour
 
         if (IsServer) // 서버에서만 실행
         {
-            //SpawnPlayerControlledObjects();
+            SpawnPlayerControlledObjects();
             SpawnSharedObject();
         }
         else
@@ -101,9 +103,26 @@ public class GameManagerTest : NetworkBehaviour
 
     private GameObject GetPlayerObjectForClient(ulong clientId)
     {
-        //clientId % 2 == 0 ? p_Warrior : p_Archor; // 짝수 ID → A, 홀수 ID → B
+        
+        GameObject obj = p_Warrior;
 
-        GameObject obj = clientId % 2 == 0 ? p_Warrior : p_Archor;
+        if (clientId == 0)
+        {
+            obj = p_Warrior;
+        }
+
+        if (clientId == 1)
+        {
+            obj = p_Archor;
+        }
+        if (clientId == 2)
+        {
+            obj = p_Assassin;
+        }
+        if (clientId == 3)
+        {
+            obj = p_Magician;
+        }
 
         if (obj == null)
         {
