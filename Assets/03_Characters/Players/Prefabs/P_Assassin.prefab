@@ -10823,6 +10823,7 @@ GameObject:
   - component: {fileID: -8203911682527767499}
   - component: {fileID: 4146515583710344192}
   - component: {fileID: 8208847430920535235}
+  - component: {fileID: -4664015494044983185}
   m_Layer: 9
   m_Name: P_Assassin
   m_TagString: Player
@@ -10908,7 +10909,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2171478204
+  GlobalObjectIdHash: 3709657405
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -10950,6 +10951,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particleDataList: []
+--- !u!114 &-4664015494044983185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f24119f1edcc2b84498ea1ca494768c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &179126
 GameObject:
   m_ObjectHideFlags: 0

@@ -210,6 +210,7 @@ GameObject:
   - component: {fileID: -2252394323271902163}
   - component: {fileID: 2948108365831047824}
   - component: {fileID: 5613403271390671927}
+  - component: {fileID: 787824416599203625}
   m_Layer: 9
   m_Name: P_Warrior
   m_TagString: Player
@@ -474,6 +475,19 @@ MonoBehaviour:
     particlePrefab: {fileID: 9080140021571130472, guid: 4d18279ad5186744a8c5a2d5e1a23578, type: 3}
   - particleName: Bigbang
     particlePrefab: {fileID: 9027514048236820045, guid: 64384c1a6dee77941a6d743aa85b5438, type: 3}
+--- !u!114 &787824416599203625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1733868696496733154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f24119f1edcc2b84498ea1ca494768c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &2221377582622383236
 GameObject:
   m_ObjectHideFlags: 0
