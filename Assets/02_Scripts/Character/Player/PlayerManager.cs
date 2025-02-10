@@ -15,65 +15,56 @@ public class PlayerManager : NetworkBehaviour
 {
     #region Variables
 
-    [HideInInspector]
-    public UnityEvent OnPlayerDead = new UnityEvent();
+        #region Inspector Variables
 
-    #region Inspector Variables
-
+    [Header("References")]
     [SerializeField]
     private PlayerData playerData = null;
     [SerializeField]
     private UIBattleUIManager battleUIManager = null;
 
+    [Header("Attack Settings")]
     [SerializeField]
     private Transform rangeAttackStartTr = null;
     [SerializeField]
     private MeleeWeapon meleeWeapon = null;
-    #endregion
 
-    #region InputBuffer
+    [Header("Multi Settings")]
+    [SerializeField]
+    private bool isLocalGame = false;
 
-    private Queue<InputBufferData> skillBuffer = new Queue<InputBufferData>();
-    private readonly float checkDequeueTime = 0.05f;
-    private float remainDequeueTime = 0f;
+        #endregion
 
-    #endregion
+        #region Private Variables
 
-    #region Private Variables
+            #region Manager References
 
     private PlayerInputManager playerInputManager = null;
-    private CharacterController characterCont = null;
-    private PlayerSkillManager skillMng = null;
-    private StatusManager statusMng = null;
+    private PlayerSkillManager skillManager = null;
+    private StatusManager statusManager = null;
     private PlayerStateMachine stateMachine = null;
     private PlayerAttackManager attackManager = null;
     private PlayerAnimationManager animationManager = null;
     private PlayerNetworkController networkController = null;
-    private Animator animator = null;
+    private PlayerMovementManager movementManager = null;
 
-    private int animId_Speed = 0;
+            #endregion
 
-    private Vector3 lastSkillUsePoint = Vector3.zero;
+            #region Components
 
-    private InputBufferData nullInputBuffer = new InputBufferData();
-    #endregion
+    private CharacterController characterController = null;
+
+        #endregion
+
+        #endregion
 
     #endregion
 
     #region Properties
-    public PlayerStateMachine StateMachine
-    {
-        get { return stateMachine; }
-    }
 
     public PlayerData PlayerData
     {
-        get {  return playerData; }
-    }
-
-    public PlayerInputManager InputManager
-    {
-        get { return playerInputManager; }
+        get { return playerData; }
     }
 
     public Transform RangeAttackStartTr
@@ -81,14 +72,32 @@ public class PlayerManager : NetworkBehaviour
         get { return rangeAttackStartTr; }
     }
 
-    public Vector3 LastSkillUsePoint
+    public MeleeWeapon PlayerMeleeWeapon
     {
-        get { return lastSkillUsePoint; }
+        get { return meleeWeapon; }
+    }
+
+    public bool IsLocalGame
+    { 
+        get { return isLocalGame; } 
+    }
+
+
+        #region Manager References
+
+    public PlayerStateMachine StateMachine
+    {
+        get { return stateMachine; }
+    }
+
+    public PlayerInputManager InputManager
+    {
+        get { return playerInputManager; }
     }
 
     public StatusManager StatusManager
     {
-        get { return statusMng; }
+        get { return statusManager; }
     }
 
     public UIBattleUIManager BattleUIManager
@@ -106,65 +115,28 @@ public class PlayerManager : NetworkBehaviour
         get { return networkController; }
     }
 
+    public PlayerSkillManager SkillManager
+    {
+        get { return skillManager; }
+    }
+
+    public PlayerAttackManager AttackManager
+    {
+        get { return attackManager; }
+    }
+
+    public PlayerMovementManager MovementManager
+    {
+        get { return movementManager; }
+    }
+
+        #endregion
+
     #endregion
 
     #region Public Functions
 
-    #region Input, State Functions
-
-    /// <summary>
-    /// 입력을 받았을 때 입력 버퍼에 해당 입력의 스킬 타입을 넣는다.
-    /// </summary>
-    /// <param name="_input">입력 버퍼에 Enqueue할 스킬 타입</param>
-    public void OnButtonInput(SkillSlot _input, SkillPointData point)
-    {
-        InputBufferData inputBuffer = new InputBufferData();
-        inputBuffer.skillType = _input;
-        inputBuffer.pointData = point;
-
-        skillBuffer.Enqueue(inputBuffer);
-
-        // 만약 입력 버퍼가 비어있다가 새롭게 입력됐다면 Dequeue 시간을 측정하기 시작한다.
-        if (skillBuffer.Count == 1)
-            remainDequeueTime = checkDequeueTime;
-    }
-
-    /// <summary>
-    /// 현재 스킬 입력 버퍼에서 하나를 꺼내옴.
-    /// </summary>
-    /// <returns>사용할 스킬의 타입</returns>
-    public InputBufferData GetNextInput()
-    {
-        if (skillBuffer.TryDequeue(out InputBufferData nextBuffer))
-        {
-            lastSkillUsePoint = nextBuffer.pointData.point;
-            return nextBuffer;
-        }
-
-        return nullInputBuffer;
-    }
-
-    /// <summary>
-    /// 조이스틱 입력을 받고 움직임을 처리한다.
-    /// </summary>
-    public void MoveByJoystick(JoystickInputData _inputData)
-    {
-        float speed = playerData.walkSpeed;
-
-        Vector3 moveVector = new Vector3(_inputData.x, 0f, _inputData.z) * speed * Time.deltaTime;
-
-        characterCont.Move(moveVector);
-
-        float currentSpeed = moveVector.sqrMagnitude;
-
-        SetAnimatorWalkSpeed(currentSpeed);
-
-        if (currentSpeed == 0f)
-            return;
-
-        if(moveVector != Vector3.zero)
-            transform.rotation = Quaternion.LookRotation(moveVector);
-    }
+        #region State Functions
 
     /// <summary>
     /// 현재 플레이어의 동작 상태를 변경한다.
@@ -176,53 +148,16 @@ public class PlayerManager : NetworkBehaviour
         StateMachine.ChangeState(_type);
     }
 
-    public void SetAnimatorWalkSpeed(float _speed)
-    {
-        animator.SetFloat(animId_Speed, _speed);
-    }
+        #endregion
 
-    #endregion
-
-    #region Skill Functions
-
-    /// <summary>
-    /// 스킬 발동을 시도한다.
-    /// </summary>
-    /// <param name="_skillIdx"></param>
-    public void TryUseSkill(SkillSlot _type, SkillPointData _point)
-    {
-        // 스킬 발동에 성공했다면
-        if (skillMng.IsSkillUsable(_type))
-        {
-            // 캐릭터를 포인트로 지정한 방향을 보도록 한다.
-            if (_point.type == SkillPointType.Position || _point.type == SkillPointType.None)
-            {
-                transform.LookAt(_point.point);
-            }
-            else
-            {
-                transform.rotation = Quaternion.Euler(_point.point);
-            }
-
-            skillMng.UseSkill(_type);
-
-            // UI에 쿨타임을 적용한다.
-            if (battleUIManager != null)
-                battleUIManager.ApplyCooltime(_type, skillMng.GetCoolTime(_type));
-        }
-    }
-
-    public PlayerSkillBase GetSkill(SkillSlot _slot)
-    {
-        return skillMng.GetSkill(_slot);
-    }
+        #region Skill Functions
 
     /// <summary>
     /// 스킬 애니메이션이 시작할 때 호출되는 함수.
     /// </summary>
     public void StartSkill(SkillSlot _type)
     {
-        GetSkill(_type).StartSkill(this);
+        skillManager.GetSkillData(_type).StartSkill(this);
     }
 
     /// <summary>
@@ -231,7 +166,7 @@ public class PlayerManager : NetworkBehaviour
     public void EndSkill(SkillSlot _type)
     {
         Debug.LogFormat("End Skill type {0}", _type);
-        GetSkill(_type).EndSkill(this);
+        skillManager.GetSkillData(_type).EndSkill(this);
     }
 
     /// <summary>
@@ -239,86 +174,10 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public void UseSkill(SkillSlot _slot)
     {
-        skillMng.SkillAction(_slot);
+        skillManager.SkillAction(_slot);
     }
 
-    /// <summary>
-    /// 지정한 스킬이 사용 가능한지 스킬매니저에서 알아오는 함수.
-    /// </summary>
-    /// <param name="_type">지정할 스킬의 타입</param>
-    /// <returns>사용 가능 여부</returns>
-    public bool IsSkillUsable(SkillSlot _type)
-    {
-        if(skillMng == null)
-        {
-            Debug.LogError("Skill Manager is not valid!");
-            return false;
-        }
-
-        return skillMng.IsSkillUsable(_type);
-    }
-
-    #endregion
-
-    #region Attack Functions
-    public void EnableMeleeAttack(int _damage, float _aggro)
-    {
-        meleeWeapon.Init(_damage, _aggro);
-        meleeWeapon.SetTriggerEnabled(true);
-    }
-
-    public void DisableMeleeAttack()
-    {
-        meleeWeapon.SetTriggerEnabled(false);
-    }
-
-    public Vector3 GetMeleeWeaponPostion()
-    {
-        return meleeWeapon.transform.position;
-    }
-
-    /// <summary>
-    /// 플레이어가 데미지를 받음.
-    /// </summary>
-    /// <param name="_damage"></param>
-    public void TakeDamage(int _damage, Vector3 _attackOriginPos, float _distance)
-    {
-        if(stateMachine.CurrentState.StateType == PlayerStateType.Damaged
-            ||
-            stateMachine.CurrentState.StateType == PlayerStateType.Death
-            ||
-            stateMachine.CurrentState.StateType == PlayerStateType.Dash)
-        {
-            Debug.Log("Player is not damageable!");
-            return;
-        }
-
-        statusMng.OnDamaged(_damage);
-        MovePlayer(_attackOriginPos, _distance);
-        ChangeState(PlayerStateType.Damaged);
-    }
-
-    public void MovePlayer(Vector3 _attackOriginPos, float _distance)
-    {
-        StartCoroutine(KnockBackCoroutine(_attackOriginPos, _distance));
-    }
-
-    public void AddDamageToBoss(int _damage, float _aggro)
-    {
-        attackManager.AddDamageToBoss(_damage, _aggro);
-    }
-
-    public bool IsPlayerBehindBoss()
-    {
-        if (Vector3.Angle(transform.forward, GameManager.Instance.GetBossTransform().forward) < 80f)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    #endregion
+        #endregion
 
     #endregion
 
@@ -339,62 +198,18 @@ public class PlayerManager : NetworkBehaviour
     }
 
     /// <summary>
-    /// 정해진 시간마다 스킬 입력 버퍼에서 입력를 하나씩 빼내는 처리를 한다.
+    /// 플레이어의 매니저 클래스들을 생성하고 초기화한다.
     /// </summary>
-    private void PopSkillInputBuffer()
+    private void InitManagers()
     {
-        if (skillBuffer.Count > 0 && remainDequeueTime > 0f)
-            remainDequeueTime -= Time.deltaTime;
+        skillManager = new PlayerSkillManager();
+        skillManager.Init(this);
 
-        if (remainDequeueTime <= 0f)
-        {
-            remainDequeueTime = checkDequeueTime;
-            if (skillBuffer.Count > 0)
-                skillBuffer.Dequeue();
-        }
-
-    }
-
-    #region Coroutines
-
-    private IEnumerator KnockBackCoroutine(Vector3 _attackOriginPos, float _distance)
-    {
-        float knockbackTime = 0.5f;
-        float currentTime = 0f;
-        float speed = _distance / knockbackTime;
-
-        Vector3 direction =  transform.position - _attackOriginPos;
-        direction.y = 0f;
-        direction.Normalize();
-
-        Debug.LogFormat("Direction : {0}, speed : {1}", direction, speed);
-
-        while (currentTime <= knockbackTime)
-        {
-            characterCont.Move(direction * speed * Time.deltaTime);
-            currentTime += Time.deltaTime;
-            yield return null;
-        }
-    }
-
-    #endregion
-
-    #endregion
-
-    #region Unity Callback
-
-    private void Awake()
-    {
-        characterCont = GetComponent<CharacterController>();
-
-        skillMng = new PlayerSkillManager();
-        skillMng.Init(this);
-
-        statusMng = new StatusManager();
-        statusMng.Init(this);
+        statusManager = new StatusManager();
+        statusManager.Init(this);
 
         playerInputManager = new PlayerInputManager();
-        playerInputManager.Init(battleUIManager.MoveJoystick);
+        playerInputManager.Init(this);
 
         attackManager = new PlayerAttackManager();
         attackManager.Init(this);
@@ -405,33 +220,46 @@ public class PlayerManager : NetworkBehaviour
         networkController = new PlayerNetworkController();
         networkController.Init(this);
 
-        animator = GetComponent<Animator>();
+        movementManager = new PlayerMovementManager();
+        movementManager.Init(this);
+    }
 
-        animId_Speed = Animator.StringToHash("Speed");
+    #endregion
+
+    #region Unity Callback
+
+    private void Awake()
+    {
+        characterController = GetComponent<CharacterController>();
 
         InitStates();
+
+        InitManagers();
     }
 
     private void Start()
     {
+        // 기본 상태를 대기 상태로 설정한다.
         stateMachine.ChangeState(PlayerStateType.Idle);
 
-        if (GetComponent<NetworkObject>().IsOwner)
+        // 로컬 게임이거나, 네트워크 오브젝트의 소유자일 경우에만 활성화한다.
+        if (isLocalGame || GetComponent<NetworkObject>().IsOwner)
         {
+            // 전투 UI를 활성화하고, 캐릭터 컨트롤러를 활성화한다.
             battleUIManager.transform.parent.gameObject.SetActive(true);
-            characterCont.enabled = true;
-        }
+            characterController.enabled = true;
 
+            // 입력 버퍼의 갱신을 시작한다.
+            InputManager.StartInputBufferPop();
+        }
     }
 
     private void Update()
     {
-        PopSkillInputBuffer();
-
         // 현재 상태에 따른 행동을 업데이트한다.
         stateMachine.UpdateState();
 
-        skillMng.DecreaseCoolTimes(Time.deltaTime);
+        skillManager.DecreaseCoolTimes(Time.deltaTime);
     }
 
     #endregion

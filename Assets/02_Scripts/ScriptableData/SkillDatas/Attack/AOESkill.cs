@@ -24,7 +24,7 @@ public class AOESkill : AttackSkill
     {
         float currentTime = 0f;
         WaitForSeconds waitSec = new WaitForSeconds(damageTickTime);
-        Vector3 damagePos = _player.LastSkillUsePoint;
+        Vector3 damagePos = _player.InputManager.LastSkillUsePoint;
 
         while (currentTime <= duration)
         {
@@ -32,7 +32,7 @@ public class AOESkill : AttackSkill
             // 충돌이 검출됐을 경우
             foreach (Collider hitCollider in hits)
             {
-                _player.AddDamageToBoss(DamageCalculate(_player), aggro);
+                _player.AttackManager.AddDamageToBoss(DamageCalculate(_player), aggro);
             }
 
             yield return waitSec;

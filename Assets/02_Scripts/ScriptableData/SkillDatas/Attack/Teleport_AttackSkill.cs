@@ -23,12 +23,12 @@ public class Teleport_AttackSkill : AttackSkill
         base.UseSkill(_player);
 
         int dmg = DamageCalculate(_player);
-        _player.EnableMeleeAttack(dmg, aggro);
+        _player.AttackManager.EnableMeleeAttack(dmg, aggro);
     }
 
     public override void EndSkill(PlayerManager _player)
     {
         base.EndSkill(_player);
-        _player.DisableMeleeAttack();
+        _player.AttackManager.DisableMeleeAttack();
     }
 }

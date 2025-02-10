@@ -4,16 +4,16 @@ using EnumTypes;
 public abstract class BasePlayerState
 {
     protected PlayerStateType stateType;
-    protected PlayerManager playerMng { get; private set; }
+    protected PlayerManager playerManager { get; private set; }
 
     public PlayerStateType StateType
     {
         get { return stateType; }
     }
 
-    public BasePlayerState(PlayerManager playerMng)
+    public BasePlayerState(PlayerManager _playerManager)
     {
-        this.playerMng = playerMng;
+        playerManager = _playerManager;
     }
 
     public abstract void OnEnterState();

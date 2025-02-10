@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
     /// <param name="_damageReceiver"></param>
     public void DamageToPlayer(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDis)
     {
-        _damageReceiver.TakeDamage(_damage, _attackPos, _knockBackDis);
+        _damageReceiver.AttackManager.TakeDamage(_damage, _attackPos, _knockBackDis);
 
         UpdatePlayerHpUI(_damageReceiver);
     }

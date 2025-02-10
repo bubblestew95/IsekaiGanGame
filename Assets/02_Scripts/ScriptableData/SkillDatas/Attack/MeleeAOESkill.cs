@@ -19,14 +19,14 @@ public class MeleeAOESkill : AttackSkill
     {
         float currentTime = 0f;
         WaitForSeconds waitSec = new WaitForSeconds(damageTickTime);
-        Vector3 damagePos = _player.GetMeleeWeaponPostion();
+        Vector3 damagePos = _player.AttackManager.GetMeleeWeaponPostion();
         while (currentTime <= duration)
         {
             Collider[] hits = Physics.OverlapSphere(damagePos, attackAreaRadius, bossLayerMask);
             // 충돌이 검출됐을 경우
             foreach (Collider hitCollider in hits)
             {
-                _player.AddDamageToBoss(DamageCalculate(_player), aggro);
+                _player.AttackManager.AddDamageToBoss(DamageCalculate(_player), aggro);
             }
 
             yield return waitSec;

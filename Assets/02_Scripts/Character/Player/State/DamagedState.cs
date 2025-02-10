@@ -11,7 +11,7 @@ public class DamagedState : BasePlayerState
 
     public override void OnEnterState()
     {
-        playerMng.AnimationManager.PlayDamagedAnimation();
+        playerManager.AnimationManager.PlayDamagedAnimation();
     }
 
     public override void OnExitState()

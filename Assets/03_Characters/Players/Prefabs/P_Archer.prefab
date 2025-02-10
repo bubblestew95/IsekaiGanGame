@@ -10824,7 +10824,6 @@ GameObject:
   - component: {fileID: 4146515583710344192}
   - component: {fileID: 2131632820310466139}
   - component: {fileID: -287821195716040168}
-  - component: {fileID: 2380477239008008822}
   - component: {fileID: -8549285457553216154}
   m_Layer: 9
   m_Name: P_Archer
@@ -10991,20 +10990,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &2380477239008008822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 179124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65425e8592c4adc4e88456a7c08bed8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  moveSpeed: 5
 --- !u!114 &-8549285457553216154
 MonoBehaviour:
   m_ObjectHideFlags: 0

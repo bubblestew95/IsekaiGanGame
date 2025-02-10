@@ -33,7 +33,7 @@ public abstract class AttackSkill : PlayerSkillBase
 
     public int DamageCalculate(PlayerManager _player)
     {
-        if (isBackattackEnable && _player.IsPlayerBehindBoss())
+        if (isBackattackEnable && _player.AttackManager.IsPlayerBehindBoss())
         {
             return damage * backAttackTimes;
         }
