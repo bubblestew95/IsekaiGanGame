@@ -1,13 +1,30 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
 public class NetworkGameManager : NetworkBehaviour
 {
+    public event Action loadingFinishCallback;
+
     /// <summary>
     /// 클라이언트 ID를 키로 가지고, 해당 클라이언트가 소유한 PlayerManger를 값으로 가지는 딕셔너리.
     /// </summary>
     private Dictionary<ulong, PlayerManager> multiPlayersMap = null;
+
+    // 플레이어 로딩 동기화 관련 변수들
+    private int playerCnt = 0;
+    private int loadingCnt = 0;
+    private bool spawnPlayer = false;
+    private bool loadingScene = false;
+
+    // 플레이어 생성 관련 변수들
+    [SerializeField] private GameObject[] prefabs = new GameObject[4];
+    [SerializeField] private Transform[] spwanTr = new Transform[4];
+    private GameObject[] players = new GameObject[4];
+    private ulong[] objectId;
+
+    public GameObject[] Players { get { return players; } }
 
     #region Public Functions
 
@@ -27,9 +44,47 @@ public class NetworkGameManager : NetworkBehaviour
 
     #endregion
 
+    #region [Private Funtions]
+
+    // 프리펩 생성 및 Players 배열에 저장
+    private void SpawnPlayerControlledObjects()
+    {
+        int cnt = 0;
+
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            GameObject playerObject = prefabs[cnt];
+
+            players[cnt] = Instantiate(playerObject, spwanTr[cnt].position, Quaternion.identity);
+
+            players[cnt].GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+
+            cnt++;
+        }
+
+        objectId = GetNetworkId(cnt);
+    }
+
+    // 생성 네트워크 ID 리턴
+    private ulong[] GetNetworkId(int _cnt)
+    {
+        ulong[] objectIds = new ulong[_cnt];
+
+        _cnt = 0;
+
+        foreach (GameObject player in players)
+        {
+            objectId[_cnt++] = player.GetComponent<NetworkObject>().NetworkObjectId;
+        }
+
+        return objectIds;
+    }
+
+    #endregion
+
     #region RPC
 
-        #region Client To Server RPC
+    #region Client To Server RPC
 
     /// <summary>
     /// 플레이어가 데미지를 받았음을 서버에게 알린다.
@@ -107,8 +162,82 @@ public class NetworkGameManager : NetworkBehaviour
 
     private void Awake()
     {
-        multiPlayersMap = new Dictionary<ulong, PlayerManager>();
+        multiPlayersMap = new Dictionary<ulong, PlayerManager>(); 
     }
 
+    private void Start()
+    {
+       LoadingCheckServerRpc();
+
+        if (IsServer)
+        {
+            SpawnPlayerControlledObjects();
+        }
+    }
+
+    private void Update()
+    {
+        if (spawnPlayer && loadingScene)
+        {
+            SynPlayerClientRpc(objectId);
+            LoadingFinishClientRpc();
+            spawnPlayer = false;
+            loadingScene = false;
+        }
+    }
+
+    #endregion
+
+    #region [ServerStart]
+
+    // 플레이어 전부 네트워크 상에서 스폰됬는지 확인하는 함수
+    [ServerRpc]
+    public void CheckPlayerSpawnServerRpc()
+    {
+        playerCnt++;
+
+        if (playerCnt == NetworkManager.Singleton.ConnectedClients.Count)
+        {
+            spawnPlayer = true;
+        }
+    }
+
+    // 플레이어 전부 네트워크 상에서 씬로딩이 됬는지 확인하는 함수
+    [ServerRpc(RequireOwnership = false)]
+    private void LoadingCheckServerRpc()
+    {
+        loadingCnt++;
+
+        if (loadingCnt == NetworkManager.Singleton.ConnectedClients.Count)
+        {
+            loadingScene = true;
+        }
+    }
+
+    // 로딩이 끝나면 모든 클라이언트에 실행이 끝났다고 콜백이 됨.
+    [ClientRpc]
+    private void LoadingFinishClientRpc()
+    {
+        loadingFinishCallback?.Invoke();
+    }
+
+    #endregion
+
+    #region [ClientRpc]
+
+    [ClientRpc]
+    private void SynPlayerClientRpc(ulong[] _networkObjectIds)
+    {
+        int cnt = 0;
+
+        foreach (ulong clientId in _networkObjectIds)
+        {
+            players[cnt] = NetworkManager.Singleton.SpawnManager.SpawnedObjects[_networkObjectIds[cnt]].gameObject;
+
+            Debug.Log("SetPlayer : " + players[cnt]);
+
+            cnt++;
+        }
+    }
     #endregion
 }

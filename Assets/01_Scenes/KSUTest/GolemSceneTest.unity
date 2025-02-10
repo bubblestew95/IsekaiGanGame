@@ -3035,6 +3035,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d9498b218a4534b96a376815ed7120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &467294348 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8172849020746995793, guid: 2af5562ce69fc2d448481a1587a352a5, type: 3}
@@ -5368,7 +5369,6 @@ GameObject:
   m_Component:
   - component: {fileID: 882385688}
   - component: {fileID: 882385687}
-  - component: {fileID: 882385690}
   - component: {fileID: 882385689}
   m_Layer: 0
   m_Name: GameManagerTest
@@ -5430,36 +5430,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 882385685}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 418daee5a5763ab498711b2188ce53f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 587fa5dc697d9b54a84bb6bad258e920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!114 &882385690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 882385685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce20b68e6601bac49b2a560b3778404e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  Characters:
+  prefabs:
   - {fileID: 179124, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
   - {fileID: 1733868696496733154, guid: 2c3b4b44c561d204987227d0d14da915, type: 3}
   - {fileID: 179124, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
   - {fileID: 7514786493872156022, guid: ade512d1f4c03314c9f8baabb487f1fc, type: 3}
-  SpwanTr:
+  spwanTr:
   - {fileID: 210764692}
   - {fileID: 1228246667}
   - {fileID: 471659402}
   - {fileID: 1408371289}
-  Players:
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &891663425
 GameObject:
   m_ObjectHideFlags: 0

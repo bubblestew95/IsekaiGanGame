@@ -52,7 +52,7 @@ public class BossStateManager : NetworkBehaviour
 
     private void Awake()
     {
-        TestNetwork.settingEndCallback += InitMulti;
+        FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += InitMulti;
     }
 
     private void Update()
@@ -417,7 +417,7 @@ public class BossStateManager : NetworkBehaviour
     // 멀티 플레이어 설정
     private void SetPlayerMulti()
     {
-        players = FindFirstObjectByType<TestNetwork>().Players;
+        players = FindFirstObjectByType<NetworkGameManager>().Players;
 
         // 초반 aggro 0이여서 세팅하는 함수
         GetHighestAggroTarget();
