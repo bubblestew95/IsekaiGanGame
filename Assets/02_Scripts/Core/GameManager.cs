@@ -58,6 +58,14 @@ public class GameManager : MonoBehaviour
         UpdatePlayerHpUI(_damageReceiver);
     }
 
+    public void DamageToBoss_Multi(ulong _clientId, int _damage, float _aggro)
+    {
+    }
+
+    public void DamageToPlayer_Multi(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDis)
+    {
+    }
+
     #endregion
 
     #region Private Functions
