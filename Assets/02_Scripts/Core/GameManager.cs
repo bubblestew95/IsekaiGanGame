@@ -1,5 +1,3 @@
-using System;
-using Unity.Multiplayer.Center.NetcodeForGameObjectsExample;
 using Unity.Netcode;
 using UnityEngine;
 

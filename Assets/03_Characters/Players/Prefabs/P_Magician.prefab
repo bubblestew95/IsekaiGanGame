@@ -16593,6 +16593,8 @@ GameObject:
   - component: {fileID: 4635323897246943225}
   - component: {fileID: 814338709902927514}
   - component: {fileID: -7037619063621164936}
+  - component: {fileID: -8995490013482134809}
+  - component: {fileID: 447944940904342645}
   m_Layer: 9
   m_Name: P_Magician
   m_TagString: Player
@@ -16738,6 +16740,90 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &-8995490013482134809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7514786493872156022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccd55cf4871bbcd4686d6a99ad1bd05a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &447944940904342645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7514786493872156022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1748754976
+    DestinationState: 2094171561
+    TransitionDuration: 0.25
+    TriggerNameHash: 1971686547
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1748754976
+    DestinationState: -1539299847
+    TransitionDuration: 0.25
+    TriggerNameHash: 995914302
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1748754976
+    DestinationState: 1295687476
+    TransitionDuration: 0.115656495
+    TriggerNameHash: -326312663
+    TransitionIndex: 3
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1748754976
+    DestinationState: -347237248
+    TransitionDuration: 0.25
+    TriggerNameHash: -1685328449
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: 2094171561
+    TransitionDuration: 0.25
+    TriggerNameHash: 1971686547
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: -1539299847
+    TransitionDuration: 0.25
+    TriggerNameHash: 995914302
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: 1295687476
+    TransitionDuration: 0.16792929
+    TriggerNameHash: -326312663
+    TransitionIndex: 3
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: -347237248
+    TransitionDuration: 0.25
+    TriggerNameHash: -1685328449
+    TransitionIndex: 4
+  m_Animator: {fileID: 3451853758380156579}
 --- !u!1 &7617502916217710384
 GameObject:
   m_ObjectHideFlags: 0

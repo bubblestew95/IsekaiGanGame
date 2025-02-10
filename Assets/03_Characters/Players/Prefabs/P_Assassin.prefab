@@ -10824,6 +10824,8 @@ GameObject:
   - component: {fileID: 4146515583710344192}
   - component: {fileID: 8208847430920535235}
   - component: {fileID: -4664015494044983185}
+  - component: {fileID: 3892225392416952665}
+  - component: {fileID: -6465391473038639350}
   m_Layer: 9
   m_Name: P_Assassin
   m_TagString: Player
@@ -10961,6 +10963,104 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f24119f1edcc2b84498ea1ca494768c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &3892225392416952665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1748754976
+    DestinationState: -1995584203
+    TransitionDuration: 0.25
+    TriggerNameHash: 1971686547
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1748754976
+    DestinationState: -806569953
+    TransitionDuration: 0.25
+    TriggerNameHash: -1685328449
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1748754976
+    DestinationState: -145065975
+    TransitionDuration: 0.25
+    TriggerNameHash: -1761810982
+    TransitionIndex: 3
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1748754976
+    DestinationState: 218874919
+    TransitionDuration: 0.25
+    TriggerNameHash: 995914302
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1748754976
+    DestinationState: -1499840059
+    TransitionDuration: 0.17322499
+    TriggerNameHash: -326312663
+    TransitionIndex: 5
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: -1995584203
+    TransitionDuration: 0.25
+    TriggerNameHash: 1971686547
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: -806569953
+    TransitionDuration: 0.25
+    TriggerNameHash: -1685328449
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: -145065975
+    TransitionDuration: 0.25
+    TriggerNameHash: -1761810982
+    TransitionIndex: 3
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: 218874919
+    TransitionDuration: 0.25
+    TriggerNameHash: 995914302
+    TransitionIndex: 4
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: -1499840059
+    TransitionDuration: 0.25
+    TriggerNameHash: -326312663
+    TransitionIndex: 5
+  m_Animator: {fileID: 9563318}
+--- !u!114 &-6465391473038639350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccd55cf4871bbcd4686d6a99ad1bd05a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
