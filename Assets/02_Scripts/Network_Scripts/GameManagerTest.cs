@@ -13,7 +13,7 @@ public class GameManagerTest : NetworkBehaviour
 
         if (IsServer) // 서버에서만 실행
         {
-            //SpawnPlayerControlledObjects();
+            SpawnPlayerControlledObjects();
             SpawnSharedObject();
         }
         else
