@@ -24,31 +24,31 @@ public class BossStateManager : NetworkBehaviour
     public BoxCollider HitCollider { get { return hitCollider; } }
 
     // 보스 상태 관련 변수들
-    public List<BossChain> activeChain = new List<BossChain>();
-    public bool[] hpCheck = new bool[9];
-    public GameObject randomTarget;
-    public float bestAggro = 0f;
-    public bool isPhase2 = false;
-    public int maxHp = 100;
-    public float chainTime = 0f;
-    public GameObject[] players;
-    public GameObject aggroPlayer;
+    private List<BossChain> activeChain = new List<BossChain>();
+    private bool[] hpCheck = new bool[9];
+    private GameObject randomTarget;
+    private float bestAggro = 0f;
+    private bool isPhase2 = false;
+    private int maxHp = 100;
+    private float chainTime = 0f;
+    private GameObject[] players;
+    private GameObject aggroPlayer;
 
     // 네트워크로 동기화 할것들
-    public NetworkVariable<int> aggroPlayerIndex = new NetworkVariable<int>(-1);
-    public NetworkVariable<int> curHp = new NetworkVariable<int>(-1);
-    public NetworkList<float> playerDamage = new NetworkList<float>();
-    public NetworkList<float> playerAggro = new NetworkList<float>();
+    private NetworkVariable<int> aggroPlayerIndex = new NetworkVariable<int>(-1);
+    private NetworkVariable<int> curHp = new NetworkVariable<int>(-1);
+    private NetworkList<float> playerDamage = new NetworkList<float>();
+    private NetworkList<float> playerAggro = new NetworkList<float>();
 
     // 가져와서 넣는거
-    public DamageParticle damageParticle;
-    public UIBossHpsManager bossHpUI;
-    public BgmController bgmController;
-    public BossAttackCollider attackCollider;
-    public BossBT bossBT;
-    public GameObject boss;
-    public GameObject bossSkin;
-    public BoxCollider hitCollider;
+    private DamageParticle damageParticle;
+    private UIBossHpsManager bossHpUI;
+    private BgmController bgmController;
+    private BossAttackCollider attackCollider;
+    private BossBT bossBT;
+    private GameObject boss;
+    private GameObject bossSkin;
+    private BoxCollider hitCollider;
 
     private void Awake()
     {

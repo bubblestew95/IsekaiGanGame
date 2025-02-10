@@ -29,7 +29,7 @@ public class BossAttackCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && gameObject.tag == "BossAttack" )//&& other.gameObject.GetComponent<PlayerManager>().IsClient)
+        if (other.gameObject.tag == "Player" && gameObject.tag == "BossAttack" && other.gameObject.GetComponent<PlayerNetworkManager>().IsClient)
         {
             // 플레이어 데미지 입도록 설정
             GameManager.Instance.DamageToPlayer(other.gameObject.GetComponent<PlayerManager>(), damage, transform.position, KnockBackDistance);
