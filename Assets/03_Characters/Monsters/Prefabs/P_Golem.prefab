@@ -2325,8 +2325,8 @@ GameObject:
   - component: {fileID: 2550935751187727211}
   - component: {fileID: 4344098978830733031}
   - component: {fileID: 7853676516811975558}
-  - component: {fileID: 2131148431429031677}
   - component: {fileID: -7888187740340765809}
+  - component: {fileID: 2131148431429031677}
   - component: {fileID: 7796279537819312077}
   - component: {fileID: 7072979799601489313}
   - component: {fileID: 5870383895420540904}
@@ -2426,6 +2426,31 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-7888187740340765809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9137032837993464747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1120013972
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &2131148431429031677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2448,31 +2473,6 @@ MonoBehaviour:
   center: {x: -3.66, y: 0, z: 19.58}
   phase2Cam: {fileID: 0}
   phase2Set: {fileID: 6881833285181368674}
---- !u!114 &-7888187740340765809
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9137032837993464747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3859563802
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!114 &7796279537819312077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2486,12 +2486,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  aggroPlayer: {fileID: 0}
-  players:
-  - {fileID: 0}
-  - {fileID: 0}
-  bossSkin: {fileID: 2492541278023546289}
-  hitCollider: {fileID: 6572184628513710127}
 --- !u!114 &7072979799601489313
 MonoBehaviour:
   m_ObjectHideFlags: 0
