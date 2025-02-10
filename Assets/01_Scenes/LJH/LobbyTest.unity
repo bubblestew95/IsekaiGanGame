@@ -1838,7 +1838,7 @@ MonoBehaviour:
   roomNameInput: {fileID: 934184626}
   joinCodeInput: {fileID: 2089317647}
   createRoomButton: {fileID: 1769794242}
-  joinRoomButton: {fileID: 1797002465}
+  join_SelectRoomButton: {fileID: 1797002465}
   join_CodeRoomButton: {fileID: 1378581851}
   leaveRoomButton: {fileID: 531277266}
   codeButton: {fileID: 368607342}
@@ -4828,7 +4828,7 @@ GameObject:
   - component: {fileID: 1797002466}
   - component: {fileID: 1797002465}
   m_Layer: 5
-  m_Name: JoinRoomButton
+  m_Name: Join_Select_RoomButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4898,13 +4898,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 797183971}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 797183972}
+        m_TargetAssemblyTypeName: RoomManager, Assembly-CSharp
+        m_MethodName: JoinSelectedRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
