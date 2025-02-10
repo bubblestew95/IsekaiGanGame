@@ -15,6 +15,7 @@ public class GameManager : NetworkBehaviour
     #endregion
 
     #region Inspector Variables
+    private bool isLocalGame = false;
     #endregion
 
     #region Private Variables
@@ -23,6 +24,14 @@ public class GameManager : NetworkBehaviour
 
     #endregion
 
+    #region Properties
+
+    public bool IsLocalGame
+    {
+        get { return isLocalGame; }
+    }
+
+    #endregion
 
     #region Public Functions
     public Transform GetBossTransform()
@@ -45,7 +54,7 @@ public class GameManager : NetworkBehaviour
 
         ulong clientId = _damageGiver.GetComponent<NetworkObject>().OwnerClientId;
 
-        if (true)//(_damageGiver.IsClient)
+        if (_damageGiver.GetComponent<PlayerNetworkManager>().IsClient)
         {
             DamageToBoss_Multi(clientId, _damage, _aggro);
         }
@@ -56,14 +65,17 @@ public class GameManager : NetworkBehaviour
     }
 
     /// <summary>
-    /// 보스가 플레이어에게 데미지를 가함.
+    /// 플레이어가 데미지를 입음.
     /// </summary>
     /// <param name="_damageReceiver"></param>
-    public void DamageToPlayer(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDis)
+    public void DamageToPlayer(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDist)
     {
-        _damageReceiver.AttackManager.TakeDamage(_damage, _attackPos, _knockBackDis);
+        if (isLocalGame)
+            ApplyDamageToPlayer(_damageReceiver, _damage, _attackPos, _knockBackDist);
+        else
+        {
 
-        UpdatePlayerHpUI(_damageReceiver);
+        }
     }
 
     public void DamageToBoss_Multi(ulong _clientId, int _damage, float _aggro)
@@ -71,8 +83,12 @@ public class GameManager : NetworkBehaviour
         bossStateManager.BossDamageReceiveServerRpc(_clientId, _damage, _aggro);
     }
 
-    public void DamageToPlayer_Multi(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDis)
+    public void ApplyDamageToPlayer
+        (PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockbackDist)
     {
+        _damageReceiver.AttackManager.TakeDamage(_damage, _attackPos, _knockbackDist);
+
+        UpdatePlayerHpUI(_damageReceiver);
     }
 
     #endregion
@@ -111,6 +127,7 @@ public class GameManager : NetworkBehaviour
     {
         bossStateManager = FindAnyObjectByType<BossStateManager>();
     }
+
     #endregion
 
 }

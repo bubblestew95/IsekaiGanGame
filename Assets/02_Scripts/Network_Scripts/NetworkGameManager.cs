@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class NetworkGameManager : NetworkBehaviour
+public class NetworkGameManager : NetworkManager
 {
     /// <summary>
     /// 클라이언트 ID를 키로 가지고, 해당 클라이언트가 소유한 PlayerManger를 값으로 가지는 딕셔너리.
@@ -78,7 +78,7 @@ public class NetworkGameManager : NetworkBehaviour
     {
         if(multiPlayersMap.TryGetValue(_cliendId, out PlayerManager playerManager))
         {
-            // GameManager.Instance.ApplyDamageToPlayer(playerManager, _damage, _attackPos, _knockbackDist);
+            GameManager.Instance.ApplyDamageToPlayer(playerManager, _damage, _attackPos, _knockbackDist);
         }
     }
 

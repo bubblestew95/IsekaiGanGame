@@ -41,7 +41,6 @@ public class PlayerManager : MonoBehaviour
     private PlayerStateMachine stateMachine = null;
     private PlayerAttackManager attackManager = null;
     private PlayerAnimationManager animationManager = null;
-    private PlayerNetworkController networkController = null;
     private PlayerMovementManager movementManager = null;
 
             #endregion
@@ -49,8 +48,9 @@ public class PlayerManager : MonoBehaviour
             #region Components
 
     private CharacterController characterController = null;
+    private PlayerNetworkManager playerNetworkManager = null;
 
-        #endregion
+            #endregion
 
         #endregion
 
@@ -100,9 +100,9 @@ public class PlayerManager : MonoBehaviour
         get { return animationManager; }
     }
 
-    public PlayerNetworkController NetworkController
+    public PlayerNetworkManager NetworkController
     {
-        get { return networkController; }
+        get { return playerNetworkManager; }
     }
 
     public PlayerSkillManager SkillManager
@@ -206,9 +206,6 @@ public class PlayerManager : MonoBehaviour
 
         animationManager = new PlayerAnimationManager();
         animationManager.Init(this);
-
-        networkController = new PlayerNetworkController();
-        networkController.Init(this);
 
         movementManager = new PlayerMovementManager();
         movementManager.Init(this);

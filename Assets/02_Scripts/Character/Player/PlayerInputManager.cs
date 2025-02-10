@@ -24,12 +24,7 @@ public class PlayerInputManager
 
     #endregion
 
-    private Vector3 lastSkillUsePoint = Vector3.zero;
-
-    public Vector3 LastSkillUsePoint
-    {
-        get { return lastSkillUsePoint; }
-    }
+    public Vector3 lastSkillUsePoint = Vector3.zero;
 
     #region Public Func
 

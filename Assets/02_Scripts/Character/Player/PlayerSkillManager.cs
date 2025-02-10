@@ -151,5 +151,20 @@ public class PlayerSkillManager
         }
     }
 
+    public void TryUseSkill(SkillSlot _type, Vector3 _position)
+    {
+        // 스킬 발동에 성공했다면
+        if (IsSkillUsable(_type))
+        {
+            playerManager.transform.LookAt(_position);
+
+            UseSkill(_type);
+
+            // UI에 쿨타임을 적용한다.
+            if (playerManager.BattleUIManager != null)
+                playerManager.BattleUIManager.ApplyCooltime(_type, GetCoolTime(_type));
+        }
+    }
+
     #endregion
 }

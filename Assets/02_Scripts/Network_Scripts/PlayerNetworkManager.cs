@@ -2,17 +2,15 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
-public class PlayerNetworkController
+public class PlayerNetworkManager : NetworkBehaviour
 {
     private PlayerManager playerManager = null;
     private NetworkAnimator networkAnimator = null;
-    private NetworkObject networkObject = null;
 
     public void Init(PlayerManager _playerManager)
     {
         playerManager = _playerManager;
         networkAnimator = playerManager.GetComponent<NetworkAnimator>();
-        networkObject = playerManager.GetComponent<NetworkObject>();
     }
 
     public void SetNetworkAnimatorTrigger(int _hashId)
@@ -24,5 +22,11 @@ public class PlayerNetworkController
         }
 
         networkAnimator.SetTrigger(_hashId);
+    }
+
+    private void Awake()
+    {
+        playerManager = GetComponent<PlayerManager>();
+        networkAnimator = playerManager.GetComponent<NetworkAnimator>();
     }
 }
