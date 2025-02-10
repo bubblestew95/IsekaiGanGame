@@ -71,8 +71,10 @@ public class PlayerSkillManager
         // 스킬 사용
         if(animatorIdMap.TryGetValue(_type, out int animId))
         {
-            playerManager.NetworkController.SetNetworkAnimatorTrigger(animId);
-            // animator.SetTrigger(animId);
+            if(GameManager.Instance.IsLocalGame)
+                animator.SetTrigger(animId);
+            else
+                playerManager.NetworkController.SetNetworkAnimatorTrigger(animId);
         }
 
         // 쿨타임 적용

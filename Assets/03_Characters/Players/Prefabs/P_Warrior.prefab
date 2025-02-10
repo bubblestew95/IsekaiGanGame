@@ -208,7 +208,6 @@ GameObject:
   - component: {fileID: 6878838860696070794}
   - component: {fileID: 6102925824277653354}
   - component: {fileID: -2252394323271902163}
-  - component: {fileID: 9046347560763781879}
   - component: {fileID: 2948108365831047824}
   m_Layer: 9
   m_Name: P_Warrior
@@ -294,7 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3969461586
+  GlobalObjectIdHash: 312981802
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -319,10 +318,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bfa38ae7095fa64aa2e58d734226279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  OnPlayerDead:
-    m_PersistentCalls:
-      m_Calls: []
   playerData: {fileID: 11400000, guid: 9d4d5139111222842a09ca82cd7da42a, type: 2}
   battleUIManager: {fileID: 3805999972285357715}
   rangeAttackStartTr: {fileID: 0}
@@ -375,20 +370,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &9046347560763781879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1733868696496733154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65425e8592c4adc4e88456a7c08bed8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  moveSpeed: 5
 --- !u!114 &2948108365831047824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -984,7 +965,7 @@ Transform:
   m_Children:
   - {fileID: 1902953855798200377}
   m_Father: {fileID: 7850066531604283143}
-  m_LocalEulerAnglesHint: {x: -0.00858488, y: 3.2947247, z: 172.72923}
+  m_LocalEulerAnglesHint: {x: 12.988642, y: -3.4514704, z: 173.23012}
 --- !u!1 &5706634574647453860
 GameObject:
   m_ObjectHideFlags: 0
@@ -1162,7 +1143,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
