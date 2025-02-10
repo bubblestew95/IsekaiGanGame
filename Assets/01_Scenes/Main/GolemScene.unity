@@ -2697,6 +2697,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 391796695}
     m_Modifications:
+    - target: {fileID: -7888187740340765809, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 134393442
+      objectReference: {fileID: 0}
     - target: {fileID: 2131148431429031677, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: phase2Cam
       value: 
@@ -2983,7 +2987,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d9498b218a4534b96a376815ed7120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isLocalGame: 0
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &467294348 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8172849020746995793, guid: 2af5562ce69fc2d448481a1587a352a5, type: 3}
