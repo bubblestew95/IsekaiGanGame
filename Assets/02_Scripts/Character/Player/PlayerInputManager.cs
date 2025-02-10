@@ -111,6 +111,8 @@ public class PlayerInputManager
 
                 yield return null;
             }
+
+            yield return null;
         }
     }
 

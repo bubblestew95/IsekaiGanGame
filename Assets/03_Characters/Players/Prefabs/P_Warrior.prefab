@@ -293,7 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3969461586
+  GlobalObjectIdHash: 312981802
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -967,7 +967,7 @@ Transform:
   m_Children:
   - {fileID: 1902953855798200377}
   m_Father: {fileID: 7850066531604283143}
-  m_LocalEulerAnglesHint: {x: -0.00858488, y: 3.2947247, z: 172.72923}
+  m_LocalEulerAnglesHint: {x: 12.988642, y: -3.4514704, z: 173.23012}
 --- !u!1 &5706634574647453860
 GameObject:
   m_ObjectHideFlags: 0
@@ -1145,7 +1145,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0

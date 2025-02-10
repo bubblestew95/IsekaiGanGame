@@ -2906,10 +2906,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7261674707082634732, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
 --- !u!1001 &444473043
 PrefabInstance:
@@ -7177,6 +7174,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6333483065327376362, guid: ade512d1f4c03314c9f8baabb487f1fc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7514786493872156022, guid: ade512d1f4c03314c9f8baabb487f1fc, type: 3}
       propertyPath: m_Name
       value: P_Magician
@@ -11364,6 +11365,10 @@ PrefabInstance:
     - target: {fileID: 494462, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7317228378180982558, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
