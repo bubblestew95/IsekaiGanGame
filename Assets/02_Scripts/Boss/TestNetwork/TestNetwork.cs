@@ -1,9 +1,12 @@
+using System;
 using Unity.Multiplayer.Center.NetcodeForGameObjectsExample;
 using Unity.Netcode;
 using UnityEngine;
 
 public class TestNetwork : NetworkBehaviour
 {
+    public static event Action settingEndCallback;
+
     public GameObject[] Characters = new GameObject[4];
     public Transform[] SpwanTr = new Transform[4];
     public GameObject[] Players = new GameObject[2];
@@ -15,17 +18,10 @@ public class TestNetwork : NetworkBehaviour
         if (IsServer)
         {
             SpawnPlayerControlledObjects();
+            GameManager.Instance.loadingFinishCallback += LoadingEnd;
         }
 
-        Debug.Log("지금 플레이어 id" + NetworkManager.Singleton.LocalClientId);
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            SetPlayersClientRpc(objectId);
-        }
+        
     }
 
     // 프리펩 생성 및 Players 배열에 저장
@@ -44,16 +40,24 @@ public class TestNetwork : NetworkBehaviour
             cnt++;
         }
 
-        objectId = new ulong[cnt];
+        objectId = GetNetworkId(cnt);
 
-        cnt = 0;
+        SetPlayersClientRpc(objectId);
+    }
+
+    // 생성 네트워크 ID 리턴
+    private ulong[] GetNetworkId(int _cnt)
+    {
+        ulong[] objectIds = new ulong[_cnt];
+
+        _cnt = 0;
 
         foreach (GameObject player in Players)
         {
-            objectId[cnt++] = player.GetComponent<NetworkObject>().NetworkObjectId;
+            objectId[_cnt++] = player.GetComponent<NetworkObject>().NetworkObjectId;
         }
 
-        SetPlayersClientRpc(objectId);
+        return objectIds;
     }
 
     // Players 동기화 시켜주는 코드 필요
@@ -70,5 +74,12 @@ public class TestNetwork : NetworkBehaviour
 
             cnt++;
         }
+    }
+
+    // 로딩이 끝났을때 플레이어 설정
+    private void LoadingEnd()
+    {
+        SetPlayersClientRpc(objectId);
+        settingEndCallback?.Invoke();
     }
 }

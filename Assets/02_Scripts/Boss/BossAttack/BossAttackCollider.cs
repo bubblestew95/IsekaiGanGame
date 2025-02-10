@@ -9,10 +9,10 @@ public class BossAttackCollider : MonoBehaviour
     private string skillName = string.Empty;
     private float knockBackDistance = 0f;
 
-    public int Damage 
-    { 
-        get { return damage; } 
-        set { damage = value; } 
+    public int Damage
+    {
+        get { return damage; }
+        set { damage = value; }
     }
 
     public string SkillName
@@ -29,7 +29,7 @@ public class BossAttackCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && gameObject.tag == "BossAttack")
+        if (other.gameObject.tag == "Player" && gameObject.tag == "BossAttack" && other.gameObject.GetComponent<PlayerManager>().IsClient)
         {
             // 플레이어 데미지 입도록 설정
             GameManager.Instance.DamageToPlayer(other.gameObject.GetComponent<PlayerManager>(), damage, transform.position, KnockBackDistance);

@@ -3,56 +3,79 @@ using System.Collections;
 using UnityEngine;
 using Unity.Netcode;
 using System.Linq;
+using System;
 
 public class BossStateManager : NetworkBehaviour
 {
+    // 델리게이트
     public delegate void BossStateDelegate();
-    public delegate void BossStateDelegate2(GameObject _target);
+    public delegate void BossStateDelegate2(Vector3 _targetPos);
     public BossStateDelegate bossDieCallback;
     public BossStateDelegate bossHp10Callback;
     public BossStateDelegate bossHpHalfCallback;
     public BossStateDelegate bossStunCallback;
     public BossStateDelegate2 bossRandomTargetCallback;
 
-    [SerializeField] private GameObject aggroPlayer;
-    [SerializeField] private GameObject[] players;
-    [SerializeField] private GameObject boss;
-    [SerializeField] public float chainTime;
-    [SerializeField] private GameObject bossSkin;
-    [SerializeField] private BoxCollider hitCollider;
-
+    // 프로퍼티
     public GameObject Boss { get { return boss; } }
     public GameObject AggroPlayer { get { return aggroPlayer; } }
     public GameObject BossSkin { get { return bossSkin; } }
     public GameObject[] Players { get { return players; } }
     public BoxCollider HitCollider { get { return hitCollider; } }
 
-
+    // 보스 상태 관련 변수들
     private List<BossChain> activeChain = new List<BossChain>();
     private bool[] hpCheck = new bool[9];
     private GameObject randomTarget;
-    private float bestAggro;
+    private float bestAggro = 0f;
     private bool isPhase2 = false;
-
     private int maxHp = 100;
+    private float chainTime = 0f;
+    private GameObject[] players;
+    private GameObject aggroPlayer;
+
+    // 네트워크로 동기화 할것들
     private NetworkVariable<int> aggroPlayerIndex = new NetworkVariable<int>(-1);
     private NetworkVariable<int> curHp = new NetworkVariable<int>(-1);
-    public NetworkList<float> playerDamage = new NetworkList<float>();
-    public NetworkList<float> playerAggro = new NetworkList<float>();
+    private NetworkList<float> playerDamage = new NetworkList<float>();
+    private NetworkList<float> playerAggro = new NetworkList<float>();
 
-    // 찾아서 넣는거
+    // 가져와서 넣는거
     private DamageParticle damageParticle;
     private UIBossHpsManager bossHpUI;
     private BgmController bgmController;
     private BossAttackCollider attackCollider;
     private BossBT bossBT;
+    private GameObject boss;
+    private GameObject bossSkin;
+    private BoxCollider hitCollider;
 
     private void Awake()
     {
-        CheckNetworkSync.loadingFinishCallback += Init;
+        TestNetwork.settingEndCallback += InitMulti;
     }
 
-    #region [ServerRpc]
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("Players[0] : " + players[0]);
+            Debug.Log("Players[1] : " + players[1]);
+            Debug.Log("AggroPlayer : " + aggroPlayer);
+        }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            BossStun();
+        }
+    }
+
+
     // 서버에서만 데미지 받는 함수 실행
     [ServerRpc]
     public void BossDamageReceiveServerRpc(ulong _clientId, int _damage, float _aggro)
@@ -83,14 +106,13 @@ public class BossStateManager : NetworkBehaviour
         // 서버만 hp콜백(현재 피에 따라 패턴 설정)
         CheckHpCallback();
     }
-    #endregion
 
     #region [ClientRPC]
     // aggroPlayer 변경
     [ClientRpc]
-    private void SetAggroPlayerClientRpc()
+    private void SetAggroPlayerClientRpc(int _num)
     {
-        aggroPlayer = players[aggroPlayerIndex.Value];
+        aggroPlayer = players[_num];
     }
 
     // 데미지 파티클 실행
@@ -116,9 +138,9 @@ public class BossStateManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void RandomPlayerClientRpc()
+    private void RandomPlayerClientRpc(Vector3 _randomTargetPos)
     {
-        bossRandomTargetCallback?.Invoke(randomTarget);
+        bossRandomTargetCallback?.Invoke(_randomTargetPos);
     }
     #endregion
 
@@ -166,7 +188,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 80f && !hpCheck[1])
         {
@@ -174,7 +196,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 70f && !hpCheck[2])
         {
@@ -182,7 +204,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 60f && !hpCheck[3])
         {
@@ -190,7 +212,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 50f && !hpCheck[4])
         {
@@ -203,7 +225,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 30f && !hpCheck[6])
         {
@@ -211,7 +233,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 20f && !hpCheck[7])
         {
@@ -219,7 +241,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 10f && !hpCheck[8])
         {
@@ -227,7 +249,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
     }
     #endregion
@@ -273,13 +295,12 @@ public class BossStateManager : NetworkBehaviour
 
         if (allAggroZero)
         {
-            int num = Random.Range(0, players.Length);
+            int num = UnityEngine.Random.Range(0, players.Length);
             playerAggro[num] = 10f;
-            aggroPlayer = players[num];
+            aggroPlayerIndex.Value = num;
+            SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
             return;
         }
-
-        aggroPlayerIndex.Value = 0;
 
         // 기존의 어그로 왕보다 어그로가 1.2배 크면 어그로 바뀜
         for (int i = 0; i < players.Length; i++)
@@ -291,8 +312,10 @@ public class BossStateManager : NetworkBehaviour
             }
         }
 
+        Debug.Log("서버에서 aggroPlayerIndex.Value :" + aggroPlayerIndex.Value);
+
         // 어그로 플레이어 변경(클라 모두)
-        SetAggroPlayerClientRpc();
+        SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
     }
 
     // 데미지 받는 함수
@@ -335,6 +358,75 @@ public class BossStateManager : NetworkBehaviour
     }
     #endregion
 
+    #region [Init]
+
+    // 초기화 해야할것들
+    private void Init()
+    {
+        for (int i = 0; i < hpCheck.Length; i++)
+        {
+            hpCheck[i] = false;
+        }
+        bestAggro = 0f;
+
+        // 참조 가져오기
+        boss = transform.gameObject;
+        bossSkin = boss.transform.GetChild(0).gameObject;
+        hitCollider = boss.transform.GetChild(1).GetComponent<BoxCollider>();
+        attackCollider = GetComponent<BossAttackCollider>();
+        damageParticle = FindFirstObjectByType<DamageParticle>();
+        bossHpUI = FindFirstObjectByType<UIBossHpsManager>();
+        bgmController = FindFirstObjectByType<BgmController>();
+        bossBT = FindAnyObjectByType<BossBT>();
+
+        // ui초기 설정
+        bossHpUI.SetMaxHp(maxHp);
+        bossHpUI.HpBarUIUpdate();
+    }
+
+    // 멀티에서 초기화 해야할것들
+    private void InitMulti()
+    {
+        if (IsServer)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                playerDamage.Add(0f);
+                playerAggro.Add(0f);
+            }
+
+            curHp.Value = maxHp;
+            aggroPlayerIndex.Value = 0;
+        }
+
+        Init();
+
+        SetCallback();
+
+        SetPlayerMulti();
+
+    }
+
+    // 콜백 설정
+    private void SetCallback()
+    {
+        attackCollider.rockCollisionCallback += BossStun;
+        bossBT.phase2BehaviorStartCallback += ChangePhase2BGM;
+    }
+
+    // 멀티 플레이어 설정
+    private void SetPlayerMulti()
+    {
+        players = FindFirstObjectByType<TestNetwork>().Players;
+
+        // 초반 aggro 0이여서 세팅하는 함수
+        GetHighestAggroTarget();
+
+        bossBT.curState = BossState.Chase;
+
+    }
+    #endregion
+
     #region [Etc.]
     // 보스와 어그로 플레이어 사이의 거리 계산
     public float GetDisWithoutY()
@@ -348,61 +440,9 @@ public class BossStateManager : NetworkBehaviour
     // 랜덤한 플레이어를 호출하는 함수
     private GameObject RandomPlayer()
     {
-        int randomIndex = Random.Range(0, players.Length);
+        int randomIndex = UnityEngine.Random.Range(0, players.Length);
 
         return players[randomIndex];
-    }
-
-    // 초기화 하는 함수
-    private void Init()
-    {
-        if (IsServer)
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                playerDamage.Add(0f);
-                playerAggro.Add(0f);
-            }
-            curHp.Value = maxHp;
-            aggroPlayerIndex.Value = 0;
-        }
-
-        for (int i = 0; i < hpCheck.Length; i++)
-        {
-            hpCheck[i] = false;
-        }
-
-        bestAggro = 0f;
-
-        attackCollider = GetComponent<BossAttackCollider>();
-
-        damageParticle = FindFirstObjectByType<DamageParticle>();
-        bossHpUI = FindFirstObjectByType<UIBossHpsManager>();
-        bgmController = FindFirstObjectByType<BgmController>();
-        bossBT = FindAnyObjectByType<BossBT>();
-
-        // 공격8 스턴 콜백
-        attackCollider.rockCollisionCallback += BossStun;
-        bossBT.phase2BehaviorStartCallback += ChangePhase2BGM;
-
-        // ui초기 설정
-        bossHpUI.SetMaxHp(maxHp);
-        bossHpUI.HpBarUIUpdate();
-
-        // 플레이어 설정하는 함수
-        SetPlayer();
-    }
-
-    // 플레이어 설정 함수
-    private void SetPlayer()
-    {
-        players = FindFirstObjectByType<TestNetwork>().Players;
-
-        // 초반 aggro 0이여서 세팅하는 함수
-        GetHighestAggroTarget();
-
-        bossBT.curState = BossState.Chase;
-
     }
     #endregion
 
