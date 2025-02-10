@@ -9,9 +9,11 @@ public class GameManagerTest : NetworkBehaviour
 
     private void Start()
     {
+        Debug.Log($"[GameManagerTest] Start() 실행됨 - IsServer: {IsServer}, IsClient: {IsClient}");
+
         if (IsServer) // 서버에서만 실행
         {
-            SpawnPlayerControlledObjects();
+            //SpawnPlayerControlledObjects();
             SpawnSharedObject();
         }
         else
@@ -30,16 +32,33 @@ public class GameManagerTest : NetworkBehaviour
         foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
         {
             ulong clientId = client.ClientId;
+
             GameObject playerObject = GetPlayerObjectForClient(clientId);
 
             if (playerObject != null)
             {
+                Debug.Log($"clientId:{clientId}");
                 GameObject instance = Instantiate(playerObject);
                 NetworkObject networkObject = instance.GetComponent<NetworkObject>();
 
-                // 각 클라이언트가 자신만 조작할 수 있도록 설정
-                networkObject.SpawnAsPlayerObject(clientId);
-                Debug.Log($"[Server] 클라이언트 {clientId}의 전용 오브젝트 {playerObject.name} 스폰 완료.");
+                if (networkObject != null)
+                {
+                    Debug.Log($"{clientId}의 오브젝트 : {playerObject.name} 스폰 시작.");
+                    // 오브젝트가 스폰 가능한 상태인지 확인
+                    if (!networkObject.IsSpawned)
+                    {
+                        Debug.Log($"[Server] 클라이언트 {clientId}의 전용 오브젝트 {playerObject.name} 스폰 완료.");
+                        networkObject.SpawnAsPlayerObject(clientId);
+                    }
+                    else
+                    {
+                        Debug.LogError($"[Server] 클라이언트 {clientId}의 오브젝트가 이미 스폰되었습니다!");
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"[Server] 클라이언트 {clientId}의 오브젝트에 NetworkObject가 없습니다!");
+                }
             }
             else
             {
@@ -47,6 +66,7 @@ public class GameManagerTest : NetworkBehaviour
             }
         }
     }
+
 
     private void SpawnSharedObject()
     {
@@ -57,12 +77,20 @@ public class GameManagerTest : NetworkBehaviour
         }
 
         GameObject sharedInstance = Instantiate(p_Golem);
+        
         NetworkObject networkObject = sharedInstance.GetComponent<NetworkObject>();
 
         if (networkObject != null)
         {
-            networkObject.Spawn();
-            Debug.Log("[Server] 공용 오브젝트 C가 스폰되었습니다.");
+            if (!networkObject.IsSpawned)
+            {
+                networkObject.Spawn();
+                Debug.Log("[Server] 공용 오브젝트 C가 스폰되었습니다.");
+            }
+            else
+            {
+                Debug.LogError("[Server] 공용 오브젝트 C가 이미 스폰된 상태입니다!");
+            }
         }
         else
         {
@@ -79,22 +107,23 @@ public class GameManagerTest : NetworkBehaviour
 
         if (obj == null)
         {
-            Debug.LogError($"[Server] 클라이언트 {clientId}에 할당할 프리팹이 존재하지 않습니다!");
+            Debug.LogError($"[Server] 클라이언트 {clientId}에 할당할 프리팹이 존재하지 않습니다! / Warrior 할당");
+            obj = p_Warrior;
         }
 
         return obj;
     }
 
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
+    //public override void OnNetworkSpawn()
+    //{
+    //    base.OnNetworkSpawn();
 
-        // 클라이언트가 다시 연결되면 소유권 재설정
-        if (IsOwner)
-        {
-            RequestOwnershipServerRpc(NetworkManager.Singleton.LocalClientId);
-        }
-    }
+    //    // 클라이언트가 다시 연결되면 소유권 재설정
+    //    if (IsOwner)
+    //    {
+    //        RequestOwnershipServerRpc(NetworkManager.Singleton.LocalClientId);
+    //    }
+    //}
     [ServerRpc]
     private void RequestOwnershipServerRpc(ulong clientId, ServerRpcParams rpcParams = default)
     {
