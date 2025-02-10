@@ -3,11 +3,12 @@ using System.Collections;
 using UnityEngine;
 using Unity.Netcode;
 using System.Linq;
+using System;
 
 public class BossStateManager : NetworkBehaviour
 {
     public delegate void BossStateDelegate();
-    public delegate void BossStateDelegate2(GameObject _target);
+    public delegate void BossStateDelegate2(Vector3 _targetPos);
     public BossStateDelegate bossDieCallback;
     public BossStateDelegate bossHp10Callback;
     public BossStateDelegate bossHpHalfCallback;
@@ -52,6 +53,26 @@ public class BossStateManager : NetworkBehaviour
         CheckNetworkSync.loadingFinishCallback += Init;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("Players[0] : " + players[0]);
+            Debug.Log("Players[1] : " + players[1]);
+            Debug.Log("AggroPlayer : " + aggroPlayer);
+        }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            BossStun();
+        }
+    }
+
     #region [ServerRpc]
     // 서버에서만 데미지 받는 함수 실행
     [ServerRpc]
@@ -88,9 +109,9 @@ public class BossStateManager : NetworkBehaviour
     #region [ClientRPC]
     // aggroPlayer 변경
     [ClientRpc]
-    private void SetAggroPlayerClientRpc()
+    private void SetAggroPlayerClientRpc(int _num)
     {
-        aggroPlayer = players[aggroPlayerIndex.Value];
+        aggroPlayer = players[_num];
     }
 
     // 데미지 파티클 실행
@@ -116,9 +137,9 @@ public class BossStateManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void RandomPlayerClientRpc()
+    private void RandomPlayerClientRpc(Vector3 _randomTargetPos)
     {
-        bossRandomTargetCallback?.Invoke(randomTarget);
+        bossRandomTargetCallback?.Invoke(_randomTargetPos);
     }
     #endregion
 
@@ -166,7 +187,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 80f && !hpCheck[1])
         {
@@ -174,7 +195,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 70f && !hpCheck[2])
         {
@@ -182,7 +203,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 60f && !hpCheck[3])
         {
@@ -190,7 +211,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 50f && !hpCheck[4])
         {
@@ -203,7 +224,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 30f && !hpCheck[6])
         {
@@ -211,7 +232,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 20f && !hpCheck[7])
         {
@@ -219,7 +240,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
         else if (hp <= 10f && !hpCheck[8])
         {
@@ -227,7 +248,7 @@ public class BossStateManager : NetworkBehaviour
             bossHp10Callback?.Invoke();
 
             randomTarget = RandomPlayer();
-            RandomPlayerClientRpc();
+            RandomPlayerClientRpc(randomTarget.transform.position);
         }
     }
     #endregion
@@ -273,13 +294,12 @@ public class BossStateManager : NetworkBehaviour
 
         if (allAggroZero)
         {
-            int num = Random.Range(0, players.Length);
+            int num = UnityEngine.Random.Range(0, players.Length);
             playerAggro[num] = 10f;
-            aggroPlayer = players[num];
+            aggroPlayerIndex.Value = num;
+            SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
             return;
         }
-
-        aggroPlayerIndex.Value = 0;
 
         // 기존의 어그로 왕보다 어그로가 1.2배 크면 어그로 바뀜
         for (int i = 0; i < players.Length; i++)
@@ -291,8 +311,10 @@ public class BossStateManager : NetworkBehaviour
             }
         }
 
+        Debug.Log("서버에서 aggroPlayerIndex.Value :" + aggroPlayerIndex.Value);
+
         // 어그로 플레이어 변경(클라 모두)
-        SetAggroPlayerClientRpc();
+        SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
     }
 
     // 데미지 받는 함수
@@ -348,7 +370,7 @@ public class BossStateManager : NetworkBehaviour
     // 랜덤한 플레이어를 호출하는 함수
     private GameObject RandomPlayer()
     {
-        int randomIndex = Random.Range(0, players.Length);
+        int randomIndex = UnityEngine.Random.Range(0, players.Length);
 
         return players[randomIndex];
     }

@@ -16,8 +16,6 @@ public class TestNetwork : NetworkBehaviour
         {
             SpawnPlayerControlledObjects();
         }
-
-        Debug.Log("지금 플레이어 id" + NetworkManager.Singleton.LocalClientId);
     }
 
     private void Update()
