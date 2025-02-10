@@ -2983,6 +2983,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d9498b218a4534b96a376815ed7120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLocalGame: 0
 --- !u!1 &467294348 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8172849020746995793, guid: 2af5562ce69fc2d448481a1587a352a5, type: 3}
@@ -3869,6 +3870,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -2836398782895520287, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2625562681
+      objectReference: {fileID: 0}
     - target: {fileID: 179124, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
       propertyPath: m_Name
       value: P_Archer
@@ -3879,7 +3884,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 190290, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 494462, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7603,6 +7608,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8203911682527767499, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 862492079
+      objectReference: {fileID: 0}
     - target: {fileID: 179124, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_Name
       value: P_Assassin

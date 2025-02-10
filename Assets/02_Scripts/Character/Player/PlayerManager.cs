@@ -11,7 +11,7 @@ using Unity.Netcode.Components;
 /// <summary>
 /// 플레이어 캐릭터를 총괄적으로 관리하는 매니저.
 /// </summary>
-public class PlayerManager : NetworkBehaviour
+public class PlayerManager : MonoBehaviour
 {
     #region Variables
 
@@ -28,10 +28,6 @@ public class PlayerManager : NetworkBehaviour
     private Transform rangeAttackStartTr = null;
     [SerializeField]
     private MeleeWeapon meleeWeapon = null;
-
-    [Header("Multi Settings")]
-    [SerializeField]
-    private bool isLocalGame = false;
 
         #endregion
 
@@ -76,12 +72,6 @@ public class PlayerManager : NetworkBehaviour
     {
         get { return meleeWeapon; }
     }
-
-    public bool IsLocalGame
-    { 
-        get { return isLocalGame; } 
-    }
-
 
         #region Manager References
 
@@ -243,7 +233,7 @@ public class PlayerManager : NetworkBehaviour
         stateMachine.ChangeState(PlayerStateType.Idle);
 
         // 로컬 게임이거나, 네트워크 오브젝트의 소유자일 경우에만 활성화한다.
-        if (isLocalGame || GetComponent<NetworkObject>().IsOwner)
+        if (GameManager.Instance.IsLocalGame || GetComponent<NetworkObject>().IsOwner)
         {
             // 전투 UI를 활성화하고, 캐릭터 컨트롤러를 활성화한다.
             battleUIManager.transform.parent.gameObject.SetActive(true);
