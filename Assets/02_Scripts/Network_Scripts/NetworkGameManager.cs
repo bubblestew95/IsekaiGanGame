@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class NetworkGameManager : NetworkManager
+public class NetworkGameManager : NetworkBehaviour
 {
     public event Action loadingFinishCallback;
 
