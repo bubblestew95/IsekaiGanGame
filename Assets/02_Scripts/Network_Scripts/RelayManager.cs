@@ -13,6 +13,7 @@ using Unity.Services.Lobbies.Models;
 using Unity.Services.Lobbies;
 using System.Collections.Generic;
 using System.Collections;
+using Unity.Services.Authentication;
 
 
 public class RelayManager : MonoBehaviour
@@ -58,19 +59,18 @@ public class RelayManager : MonoBehaviour
     // 호스트(방장)가 Relay 생성
     public async Task<string> CreateRelay(int maxPlayers)
     {
+        await UnityServices.InitializeAsync();
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
         try
         {
             Debug.Log("[RelayManager] Relay 서버 생성 요청...");
             // Relay 할당 요청
-            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers);
-
-            if (allocation == null)
-            {
-                Debug.LogError("Relay Allocation 생성 실패: Allocation이 null입니다.");
-                return null;
-            }
-
-            joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            var allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers - 1); // 호스트 제외 인원
+            string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            Debug.Log($"[Relay] 생성된 Join Code: {joinCode}");
             if (string.IsNullOrEmpty(joinCode))
             {
                 Debug.LogError("Relay 생성 실패: Join Code가 반환되지 않음.");
@@ -89,33 +89,34 @@ public class RelayManager : MonoBehaviour
                 allocation.ConnectionData
             );
 
+
             // 호스트 시작
-            NetworkManager.Singleton.StartHost();
-            Debug.Log("Host started successfully.");
+            //NetworkManager.Singleton.StartHost();
+            //Debug.Log("Host started successfully.");
 
             // Lobby에 RelayJoinCode 업데이트 (기존 AddHostToLobby 코드 제거하고 여기서 직접 실행)
-            if (!string.IsNullOrEmpty(RoomManager.Instance.currentRoom))
-            {
-                await LobbyService.Instance.UpdateLobbyAsync(RoomManager.Instance.currentRoom, new UpdateLobbyOptions
-                {
-                    Data = new Dictionary<string, DataObject>
-                {
-                    { "RelayJoinCode", new DataObject(DataObject.VisibilityOptions.Member, joinCode) }
-                }
-                });
+            //if (!string.IsNullOrEmpty(RoomManager.Instance.currentRoom))
+            //{
+            //    await LobbyService.Instance.UpdateLobbyAsync(RoomManager.Instance.currentRoom, new UpdateLobbyOptions
+            //    {
+            //        Data = new Dictionary<string, DataObject>
+            //    {
+            //        { "RelayJoinCode", new DataObject(DataObject.VisibilityOptions.Member, joinCode) }
+            //    }
+            //    });
 
-                Debug.Log("Lobby에 RelayJoinCode 업데이트 완료");
-            }
-            else
-            {
-                Debug.LogWarning("Lobby ID가 없습니다. RelayJoinCode를 업데이트할 수 없습니다.");
-            }
+            //    Debug.Log("Lobby에 RelayJoinCode 업데이트 완료");
+            //}
+            //else
+            //{
+            //    Debug.LogWarning("Lobby ID가 없습니다. RelayJoinCode를 업데이트할 수 없습니다.");
+            //}
 
-            //  Keep-Alive 시작
-            if (keepAliveCoroutine == null)
-            {
-                keepAliveCoroutine = StartCoroutine(SendKeepAlive());
-            }
+            ////  Keep-Alive 시작
+            //if (keepAliveCoroutine == null)
+            //{
+            //    keepAliveCoroutine = StartCoroutine(SendKeepAlive());
+            //}
 
             return joinCode;
         }
@@ -137,6 +138,11 @@ public class RelayManager : MonoBehaviour
     // Relay 연결 후 Keep-Alive 시작
     public async Task<bool> JoinRelay(string joinCode)
     {
+        await UnityServices.InitializeAsync();
+        if (!AuthenticationService.Instance.IsSignedIn)
+        {
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
         try
         {
             JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
@@ -150,16 +156,16 @@ public class RelayManager : MonoBehaviour
                 allocation.HostConnectionData
             );
 
-            NetworkManager.Singleton.StartClient();
-            Debug.Log("Joined Relay successfully!");
+            //NetworkManager.Singleton.StartClient();
+            //Debug.Log("Joined Relay successfully!");
 
-            //  Keep-Alive 시작
-            if (keepAliveCoroutine == null)
-            {
-                keepAliveCoroutine = StartCoroutine(SendKeepAlive());
-            }
+            ////  Keep-Alive 시작
+            //if (keepAliveCoroutine == null)
+            //{
+            //    keepAliveCoroutine = StartCoroutine(SendKeepAlive());
+            //}
 
-            return true;
+            return NetworkManager.Singleton.StartClient();
         }
         catch (RelayServiceException e)
         {
