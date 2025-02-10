@@ -1,13 +1,16 @@
 using Unity.Netcode;
+using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 
 public class CheckId : NetworkBehaviour
 {
-    private void Update()
+    public override void OnNetworkSpawn()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Debug.Log(NetworkObjectId);
-        }
+        GameManager.Instance.CheckPlayerSpawnServerRpc();
+    }
+
+    private void CheckNetworkSpwan()
+    {
+
     }
 }

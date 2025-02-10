@@ -1,7 +1,9 @@
+using System;
+using Unity.Multiplayer.Center.NetcodeForGameObjectsExample;
 using Unity.Netcode;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     #region Singleton Variable, Properties
     private static GameManager instance = null;
@@ -18,6 +20,18 @@ public class GameManager : MonoBehaviour
     #region Private Variables
 
     private BossStateManager bossStateManager = null;
+
+    // 네트워크 관련
+    private int playerCnt = 0;
+    private int loadingCnt = 0;
+    private bool spawnPlayer = false;
+    private bool loadingScene = false;
+
+    #endregion
+
+    #region Delegate
+
+    public event Action loadingFinishCallback;
 
     #endregion
 
@@ -108,6 +122,52 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         bossStateManager = FindAnyObjectByType<BossStateManager>();
+        LoadingCheckServerRpc();
+    }
+
+    private void Update()
+    {
+        if (spawnPlayer && loadingScene)
+        {
+            LoadingFinishClientRpc();
+            spawnPlayer = false;
+            loadingScene = false;
+        }
+    }
+
+    #endregion
+
+    #region [ServerStart]
+
+    // 플레이어 전부 네트워크 상에서 스폰됬는지 확인하는 함수
+    [ServerRpc]
+    public void CheckPlayerSpawnServerRpc()
+    {
+        playerCnt++;
+
+        if (playerCnt == NetworkManager.Singleton.ConnectedClients.Count)
+        {
+            spawnPlayer = true;
+        }
+    }
+
+    // 플레이어 전부 네트워크 상에서 씬로딩이 됬는지 확인하는 함수
+    [ServerRpc(RequireOwnership = false)]
+    private void LoadingCheckServerRpc()
+    {
+        loadingCnt++;
+
+        if (loadingCnt == NetworkManager.Singleton.ConnectedClients.Count)
+        {
+            loadingScene = true;
+        }
+    }
+
+    // 로딩이 끝나면 모든 클라이언트에 실행이 끝났다고 콜백이 됨.
+    [ClientRpc]
+    private void LoadingFinishClientRpc()
+    {
+        loadingFinishCallback?.Invoke();
     }
 
     #endregion

@@ -416,7 +416,7 @@ Transform:
   m_GameObject: {fileID: 2492541278023546289}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2355,10 +2355,10 @@ Transform:
   m_LocalScale: {x: 1.4999999, y: 1.4999999, z: 1.4999999}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 5338810321804793658}
   - {fileID: 7846597328748055966}
-  - {fileID: 7595857743559779588}
   - {fileID: 565950463579664464}
+  - {fileID: 5338810321804793658}
+  - {fileID: 7595857743559779588}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &2550935751187727211
@@ -2438,6 +2438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: febcbf83916fccc4ea0722f50c5c2890, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   curState: 0
   anim: {fileID: 2550935751187727211}
   nvAgent: {fileID: 7853676516811975558}
@@ -2459,7 +2460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1120013972
+  GlobalObjectIdHash: 3859563802
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -2489,12 +2490,8 @@ MonoBehaviour:
   players:
   - {fileID: 0}
   - {fileID: 0}
-  boss: {fileID: 9137032837993464747}
-  chainTime: 0
   bossSkin: {fileID: 2492541278023546289}
   hitCollider: {fileID: 6572184628513710127}
-  maxHp: 1000
-  curHp: 1000
 --- !u!114 &7072979799601489313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2507,6 +2504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6286700f70eb88b43b75b88600953223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   bossStateManager: {fileID: 7796279537819312077}
   bossSkillManager: {fileID: 5870383895420540904}
   bossBT: {fileID: 2131148431429031677}

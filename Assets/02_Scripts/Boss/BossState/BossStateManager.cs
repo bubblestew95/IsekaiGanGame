@@ -7,6 +7,7 @@ using System;
 
 public class BossStateManager : NetworkBehaviour
 {
+    // 델리게이트
     public delegate void BossStateDelegate();
     public delegate void BossStateDelegate2(Vector3 _targetPos);
     public BossStateDelegate bossDieCallback;
@@ -15,42 +16,43 @@ public class BossStateManager : NetworkBehaviour
     public BossStateDelegate bossStunCallback;
     public BossStateDelegate2 bossRandomTargetCallback;
 
-    [SerializeField] private GameObject aggroPlayer;
-    [SerializeField] private GameObject[] players;
-    [SerializeField] private GameObject boss;
-    [SerializeField] public float chainTime;
-    [SerializeField] private GameObject bossSkin;
-    [SerializeField] private BoxCollider hitCollider;
-
+    // 프로퍼티
     public GameObject Boss { get { return boss; } }
     public GameObject AggroPlayer { get { return aggroPlayer; } }
     public GameObject BossSkin { get { return bossSkin; } }
     public GameObject[] Players { get { return players; } }
     public BoxCollider HitCollider { get { return hitCollider; } }
 
-
+    // 보스 상태 관련 변수들
     private List<BossChain> activeChain = new List<BossChain>();
     private bool[] hpCheck = new bool[9];
     private GameObject randomTarget;
-    private float bestAggro;
+    private float bestAggro = 0f;
     private bool isPhase2 = false;
-
     private int maxHp = 100;
+    private float chainTime = 0f;
+    private GameObject[] players;
+    private GameObject aggroPlayer;
+
+    // 네트워크로 동기화 할것들
     private NetworkVariable<int> aggroPlayerIndex = new NetworkVariable<int>(-1);
     private NetworkVariable<int> curHp = new NetworkVariable<int>(-1);
-    public NetworkList<float> playerDamage = new NetworkList<float>();
-    public NetworkList<float> playerAggro = new NetworkList<float>();
+    private NetworkList<float> playerDamage = new NetworkList<float>();
+    private NetworkList<float> playerAggro = new NetworkList<float>();
 
-    // 찾아서 넣는거
+    // 가져와서 넣는거
     private DamageParticle damageParticle;
     private UIBossHpsManager bossHpUI;
     private BgmController bgmController;
     private BossAttackCollider attackCollider;
     private BossBT bossBT;
+    private GameObject boss;
+    private GameObject bossSkin;
+    private BoxCollider hitCollider;
 
     private void Awake()
     {
-        CheckNetworkSync.loadingFinishCallback += Init;
+        TestNetwork.settingEndCallback += InitMulti;
     }
 
     private void Update()
@@ -73,7 +75,7 @@ public class BossStateManager : NetworkBehaviour
         }
     }
 
-    #region [ServerRpc]
+
     // 서버에서만 데미지 받는 함수 실행
     [ServerRpc]
     public void BossDamageReceiveServerRpc(ulong _clientId, int _damage, float _aggro)
@@ -104,7 +106,6 @@ public class BossStateManager : NetworkBehaviour
         // 서버만 hp콜백(현재 피에 따라 패턴 설정)
         CheckHpCallback();
     }
-    #endregion
 
     #region [ClientRPC]
     // aggroPlayer 변경
@@ -357,6 +358,75 @@ public class BossStateManager : NetworkBehaviour
     }
     #endregion
 
+    #region [Init]
+
+    // 초기화 해야할것들
+    private void Init()
+    {
+        for (int i = 0; i < hpCheck.Length; i++)
+        {
+            hpCheck[i] = false;
+        }
+        bestAggro = 0f;
+
+        // 참조 가져오기
+        boss = transform.gameObject;
+        bossSkin = boss.transform.GetChild(0).gameObject;
+        hitCollider = boss.transform.GetChild(1).GetComponent<BoxCollider>();
+        attackCollider = GetComponent<BossAttackCollider>();
+        damageParticle = FindFirstObjectByType<DamageParticle>();
+        bossHpUI = FindFirstObjectByType<UIBossHpsManager>();
+        bgmController = FindFirstObjectByType<BgmController>();
+        bossBT = FindAnyObjectByType<BossBT>();
+
+        // ui초기 설정
+        bossHpUI.SetMaxHp(maxHp);
+        bossHpUI.HpBarUIUpdate();
+    }
+
+    // 멀티에서 초기화 해야할것들
+    private void InitMulti()
+    {
+        if (IsServer)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                playerDamage.Add(0f);
+                playerAggro.Add(0f);
+            }
+
+            curHp.Value = maxHp;
+            aggroPlayerIndex.Value = 0;
+        }
+
+        Init();
+
+        SetCallback();
+
+        SetPlayerMulti();
+
+    }
+
+    // 콜백 설정
+    private void SetCallback()
+    {
+        attackCollider.rockCollisionCallback += BossStun;
+        bossBT.phase2BehaviorStartCallback += ChangePhase2BGM;
+    }
+
+    // 멀티 플레이어 설정
+    private void SetPlayerMulti()
+    {
+        players = FindFirstObjectByType<TestNetwork>().Players;
+
+        // 초반 aggro 0이여서 세팅하는 함수
+        GetHighestAggroTarget();
+
+        bossBT.curState = BossState.Chase;
+
+    }
+    #endregion
+
     #region [Etc.]
     // 보스와 어그로 플레이어 사이의 거리 계산
     public float GetDisWithoutY()
@@ -373,58 +443,6 @@ public class BossStateManager : NetworkBehaviour
         int randomIndex = UnityEngine.Random.Range(0, players.Length);
 
         return players[randomIndex];
-    }
-
-    // 초기화 하는 함수
-    private void Init()
-    {
-        if (IsServer)
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                playerDamage.Add(0f);
-                playerAggro.Add(0f);
-            }
-            curHp.Value = maxHp;
-            aggroPlayerIndex.Value = 0;
-        }
-
-        for (int i = 0; i < hpCheck.Length; i++)
-        {
-            hpCheck[i] = false;
-        }
-
-        bestAggro = 0f;
-
-        attackCollider = GetComponent<BossAttackCollider>();
-
-        damageParticle = FindFirstObjectByType<DamageParticle>();
-        bossHpUI = FindFirstObjectByType<UIBossHpsManager>();
-        bgmController = FindFirstObjectByType<BgmController>();
-        bossBT = FindAnyObjectByType<BossBT>();
-
-        // 공격8 스턴 콜백
-        attackCollider.rockCollisionCallback += BossStun;
-        bossBT.phase2BehaviorStartCallback += ChangePhase2BGM;
-
-        // ui초기 설정
-        bossHpUI.SetMaxHp(maxHp);
-        bossHpUI.HpBarUIUpdate();
-
-        // 플레이어 설정하는 함수
-        SetPlayer();
-    }
-
-    // 플레이어 설정 함수
-    private void SetPlayer()
-    {
-        players = FindFirstObjectByType<TestNetwork>().Players;
-
-        // 초반 aggro 0이여서 세팅하는 함수
-        GetHighestAggroTarget();
-
-        bossBT.curState = BossState.Chase;
-
     }
     #endregion
 
