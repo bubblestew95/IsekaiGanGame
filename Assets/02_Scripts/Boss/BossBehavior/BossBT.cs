@@ -84,7 +84,7 @@ public class BossBT : NetworkBehaviour
 
             if (curState != BossState.Chase)
             {
-                    break;
+                break;
             }
 
             if (elapseTime >= patternDelay)
@@ -704,11 +704,12 @@ public class BossBT : NetworkBehaviour
 
         // 스턴 애니메이션 강제 재생
         anim.Play("Stun");
-        SetAnimBool(curState, true);
 
         // 몇초후
         yield return new WaitForSeconds(3f);
-        SetAnimBool(curState, false);
+
+
+        StunSync2ClientRpc();
 
         if (previousBehavior != BossState.Attack8)
         {
@@ -748,7 +749,7 @@ public class BossBT : NetworkBehaviour
         {
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Phase2"))
             {
-                
+
                 if (once)
                 {
                     once = false;
@@ -793,7 +794,7 @@ public class BossBT : NetworkBehaviour
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Phase2-1") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
                 // 카메라 원상복귀
-                StartCoroutine(phase2Cam.ReturnCam());
+                Phase2EndClientRpc();
 
                 anim.SetBool("Phase2-1Flag", false);
                 break;
@@ -881,6 +882,13 @@ public class BossBT : NetworkBehaviour
         bossStateManager.BossSkin.SetActive(true);
         bossStateManager.HitCollider.enabled = true;
         bossStateManager.Boss.tag = "Untagged";
+        SetAnimBool(BossState.Stun, true);
+    }
+
+    [ClientRpc]
+    private void StunSync2ClientRpc()
+    {
+        SetAnimBool(BossState.Stun, false);
     }
 
     // 카메라 움직이고, 브금 변경 콜백

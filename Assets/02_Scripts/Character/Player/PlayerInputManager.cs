@@ -108,7 +108,11 @@ public class PlayerInputManager
                 // Dequeue ½Ãµµ
                 if (skillBuffer.Count > 0)
                     skillBuffer.Dequeue();
+
+                yield return null;
             }
+
+            yield return null;
         }
     }
 
