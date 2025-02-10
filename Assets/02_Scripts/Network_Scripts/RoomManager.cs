@@ -26,8 +26,8 @@ public class RoomManager : NetworkBehaviour
     public TMP_InputField roomNameInput; // 방 이름 입력 필드
     public TMP_InputField joinCodeInput; // 방 코드 입력 필드
     public Button createRoomButton; // 방 생성 버튼
-    public Button joinRoomButton; // Join 버튼
-    public Button join_CodeRoomButton; // Join 버튼
+    public Button join_SelectRoomButton; // Select Join 버튼
+    public Button join_CodeRoomButton; // Code Join 버튼
     public Button leaveRoomButton; // Join 버튼
     public Button codeButton; // Code 복사 버튼
     public Button readyButton; //ready 버튼
@@ -279,6 +279,7 @@ public class RoomManager : NetworkBehaviour
             joinCodeInput.interactable = false;
             createRoomButton.interactable = false;
             join_CodeRoomButton.interactable = false;
+            join_SelectRoomButton.interactable = false;
             codeButton.GetComponentInChildren<TMP_Text>().text = lobby.LobbyCode;
             codeButton.interactable = true;
             leaveRoomButton.interactable = true;
@@ -384,6 +385,7 @@ public class RoomManager : NetworkBehaviour
             joinCodeInput.interactable = false;
             createRoomButton.interactable = false;
             join_CodeRoomButton.interactable = false;
+            join_SelectRoomButton.interactable = false;
             codeButton.interactable = true;
             leaveRoomButton.interactable = true;
             //readyButton.SetActive(true);
@@ -408,6 +410,60 @@ public class RoomManager : NetworkBehaviour
         catch (LobbyServiceException e)
         {
             Debug.LogError($"방 참가 실패: {e.Message}");
+        }
+    }
+
+    public async void JoinSelectedRoom()
+    {
+        if (string.IsNullOrEmpty(currentRoom))
+        {
+            Debug.LogError("선택된 방이 없습니다!");
+            return;
+        }
+
+        try
+        {
+            // 선택된 Room ID를 사용하여 입장
+            Lobby lobby = await LobbyService.Instance.GetLobbyAsync(currentRoom);
+            if (lobby == null)
+            {
+                Debug.LogError("[JoinSelectedRoom] 해당 방을 찾을 수 없습니다!");
+                return;
+            }
+
+            Debug.Log($"[JoinSelectedRoom] 방 참가 성공! Lobby ID: {lobby.Id}");
+
+            // RelayJoinCode 확인 및 참가
+            if (!lobby.Data.ContainsKey("RelayJoinCode") || string.IsNullOrEmpty(lobby.Data["RelayJoinCode"].Value))
+            {
+                Debug.LogError("RelayJoinCode가 존재하지 않습니다!");
+                return;
+            }
+
+            string relayJoinCode = lobby.Data["RelayJoinCode"].Value;
+            Debug.Log($"RelayJoinCode 확인 완료: {relayJoinCode}");
+
+            bool relaySuccess = await RelayManager.Instance.JoinRelay(relayJoinCode);
+            if (!relaySuccess)
+            {
+                Debug.LogError("Relay 참가 실패!");
+                return;
+            }
+
+            Debug.Log($"[JoinSelectedRoom] {lobby.Id}로 입장 성공!");
+
+            readyButton.gameObject.SetActive(true);
+            roomNameInput.interactable = false;
+            joinCodeInput.interactable = false;
+            createRoomButton.interactable = false;
+            join_CodeRoomButton.interactable = false;
+            join_SelectRoomButton.interactable = false;
+            codeButton.interactable = true;
+            leaveRoomButton.interactable = true;
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.LogError($"[JoinSelectedRoom] 방 참가 실패: {e.Message}");
         }
     }
 
@@ -440,6 +496,7 @@ public class RoomManager : NetworkBehaviour
             joinCodeInput.interactable = true;
             createRoomButton.interactable = true;
             join_CodeRoomButton.interactable = true;
+            join_SelectRoomButton.interactable = true;
             codeButton.interactable = false;
             leaveRoomButton.interactable = false;
 
@@ -669,7 +726,8 @@ public class RoomManager : NetworkBehaviour
         roomNameInput.interactable = true;
         joinCodeInput.interactable = true;
         createRoomButton.interactable = true;
-        joinRoomButton.interactable = true;
+        join_CodeRoomButton.interactable = true;
+        join_SelectRoomButton.interactable = true;
         leaveRoomButton.interactable = false;
         codeButton.interactable = false;
     }
