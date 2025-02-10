@@ -18,7 +18,7 @@ public class TestNetwork : NetworkBehaviour
         if (IsServer)
         {
             SpawnPlayerControlledObjects();
-            GameManager.Instance.loadingFinishCallback += LoadingEnd;
+            // GameManager.Instance.loadingFinishCallback += LoadingEnd;
         }
 
         
