@@ -6,11 +6,18 @@ public class PlayerAttackManager
 {
     private PlayerManager playerManager = null;
     private MeleeWeapon meleeWeapon = null;
+    private Transform rangeAttackTransform = null;
+
+    public Transform RangeAttackTransform
+    {
+        get { return rangeAttackTransform; }
+    }
 
     public void Init(PlayerManager _playerManager)
     {
         playerManager = _playerManager;
         meleeWeapon = playerManager.PlayerMeleeWeapon;
+        rangeAttackTransform = playerManager.RangeAttackStartTr;
     }
 
     public void AddDamageToBoss(int _damage, float _aggro)

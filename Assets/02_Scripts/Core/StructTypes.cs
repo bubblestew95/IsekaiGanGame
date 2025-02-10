@@ -29,4 +29,11 @@ namespace StructTypes
         public SkillPointType type;
         public Vector3 point;
     }
+
+    [Serializable]
+    public struct PlayerParticleData
+    {
+        public string particleName;
+        public GameObject particlePrefab;
+    }
 }
