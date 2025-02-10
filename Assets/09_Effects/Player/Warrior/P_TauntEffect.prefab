@@ -4902,6 +4902,7 @@ GameObject:
   - component: {fileID: 4299738629470430756}
   - component: {fileID: 4891440538664600065}
   - component: {fileID: 7326644512317886410}
+  - component: {fileID: -2755259304548784062}
   m_Layer: 0
   m_Name: P_TauntEffect
   m_TagString: Untagged
@@ -9783,3 +9784,16 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-2755259304548784062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9080140021571130472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f43f496e704914cb42452c3405c4c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeTime: 1.5
