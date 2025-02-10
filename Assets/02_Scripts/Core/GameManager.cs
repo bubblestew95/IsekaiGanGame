@@ -96,6 +96,17 @@ public class GameManager : MonoBehaviour
         UpdatePlayerHpUI(_damageReceiver);
     }
 
+    public void ApplyDamageToBoss
+        (PlayerManager _damageGiver, int _damage, float _aggro)
+    {
+        // bossStateManager.TakeDamage(_damageGiver, _damage, _aggro)
+        UpdateBossHpUI(_damageGiver);
+    }
+
+    public void DamageToBoss_Multi(ulong _clientId, int _damage, float _aggro)
+    {
+    }
+
     #endregion
 
     #region Private Functions

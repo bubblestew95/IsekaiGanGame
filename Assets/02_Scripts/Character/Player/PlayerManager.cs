@@ -11,7 +11,7 @@ using Unity.Netcode.Components;
 /// <summary>
 /// 플레이어 캐릭터를 총괄적으로 관리하는 매니저.
 /// </summary>
-public class PlayerManager : NetworkBehaviour
+public class PlayerManager : MonoBehaviour
 {
     #region Variables
 
