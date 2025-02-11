@@ -219,6 +219,8 @@ public class PlayerManager : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
 
+        playerNetworkManager = GetComponent<PlayerNetworkManager>();
+
         InitStates();
 
         InitManagers();

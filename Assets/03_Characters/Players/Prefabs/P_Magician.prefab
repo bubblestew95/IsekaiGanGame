@@ -16592,7 +16592,6 @@ GameObject:
   - component: {fileID: 1735406565476749645}
   - component: {fileID: 4635323897246943225}
   - component: {fileID: 814338709902927514}
-  - component: {fileID: -7037619063621164936}
   - component: {fileID: -8995490013482134809}
   - component: {fileID: 447944940904342645}
   m_Layer: 9
@@ -16727,19 +16726,6 @@ MonoBehaviour:
     particlePrefab: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
   - particleName: FlameThrower
     particlePrefab: {fileID: 8400424712307853490, guid: efa44bbb7410de0459f8b24e062b9482, type: 3}
---- !u!114 &-7037619063621164936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7514786493872156022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f24119f1edcc2b84498ea1ca494768c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &-8995490013482134809
 MonoBehaviour:
   m_ObjectHideFlags: 0
