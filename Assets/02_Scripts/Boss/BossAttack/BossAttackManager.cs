@@ -220,7 +220,11 @@ public class BossAttackManager : NetworkBehaviour
         // 스킬위치 조정
         foreach (GameObject skillPos in circleSkillPos)
         {
-            if (bossStateManager.Players[cnt] == null) continue;
+            if (bossStateManager.Players[cnt] == null)
+            {
+                skillPos.transform.position = new Vector3(-100f, 0f, -100f);
+                continue;
+            }
 
             skillPos.transform.position = new Vector3(bossStateManager.Players[cnt].transform.position.x, 0.3f, bossStateManager.Players[cnt].transform.position.z);
 
