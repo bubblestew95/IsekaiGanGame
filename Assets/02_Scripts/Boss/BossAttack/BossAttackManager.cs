@@ -1,8 +1,9 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class BossAttackManager : MonoBehaviour
+public class BossAttackManager : NetworkBehaviour
 {
     [SerializeField] private Animator anim;
     [SerializeField] private BossStateManager bossStateManager;
@@ -57,6 +58,9 @@ public class BossAttackManager : MonoBehaviour
 
     // 돌 던지기 관련(stun시 돌도 사라지도록 만들어야함)
     private GameObject curStone;
+    private Vector3 stoneStartPos;
+    private Vector3 stoneStartSize;
+    private Quaternion stoneStartRotation;
 
     // 스턴시 진행중이였던 코루틴 중지
     private Coroutine curCoroutine;
@@ -518,13 +522,18 @@ public class BossAttackManager : MonoBehaviour
         circleFullRangeDecals[0].size = new Vector3(range, range, 1f);
 
         // 돌생성
-        GameObject stone = Instantiate(P_Stone, rightHand);
-        curStone = stone;
+        if (IsServer)
+        {
+            GameObject stone = Instantiate(P_Stone, rightHand);
+            stone.GetComponent<NetworkObject>().Spawn();
+            curStone = stone;
 
-        stone.transform.SetParent(null);
-        Vector3 startPos = stone.transform.position;
-        Vector3 startSize = stone.transform.localScale;
-        Quaternion startRotation = stone.transform.rotation;
+            stone.transform.SetParent(null);
+            stoneStartPos = stone.transform.position;
+            stoneStartSize = stone.transform.localScale;
+            stoneStartRotation = stone.transform.rotation;
+        }
+
 
         // 스킬 차는거 표시
         float elapseTime = 0f;
@@ -535,9 +544,12 @@ public class BossAttackManager : MonoBehaviour
 
             circleChargingRangeDecals[0].size = new Vector3(range * (elapseTime / delay), range * (elapseTime / delay), 1f);
 
-            stone.transform.position = Vector3.Lerp(startPos, circleSkillPos[0].transform.position, elapseTime / delay);
-            stone.transform.localScale = Vector3.Lerp(startSize, new Vector3(2f, 2f, 2f), elapseTime / delay);
-            stone.transform.rotation = Quaternion.Lerp(startRotation, Quaternion.Euler(0f, 0f, 0f), elapseTime / delay);
+            if (IsServer)
+            {
+                curStone.transform.position = Vector3.Lerp(stoneStartPos, circleSkillPos[0].transform.position, elapseTime / delay);
+                curStone.transform.localScale = Vector3.Lerp(stoneStartSize, new Vector3(2f, 2f, 2f), elapseTime / delay);
+                curStone.transform.rotation = Quaternion.Lerp(stoneStartRotation, Quaternion.Euler(0f, 0f, 0f), elapseTime / delay);
+            }
 
             yield return null;
         }
@@ -747,7 +759,10 @@ public class BossAttackManager : MonoBehaviour
         InitAttack();
 
         // 현재 돌 삭제
-        Destroy(curStone);
+        if (IsServer)
+        {
+            curStone.GetComponent<NetworkObject>().Despawn();
+        }
 
         yield return null;
     }
@@ -894,10 +909,16 @@ public class BossAttackManager : MonoBehaviour
         Vector3 bossPos = new Vector3(bossStateManager.Boss.transform.position.x, 0.5f, bossStateManager.Boss.transform.position.z);
         LayerMask defaultLayerMask = LayerMask.GetMask("Player");
 
-        // 각 플레이어한테 ray를쏴서 돌뒤에 있는지 확인
+        int playerCnt = 0;
+
         foreach (GameObject player in bossStateManager.Players)
         {
-            Vector3 playerPos = new Vector3(player.transform.position.x, 0.5f, player.transform.position.z);
+            if (player != null) playerCnt++;
+        }
+
+        for (int i = 0; i < playerCnt; i++)
+        {
+            Vector3 playerPos = new Vector3(bossStateManager.Players[i].transform.position.x, 0.5f, bossStateManager.Players[i].transform.position.z);
             Vector3 dir = (playerPos - bossPos).normalized;
 
             RaycastHit[] hits = Physics.RaycastAll(bossPos, dir, 100f, defaultLayerMask);
@@ -908,23 +929,49 @@ public class BossAttackManager : MonoBehaviour
             {
                 if (ray.collider.CompareTag("Rock"))
                 {
-                    player.tag = "BehindRock";
+                    bossStateManager.Players[i].tag = "BehindRock";
                     break;
                 }
-                else if (ray.collider.gameObject == player)
+                else if (ray.collider.gameObject == bossStateManager.Players[i])
                 {
                     break;
                 }
             }
         }
+
+        // 각 플레이어한테 ray를쏴서 돌뒤에 있는지 확인
+        //foreach (GameObject player in bossStateManager.Players)
+        //{
+        //    Vector3 playerPos = new Vector3(player.transform.position.x, 0.5f, player.transform.position.z);
+        //    Vector3 dir = (playerPos - bossPos).normalized;
+
+        //    RaycastHit[] hits = Physics.RaycastAll(bossPos, dir, 100f, defaultLayerMask);
+
+        //    System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        //    foreach (RaycastHit ray in hits)
+        //    {
+        //        if (ray.collider.CompareTag("Rock"))
+        //        {
+        //            player.tag = "BehindRock";
+        //            break;
+        //        }
+        //        else if (ray.collider.gameObject == player)
+        //        {
+        //            break;
+        //        }
+        //    }
+        //}
     }
 
     // 태그 리셋
     private void ResetTag()
     {
-        foreach (GameObject player in bossStateManager.Players)
+        for (int i = 0; i <  bossStateManager.Players.Length; i++)
         {
-            player.tag = "Player";
+            if (bossStateManager.Players[i] == null) continue;
+
+            bossStateManager.Players[i].tag = "Player";
         }
     }
     #endregion
