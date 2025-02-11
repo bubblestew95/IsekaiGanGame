@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
@@ -30,6 +31,10 @@ public class BossAttackManager : NetworkBehaviour
     [Header("돌 던지기")]
     [SerializeField] private GameObject P_Stone;
     [SerializeField] private Transform rightHand;
+    [SerializeField] private GameObject P_Stone2;
+
+    [Header("파티클")]
+    [SerializeField] private GameObject attack4;
 
     // 스킬 관련
     private BossSkillData skill;
@@ -62,6 +67,7 @@ public class BossAttackManager : NetworkBehaviour
     private Vector3 stoneStartPos;
     private Vector3 stoneStartSize;
     private Quaternion stoneStartRotation;
+    private List<GameObject> stones = new List<GameObject>();
 
     // 스턴시 진행중이였던 코루틴 중지
     private Coroutine curCoroutine;
@@ -217,6 +223,7 @@ public class BossAttackManager : NetworkBehaviour
         knockBackDis = skill.KnockbackDistance;
 
         int cnt = 0;
+        stones.Clear();
 
         // 스킬위치 조정
         foreach (GameObject skillPos in circleSkillPos)
@@ -244,10 +251,12 @@ public class BossAttackManager : NetworkBehaviour
             attackCollider.GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
         }
 
-        // 스킬 표시
+        cnt = 0;
+        // 스킬 표시 && 돌생성
         foreach (DecalProjector circleFullRangeDecal in circleFullRangeDecals)
         {
             circleFullRangeDecal.size = new Vector3(range, range, 1f);
+            stones.Add(Instantiate(P_Stone2, new Vector3(circleFullRangeDecal.transform.position.x, 10f, circleFullRangeDecal.transform.position.z), Quaternion.identity, null));
         }
 
         // 스킬 차는거 표시
@@ -263,6 +272,12 @@ public class BossAttackManager : NetworkBehaviour
                 circleChargingRangeDecal.size = new Vector3(range * (elapseTime / delay), range * (elapseTime / delay), 1f);
             }
 
+            // 돌 떨어짐
+            foreach (GameObject stone in stones)
+            {
+                stone.transform.position = new Vector3(stone.transform.position.x, 2f / (elapseTime / delay), stone.transform.position.z);
+            }
+
             yield return null;
         }
         yield return null;
@@ -276,6 +291,11 @@ public class BossAttackManager : NetworkBehaviour
         foreach (DecalProjector circleChargingRangeDecal in circleChargingRangeDecals)
         {
             circleChargingRangeDecal.size = new Vector3(0f, 0f, 0f);
+        }
+
+        foreach (GameObject stone in stones)
+        {
+            Destroy(stone);
         }
 
         // attackCollider 활성화
@@ -385,10 +405,12 @@ public class BossAttackManager : NetworkBehaviour
 
         float elapseTime = 0f;
 
+        // 휠윈드 파티클
+        attack4.SetActive(true);
+
         while (true)
         {
             elapseTime += Time.deltaTime;
-
 
             // 너무 붙어있으면 안되서 1초마다 껏다킴
             if (elapseTime >= 1f)
@@ -404,10 +426,15 @@ public class BossAttackManager : NetworkBehaviour
             yield return null;
         }
 
+
+
+
         // 공격 끝난후
         GetComponent<BoxCollider>().size = originSize;
         GetComponent<BoxCollider>().enabled = false;
         bossStateManager.Boss.tag = "Untagged";
+        // 휠윈드 파티클
+        attack4.SetActive(false);
 
         yield return null;
     }

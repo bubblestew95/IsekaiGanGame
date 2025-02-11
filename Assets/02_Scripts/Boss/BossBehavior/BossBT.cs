@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using Unity.Netcode;
@@ -7,6 +8,9 @@ using UnityEngine.AI;
 
 public class BossBT : NetworkBehaviour
 {
+    public static event Action AttackStartCallback;
+    public static event Action AttackEndCallback;
+
     public delegate void BTDelegate();
     public BTDelegate behaviorEndCallback;
     public BTDelegate phase2BehaviorStartCallback;
@@ -110,7 +114,9 @@ public class BossBT : NetworkBehaviour
 
     private IEnumerator Attack1()
     {
-        isCoroutineRunning = true;
+
+        isCoroutineRunning = true; 
+        AttackStartCallback?.Invoke();
         previousBehavior = curState;
 
         // 애니메이션 시작
@@ -144,11 +150,13 @@ public class BossBT : NetworkBehaviour
         behaviorEndCallback?.Invoke();
 
         isCoroutineRunning = false;
+        AttackEndCallback?.Invoke();
     }
 
     private IEnumerator Attack2()
     {
-        isCoroutineRunning = true;
+        isCoroutineRunning = true; 
+        AttackStartCallback?.Invoke();
         previousBehavior = curState;
 
         // 애니메이션 시작
@@ -181,12 +189,14 @@ public class BossBT : NetworkBehaviour
         // 패턴이 끝났음을 콜백
         behaviorEndCallback?.Invoke();
 
-        isCoroutineRunning = false;
+        isCoroutineRunning = false; 
+        AttackEndCallback?.Invoke();
     }
 
     private IEnumerator Attack3()
     {
-        isCoroutineRunning = true;
+        isCoroutineRunning = true; 
+        AttackStartCallback?.Invoke();
         previousBehavior = curState;
 
         // 애니메이션 시작
@@ -220,11 +230,13 @@ public class BossBT : NetworkBehaviour
         behaviorEndCallback?.Invoke();
 
         isCoroutineRunning = false;
+        AttackEndCallback?.Invoke();
     }
 
     private IEnumerator Attack4()
     {
-        isCoroutineRunning = true;
+        isCoroutineRunning = true; 
+        AttackStartCallback?.Invoke();
         previousBehavior = curState;
 
         // 애니메이션 시작
@@ -294,12 +306,14 @@ public class BossBT : NetworkBehaviour
         // 패턴이 끝났음을 콜백
         behaviorEndCallback?.Invoke();
 
-        isCoroutineRunning = false;
+        isCoroutineRunning = false; 
+        AttackEndCallback?.Invoke();
     }
 
     private IEnumerator Attack5()
     {
-        isCoroutineRunning = true;
+        isCoroutineRunning = true; 
+        AttackStartCallback?.Invoke();
         previousBehavior = curState;
 
         // 애니메이션 시작
@@ -463,11 +477,13 @@ public class BossBT : NetworkBehaviour
         behaviorEndCallback?.Invoke();
 
         isCoroutineRunning = false;
+        AttackEndCallback?.Invoke();
     }
 
     private IEnumerator Attack6()
     {
-        isCoroutineRunning = true;
+        isCoroutineRunning = true; 
+        AttackStartCallback?.Invoke();
         previousBehavior = curState;
 
         // 애니메이션 시작
@@ -491,12 +507,14 @@ public class BossBT : NetworkBehaviour
         // 패턴이 끝났음을 콜백
         behaviorEndCallback?.Invoke();
 
-        isCoroutineRunning = false;
+        isCoroutineRunning = false; 
+        AttackEndCallback?.Invoke();
     }
 
     private IEnumerator Attack7()
     {
-        isCoroutineRunning = true;
+        isCoroutineRunning = true; 
+        AttackStartCallback?.Invoke();
         previousBehavior = curState;
 
         // 애니메이션 시작
@@ -559,14 +577,16 @@ public class BossBT : NetworkBehaviour
         // 패턴이 끝났음을 콜백
         behaviorEndCallback?.Invoke();
 
-        isCoroutineRunning = false;
+        isCoroutineRunning = false; 
+        AttackEndCallback?.Invoke();
 
         yield return null;
     }
 
     private IEnumerator Attack8()
     {
-        isCoroutineRunning = true;
+        isCoroutineRunning = true; 
+        AttackStartCallback?.Invoke();
         previousBehavior = curState;
 
         // 애니메이션 시작
@@ -637,14 +657,14 @@ public class BossBT : NetworkBehaviour
         // 패턴이 끝났음을 콜백
         behaviorEndCallback?.Invoke();
 
-        isCoroutineRunning = false;
+        isCoroutineRunning = false; AttackEndCallback?.Invoke();
 
         yield return null;
     }
 
     private IEnumerator Attack9()
     {
-        isCoroutineRunning = true;
+        isCoroutineRunning = true; AttackStartCallback?.Invoke();
         previousBehavior = curState;
 
         // 애니메이션 시작
@@ -698,7 +718,7 @@ public class BossBT : NetworkBehaviour
         // 패턴이 끝났음을 콜백
         behaviorEndCallback?.Invoke();
 
-        isCoroutineRunning = false;
+        isCoroutineRunning = false; AttackEndCallback?.Invoke();
 
         yield return null;
     }
