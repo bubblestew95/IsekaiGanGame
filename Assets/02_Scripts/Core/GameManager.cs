@@ -51,10 +51,10 @@ public class GameManager : MonoBehaviour
     /// <param name="_damageSource">보스에게 데미지를 주는 플레이어</param>
     public void DamageToBoss(PlayerManager _damageGiver, int _damage, float _aggro)
     {
-        if (_damageGiver.NetworkController.IsClient)
-        {
-            ulong clientId = _damageGiver.GetComponent<NetworkObject>().OwnerClientId;
+        ulong clientId = _damageGiver.GetComponent<NetworkObject>().OwnerClientId;
 
+        if (clientId == NetworkManager.Singleton.LocalClientId)
+        {
             DamageToBoss_Multi(clientId, _damage, _aggro);
         }
 
@@ -82,6 +82,13 @@ public class GameManager : MonoBehaviour
         bossStateManager.BossDamageReceiveServerRpc(_clientId, _damage, _aggro);
     }
 
+    /// <summary>
+    /// 실제로 플레이어에게 데미지를 적용시키는 함수
+    /// </summary>
+    /// <param name="_damageReceiver"></param>
+    /// <param name="_damage"></param>
+    /// <param name="_attackPos"></param>
+    /// <param name="_knockbackDist"></param>
     public void ApplyDamageToPlayer
         (PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockbackDist)
     {

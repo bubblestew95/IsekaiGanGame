@@ -1,12 +1,6 @@
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 using EnumTypes;
-using StructTypes;
-using Unity.Netcode;
-using Unity.Netcode.Components;
 
 /// <summary>
 /// 플레이어 캐릭터를 총괄적으로 관리하는 매니저.
