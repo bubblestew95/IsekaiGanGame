@@ -1,9 +1,12 @@
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerNetworkManager : NetworkBehaviour
 {
+    public UnityAction<ulong> OnNetworkPlayerDeath;
+
     private PlayerManager playerManager = null;
     private NetworkAnimator networkAnimator = null;
 
