@@ -2736,22 +2736,14 @@ PrefabInstance:
       propertyPath: phase2Cam
       value: 
       objectReference: {fileID: 7551530356836386421}
-    - target: {fileID: 4344098978830733031, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
-      propertyPath: m_Size.x
-      value: 2
+    - target: {fileID: 2279556829689898717, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4344098978830733031, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
-      propertyPath: m_Size.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4344098978830733031, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
-      propertyPath: m_Size.z
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6055016002681168014, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
-      propertyPath: anims.Array.data[13].moveMultiplier
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 6308332450445231548, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: attack4
+      value: 
+      objectReference: {fileID: 1376189868}
     - target: {fileID: 6308332450445231548, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: fanSkillPos
       value: 
@@ -2860,14 +2852,6 @@ PrefabInstance:
       propertyPath: phase2Particle
       value: 
       objectReference: {fileID: 1005370971}
-    - target: {fileID: 7853676516811975558, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
-      propertyPath: m_Speed
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7853676516811975558, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
-      propertyPath: m_StoppingDistance
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8468617057500289297, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.34
@@ -5435,9 +5419,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   prefabs:
   - {fileID: 179124, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
-  - {fileID: 1733868696496733154, guid: 2c3b4b44c561d204987227d0d14da915, type: 3}
-  - {fileID: 179124, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
-  - {fileID: 7514786493872156022, guid: ade512d1f4c03314c9f8baabb487f1fc, type: 3}
+  - {fileID: 1733868696496733154, guid: 4087144654e6e134bbe81071d2ee2598, type: 3}
+  - {fileID: 179124, guid: fc03ca546cdc6d64e8531c3e99acb376, type: 3}
+  - {fileID: 7514786493872156022, guid: c47263f3cda2a704382a3a8a2ad9c5d5, type: 3}
   spwanTr:
   - {fileID: 210764692}
   - {fileID: 1228246667}
@@ -6411,7 +6395,7 @@ Transform:
   m_GameObject: {fileID: 1087631057}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.5, y: 0, z: 18.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8396,6 +8380,11 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.25, y: 5.17, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1376189868 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2279556829689898717, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+  m_PrefabInstance: {fileID: 457395388}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1376866565 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8172849020266659018, guid: 2af5562ce69fc2d448481a1587a352a5, type: 3}
@@ -9586,7 +9575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attack1: {fileID: 4810726212148235539, guid: 201b3a739c2f3c942a341d61b32a9e2d, type: 3}
-  attack2: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
+  attack2: {fileID: 4810726212148235539, guid: 75a06b1c2411662488e14d2f88daceef, type: 3}
   attack3: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
   attack4: {fileID: 4810726212148235539, guid: 75a06b1c2411662488e14d2f88daceef, type: 3}
   attack5: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
