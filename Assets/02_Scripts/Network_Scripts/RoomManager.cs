@@ -31,6 +31,7 @@ public class RoomManager : NetworkBehaviour
     public Button leaveRoomButton; // Join 버튼
     public Button codeButton; // Code 복사 버튼
     public Button readyButton; //ready 버튼
+    public Button startButton; //start 버튼
     public RectTransform contentRect; // Scroll View의 Content 크기 조절
     public string gameSceneName = "GameTest"; // 다음 씬 이름
 
@@ -42,34 +43,10 @@ public class RoomManager : NetworkBehaviour
     private string username;
     private bool isInitialized = false;
     private Lobby currentLobby;
-
-    //public static RoomManager GetRoomManager()
-    //{
-    //    if (Instance != null)
-    //    {
-    //        return Instance;
-    //    }
-
-    //    if (NetworkManager.Singleton != null && NetworkManager.Singleton.SpawnManager != null)
-    //    {
-    //        foreach (var obj in NetworkManager.Singleton.SpawnManager.SpawnedObjects.Values)
-    //        {
-    //            RoomManager roomManager = obj.GetComponent<RoomManager>();
-    //            if (roomManager != null)
-    //            {
-    //                Debug.Log("[클라이언트] RoomManager를 NetworkManager에서 가져왔습니다.");
-    //                Instance = roomManager;
-    //                return roomManager;
-    //            }
-    //        }
-    //    }
-
-    //    Debug.LogError("[Error] RoomManager를 찾을 수 없습니다!");
-    //    return null;
-    //}
+    private bool playerJoined = false; // 플레이어가 들어왔을때의 상태를 나타낼 변수
+    private bool isReady = false; //Ready 상태를 저장하는 변수
 
     private HashSet<string> previousPlayerIDs = new HashSet<string>(); // 기존 플레이어 ID 저장
-
 
     private void Awake()
     {
@@ -146,15 +123,6 @@ public class RoomManager : NetworkBehaviour
         codeButton.interactable = false;
         leaveRoomButton.interactable = false;
 
-    }
-
-    // 로비 변경 감지 시 실행되는 함수
-    private async void OnLobbyChanged(Lobby lobby)
-    {
-        Debug.Log($"[LobbyChanged] 로비 변경 감지: {lobby.Id}");
-
-        // 모든 클라이언트에서 로비 리스트 갱신
-        await RefreshRoomList();
     }
 
     void RegisterRelayMessageHandler()
@@ -300,8 +268,7 @@ public class RoomManager : NetworkBehaviour
         }
     }
 
-    // 방 입장
-    public async void JoinRoom()
+    public async void JoinCodeRoom()
     {
         if (!isInitialized)
         {
@@ -318,7 +285,11 @@ public class RoomManager : NetworkBehaviour
 
         try
         {
+            Debug.Log($"[JoinRoom] 방 참가 요청: Room Code = {roomCode}");
+
+            // 코드로 방 찾기
             currentLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(roomCode);
+
             if (currentLobby == null)
             {
                 Debug.LogError("[JoinRoom] Lobby를 찾을 수 없습니다!");
@@ -327,63 +298,8 @@ public class RoomManager : NetworkBehaviour
 
             Debug.Log($"[JoinRoom] 방 참가 성공! Lobby ID: {currentLobby.Id}");
 
-            // RelayJoinCode 확인 후 참가
-            if (!currentLobby.Data.ContainsKey("RelayJoinCode") || string.IsNullOrEmpty(currentLobby.Data["RelayJoinCode"].Value))
-            {
-                Debug.LogError("RelayJoinCode가 존재하지 않습니다!");
-                return;
-            }
-            //relay 참가
-            string relayJoinCode = currentLobby.Data["RelayJoinCode"].Value;
-            Debug.Log($"RelayJoinCode 확인 완료: {relayJoinCode}");
-
-            bool relaySuccess = await RelayManager.Instance.JoinRelay(relayJoinCode);
-            if (!relaySuccess)
-            {
-                Debug.LogError("Relay 참가 실패!");
-                return;
-            }
-
-            Debug.Log($"[JoinRoom] 플레이어 데이터 업데이트 완료: {username}");
-
-            
-
-            // 최신 Lobby 정보 가져오기
-            currentLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
-
-            // 모든 플레이어의 `Username` 출력 (정상적으로 갱신되는지 확인)
-            foreach (var player in currentLobby.Players)
-            {
-                string playerUsername = "알 수 없음";
-
-                if (player.Data != null && player.Data.ContainsKey("Username"))
-                {
-                    playerUsername = player.Data["Username"].Value;
-                }
-                Debug.Log($"[CreateRoom] 플레이어 확인: Player ID = {player.Id}, Username = {playerUsername}");
-            }
-
-            //SendMessageToServer($"UpdateRoom|{lobby.Id}|{lobby.Players.Count}");
-
-            SetUIState(true);
-
-            SetCurrentRoom(currentLobby.Id);
-
-            // 호스트인지 여부 확인
-            if (NetworkManager.Singleton.IsHost)
-            {
-                Debug.Log("[JoinRoom] 현재 플레이어는 HOST 입니다.");
-            }
-            else
-            {
-                Debug.Log("[JoinRoom] 현재 플레이어는 클라이언트 입니다.");
-            }
-
-            UpdateRoomUI(currentLobby);
-            await SubscribeToLobbyEvents(currentLobby.Id);
-            //RequestRoomRefresh();
-
-            Debug.Log($"방 참가 성공: {currentLobby.Id}");
+            // 공통 처리 메서드 호출 (Relay 참가 및 UI 갱신)
+            await JoinRoom(currentLobby.Id);
         }
         catch (LobbyServiceException e)
         {
@@ -403,37 +319,68 @@ public class RoomManager : NetworkBehaviour
         {
             Debug.Log($"[JoinSelectedRoom] 방 참가 요청: {currentRoom}");
 
-            // 선택된 Room ID를 사용하여 입장
+            // 선택된 Room ID로 참가
             currentLobby = await LobbyService.Instance.JoinLobbyByIdAsync(currentRoom);
 
-            string relayJoinCode = currentLobby.Data["RelayJoinCode"].Value;
-
-            if (string.IsNullOrEmpty(relayJoinCode))
+            if (currentLobby == null)
             {
-                Debug.LogError("[JoinSelectedRoom] RelayJoinCode 값이 비어 있습니다!");
+                Debug.LogError("[JoinSelectedRoom] Lobby를 찾을 수 없습니다!");
                 return;
             }
 
-            Debug.Log($"RelayJoinCode 확인 완료: {relayJoinCode}");
+            Debug.Log($"[JoinSelectedRoom] 방 참가 성공! Lobby ID: {currentLobby.Id}");
 
-            bool relaySuccess = await RelayManager.Instance.JoinRelay(relayJoinCode);
-            if (!relaySuccess)
-            {
-                Debug.LogError("Relay 참가 실패!");
-                return;
-            }
-
-            Debug.Log($"[JoinSelectedRoom] {currentLobby.Id}로 입장 성공!");
-            //await SubscribeToLobbyEvents(lobby.Id);
-            SetUIState(true);
-
-            UpdateRoomUI(currentLobby);
-            await SubscribeToLobbyEvents(currentLobby.Id);
-            //RequestRoomRefresh();
+            // 공통 처리 메서드 호출 (Relay 참가 및 UI 갱신)
+            await JoinRoom(currentLobby.Id);
         }
         catch (LobbyServiceException e)
         {
             Debug.LogError($"[JoinSelectedRoom] 방 참가 실패: {e.Message}");
+        }
+    }
+
+    // 중복된 로직을 처리하는 메서드 (공통 함수)
+    private async Task JoinRoom(string lobbyId)
+    {
+        try
+        {
+            Debug.Log($"[JoinRoomById] 방 참가 처리 시작: Lobby ID = {lobbyId}");
+
+            // 최신 Lobby 정보 가져오기
+            currentLobby = await LobbyService.Instance.GetLobbyAsync(lobbyId);
+
+            // RelayJoinCode 확인 후 참가
+            if (!currentLobby.Data.ContainsKey("RelayJoinCode") || string.IsNullOrEmpty(currentLobby.Data["RelayJoinCode"].Value))
+            {
+                Debug.LogError("[JoinRoomById] RelayJoinCode가 존재하지 않습니다!");
+                return;
+            }
+
+            string relayJoinCode = currentLobby.Data["RelayJoinCode"].Value;
+            Debug.Log($"[JoinRoomById] RelayJoinCode 확인 완료: {relayJoinCode}");
+
+            bool relaySuccess = await RelayManager.Instance.JoinRelay(relayJoinCode);
+            if (!relaySuccess)
+            {
+                Debug.LogError("[JoinRoomById] Relay 참가 실패!");
+                return;
+            }
+
+            Debug.Log($"[JoinRoomById] Relay 참가 성공!");
+
+            // UI 상태 갱신
+            SetUIState(true);
+            SetCurrentRoom(currentLobby.Id);
+            UpdateRoomUI(currentLobby);
+
+            // 로비 이벤트 구독
+            await SubscribeToLobbyEvents(currentLobby.Id);
+
+            Debug.Log($"[JoinRoomById] 최종 방 참가 완료: {currentLobby.Id}");
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.LogError($"[JoinRoomById] 처리 중 오류 발생: {e.Message}");
         }
     }
 
@@ -477,7 +424,6 @@ public class RoomManager : NetworkBehaviour
     {
         var callbacks = new LobbyEventCallbacks();
         callbacks.LobbyChanged += OnLobbyChanged;
-        //callbacks.KickedFromLobby += OnKickedFromLobby;
         //callbacks.LobbyEventConnectionStateChanged += OnLobbyEventConnectionStateChanged;
         await LobbyService.Instance.SubscribeToLobbyEventsAsync(lobbyId, callbacks);
 
@@ -499,8 +445,18 @@ public class RoomManager : NetworkBehaviour
         {
             foreach (var player in changes.PlayerJoined.Value)
             {
-                Debug.Log($"[RoomManager] 플레이어 입장: {player.Player.Id}");
+                Debug.Log($"[RoomManager] 플레이어 입장 감지: {player.Player.Id}");
+                playerJoined = true;
+                await RefreshRoomList();
             }
+        }
+        // 새로운 플레이어가 입장하면 Start 버튼 비활성화
+        if (playerJoined && NetworkManager.Singleton.IsHost)
+        {
+            Debug.Log("[RoomManager] 새로운 플레이어가 입장하여 Start 버튼 비활성화");
+            playerJoined = false;
+            startButton.interactable = playerJoined;
+            
         }
 
         // 플레이어 퇴장 감지 → UI 갱신 필요
@@ -508,34 +464,47 @@ public class RoomManager : NetworkBehaviour
         {
             foreach (var playerId in changes.PlayerLeft.Value)
             {
-                Debug.Log($"[RoomManager] 플레이어 퇴장: {playerId}");
+                Debug.Log($"[RoomManager] 플레이어 퇴장 감지: {playerId}");
+                await RefreshRoomList();
             }
         }
-
-        // 플레이어 데이터 변경 감지 (캐릭터 정보 등)
+        // 플레이어 데이터 변경 감지 (캐릭터 정보/Ready 등)
         if (changes.PlayerData.Changed)
         {
-            //foreach (var playerData in changes.PlayerData.Value)
-            //{
-            //    Debug.Log($"[RoomManager] 플레이어 데이터 변경됨: Player {playerData.Key}");
-            //}
-        }
+            Debug.Log("Ready 이벤트 시작");
+            foreach (var playerData in changes.PlayerData.Value)
+            {
+                int playerId = playerData.Key;
+                var playerChanges = playerData.Value;
 
-        // 최신 로비 정보 적용
-        if (currentLobby != null)
-        {
-            changes.ApplyToLobby(currentLobby);
-            Debug.Log("[RoomManager] 로비 변경 사항이 적용됨.");
-        }
-        else
-        {
-            Debug.LogWarning("[RoomManager] 현재 로비 정보가 존재하지 않음.");
-        }
+                if (playerChanges.ChangedData.Changed)
+                {
+                    var newData = playerChanges.ChangedData.Value;
+                    if (newData.ContainsKey("Ready"))
+                    {
+                        var readyStatus = newData["Ready"];
+                        if (readyStatus.Changed)
+                        {
+                            Debug.Log($"[RoomManager]  플레이어 {playerId} Ready 상태 변경: {readyStatus.Value}");
+                        }
+                    }
+                }
+                
+            }
+            CheckAllPlayersReady();
 
-        // 입장/퇴장 시에만 RefreshRoomList() 실행 (최적화)
-        if (changes.PlayerJoined.Changed || changes.PlayerLeft.Changed)
-        {
-            await RefreshRoomList();
+            Debug.Log("Ready 이벤트 끝");
+
+            // 최신 로비 정보 적용
+            if (currentLobby != null)
+            {
+                changes.ApplyToLobby(currentLobby);
+                Debug.Log("[RoomManager] 로비 변경 사항이 적용됨.");
+            }
+            else
+            {
+                Debug.LogWarning("[RoomManager] 현재 로비 정보가 존재하지 않음.");
+            }
         }
     }
     // 네트워크 연결 상태 변경 감지
@@ -585,62 +554,85 @@ public class RoomManager : NetworkBehaviour
         // 현재 선택된 방 ID 업데이트
         SetCurrentRoom(selectedRoomId);
     }
-
-    //특정 방의 인원 수 업데이트
-    private void UpdateRoomPlayerCount(string roomId, int playerCount)
+    public async void OnReadyButtonClicked()
     {
-        if (roomList.ContainsKey(roomId))
-        {
-            TMP_Text playerCountText = roomList[roomId].transform.Find("roomPlayers").GetComponent<TMP_Text>();
-            playerCountText.text = $"{playerCount}/{maxPlayers}";
-        }
-    }
-
-    public async void OnReadyButtonClick()
-    {
-        if (string.IsNullOrEmpty(currentRoom))
-        {
-            Debug.LogError("[Ready] 현재 방이 없습니다!");
-            return;
-        }
+        if (currentLobby == null) return;
 
         try
         {
-            string playerId = AuthenticationService.Instance.PlayerId;
-            if (string.IsNullOrEmpty(playerId))
-            {
-                Debug.LogError("[Ready] Player ID를 찾을 수 없습니다!");
-                return;
-            }
+            Debug.Log("[OnReadyButtonClicked] Ready 버튼 클릭!");
 
-            // Ready 상태를 서버에 저장
-            await LobbyService.Instance.UpdatePlayerAsync(currentRoom, playerId, new UpdatePlayerOptions
+            isReady = !isReady;
+
+            UpdatePlayerOptions options = new UpdatePlayerOptions
             {
                 Data = new Dictionary<string, PlayerDataObject>
-            {
                 {
-                    "Ready", new PlayerDataObject(
-                        visibility: PlayerDataObject.VisibilityOptions.Member,
-                        value: "True")
+                    { "Ready", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, isReady ? "true" : "false") }
                 }
-            }
-            });
+            };
 
-            Debug.Log("[Ready] 플레이어 Ready 상태 업데이트 완료!");
+            await LobbyService.Instance.UpdatePlayerAsync(currentLobby.Id, AuthenticationService.Instance.PlayerId, options);
 
-            // 모든 클라이언트에게 Ready 상태 알리기
-            NotifyPlayersReady(playerId);
+            Debug.Log($"[OnReadyButtonClicked] Ready 상태 업데이트 완료! 현재 상태: {(isReady ? "Ready" : "Not Ready")}");
 
-            Debug.Log("NotifyPlayersReady 실행완");
-            // Ready 상태 확인 후 씬 전환
-            await CheckAllPlayersReady();
-            Debug.Log("CheckAllPlayersReady 실행완");
+            // Ready 버튼 텍스트 변경
+            readyButton.GetComponentInChildren<TMP_Text>().text = isReady ? "On Ready" : "Not Ready";
+
+            CheckAllPlayersReady();
         }
         catch (LobbyServiceException e)
         {
-            Debug.LogError($"[Ready] Ready 상태 업데이트 실패: {e.Message}");
+            Debug.LogError($"[OnReadyButtonClicked] Ready 상태 업데이트 실패: {e.Message}");
         }
     }
+
+
+    //public async void OnReadyButtonClick()
+    //{
+    //    if (string.IsNullOrEmpty(currentRoom))
+    //    {
+    //        Debug.LogError("[Ready] 현재 방이 없습니다!");
+    //        return;
+    //    }
+
+    //    try
+    //    {
+    //        string playerId = AuthenticationService.Instance.PlayerId;
+    //        if (string.IsNullOrEmpty(playerId))
+    //        {
+    //            Debug.LogError("[Ready] Player ID를 찾을 수 없습니다!");
+    //            return;
+    //        }
+
+    //        // Ready 상태를 서버에 저장
+    //        await LobbyService.Instance.UpdatePlayerAsync(currentRoom, playerId, new UpdatePlayerOptions
+    //        {
+    //            Data = new Dictionary<string, PlayerDataObject>
+    //        {
+    //            {
+    //                "Ready", new PlayerDataObject(
+    //                    visibility: PlayerDataObject.VisibilityOptions.Member,
+    //                    value: "True")
+    //            }
+    //        }
+    //        });
+
+    //        Debug.Log("[Ready] 플레이어 Ready 상태 업데이트 완료!");
+
+    //        // 모든 클라이언트에게 Ready 상태 알리기
+    //        NotifyPlayersReady(playerId);
+
+    //        //Debug.Log("NotifyPlayersReady 실행완");
+    //        // Ready 상태 확인 후 씬 전환
+    //        //await CheckAllPlayersReady();
+    //        //Debug.Log("CheckAllPlayersReady 실행완");
+    //    }
+    //    catch (LobbyServiceException e)
+    //    {
+    //        Debug.LogError($"[Ready] Ready 상태 업데이트 실패: {e.Message}");
+    //    }
+    //}
 
     [ClientRpc]
     private void NotifyPlayersReadyClientRpc(string playerId)
@@ -666,59 +658,126 @@ public class RoomManager : NetworkBehaviour
         }
     }
 
-
-
-    public async Task CheckAllPlayersReady()
+    private async void CheckAllPlayersReady()
     {
+        if (!NetworkManager.Singleton.IsHost) return; // 호스트만 실행
+
+        Debug.Log("[RoomManager] 모든 플레이어의 Ready 상태 확인 시작...");
+
+        bool allReady = true;
+
+        // 최신 Lobby 정보 가져오기 (Ready 상태 업데이트 반영)
         try
         {
-            //  최신 Lobby 데이터 가져오기
-            currentLobby = await LobbyService.Instance.GetLobbyAsync(currentRoom);
-
-            if (currentLobby == null)
-            {
-                Debug.LogError("[Ready] Lobby 정보를 가져올 수 없습니다.");
-                return;
-            }
-
-            int totalPlayers = currentLobby.Players.Count;
-            int readyCount = 0;
-
-            foreach (var player in currentLobby.Players)
-            {
-                if (player.Data != null)
-                {
-                    foreach (var dataKey in player.Data.Keys)
-                    {
-                        Debug.Log($"[Ready] 플레이어 {player.Id}의 데이터 - Key: {dataKey}, Value: {player.Data[dataKey].Value}");
-                    }
-
-                    if (player.Data.ContainsKey("Ready") && player.Data["Ready"].Value == "True")
-                    {
-                        readyCount++;
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning($"[Ready] 플레이어 {player.Id}의 데이터가 null입니다!");
-                }
-            }
-
-            Debug.Log($"[Ready] 현재 Ready한 플레이어 수: {readyCount}/{totalPlayers}");
-
-            //  모든 입장한 플레이어가 Ready 상태이면 씬 전환
-            if (readyCount == totalPlayers && totalPlayers > 1)
-            {
-                Debug.Log("[Ready] 모든 플레이어가 Ready 상태입니다! 다음 씬으로 이동!");
-
-                RequestSceneChange();
-            }
+            currentLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
         }
         catch (LobbyServiceException e)
         {
-            Debug.LogError($"[Ready] Ready 상태 확인 실패: {e.Message}");
+            Debug.LogError($"[RoomManager] 최신 Lobby 정보 가져오기 실패: {e.Message}");
+            return;
         }
+
+        foreach (var player in currentLobby.Players)
+        {
+            Debug.Log($"[RoomManager] 체크 중 - 플레이어 {player.Id}");
+
+            // 호스트는 Ready 체크에서 제외
+            if (player.Id == AuthenticationService.Instance.PlayerId)
+            {
+                Debug.Log($"[RoomManager] {player.Id} (호스트) - Ready 체크 제외");
+                continue;
+            }
+
+            // player.Data가 null인지 확인 후 처리
+            if (player.Data == null)
+            {
+                Debug.Log($"[RoomManager] {player.Id} - player.Data가 null! (동기화 지연 가능)");
+                allReady = false;
+                break;
+            }
+
+            if (!player.Data.ContainsKey("Ready"))
+            {
+                Debug.Log($"[RoomManager] {player.Id} - Ready 데이터 없음");
+                allReady = false;
+                break;
+            }
+
+            if (player.Data["Ready"].Value != "true") // Ready가 아닌 경우 즉시 종료
+            {
+                Debug.Log($"[RoomManager] {player.Id} - Ready 상태 아님: {player.Data["Ready"].Value}");
+                allReady = false;
+                break;
+            }
+
+            Debug.Log($"[RoomManager] {player.Id} - Ready 상태 확인 완료");
+        }
+
+        startButton.interactable = allReady;
+        Debug.Log($"[RoomManager] Start 버튼 상태 업데이트: {startButton.interactable}");
     }
+
+    //public async Task CheckAllPlayersReady()
+    //{
+    //    try
+    //    {
+    //        //  최신 Lobby 데이터 가져오기
+    //        currentLobby = await LobbyService.Instance.GetLobbyAsync(currentRoom);
+
+    //        if (currentLobby == null)
+    //        {
+    //            Debug.LogError("[Ready] Lobby 정보를 가져올 수 없습니다.");
+    //            return;
+    //        }
+
+    //        int totalPlayers = currentLobby.Players.Count;
+    //        int readyCount = 0;
+
+    //        foreach (var player in currentLobby.Players)
+    //        {
+    //            if (player.Data != null)
+    //            {
+    //                foreach (var dataKey in player.Data.Keys)
+    //                {
+    //                    Debug.Log($"[Ready] 플레이어 {player.Id}의 데이터 - Key: {dataKey}, Value: {player.Data[dataKey].Value}");
+    //                }
+
+    //                if (player.Data.ContainsKey("Ready") && player.Data["Ready"].Value == "True")
+    //                {
+    //                    readyCount++;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                Debug.LogWarning($"[Ready] 플레이어 {player.Id}의 데이터가 null입니다!");
+    //            }
+    //        }
+
+    //        Debug.Log($"[Ready] 현재 Ready한 플레이어 수: {readyCount}/{totalPlayers}");
+
+    //        //  모든 입장한 플레이어가 Ready 상태이면 씬 전환
+    //        if (readyCount == totalPlayers && totalPlayers > 1)
+    //        {
+    //            Debug.Log("[Ready] 모든 플레이어가 Ready 상태입니다! 다음 씬으로 이동!");
+
+    //            RequestSceneChange();
+    //        }
+    //    }
+    //    catch (LobbyServiceException e)
+    //    {
+    //        Debug.LogError($"[Ready] Ready 상태 확인 실패: {e.Message}");
+    //    }
+    //}
+    public void OnStartButtonClicked()
+    {
+        if (!NetworkManager.Singleton.IsHost) return;
+
+        Debug.Log("[OnStartButtonClicked] 게임 시작!");
+
+        // 씬 전환 (네트워크 동기화 필요)
+        NetworkManager.Singleton.SceneManager.LoadScene(gameSceneName, LoadSceneMode.Single);
+    }
+
 
     public void RequestSceneChange()
     {
@@ -780,7 +839,6 @@ public class RoomManager : NetworkBehaviour
     // UI 리셋
     private void SetUIState(bool isInRoom)
     {
-        readyButton.gameObject.SetActive(isInRoom);
         roomNameInput.interactable = !isInRoom;
         joinCodeInput.interactable = !isInRoom;
         createRoomButton.interactable = !isInRoom;
@@ -788,6 +846,22 @@ public class RoomManager : NetworkBehaviour
         join_SelectRoomButton.interactable = !isInRoom;
         codeButton.interactable = isInRoom;
         leaveRoomButton.interactable = isInRoom;
+        SetUIForRole(isInRoom);
+    }
+
+    private void SetUIForRole(bool isInRoom)
+    {
+        if (NetworkManager.Singleton.IsHost)
+        {
+            startButton.gameObject.SetActive(isInRoom);
+            startButton.interactable = !isInRoom; // 기본적으로 비활성화
+            readyButton.gameObject.SetActive(!isInRoom); // 호스트는 Ready 버튼 필요 없음
+        }
+        else
+        {
+            startButton.gameObject.SetActive(!isInRoom); // 클라이언트는 Start 버튼 필요 없음
+            readyButton.gameObject.SetActive(isInRoom);
+        }
     }
 
 
@@ -810,12 +884,12 @@ public class RoomManager : NetworkBehaviour
         }
     }
 
-    // 서버에서 방 삭제 동기화
-    [ServerRpc(RequireOwnership = false)]
-    private void DestroyRoomServerRpc(string roomId)
-    {
-        DestroyRoomClientRpc(roomId);
-    }
+    //// 서버에서 방 삭제 동기화
+    //[ServerRpc(RequireOwnership = false)]
+    //private void DestroyRoomServerRpc(string roomId)
+    //{
+    //    DestroyRoomClientRpc(roomId);
+    //}
 
     // 모든 클라이언트에서 방 삭제
     [ClientRpc]
@@ -999,42 +1073,42 @@ public class RoomManager : NetworkBehaviour
 
 
     // 방 삭제 처리
-    private void DestroyRoom(string roomId)
-    {
-        if (roomList.ContainsKey(roomId))
-        {
-            Destroy(roomList[roomId]);
-            roomList.Remove(roomId);
-            Debug.Log($"Room {roomId} has been deleted.");
-        }
+    //private void DestroyRoom(string roomId)
+    //{
+    //    if (roomList.ContainsKey(roomId))
+    //    {
+    //        Destroy(roomList[roomId]);
+    //        roomList.Remove(roomId);
+    //        Debug.Log($"Room {roomId} has been deleted.");
+    //    }
 
-        RefreshRoomList();
-    }
+    //    RefreshRoomList();
+    //}
 
-    private async Task<bool> WaitForRelayJoinCode(string lobbyId)
-    {
-        int maxAttempts = 5;
-        for (int attempt = 0; attempt < maxAttempts; attempt++)
-        {
-            try
-            {
-                currentLobby = await LobbyService.Instance.GetLobbyAsync(lobbyId);
-                if (currentLobby.Data.ContainsKey("RelayJoinCode") && !string.IsNullOrEmpty(currentLobby.Data["RelayJoinCode"].Value))
-                {
-                    Debug.Log($" RelayJoinCode 확인 완료: {currentLobby.Data["RelayJoinCode"].Value}");
-                    return true;
-                }
-            }
-            catch (LobbyServiceException e)
-            {
-                Debug.LogWarning($"RelayJoinCode 조회 실패: {e.Message}");
-            }
+    //private async Task<bool> WaitForRelayJoinCode(string lobbyId)
+    //{
+    //    int maxAttempts = 5;
+    //    for (int attempt = 0; attempt < maxAttempts; attempt++)
+    //    {
+    //        try
+    //        {
+    //            currentLobby = await LobbyService.Instance.GetLobbyAsync(lobbyId);
+    //            if (currentLobby.Data.ContainsKey("RelayJoinCode") && !string.IsNullOrEmpty(currentLobby.Data["RelayJoinCode"].Value))
+    //            {
+    //                Debug.Log($" RelayJoinCode 확인 완료: {currentLobby.Data["RelayJoinCode"].Value}");
+    //                return true;
+    //            }
+    //        }
+    //        catch (LobbyServiceException e)
+    //        {
+    //            Debug.LogWarning($"RelayJoinCode 조회 실패: {e.Message}");
+    //        }
 
-            Debug.Log($"RelayJoinCode가 아직 설정되지 않음. ({attempt + 1}/{maxAttempts}) 재시도 중...");
-            await Task.Delay(2000); // 2초 대기 후 다시 시도
-        }
+    //        Debug.Log($"RelayJoinCode가 아직 설정되지 않음. ({attempt + 1}/{maxAttempts}) 재시도 중...");
+    //        await Task.Delay(2000); // 2초 대기 후 다시 시도
+    //    }
 
-        Debug.LogError(" 최대 재시도 후에도 RelayJoinCode를 가져오지 못함.");
-        return false;
-    }
+    //    Debug.LogError(" 최대 재시도 후에도 RelayJoinCode를 가져오지 못함.");
+    //    return false;
+    //}
 }

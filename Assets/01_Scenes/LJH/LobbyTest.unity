@@ -1496,7 +1496,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 348654883}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1757,7 +1757,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 454640061}
   m_HandleRect: {fileID: 454640060}
   m_Direction: 0
-  m_Value: 0.5
+  m_Value: 0.49999955
   m_Size: 0.9190476
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1843,6 +1843,7 @@ MonoBehaviour:
   leaveRoomButton: {fileID: 531277266}
   codeButton: {fileID: 368607342}
   readyButton: {fileID: 1881519664}
+  startButton: {fileID: 1388174886}
   contentRect: {fileID: 1959464307}
   gameSceneName: GameTest
 --- !u!4 &797183973
@@ -3494,7 +3495,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 797183972}
         m_TargetAssemblyTypeName: RoomManager, Assembly-CSharp
-        m_MethodName: JoinRoom
+        m_MethodName: JoinCodeRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3760,7 +3761,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1388174887}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 797183972}
+        m_TargetAssemblyTypeName: RoomManager, Assembly-CSharp
+        m_MethodName: OnStartButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1388174887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5205,7 +5218,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 797183972}
         m_TargetAssemblyTypeName: RoomManager, Assembly-CSharp
-        m_MethodName: OnReadyButtonClick
+        m_MethodName: OnReadyButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
