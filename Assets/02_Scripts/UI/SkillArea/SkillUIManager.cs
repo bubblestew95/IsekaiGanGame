@@ -14,6 +14,11 @@ public class SkillUIManager : MonoBehaviour
 
     private Dictionary<SkillSlot, SkillUI_Base> skillUIMap = null;
 
+    public Dictionary<SkillSlot, SkillUI_Base> SkillUIMap
+    {
+        get { return skillUIMap; }
+    }
+
     /// <summary>
     /// 스킬 범위 혹은 스킬 사용 방향의 출력 여부를 설정한다.
     /// </summary>

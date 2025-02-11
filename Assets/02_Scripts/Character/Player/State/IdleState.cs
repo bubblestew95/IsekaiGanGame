@@ -10,6 +10,7 @@ public class IdleState : BasePlayerState
     private JoystickInputData joystickInputData;
     private NetworkObject networkObj = null;
     private Coroutine updateCoroutine = null;
+    private Coroutine skillUICoroutine = null;
 
     public IdleState(PlayerManager _playerManager) : base(_playerManager)
     {
@@ -50,6 +51,55 @@ public class IdleState : BasePlayerState
     {
     }
 
+    private void UseSkill(SkillSlot _slot)
+    {
+        if (playerManager.SkillUIManager.SkillUIMap.TryGetValue(_slot, out SkillUI_Base skillUI))
+        {
+            if (skillUI as SkillUI_AOE)
+            {
+                if (skillUI.IsEnabled())
+                {
+                    playerManager.InputManager.OnButtonInput
+                        (SkillSlot.Skill_A, skillUI.GetSkillAimPoint());
+                    playerManager.StopCoroutine(skillUICoroutine);
+                    skillUI.SetEnabled(false);
+                }
+                else
+                {
+                    skillUICoroutine = playerManager.
+                        StartCoroutine(SkillAOEPositionCoroutine(skillUI));
+                }
+            }
+            else if (skillUI as SkillUI_Direction)
+            {
+                if (skillUI.IsEnabled())
+                {
+                    playerManager.InputManager.OnButtonInput
+                        (SkillSlot.Skill_A, skillUI.GetSkillAimPoint());
+                    playerManager.StopCoroutine(skillUICoroutine);
+                    skillUI.SetEnabled(false);
+                }
+                else
+                {
+                    skillUICoroutine = playerManager.
+                        StartCoroutine(SkillAOEPositionCoroutine(skillUI));
+                }
+            }
+        }
+        else
+        {
+            SkillPointData data = new SkillPointData();
+            data.type = SkillPointType.None;
+
+            if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mousePos))
+            {
+                Vector3 direction = (mousePos - playerManager.transform.position).normalized;
+                data.skillUsedRotation = Quaternion.LookRotation(direction);
+                playerManager.InputManager.OnButtonInput(_slot, data);
+            }
+        }
+    }
+
     private IEnumerator IdleMobileCoroutine()
     {
         while(true)
@@ -88,35 +138,36 @@ public class IdleState : BasePlayerState
             {
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    
+                    UseSkill(SkillSlot.Skill_A);
                 }
 
                 if (Input.GetKeyDown(KeyCode.Alpha2))
                 {
-
+                    UseSkill(SkillSlot.Skill_B);
                 }
 
                 if (Input.GetKeyDown(KeyCode.Alpha3))
                 {
-
+                    UseSkill(SkillSlot.Skill_C);
                 }
 
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     SkillPointData data = new SkillPointData();
                     data.type = SkillPointType.Direction;
-                    if(playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mousePos))
+
+                    if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mousePos))
                     {
                         Vector3 direction = (mousePos - playerManager.transform.position).normalized;
+                        data.skillUsedPosition = mousePos;
                         data.skillUsedRotation = Quaternion.LookRotation(direction);
                         playerManager.InputManager.OnButtonInput(SkillSlot.Dash, data);
                     }
-                        
                 }
 
                 if (Input.GetMouseButtonDown(0))
                 {
-
+                    UseSkill(SkillSlot.BasicAttack);
                 }
             }
 
@@ -125,8 +176,23 @@ public class IdleState : BasePlayerState
 
             if (inputBuffer.skillType != SkillSlot.None)
             {
-                playerManager.MovementManager.StopMove();
                 playerManager.SkillManager.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
+                playerManager.MovementManager.StopMove();
+            }
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator SkillAOEPositionCoroutine(SkillUI_Base _skillUI)
+    {
+        _skillUI.SetEnabled(true);
+
+        while (true)
+        {
+            if(playerManager.InputManager.GetMouseRayHitPosition(out Vector3 pos))
+            {
+                _skillUI.AimSkill(pos);
             }
 
             yield return null;

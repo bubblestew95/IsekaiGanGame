@@ -22,6 +22,13 @@ public class SkillUI_AOE : SkillUI_Base
         SetTargetPosition(new Vector3(_horizontal, defaultY, _vertical));
     }
 
+    public override void AimSkill(Vector3 position)
+    {
+        position.y = 0.1f;
+
+        targetRectTr.position = position;
+    }
+
     public override SkillPointData GetSkillAimPoint()
     {
         SkillPointData pointData = new SkillPointData();
@@ -34,6 +41,10 @@ public class SkillUI_AOE : SkillUI_Base
     {
         targetImageObj.SetActive(_enabled);
         rangeImageObj.SetActive(_enabled);
+    }
+    public override bool IsEnabled()
+    {
+        return targetImageObj.activeSelf;
     }
 
     /// <summary>

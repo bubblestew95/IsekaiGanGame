@@ -832,6 +832,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 821614662}
   m_CullTransparentMesh: 1
+--- !u!114 &976457462 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2481139205278611692, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+  m_PrefabInstance: {fileID: 1794944599}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 743b0780de74eec459bf30d82d648e96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &985481019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1253,7 +1264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLocalGame: 1
-  isPCMode: 0
+  isPCMode: 1
 --- !u!1001 &1546865054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1813,6 +1824,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4146515583710344192, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+      propertyPath: skillUIManager
+      value: 
+      objectReference: {fileID: 976457462}
     - target: {fileID: 6093684178934932082, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1827,7 +1842,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8410057075557268786, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

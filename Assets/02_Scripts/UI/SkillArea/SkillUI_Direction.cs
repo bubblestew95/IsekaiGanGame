@@ -14,6 +14,11 @@ public class SkillUI_Direction : SkillUI_Base
         SetDirection(_horizontal, _vertical);
     }
 
+    public override void AimSkill(Vector3 position)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override SkillPointData GetSkillAimPoint()
     {
         SkillPointData pointData = new SkillPointData();
@@ -26,6 +31,11 @@ public class SkillUI_Direction : SkillUI_Base
     public override void SetEnabled(bool _enabled)
     {
         arrowImagePivot.gameObject.SetActive(_enabled);
+    }
+
+    public override bool IsEnabled()
+    {
+        return arrowImagePivot.gameObject.activeSelf;
     }
 
     private void SetDirection(float x, float z)

@@ -7,6 +7,8 @@ using EnumTypes;
 /// </summary>
 public class PlayerManager : MonoBehaviour
 {
+
+
     #region Variables
 
         #region Inspector Variables
@@ -16,6 +18,8 @@ public class PlayerManager : MonoBehaviour
     private PlayerData playerData = null;
     [SerializeField]
     private UIBattleUIManager battleUIManager = null;
+    [SerializeField]
+    private SkillUIManager skillUIManager = null;
 
     [Header("Attack Settings")]
     [SerializeField]
@@ -112,6 +116,11 @@ public class PlayerManager : MonoBehaviour
     public PlayerMovementManager MovementManager
     {
         get { return movementManager; }
+    }
+
+    public SkillUIManager SkillUIManager
+    {
+        get { return skillUIManager; }
     }
 
         #endregion
