@@ -9,7 +9,14 @@ public class DeathState : BasePlayerState
 
     public override void OnEnterState()
     {
+        if(!GameManager.Instance.IsLocalGame)
+        {
+            ulong clientId = 0;
+            playerManager.PlayerNetworkManager.OnNetworkPlayerDeath?.Invoke(clientId);
+        }
+
         playerManager.AnimationManager.PlayDeathAnimation();
+
     }
 
     public override void OnExitState()
