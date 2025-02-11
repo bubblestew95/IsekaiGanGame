@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -220,7 +221,11 @@ public class BossAttackManager : NetworkBehaviour
         // 스킬위치 조정
         foreach (GameObject skillPos in circleSkillPos)
         {
-            if (bossStateManager.Players[cnt] == null) continue;
+            if (bossStateManager.Players[cnt] == null)
+            {
+                skillPos.transform.position = new Vector3(-100f, 0f, -100f);
+                continue;
+            }
 
             skillPos.transform.position = new Vector3(bossStateManager.Players[cnt].transform.position.x, 0.3f, bossStateManager.Players[cnt].transform.position.z);
 
@@ -363,7 +368,7 @@ public class BossAttackManager : NetworkBehaviour
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         GetComponent<BoxCollider>().enabled = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
-        GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
+        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
         bossStateManager.Boss.tag = "BossAttack";
 
         // 공격 끝났는지 Check
@@ -871,9 +876,9 @@ public class BossAttackManager : NetworkBehaviour
     }
 
     // 랜덤 타겟 설정
-    private void SetRandomTarget(int _index)
+    private void SetRandomTarget(ulong _index)
     {
-        randomTarget = bossStateManager.Players[_index];
+        randomTarget = bossStateManager.Players.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == _index);
     }
 
     // 공격 초기화

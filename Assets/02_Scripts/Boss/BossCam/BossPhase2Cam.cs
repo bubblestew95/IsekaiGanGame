@@ -14,24 +14,6 @@ public class BossPhase2Cam : MonoBehaviour
     public float shakeAmout;
     public float shakeTime;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            StartCoroutine(MoveCam());
-        }
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            StartCoroutine(ReturnCam());
-        }
-
-        if (Input.GetKeyDown (KeyCode.Y))
-        {
-            StartCoroutine(ShakeCam());
-        }
-    }
-
     public IEnumerator MoveCam()
     {
         origin = Cam.localPosition;

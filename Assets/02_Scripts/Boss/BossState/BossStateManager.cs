@@ -2,18 +2,18 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using Unity.Netcode;
-using System.Linq;
-using System;
+
 
 public class BossStateManager : NetworkBehaviour
 {
     // 델리게이트
     public delegate void BossStateDelegate();
-    public delegate void BossStateDelegate2(int _index);
+    public delegate void BossStateDelegate2(ulong _index);
     public BossStateDelegate bossDieCallback;
     public BossStateDelegate bossHp10Callback;
     public BossStateDelegate bossHpHalfCallback;
     public BossStateDelegate bossStunCallback;
+    public BossStateDelegate bossWallTriggerCallback;
     public BossStateDelegate2 bossRandomTargetCallback;
 
     // 프로퍼티
@@ -55,23 +55,12 @@ public class BossStateManager : NetworkBehaviour
         FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += InitMulti;
     }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (other.tag == "Wall")
         {
-            SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
-        }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            Debug.Log("Players[0] : " + players[0]);
-            Debug.Log("Players[1] : " + players[1]);
-            Debug.Log("AggroPlayer : " + aggroPlayer);
-        }
-
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            BossStun();
+            bossWallTriggerCallback?.Invoke();
+            Debug.Log("벽이랑 부딛침");
         }
     }
 
@@ -144,7 +133,7 @@ public class BossStateManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void RandomPlayerClientRpc(int _num)
+    private void RandomPlayerClientRpc(ulong _num)
     {
         bossRandomTargetCallback?.Invoke(_num);
     }
@@ -443,18 +432,20 @@ public class BossStateManager : NetworkBehaviour
     }
 
     // 랜덤한 플레이어를 호출하는 함수
-    public int RandomPlayer()
+    public ulong RandomPlayer()
     {
-        int len = 0;
+        List<ulong> numList = new List<ulong>();
 
-        foreach (GameObject player in players)
+        for (int i = 0; i < 4; ++i)
         {
-            if (player != null) len++;
+            if (Players[i] == null) continue;
+
+            numList.Add(Players[i].GetComponent<NetworkObject>().OwnerClientId);
         }
 
-        int randomIndex = UnityEngine.Random.Range(0, len);
+        ulong randomNum = numList[Random.Range(0, numList.Count)];
 
-        return randomIndex;
+        return randomNum;
     }
     #endregion
 
