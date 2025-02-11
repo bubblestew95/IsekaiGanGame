@@ -318,13 +318,13 @@ public class BossBT : NetworkBehaviour
 
         float elapseTime = 0f;
 
-        int randomNum = bossStateManager.RandomPlayer();
-
+        ulong randomNum = bossStateManager.RandomPlayer();
+        GameObject target = bossStateManager.Players.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == randomNum);
 
         // 잠시 다른 플레이어 쳐다보다가
         while (true)
         {
-            nvAgent.SetDestination(bossStateManager.Players[randomNum].transform.position);
+            nvAgent.SetDestination(target.transform.position);
             elapseTime += Time.deltaTime;
 
             if (elapseTime >= 1f)
@@ -351,11 +351,12 @@ public class BossBT : NetworkBehaviour
         }
 
         randomNum = bossStateManager.RandomPlayer();
+        target = bossStateManager.Players.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == randomNum);
 
         // 또다른 플레이어 쳐다보다가
         while (true)
         {
-            nvAgent.SetDestination(bossStateManager.Players[randomNum].transform.position);
+            nvAgent.SetDestination(target.transform.position);
             elapseTime += Time.deltaTime;
 
             if (elapseTime >= 1f)
@@ -383,11 +384,12 @@ public class BossBT : NetworkBehaviour
         }
 
         randomNum = bossStateManager.RandomPlayer();
+        target = bossStateManager.Players.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == randomNum);
 
         // 또다른 플레이어 쳐다보다가 
         while (true)
         {
-            nvAgent.SetDestination(bossStateManager.Players[randomNum].transform.position);
+            nvAgent.SetDestination(target.transform.position);
             elapseTime += Time.deltaTime;
 
             if (elapseTime >= 1f)

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -875,9 +876,9 @@ public class BossAttackManager : NetworkBehaviour
     }
 
     // 랜덤 타겟 설정
-    private void SetRandomTarget(int _index)
+    private void SetRandomTarget(ulong _index)
     {
-        randomTarget = bossStateManager.Players[_index];
+        randomTarget = bossStateManager.Players.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == _index);
     }
 
     // 공격 초기화
