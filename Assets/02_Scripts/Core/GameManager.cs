@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Inspector Variables
+    [SerializeField]
     private bool isLocalGame = false;
+
     #endregion
 
     #region Private Variables
