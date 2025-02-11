@@ -11,11 +11,7 @@ using Unity.Services.Authentication;
 using Unity.Netcode;
 using System;
 using Player = Unity.Services.Lobbies.Models.Player;
-using Unity.Services.Matchmaker.Models;
-using UnityEditor.PackageManager;
 using Unity.Collections;
-using Unity.Netcode.Transports.UTP;
-using Unity.Networking.Transport.Relay;
 
 public class RoomManager : NetworkBehaviour
 {
@@ -588,52 +584,6 @@ public class RoomManager : NetworkBehaviour
     }
 
 
-    //public async void OnReadyButtonClick()
-    //{
-    //    if (string.IsNullOrEmpty(currentRoom))
-    //    {
-    //        Debug.LogError("[Ready] 현재 방이 없습니다!");
-    //        return;
-    //    }
-
-    //    try
-    //    {
-    //        string playerId = AuthenticationService.Instance.PlayerId;
-    //        if (string.IsNullOrEmpty(playerId))
-    //        {
-    //            Debug.LogError("[Ready] Player ID를 찾을 수 없습니다!");
-    //            return;
-    //        }
-
-    //        // Ready 상태를 서버에 저장
-    //        await LobbyService.Instance.UpdatePlayerAsync(currentRoom, playerId, new UpdatePlayerOptions
-    //        {
-    //            Data = new Dictionary<string, PlayerDataObject>
-    //        {
-    //            {
-    //                "Ready", new PlayerDataObject(
-    //                    visibility: PlayerDataObject.VisibilityOptions.Member,
-    //                    value: "True")
-    //            }
-    //        }
-    //        });
-
-    //        Debug.Log("[Ready] 플레이어 Ready 상태 업데이트 완료!");
-
-    //        // 모든 클라이언트에게 Ready 상태 알리기
-    //        NotifyPlayersReady(playerId);
-
-    //        //Debug.Log("NotifyPlayersReady 실행완");
-    //        // Ready 상태 확인 후 씬 전환
-    //        //await CheckAllPlayersReady();
-    //        //Debug.Log("CheckAllPlayersReady 실행완");
-    //    }
-    //    catch (LobbyServiceException e)
-    //    {
-    //        Debug.LogError($"[Ready] Ready 상태 업데이트 실패: {e.Message}");
-    //    }
-    //}
-
     [ClientRpc]
     private void NotifyPlayersReadyClientRpc(string playerId)
     {
@@ -717,57 +667,6 @@ public class RoomManager : NetworkBehaviour
         Debug.Log($"[RoomManager] Start 버튼 상태 업데이트: {startButton.interactable}");
     }
 
-    //public async Task CheckAllPlayersReady()
-    //{
-    //    try
-    //    {
-    //        //  최신 Lobby 데이터 가져오기
-    //        currentLobby = await LobbyService.Instance.GetLobbyAsync(currentRoom);
-
-    //        if (currentLobby == null)
-    //        {
-    //            Debug.LogError("[Ready] Lobby 정보를 가져올 수 없습니다.");
-    //            return;
-    //        }
-
-    //        int totalPlayers = currentLobby.Players.Count;
-    //        int readyCount = 0;
-
-    //        foreach (var player in currentLobby.Players)
-    //        {
-    //            if (player.Data != null)
-    //            {
-    //                foreach (var dataKey in player.Data.Keys)
-    //                {
-    //                    Debug.Log($"[Ready] 플레이어 {player.Id}의 데이터 - Key: {dataKey}, Value: {player.Data[dataKey].Value}");
-    //                }
-
-    //                if (player.Data.ContainsKey("Ready") && player.Data["Ready"].Value == "True")
-    //                {
-    //                    readyCount++;
-    //                }
-    //            }
-    //            else
-    //            {
-    //                Debug.LogWarning($"[Ready] 플레이어 {player.Id}의 데이터가 null입니다!");
-    //            }
-    //        }
-
-    //        Debug.Log($"[Ready] 현재 Ready한 플레이어 수: {readyCount}/{totalPlayers}");
-
-    //        //  모든 입장한 플레이어가 Ready 상태이면 씬 전환
-    //        if (readyCount == totalPlayers && totalPlayers > 1)
-    //        {
-    //            Debug.Log("[Ready] 모든 플레이어가 Ready 상태입니다! 다음 씬으로 이동!");
-
-    //            RequestSceneChange();
-    //        }
-    //    }
-    //    catch (LobbyServiceException e)
-    //    {
-    //        Debug.LogError($"[Ready] Ready 상태 확인 실패: {e.Message}");
-    //    }
-    //}
     public void OnStartButtonClicked()
     {
         if (!NetworkManager.Singleton.IsHost) return;
