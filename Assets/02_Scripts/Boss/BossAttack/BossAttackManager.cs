@@ -383,8 +383,20 @@ public class BossAttackManager : NetworkBehaviour
 
         // ParticleManager.Instance.PlayParticleSetParent(ParticleManager.Instance.attack4, bossStateManager.Boss.transform.position, bossStateManager.Boss, duration + 1f);
 
+        float elapseTime = 0f;
+
         while (true)
         {
+            elapseTime += Time.deltaTime;
+
+
+            // 너무 붙어있으면 안되서 1초마다 껏다킴
+            if (elapseTime >= 1f)
+            {
+                GetComponent<BoxCollider>().enabled = false;
+                GetComponent<BoxCollider>().enabled = true;
+                elapseTime = 0f;
+            }
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
             {
                 break;

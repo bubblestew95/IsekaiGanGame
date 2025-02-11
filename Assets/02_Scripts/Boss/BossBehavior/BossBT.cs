@@ -266,6 +266,7 @@ public class BossBT : NetworkBehaviour
 
         float duration = attack4.Duration;
         float elapseTime = 0f;
+        float elapseTime2 = 0f;
 
         // 이동속도 설정
         nvAgent.speed = 8f;
