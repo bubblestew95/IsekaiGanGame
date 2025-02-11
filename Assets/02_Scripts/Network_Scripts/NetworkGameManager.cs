@@ -31,8 +31,11 @@ public class NetworkGameManager : NetworkBehaviour
     public void OnPlayerDamaged
         (PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockbackDist)
     {
-        ulong cliendId = _damageReceiver.GetComponent<NetworkObject>().OwnerClientId;
-        PlayerDamagedRpc(cliendId, _damage, _attackPos, _knockbackDist);
+        if(_damageReceiver.GetComponent<NetworkObject>().IsOwner)
+        {
+            ulong cliendId = _damageReceiver.GetComponent<NetworkObject>().OwnerClientId;
+            PlayerDamagedRpc(cliendId, _damage, _attackPos, _knockbackDist);
+        }
     }
     
     public void OnBossDamaged

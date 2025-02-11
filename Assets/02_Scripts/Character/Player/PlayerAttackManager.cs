@@ -5,6 +5,7 @@ using EnumTypes;
 public class PlayerAttackManager
 {
     private PlayerManager playerManager = null;
+    private CharacterController characterController = null;
     private MeleeWeapon meleeWeapon = null;
     private Transform rangeAttackTransform = null;
 
@@ -16,6 +17,7 @@ public class PlayerAttackManager
     public void Init(PlayerManager _playerManager)
     {
         playerManager = _playerManager;
+        characterController = playerManager.GetComponent<CharacterController>();
         meleeWeapon = playerManager.PlayerMeleeWeapon;
         rangeAttackTransform = playerManager.RangeAttackStartTr;
     }
@@ -64,7 +66,8 @@ public class PlayerAttackManager
 
     public void KnockbackPlayer(Vector3 _attackOriginPos, float _distance)
     {
-        playerManager.StartCoroutine(KnockBackCoroutine(_attackOriginPos, _distance));
+        if(characterController.enabled)
+            playerManager.StartCoroutine(KnockBackCoroutine(_attackOriginPos, _distance));
     }
 
     public bool IsPlayerBehindBoss()
