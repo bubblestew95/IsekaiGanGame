@@ -4858,6 +4858,7 @@ GameObject:
   - component: {fileID: 199536971008656446}
   - component: {fileID: 2285896364206250241}
   - component: {fileID: 5083599047737124796}
+  - component: {fileID: 3425301468136127438}
   m_Layer: 0
   m_Name: FireArea
   m_TagString: Fire
@@ -9704,6 +9705,20 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &3425301468136127438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632659334546840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97d1fce9d9e9c594694e34d4b251326f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 30
+  TickTime: 1
 --- !u!1 &3282573220535931295
 GameObject:
   m_ObjectHideFlags: 0
