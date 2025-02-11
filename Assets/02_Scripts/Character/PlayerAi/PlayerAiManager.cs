@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using EnumTypes;
 using StructTypes;
+using TMPro;
 using UnityEngine;
 
 public class PlayerAiManager : MonoBehaviour
@@ -10,16 +11,13 @@ public class PlayerAiManager : MonoBehaviour
     private List<Vector3> rocksPos = new List<Vector3>(); // 돌들의 위치를 저장하는 리스트
     public Vector3 mapCenterPos; // 맵의 중앙 위치 
     public float rockSize = 2.0f; // 돌의 크기 (예시로 설정, 실제 돌 크기에 맞게 조정)
-
+    WaitForSeconds wait = new WaitForSeconds(0.5f);
     private void Awake()
     {
         playerManager = GetComponent<PlayerManager>();
-
-
-
     }
     #region 위치파악
-    private void UpdateRockPositions()
+    private void UpdateRockPositions()// 돌위치 파악
     {
         rocksPos.Clear(); // 기존 리스트를 초기화
         // 현재 "Rock" 태그를 가진 모든 오브젝트의 위치를 리스트로 받기
@@ -29,7 +27,7 @@ public class PlayerAiManager : MonoBehaviour
         {
             rocksPos.Add(rock.transform.position); // 돌의 위치 추가
         }
-    }
+    } 
     #endregion
     #region 이동
     #region 기본 이동
@@ -76,22 +74,28 @@ public class PlayerAiManager : MonoBehaviour
     }
     private void RunawayFromBossAttackRange() // 보스 공격 범위부터 도망치는 함수 ( 사유 AI 생존 관련  
     {
-        //플레이어 위치 받기 playerPos
+        Vector3 playerPos = transform.position;//플레이어 위치 받기 playerPos
         //보스 공격 지점 받기 attackCenterPos
         //보스 공격 범위 중앙 = 보스 공격 지점
         //if 보스 공격 범위가 부채꼴이라면 
         //  보스 공격 범위 중앙 = 보스 공격 지점 + (보스가 바라보고 있는 방향.노말라이즈() * 반지름의 1/2)
-        //플레이어 위치 - 
+        //플레이어 위치
         //코루틴 이동 범위 밖으로 가는
     }
-    private void GoToBossForAttack() // 공격하기위해 보스에게 가까이 가는 함수 ( 사유 공격 
+    private void GoToBossForAttack() // 공격하기 위해 보스에게 가까이 가는 함수 ( 사유 공격 
     {
-        //if
+        Vector3 bossPos = playerManager.InputManager.lastSkillUsePoint; // 보스 위치
+        Vector3 playerPos = transform.position;//플레이어 위치 받기 playerPos
+        // 목표 위치를 계산한 후, 목표로 향할 방향 (AI 이동)
+        Vector3 directionToTarget = bossPos - playerPos;
+        float x = directionToTarget.x;
+        float z = directionToTarget.z;
+        AiMove(x, z);
     }
     #endregion
     #endregion
     #region 공격
-    private void AiUseSkillWithAim(SkillSlot _type) // 보스 위치에 스킬쓰는 함수
+    private void AiUseSkillWithAim(SkillSlot _type) // 스킬 데이터를 받아 사거리내에 보스가 있다면 보스 위치에 스킬쓰고 아니면 보스에게 가는 함수
     {
         Vector3 bossPos = playerManager.InputManager.lastSkillUsePoint; // 보스 위치
         Vector3 playerPos = transform.position;//플레이어 위치 받기 playerPos
@@ -104,6 +108,11 @@ public class PlayerAiManager : MonoBehaviour
             {
                 playerManager.SkillManager.TryUseSkill(_type, bossPos); // 보스위치에 스킬 사용
             }
+            else
+            {
+                Debug.Log("Ai Log Boss is out of Skill range");
+                GoToBossForAttack();
+            }
         }
         else // 범위 스킬이면
         {
@@ -111,9 +120,20 @@ public class PlayerAiManager : MonoBehaviour
             {
                 playerManager.SkillManager.TryUseSkill(_type, bossPos); // 보스위치에 스킬 사용
             }
+            else
+            {
+                Debug.Log("Ai Log Boss is out of Skill range");
+                GoToBossForAttack();
+            }
         }
     }
     #endregion
 
-    
+    private void Update()
+    {
+        AiUseSkillWithAim(SkillSlot.Skill_A);
+        AiUseSkillWithAim(SkillSlot.Skill_B);
+        AiUseSkillWithAim(SkillSlot.Skill_C);
+        AiUseSkillWithAim(SkillSlot.BasicAttack);
+    }
 }
