@@ -94,7 +94,7 @@ public class PlayerManager : MonoBehaviour
         get { return animationManager; }
     }
 
-    public PlayerNetworkManager NetworkController
+    public PlayerNetworkManager PlayerNetworkManager
     {
         get { return playerNetworkManager; }
     }
@@ -226,7 +226,7 @@ public class PlayerManager : MonoBehaviour
         stateMachine.ChangeState(PlayerStateType.Idle);
 
         // 로컬 게임이거나, 네트워크 오브젝트의 소유자일 경우에만 활성화한다.
-        if (GameManager.Instance.IsLocalGame || NetworkController.IsOwner)
+        if (GameManager.Instance.IsLocalGame || PlayerNetworkManager.IsOwner)
         {
             // 전투 UI를 활성화하고, 캐릭터 컨트롤러를 활성화한다.
             battleUIManager.transform.parent.gameObject.SetActive(true);

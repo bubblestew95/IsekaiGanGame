@@ -7,11 +7,6 @@ public class NetworkGameManager : NetworkBehaviour
 {
     public event Action loadingFinishCallback;
 
-    /// <summary>
-    /// 클라이언트 ID를 키로 가지고, 해당 클라이언트가 소유한 PlayerManger를 값으로 가지는 딕셔너리.
-    /// </summary>
-    private Dictionary<ulong, PlayerManager> multiPlayersMap = null;
-
     // 플레이어 로딩 동기화 관련 변수들
     private int playerCnt = 0;
     private int loadingCnt = 0;
@@ -28,21 +23,22 @@ public class NetworkGameManager : NetworkBehaviour
 
     #region Public Functions
 
+    /// <summary>
+    /// 플레이어가 데미지를 받았음을 서버에게 알려주는 RPC를 호출한다.
+    /// </summary>
+    /// <param name="_damageReceiver"></param>
+    /// <param name="_damage"></param>
+    /// <param name="_attackPos"></param>
+    /// <param name="_knockbackDist"></param>
     public void OnPlayerDamaged
         (PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockbackDist)
     {
-        if(_damageReceiver.GetComponent<NetworkObject>().IsOwner)
+        ulong clientId = _damageReceiver.PlayerNetworkManager.OwnerClientId;
+
+        if (NetworkManager.Singleton.LocalClientId == clientId)
         {
-            ulong cliendId = _damageReceiver.GetComponent<NetworkObject>().OwnerClientId;
-            PlayerDamagedRpc(cliendId, _damage, _attackPos, _knockbackDist);
+            PlayerDamagedRpc(clientId, _damage, _attackPos, _knockbackDist);
         }
-    }
-    
-    public void OnBossDamaged
-        (PlayerManager _damageGiver, int _damage, float _aggro)
-    {
-        ulong cliendId = _damageGiver.GetComponent<NetworkObject>().OwnerClientId;
-        BossDamagedRpc(cliendId, _damage, _aggro);
     }
 
     #endregion
@@ -98,7 +94,7 @@ public class NetworkGameManager : NetworkBehaviour
 
     #region RPC
 
-    #region Client To Server RPC
+        #region Client To Server RPC
 
     /// <summary>
     /// 플레이어가 데미지를 받았음을 서버에게 알린다.
@@ -115,20 +111,6 @@ public class NetworkGameManager : NetworkBehaviour
         ApplyDamageToPlayerRpc(_cliendId, _damage, _attackPos, _knockbackDist);
     }
 
-    /// <summary>
-    /// 보스가 데미지를 받았음을 서버에게 알린다.
-    /// </summary>
-    /// <param name="_cliendId"></param>
-    /// <param name="_damage"></param>
-    /// <param name="_attackPos"></param>
-    /// <param name="_knockbackDist"></param>
-    [Rpc(SendTo.Server)]
-    private void BossDamagedRpc
-        (ulong _cliendId, int _damage, float _aggro)
-    {
-        // 다른 클라이언트들에게 보스에게 데미지를 입히라고 명령한다.
-        ApplyDamageToBossRpc(_cliendId, _damage, _aggro);
-    }
 
         #endregion
 
@@ -157,36 +139,11 @@ public class NetworkGameManager : NetworkBehaviour
         }
 
     }
-
-    /// <summary>
-    /// 서버에서 보스에게 데미지를 적용하도록 모든 클라이언트에게 명령한다.
-    /// </summary>
-    /// <param name="_cliendId"></param>
-    /// <param name="_damage"></param>
-    /// <param name="_attackPos"></param>
-    /// <param name="_knockbackDist"></param>
-    [Rpc(SendTo.Everyone)]
-    private void ApplyDamageToBossRpc
-        (ulong _cliendId, int _damage, float _aggro)
-    {
-        var obj = NetworkManager.ConnectedClients[_cliendId].PlayerObject;
-
-        if (obj != null)
-        {
-            // GameManager.Instance.ApplyDamageToBoss(playerManager, _damage, _aggro)
-        }
-    }
-
         #endregion
 
     #endregion
 
     #region Unity Callbacks
-
-    private void Awake()
-    {
-        multiPlayersMap = new Dictionary<ulong, PlayerManager>(); 
-    }
 
     private void Start()
     {
