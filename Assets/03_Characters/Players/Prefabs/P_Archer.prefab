@@ -10826,7 +10826,6 @@ GameObject:
   - component: {fileID: -287821195716040168}
   - component: {fileID: -8549285457553216154}
   - component: {fileID: 768737984502602709}
-  - component: {fileID: -453485446564955131}
   - component: {fileID: 8742243076319004022}
   m_Layer: 9
   m_Name: P_Archer
@@ -11092,19 +11091,6 @@ MonoBehaviour:
     particlePrefab: {fileID: 2232111375016833989, guid: 7f80baed94a37294fa07eb5faf2668c7, type: 3}
   - particleName: BackJump
     particlePrefab: {fileID: 1141330259687333427, guid: 833991be4f51dc7439d6474656e963a7, type: 3}
---- !u!114 &-453485446564955131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 179124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f24119f1edcc2b84498ea1ca494768c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &8742243076319004022
 MonoBehaviour:
   m_ObjectHideFlags: 0

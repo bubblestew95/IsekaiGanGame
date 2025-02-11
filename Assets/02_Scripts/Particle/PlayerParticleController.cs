@@ -74,7 +74,7 @@ public class PlayerParticleController : MonoBehaviour
 
         if (particlePrefab == null)
         {
-            Debug.LogWarningFormat("{0} name particle is not exist in list!");
+            Debug.LogWarningFormat("{0} name particle is not exist in list!", _particleName);
             return;
         }
 

@@ -7,12 +7,6 @@ public class PlayerNetworkManager : NetworkBehaviour
     private PlayerManager playerManager = null;
     private NetworkAnimator networkAnimator = null;
 
-    public void Init(PlayerManager _playerManager)
-    {
-        playerManager = _playerManager;
-        networkAnimator = playerManager.GetComponent<NetworkAnimator>();
-    }
-
     public void SetNetworkAnimatorTrigger(int _hashId)
     {
         if(networkAnimator == null)
@@ -23,6 +17,11 @@ public class PlayerNetworkManager : NetworkBehaviour
 
         networkAnimator.SetTrigger(_hashId);
     }
+    public override void OnNetworkSpawn()
+    {
+        FindAnyObjectByType<NetworkGameManager>().CheckPlayerSpawnServerRpc();
+    }
+
 
     private void Awake()
     {
