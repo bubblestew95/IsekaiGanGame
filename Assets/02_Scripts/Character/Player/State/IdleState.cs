@@ -60,7 +60,7 @@ public class IdleState : BasePlayerState
                 if (skillUI.IsEnabled())
                 {
                     playerManager.InputManager.OnButtonInput
-                        (SkillSlot.Skill_A, skillUI.GetSkillAimPoint());
+                        (_slot, skillUI.GetSkillAimPoint());
                     playerManager.StopCoroutine(skillUICoroutine);
                     skillUI.SetEnabled(false);
                 }
@@ -75,14 +75,14 @@ public class IdleState : BasePlayerState
                 if (skillUI.IsEnabled())
                 {
                     playerManager.InputManager.OnButtonInput
-                        (SkillSlot.Skill_A, skillUI.GetSkillAimPoint());
+                        (_slot, skillUI.GetSkillAimPoint());
                     playerManager.StopCoroutine(skillUICoroutine);
                     skillUI.SetEnabled(false);
                 }
                 else
                 {
                     skillUICoroutine = playerManager.
-                        StartCoroutine(SkillAOEPositionCoroutine(skillUI));
+                        StartCoroutine(SkillDirectionCoroutine(skillUI));
                 }
             }
         }
@@ -191,6 +191,21 @@ public class IdleState : BasePlayerState
         while (true)
         {
             if(playerManager.InputManager.GetMouseRayHitPosition(out Vector3 pos))
+            {
+                _skillUI.AimSkill(pos);
+            }
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator SkillDirectionCoroutine(SkillUI_Base _skillUI)
+    {
+        _skillUI.SetEnabled(true);
+
+        while (true)
+        {
+            if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 pos))
             {
                 _skillUI.AimSkill(pos);
             }
