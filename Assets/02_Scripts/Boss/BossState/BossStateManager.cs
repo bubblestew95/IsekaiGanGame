@@ -246,6 +246,8 @@ public class BossStateManager : NetworkBehaviour
         {
             playerAggro[i] = 0f;
         }
+
+        GetHighestAggroTarget();
     }
 
     // 플레이어의 데미지, 어그로 수치 관리하는 함수
