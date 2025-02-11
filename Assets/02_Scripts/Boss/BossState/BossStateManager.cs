@@ -56,26 +56,6 @@ public class BossStateManager : NetworkBehaviour
         FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += InitMulti;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
-        }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            Debug.Log("Players[0] : " + players[0]);
-            Debug.Log("Players[1] : " + players[1]);
-            Debug.Log("AggroPlayer : " + aggroPlayer);
-        }
-
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            BossStun();
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Wall")

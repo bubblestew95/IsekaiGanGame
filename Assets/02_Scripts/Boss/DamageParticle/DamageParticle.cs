@@ -24,14 +24,6 @@ public class DamageParticle : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SetupAndPlayParticles(damage);
-        }
-    }
-
     // 데미지에 맞는 파티클 실행
     public void SetupAndPlayParticles(float _damage)
     {
