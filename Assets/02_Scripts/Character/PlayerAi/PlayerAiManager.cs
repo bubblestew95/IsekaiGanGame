@@ -43,26 +43,30 @@ public class PlayerAiManager : MonoBehaviour
     #region 기본 이동
     private void AiMove(float _x, float _z) // 플레이어 매니저에 조이스틱 입력이랑 같은 입력을 줘서 움직이는 함수
     {
-        JoystickInputData data = new JoystickInputData();
-
-        // 입력 값이 유효 범위를 벗어났을 경우
-        if (_x > 1 || _x < -1 || _z > 1 || _z < -1)
+        
+        if(playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Idle)
         {
-            Debug.Log("Ai move input is out of range, Range is (-1 ~ 1) (X:" + _x + ", Z:" + _z + ")");
+            JoystickInputData data = new JoystickInputData();
 
-            // 입력 값을 -1 또는 1로 고정 (음수면 -1, 양수면 1)
-            data.x = Mathf.Sign(_x); // _x가 음수면 -1, 양수면 1
-            data.z = Mathf.Sign(_z); // _z가 음수면 -1, 양수면 1
-        }
-        else
-        {
-            // 입력 값이 유효 범위 내에 있을 경우 그대로 사용
-            data.x = _x;
-            data.z = _z;
-        }
+            // 입력 값이 유효 범위를 벗어났을 경우
+            if (_x > 1 || _x < -1 || _z > 1 || _z < -1)
+            {
+                Debug.Log("Ai move input is out of range, Range is (-1 ~ 1) (X:" + _x + ", Z:" + _z + ")");
 
-        // 조이스틱 데이터를 이용해 이동 처리
-        playerManager.MovementManager.MoveByJoystick(data);
+                // 입력 값을 -1 또는 1로 고정 (음수면 -1, 양수면 1)
+                data.x = Mathf.Sign(_x); // _x가 음수면 -1, 양수면 1
+                data.z = Mathf.Sign(_z); // _z가 음수면 -1, 양수면 1
+            }
+            else
+            {
+                // 입력 값이 유효 범위 내에 있을 경우 그대로 사용
+                data.x = _x;
+                data.z = _z;
+            }
+
+            // 조이스틱 데이터를 이용해 이동 처리
+            playerManager.MovementManager.MoveByJoystick(data);
+        }
     }
     #endregion
     #region 이동 심화
