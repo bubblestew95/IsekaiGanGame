@@ -22,7 +22,6 @@ public class PlayerNetworkManager : NetworkBehaviour
         FindAnyObjectByType<NetworkGameManager>().CheckPlayerSpawnServerRpc();
     }
 
-
     private void Awake()
     {
         playerManager = GetComponent<PlayerManager>();

@@ -142,10 +142,17 @@ public class NetworkGameManager : NetworkBehaviour
     private void ApplyDamageToPlayerRpc
         (ulong _cliendId, int _damage, Vector3 _attackPos, float _knockbackDist)
     {
-        if(multiPlayersMap.TryGetValue(_cliendId, out PlayerManager playerManager))
+        var obj = NetworkManager.ConnectedClients[_cliendId].PlayerObject;
+
+        if(obj != null)
         {
-            GameManager.Instance.ApplyDamageToPlayer(playerManager, _damage, _attackPos, _knockbackDist);
+            GameManager.Instance.ApplyDamageToPlayer(
+                obj.GetComponent<PlayerManager>(),
+                _damage,
+                _attackPos,
+                _knockbackDist);
         }
+
     }
 
     /// <summary>
@@ -159,9 +166,11 @@ public class NetworkGameManager : NetworkBehaviour
     private void ApplyDamageToBossRpc
         (ulong _cliendId, int _damage, float _aggro)
     {
-        if (multiPlayersMap.TryGetValue(_cliendId, out PlayerManager playerManager))
+        var obj = NetworkManager.ConnectedClients[_cliendId].PlayerObject;
+
+        if (obj != null)
         {
-            // GameManager.Instance.ApplyDamageToBoss(playerManager, _damage, _aggro);
+            // GameManager.Instance.ApplyDamageToBoss(playerManager, _damage, _aggro)
         }
     }
 

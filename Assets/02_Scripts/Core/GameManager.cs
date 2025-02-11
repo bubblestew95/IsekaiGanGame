@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     #region Private Variables
 
     private BossStateManager bossStateManager = null;
+    private NetworkGameManager networkGameManager = null;
 
     #endregion
 
@@ -48,12 +49,10 @@ public class GameManager : MonoBehaviour
     /// <param name="_damageSource">보스에게 데미지를 주는 플레이어</param>
     public void DamageToBoss(PlayerManager _damageGiver, int _damage, float _aggro)
     {
-        Debug.LogFormat("Player deal to boss! damage : {0}, aggro : {1}", _damage, _aggro);
-
-        ulong clientId = _damageGiver.GetComponent<NetworkObject>().OwnerClientId;
-
-        if (_damageGiver.GetComponent<PlayerNetworkManager>().IsClient)
+        if (_damageGiver.NetworkController.IsClient)
         {
+            ulong clientId = _damageGiver.GetComponent<NetworkObject>().OwnerClientId;
+
             DamageToBoss_Multi(clientId, _damage, _aggro);
         }
 
@@ -72,7 +71,7 @@ public class GameManager : MonoBehaviour
             ApplyDamageToPlayer(_damageReceiver, _damage, _attackPos, _knockBackDist);
         else
         {
-
+            networkGameManager.OnPlayerDamaged(_damageReceiver, _damage, _attackPos, _knockBackDist);
         }
     }
 
@@ -110,20 +109,16 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if(instance != null)
+        if (instance != null)
         {
             Destroy(gameObject);
             return;
         }
-        else
-        {
-            instance = this;
-        }
-    }
 
-    private void Start()
-    {
+        instance = this;
+
         bossStateManager = FindAnyObjectByType<BossStateManager>();
+        networkGameManager = FindAnyObjectByType<NetworkGameManager>();
     }
 
     #endregion
