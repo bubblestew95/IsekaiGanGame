@@ -85,6 +85,24 @@ public class PlayerInputManager
         return nullInputBuffer;
     }
 
+    public bool GetMouseRayHitPosition(out Vector3 result)
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100f))
+        {
+            result = hit.point;
+            return true;
+        }
+
+        result = Vector3.zero;
+        return false;
+    }
+
+    /// <summary>
+    /// 입력 버퍼에서 일정 시간마다 입력을 삭제하는 처리를 하는 코루틴
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator PopInputBufferCoroutine()
     {
         float remainTime = 0f;

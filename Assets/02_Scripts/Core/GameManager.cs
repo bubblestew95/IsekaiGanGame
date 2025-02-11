@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private bool isLocalGame = false;
 
+    [SerializeField]
+    private bool isPCMode = false;
+
     #endregion
 
     #region Private Variables
@@ -31,6 +34,11 @@ public class GameManager : MonoBehaviour
     public bool IsLocalGame
     {
         get { return isLocalGame; }
+    }
+
+    public bool IsPCMode
+    {
+        get { return isPCMode; }
     }
 
     #endregion
