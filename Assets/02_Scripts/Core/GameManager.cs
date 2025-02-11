@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Inspector Variables
+
     [SerializeField]
     private bool isLocalGame = false;
 
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Public Functions
+
     public Transform GetBossTransform()
     {
         return bossStateManager.transform;
@@ -63,17 +65,36 @@ public class GameManager : MonoBehaviour
         // UpdatePlayerHpUI(_damageGiver);
     }
 
+
     /// <summary>
-    /// 플레이어가 데미지를 입음.
+    /// 플레이어에게 데미지를 입힘.
+    /// </summary>
+    /// <param name="_damageReceiver"></param>
+    public void DamageToPlayer(PlayerManager _damageReceiver, int _damage)
+    {
+        if (isLocalGame)
+            ApplyDamageToPlayer(_damageReceiver, _damage);
+        else
+        {
+            networkGameManager.OnPlayerDamaged(_damageReceiver, _damage);
+        }
+    }
+
+    /// <summary>
+    /// 플레이어에게 데미지를 입힘과 동시에 넉백 효과를 부여함.
     /// </summary>
     /// <param name="_damageReceiver"></param>
     public void DamageToPlayer(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDist)
     {
+        DamageToPlayer(_damageReceiver, _damage);
+
         if (isLocalGame)
-            ApplyDamageToPlayer(_damageReceiver, _damage, _attackPos, _knockBackDist);
+        {
+            ApplyKnockbackToPlayer(_damageReceiver, _attackPos, _knockBackDist);
+        }
         else
         {
-            networkGameManager.OnPlayerDamaged(_damageReceiver, _damage, _attackPos, _knockBackDist);
+            networkGameManager.OnPlayerKnockback(_damageReceiver, _attackPos, _knockBackDist);
         }
     }
 
@@ -90,17 +111,21 @@ public class GameManager : MonoBehaviour
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
     public void ApplyDamageToPlayer
-        (PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockbackDist)
+        (PlayerManager _damageReceiver, int _damage)
     {
-        _damageReceiver.AttackManager.TakeDamage(_damage, _attackPos, _knockbackDist);
+        _damageReceiver.AttackManager.TakeDamage(_damage);
 
         UpdatePlayerHpUI(_damageReceiver);
+    }
+
+    public void ApplyKnockbackToPlayer(PlayerManager _targer, Vector3 _attackPos, float _knockbackDist)
+    {
+        _targer.AttackManager.KnockbackPlayer(_attackPos, _knockbackDist);
     }
 
     #endregion
 
     #region Private Functions
-
 
     private void UpdatePlayerHpUI(PlayerManager _player)
     {

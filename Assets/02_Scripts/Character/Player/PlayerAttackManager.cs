@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using EnumTypes;
+using Unity.VisualScripting;
 
 public class PlayerAttackManager
 {
@@ -47,7 +48,7 @@ public class PlayerAttackManager
     /// 플레이어가 데미지를 받음.
     /// </summary>
     /// <param name="_damage"></param>
-    public void TakeDamage(int _damage, Vector3 _attackOriginPos, float _distance)
+    public void TakeDamage(int _damage)
     {
         if (playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Damaged
             ||
@@ -60,16 +61,27 @@ public class PlayerAttackManager
         }
 
         playerManager.StatusManager.OnDamaged(_damage);
-        KnockbackPlayer(_attackOriginPos, _distance);
-        playerManager.ChangeState(PlayerStateType.Damaged);
     }
 
+    /// <summary>
+    /// 플레이어에게 넉백 효과를 부여함.
+    /// </summary>
+    /// <param name="_attackOriginPos"></param>
+    /// <param name="_distance"></param>
     public void KnockbackPlayer(Vector3 _attackOriginPos, float _distance)
     {
-        if(characterController.enabled)
+        playerManager.ChangeState(PlayerStateType.Damaged);
+
+        if (characterController.enabled)
+        {
             playerManager.StartCoroutine(KnockBackCoroutine(_attackOriginPos, _distance));
+        }
     }
 
+    /// <summary>
+    /// 플레이어가 현재 보스의 뒤에 위치하고 있는지 여부를 리턴함.
+    /// </summary>
+    /// <returns></returns>
     public bool IsPlayerBehindBoss()
     {
         if (Vector3.Angle(
@@ -83,7 +95,7 @@ public class PlayerAttackManager
     }
 
     /// <summary>
-    /// 플레이어를 넉백시키는 코루틴
+    /// 플레이어 넉백 시 밀려나는 효과를 주는 코루틴.
     /// </summary>
     /// <param name="_attackOriginPos"></param>
     /// <param name="_distance"></param>
