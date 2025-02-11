@@ -312,7 +312,9 @@ public class BossBT : NetworkBehaviour
         }
 
         float elapseTime = 0f;
-        int randomNum = Random.Range(0, bossStateManager.Players.Length);
+
+        int randomNum = bossStateManager.RandomPlayer();
+
 
         // 잠시 다른 플레이어 쳐다보다가
         while (true)
@@ -343,7 +345,7 @@ public class BossBT : NetworkBehaviour
             yield return null;
         }
 
-        randomNum = Random.Range(0, bossStateManager.Players.Length);
+        randomNum = bossStateManager.RandomPlayer();
 
         // 또다른 플레이어 쳐다보다가
         while (true)
@@ -375,7 +377,8 @@ public class BossBT : NetworkBehaviour
             yield return null;
         }
 
-        randomNum = Random.Range(0, bossStateManager.Players.Length);
+        randomNum = bossStateManager.RandomPlayer();
+
         // 또다른 플레이어 쳐다보다가 
         while (true)
         {

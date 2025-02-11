@@ -50,7 +50,7 @@ public class BossAttackManager : MonoBehaviour
     private WaitForSeconds attackColliderTime = new WaitForSeconds(0.3f);
 
     // 랜덤 타겟
-    private Vector3 randomTargetPos;
+    private GameObject randomTarget;
 
     // 애니메이션 속도 배속시 delay감소 시켜야함.
     private float animSpd = 1f;
@@ -69,7 +69,7 @@ public class BossAttackManager : MonoBehaviour
     private void Start()
     {
         bossStateManager.bossRandomTargetCallback += SetRandomTarget;
-        randomTargetPos = Vector3.zero;
+        randomTarget = null;
     }
 
     private void PerformAttack(string _state)
@@ -504,7 +504,7 @@ public class BossAttackManager : MonoBehaviour
         knockBackDis = skill.KnockbackDistance;
 
         // 스킬위치 조정
-        circleSkillPos[0].transform.position = new Vector3(randomTargetPos.x, 0.3f, randomTargetPos.z);
+        circleSkillPos[0].transform.position = new Vector3(randomTarget.transform.position.x, 0.3f, randomTarget.transform.position.z);
 
         // 스킬 데미지 설정
         circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
@@ -856,9 +856,9 @@ public class BossAttackManager : MonoBehaviour
     }
 
     // 랜덤 타겟 설정
-    private void SetRandomTarget(Vector3 _targetPos)
+    private void SetRandomTarget(int _index)
     {
-        randomTargetPos = _targetPos;
+        randomTarget = bossStateManager.Players[_index];
     }
 
     // 공격 초기화
