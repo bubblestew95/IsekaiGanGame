@@ -1,13 +1,31 @@
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class RockDestroy : MonoBehaviour
+public class RockDestroy : NetworkBehaviour
 {
+    private NavMeshObstacle nav;
+    private Collider col;
     private bool donDestory = true;
+
+    private void Awake()
+    {
+        nav = GetComponent<NavMeshObstacle>();
+        col = GetComponent<Collider>();
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        Invoke("EnalbedNav", 1.5f);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "BossAttack")
         {
             string skill = other.GetComponent<BossAttackCollider>().SkillName;
+
+            if (!IsServer) return;
 
             if (skill == "Attack5" || skill == "SpecialAttack" || skill == "Attack6" || skill == "Attack7" || skill == "Attack8")
             {
@@ -19,8 +37,14 @@ public class RockDestroy : MonoBehaviour
                     return;
                 }
 
-                Destroy(gameObject);
+                transform.GetComponent<NetworkObject>().Despawn(true);
             }
         }
+    }
+
+    private void EnalbedNav()
+    {
+        nav.enabled = true;
+        col.enabled = true;
     }
 }

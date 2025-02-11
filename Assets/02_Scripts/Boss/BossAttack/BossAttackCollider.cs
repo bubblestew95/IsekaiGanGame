@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class BossAttackCollider : MonoBehaviour
@@ -29,7 +30,7 @@ public class BossAttackCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && gameObject.tag == "BossAttack" && other.gameObject.GetComponent<PlayerNetworkManager>().IsClient)
+        if (other.gameObject.tag == "Player" && gameObject.tag == "BossAttack" && other.gameObject.GetComponent<NetworkObject>().OwnerClientId == NetworkManager.Singleton.LocalClientId)
         {
             // 플레이어 데미지 입도록 설정
             GameManager.Instance.DamageToPlayer(other.gameObject.GetComponent<PlayerManager>(), damage, transform.position, KnockBackDistance);
