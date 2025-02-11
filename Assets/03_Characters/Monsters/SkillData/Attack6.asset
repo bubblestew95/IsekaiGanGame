@@ -16,7 +16,7 @@ MonoBehaviour:
   coolDown: 30
   damage: 6
   minRange: 0
-  maxRange: 100
+  maxRange: 1000
   attackRange: 5
   attackColliderDelay: 1
   knockbackDistance: 2

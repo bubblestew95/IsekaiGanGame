@@ -15,9 +15,9 @@ MonoBehaviour:
   skillName: Attack8
   coolDown: 30
   damage: 8
-  minRange: 0
+  minRange: 5
   maxRange: 100
   attackRange: 0
   attackColliderDelay: 0
   knockbackDistance: 2
-  duration: 3
+  duration: 10

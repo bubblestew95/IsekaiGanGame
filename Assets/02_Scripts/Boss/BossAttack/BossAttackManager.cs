@@ -363,7 +363,7 @@ public class BossAttackManager : NetworkBehaviour
         // 공격 콜라이더 설정(크기, 위치, 각도 등)
         GetComponent<BoxCollider>().enabled = true;
         Vector3 originSize = GetComponent<BoxCollider>().size;
-        GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
+        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
         bossStateManager.Boss.tag = "BossAttack";
 
         // 공격 끝났는지 Check

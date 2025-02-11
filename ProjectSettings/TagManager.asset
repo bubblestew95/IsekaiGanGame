@@ -9,6 +9,7 @@ TagManager:
   - Rock
   - BehindRock
   - Fire
+  - Wall
   layers:
   - Default
   - TransparentFX

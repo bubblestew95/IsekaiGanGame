@@ -2335,6 +2335,7 @@ GameObject:
   - component: {fileID: 4155994505806969654}
   - component: {fileID: 6881833285181368674}
   - component: {fileID: 986469305498857734}
+  - component: {fileID: 3630467769548197717}
   m_Layer: 0
   m_Name: P_Golem
   m_TagString: Untagged
@@ -2418,7 +2419,7 @@ NavMeshAgent:
   m_Acceleration: 100
   avoidancePriority: 50
   m_AngularSpeed: 240
-  m_StoppingDistance: 3
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -2438,8 +2439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1120013972
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 3859563802
+  InScenePlacedSourceGlobalObjectIdHash: 1120013972
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -2486,6 +2487,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  activeChain: 
+  hpCheck: 000000000000000000
+  randomTarget: {fileID: 0}
+  bestAggro: 0
+  isPhase2: 0
+  maxHp: 100
+  chainTime: 0
+  players: []
+  aggroPlayer: {fileID: 0}
+  aggroPlayerIndex:
+    m_InternalValue: -1
+  curHp:
+    m_InternalValue: -1
+  damageParticle: {fileID: 0}
+  bossHpUI: {fileID: 0}
+  bgmController: {fileID: 0}
+  attackCollider: {fileID: 0}
+  bossBT: {fileID: 0}
+  boss: {fileID: 0}
+  bossSkin: {fileID: 0}
+  hitCollider: {fileID: 0}
 --- !u!114 &7072979799601489313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2545,6 +2567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aacb4e8d4f474b4f88672913cadf6d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   anim: {fileID: 2550935751187727211}
   bossStateManager: {fileID: 7796279537819312077}
   bossSkillManager: {fileID: 5870383895420540904}
@@ -2703,6 +2726,21 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &3630467769548197717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9137032837993464747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 2550935751187727211}
 --- !u!1001 &925387568466674438
 PrefabInstance:
   m_ObjectHideFlags: 0

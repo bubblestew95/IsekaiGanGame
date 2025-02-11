@@ -14,6 +14,7 @@ public class BossStateManager : NetworkBehaviour
     public BossStateDelegate bossHp10Callback;
     public BossStateDelegate bossHpHalfCallback;
     public BossStateDelegate bossStunCallback;
+    public BossStateDelegate bossWallTriggerCallback;
     public BossStateDelegate2 bossRandomTargetCallback;
 
     // ÇÁ·ÎÆÛÆ¼
@@ -72,6 +73,15 @@ public class BossStateManager : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.V))
         {
             BossStun();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Wall")
+        {
+            bossWallTriggerCallback?.Invoke();
+            Debug.Log("º®ÀÌ¶û ºÎµóÄ§");
         }
     }
 

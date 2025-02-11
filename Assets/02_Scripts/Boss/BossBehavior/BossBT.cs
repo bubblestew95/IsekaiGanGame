@@ -24,12 +24,17 @@ public class BossBT : NetworkBehaviour
     private bool isCoroutineRunning = false;
     private bool isStun = false;
     private bool isDie = false;
+    private bool isTriggerWall = false;
     private BossState previousBehavior;
     private float patternDelay = 2f;
     public Coroutine curCoroutine;
 
     public float PatternDelay { get { return patternDelay; } set { patternDelay = value; } }
 
+    private void Start()
+    {
+        bossStateManager.bossWallTriggerCallback += ChangeMove;
+    }
 
     private void Update()
     {
@@ -263,7 +268,7 @@ public class BossBT : NetworkBehaviour
         float elapseTime = 0f;
 
         // 이동속도 설정
-        nvAgent.speed = 6f;
+        nvAgent.speed = 8f;
 
         // 애니메이션 4-1을 지속시간동안 실행
         while (true)
@@ -606,6 +611,13 @@ public class BossBT : NetworkBehaviour
         // Attack 8-1이 끝났는지 check
         while (true)
         {
+            if (isTriggerWall)
+            {
+                bossStateManager.Boss.transform.LookAt(bossStateManager.AggroPlayer.transform.position);
+                isTriggerWall = false;
+                Debug.Log("방향전환 호출됨");
+            }
+
             elapseTime += Time.deltaTime;
             if (elapseTime >= duration)
             {
@@ -854,6 +866,14 @@ public class BossBT : NetworkBehaviour
             {
                 anim.SetBool(parameter.name, false);
             }
+        }
+    }
+
+    private void ChangeMove()
+    {
+        if (anim.GetBool("Attack8Flag"))
+        {
+            isTriggerWall = true;
         }
     }
     #endregion
