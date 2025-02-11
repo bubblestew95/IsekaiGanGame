@@ -5,15 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/01_Scenes/LJH/LobbyTest.unity
     guid: 84a04911339349546a003347b493a183
-  - enabled: 1
+  - enabled: 0
     path: Assets/01_Scenes/LJH/GameTest.unity
     guid: a95c70bc12355374e97e68e55443ff5a
-  - enabled: 0
-    path: Assets/01_Scenes/LJH/aaa.unity
-    guid: e9bdf748543b68443a9ebaf372260c16
+  - enabled: 1
+    path: Assets/01_Scenes/KSUTest/LobbyTest.unity
+    guid: ed0ab3aeb1bbeee4cba66aa31b78182b
+  - enabled: 1
+    path: Assets/01_Scenes/KSUTest/GolemSceneTest.unity
+    guid: ff1f9fe5b6608204f80c0ec9bd26afd5
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 99f9c9493070a9d4c979a8fec7c5a8d3, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

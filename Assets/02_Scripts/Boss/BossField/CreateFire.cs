@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.Netcode;
 
 public class CreateFire : MonoBehaviour
 {
@@ -25,15 +26,20 @@ public class CreateFire : MonoBehaviour
 
     private void SpawnFires()
     {
-        for (int i = 0; i < fireCount; i++)
+        if (NetworkManager.Singleton.IsServer)
         {
-            // XZ 평면에서 랜덤한 위치 지정
-            float randomX = Random.Range(-spawnRangeX, spawnRangeX);
-            float randomZ = Random.Range(-spawnRangeZ, spawnRangeZ);
-            Vector3 spawnPosition = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+            for (int i = 0; i < fireCount; i++)
+            {
+                // XZ 평면에서 랜덤한 위치 지정
+                float randomX = Random.Range(-spawnRangeX, spawnRangeX);
+                float randomZ = Random.Range(-spawnRangeZ, spawnRangeZ);
+                Vector3 spawnPosition = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
-            // fire 프리팹 생성
-            Instantiate(firePrefab, spawnPosition, Quaternion.Euler(270, 0, 0));
+                // fire 프리팹 생성
+                GameObject fire = Instantiate(firePrefab, spawnPosition, Quaternion.Euler(270, 0, 0));
+
+                fire.GetComponent<NetworkObject>().Spawn();
+            }
         }
     }
 }
