@@ -54,6 +54,14 @@ public class NetworkGameManager : NetworkBehaviour
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
             GameObject playerObject = prefabs[cnt];
+            
+            // GameObject를 역할에 맞게 설정
+            //string role = RoleManager.Instance.GetPlayerRole(clientId);
+            //foreach (GameObject prefab in prefabs)
+            //{
+            //    if (prefab.name == role) playerObject = prefab;
+            //}
+
 
             players[cnt] = Instantiate(playerObject, spwanTr[cnt].position, Quaternion.identity);
 
