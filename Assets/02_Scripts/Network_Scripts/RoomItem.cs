@@ -12,7 +12,8 @@ public class RoomItem : MonoBehaviour, IPointerClickHandler
     public void SetRoomInfo(string roomId, string roomName, int currentPlayers, int maxPlayers)
     {
         this.roomId = roomId;
-        roomNameText.text = $"{roomName} ({currentPlayers}/{maxPlayers})";
+        roomNameText.text = $"{roomName}";
+        playerCountText.text = $"{currentPlayers}/{maxPlayers}";
 
         // 디버그 로그 추가
         Debug.Log($"[RoomItem] SetRoomInfo 호출됨: roomId={roomId}, roomName={roomName}, players={currentPlayers}/{maxPlayers}");
@@ -22,7 +23,7 @@ public class RoomItem : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         // 클릭된 방 정보 로그
-        Debug.Log($"[RoomItem] 방 클릭됨: roomId={roomId}, roomName={roomNameText.text}");
+        Debug.Log($"[RoomItem] 방 클릭됨: roomId={roomId}, roomName={roomNameText.text}, players={playerCountText.text}");
 
         // RoomManager로 이벤트 전달
         RoomManager.Instance.OnRoomItemClicked(this);
