@@ -32,7 +32,7 @@ public class SkillUIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 스킬 범위 혹은 스킬 사용 방향을 입력받은 값을 통해 설정한다.
+    /// 스킬 범위 혹은 스킬 사용 방향을 입력받은 값만큼 움직인다.
     /// </summary>
     /// <param name="_type">스킬 타입</param>
     /// <param name="_horizontal">가로 입력값</param>

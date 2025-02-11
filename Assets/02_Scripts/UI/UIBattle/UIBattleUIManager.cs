@@ -53,7 +53,7 @@ public class UIBattleUIManager : MonoBehaviour
     {
         SkillPointData pointData = skillUIManager.GetSkillAimPoint(_slot);
         pointData.type = SkillPointType.None;
-        pointData.point = GameManager.Instance.GetBossTransform().position;
+        pointData.skillUsedPosition = GameManager.Instance.GetBossTransform().position;
 
         playerManager.InputManager.OnButtonInput(_slot, pointData);
     }

@@ -80,7 +80,44 @@ public class IdleState : BasePlayerState
             if(Input.GetMouseButtonDown(1) && 
                 playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mouseRayPosition))
             {
+                // 지정한 위치로 이동.
                 playerManager.MovementManager.MoveToPosition(mouseRayPosition);
+            }
+
+            // 스킬 입력 처리
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+
+                }
+
+                if (Input.GetKeyDown(KeyCode.Alpha3))
+                {
+
+                }
+
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    SkillPointData data = new SkillPointData();
+                    data.type = SkillPointType.Direction;
+                    if(playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mousePos))
+                    {
+                        Vector3 direction = (mousePos - playerManager.transform.position).normalized;
+                        data.skillUsedRotation = Quaternion.LookRotation(direction);
+                        playerManager.InputManager.OnButtonInput(SkillSlot.Dash, data);
+                    }
+                        
+                }
+
+                if (Input.GetMouseButtonDown(0))
+                {
+
+                }
             }
 
             // 대기 상태일 때만 스킬이 사용 가능함. 스킬 사용 체크.
@@ -88,6 +125,7 @@ public class IdleState : BasePlayerState
 
             if (inputBuffer.skillType != SkillSlot.None)
             {
+                playerManager.MovementManager.StopMove();
                 playerManager.SkillManager.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
             }
 

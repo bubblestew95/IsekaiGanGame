@@ -63,6 +63,7 @@ public class PlayerMovementManager
     /// <returns></returns>
     private IEnumerator MoveCoroutine(Vector3 _destination)
     {
+        // 달리기 애니메이션 재생 시작
         playerManager.AnimationManager.SetAnimatorWalkSpeed(1f);
 
         float speed = playerManager.PlayerData.walkSpeed;
@@ -80,6 +81,7 @@ public class PlayerMovementManager
             yield return null;
         }
 
+        // 달리기 애니메이션 재생 종료
         playerManager.AnimationManager.SetAnimatorWalkSpeed(0f);
     }
 }

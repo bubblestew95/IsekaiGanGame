@@ -46,7 +46,7 @@ public class PlayerInputManager
     }
 
     /// <summary>
-    /// 정해진 시간마다 스킬 입력 버퍼에서 입력를 하나씩 빼서 삭제하는 처리를 한다.
+    /// 정해진 시간마다 스킬 입력 버퍼에서 입력를 하나씩 빼서 삭제하는 처리를 하는 코루틴을 실행한다.
     /// </summary>
     public void StartInputBufferPop()
     {
@@ -78,7 +78,7 @@ public class PlayerInputManager
     {
         if (skillBuffer.TryDequeue(out InputBufferData nextBuffer))
         {
-            lastSkillUsePoint = nextBuffer.pointData.point;
+            lastSkillUsePoint = nextBuffer.pointData.skillUsedPosition;
             return nextBuffer;
         }
 

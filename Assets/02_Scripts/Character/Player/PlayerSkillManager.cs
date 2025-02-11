@@ -143,11 +143,11 @@ public class PlayerSkillManager
             // 캐릭터를 포인트로 지정한 방향을 보도록 한다.
             if (_point.type == SkillPointType.Position || _point.type == SkillPointType.None)
             {
-                playerManager.transform.LookAt(_point.point);
+                playerManager.transform.LookAt(_point.skillUsedPosition);
             }
             else
             {
-                playerManager.transform.rotation = Quaternion.Euler(_point.point);
+                playerManager.transform.rotation = _point.skillUsedRotation;
             }
 
             UseSkill(_type);

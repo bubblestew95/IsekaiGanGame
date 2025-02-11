@@ -18,7 +18,8 @@ public class SkillUI_Direction : SkillUI_Base
     {
         SkillPointData pointData = new SkillPointData();
         pointData.type = SkillPointType.Direction;
-        pointData.point = arrowImagePivot.rotation.eulerAngles;
+        // pointData.skillUsedPosition = arrowImagePivot.rotation.eulerAngles;
+        pointData.skillUsedRotation = arrowImagePivot.rotation;
         return pointData;
     }
 

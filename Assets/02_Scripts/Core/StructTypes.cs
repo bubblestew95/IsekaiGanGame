@@ -27,7 +27,12 @@ namespace StructTypes
     public struct SkillPointData
     {
         public SkillPointType type;
-        public Vector3 point;
+
+        // 스킬 사용 범위 위치값
+        public Vector3 skillUsedPosition;
+
+        // 스킬 사용 방향 회전값
+        public Quaternion skillUsedRotation;
     }
 
     [Serializable]
