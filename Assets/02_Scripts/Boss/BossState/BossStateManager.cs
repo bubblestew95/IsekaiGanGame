@@ -20,7 +20,7 @@ public class BossStateManager : NetworkBehaviour
     public GameObject Boss { get { return boss; } }
     public GameObject AggroPlayer { get { return aggroPlayer; } }
     public GameObject BossSkin { get { return bossSkin; } }
-    public GameObject[] Players { get { return players; } }
+    public GameObject[] AlivePlayers { get { return alivePlayers; } }
     public BoxCollider HitCollider { get { return hitCollider; } }
 
     // 보스 상태 관련 변수들
@@ -31,7 +31,8 @@ public class BossStateManager : NetworkBehaviour
     public bool isPhase2 = false;
     public int maxHp = 100;
     public float chainTime = 0f;
-    public GameObject[] players;
+    public GameObject[] allPlayers;
+    public GameObject[] alivePlayers;
     public GameObject aggroPlayer;
 
     // 네트워크로 동기화 할것들
@@ -103,11 +104,7 @@ public class BossStateManager : NetworkBehaviour
     [ClientRpc]
     private void SetAggroPlayerClientRpc(int _num)
     {
-        Debug.LogWarning("SetAggroPlayerClientRpc 실행됨");
-
-        Debug.LogWarning("SetAggroPlayerClientRpc의 num : " + _num);
-
-        aggroPlayer = players[_num];
+        aggroPlayer = alivePlayers[_num];
     }
 
     // 데미지 파티클 실행
@@ -256,11 +253,11 @@ public class BossStateManager : NetworkBehaviour
     {
         if (_clientId == 100) return;
 
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < alivePlayers.Length; i++)
         {
-            if (players[i] == null) continue;
+            if (alivePlayers[i] == null) continue;
 
-            if (players[i].GetComponent<NetworkObject>().OwnerClientId == _clientId)
+            if (alivePlayers[i].GetComponent<NetworkObject>().OwnerClientId == _clientId)
             {
                 playerDamage[i] += _damage;
                 playerAggro[i] += _aggro;
@@ -286,7 +283,7 @@ public class BossStateManager : NetworkBehaviour
         {
             int len = 0;
 
-            foreach (GameObject player in players)
+            foreach (GameObject player in alivePlayers)
             {
                 if (player != null) len++;
             }
@@ -299,7 +296,7 @@ public class BossStateManager : NetworkBehaviour
         }
 
         // 기존의 어그로 왕보다 어그로가 1.2배 크면 어그로 바뀜
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < alivePlayers.Length; i++)
         {
             if (bestAggro * 1.2f <= playerAggro[i])
             {
@@ -307,8 +304,6 @@ public class BossStateManager : NetworkBehaviour
                 aggroPlayerIndex.Value = i;
             }
         }
-
-        Debug.Log("서버에서 aggroPlayerIndex.Value :" + aggroPlayerIndex.Value);
 
         // 어그로 플레이어 변경(클라 모두)
         SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
@@ -414,7 +409,8 @@ public class BossStateManager : NetworkBehaviour
     // 멀티 플레이어 설정
     private void SetPlayerMulti()
     {
-        players = FindFirstObjectByType<NetworkGameManager>().Players;
+        alivePlayers = FindFirstObjectByType<NetworkGameManager>().Players;
+        allPlayers = alivePlayers;
 
         // 초반 aggro 0이여서 세팅하는 함수
         GetHighestAggroTarget();
@@ -426,7 +422,7 @@ public class BossStateManager : NetworkBehaviour
     public float GetDisWithoutY()
     {
         Vector2 bossPos2D = new Vector2(boss.transform.position.x, boss.transform.position.z);
-        Vector2 playerPos2D = new Vector2(players[aggroPlayerIndex.Value].transform.position.x, players[aggroPlayerIndex.Value].transform.position.z);
+        Vector2 playerPos2D = new Vector2(alivePlayers[aggroPlayerIndex.Value].transform.position.x, alivePlayers[aggroPlayerIndex.Value].transform.position.z);
 
         return Vector2.Distance(bossPos2D, playerPos2D);
     }
@@ -438,14 +434,47 @@ public class BossStateManager : NetworkBehaviour
 
         for (int i = 0; i < 4; ++i)
         {
-            if (Players[i] == null) continue;
+            if (alivePlayers[i] == null) continue;
 
-            numList.Add(Players[i].GetComponent<NetworkObject>().OwnerClientId);
+            numList.Add(alivePlayers[i].GetComponent<NetworkObject>().OwnerClientId);
         }
 
         ulong randomNum = numList[Random.Range(0, numList.Count)];
 
         return randomNum;
+    }
+
+    // 플레이어가 죽었을때 호출되는 함수
+    private void PlayerDieCallback(ulong _clientId)
+    {
+        // 죽은 플레이어의 Aggro수치 리셋 && Player리스트에서 빼기
+        for (int i = 0; i < 4; ++i)
+        {
+            if (alivePlayers[i] == null) continue;
+
+            if (alivePlayers[i].GetComponent<NetworkObject>().OwnerClientId == _clientId)
+            {
+                playerAggro[i] = 0f;
+                alivePlayers[i] = null;
+            }
+        }
+
+        // 어그로 재설정을 위한 어그로 세팅 함수 호출
+        GetHighestAggroTarget();
+    }
+
+    private void PlayerReviveCallback(ulong _clientId)
+    {
+        // 죽은 플레이어를 alivePlayers배열에 추가
+        for (int i = 0; i < 4; ++i)
+        {
+            if (allPlayers[i] == null) continue;
+
+            if (allPlayers[i].GetComponent<NetworkObject>().OwnerClientId == _clientId)
+            {
+                alivePlayers[i] = allPlayers[i];
+            }
+        }
     }
     #endregion
 

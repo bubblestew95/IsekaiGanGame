@@ -41,7 +41,7 @@ public class BossBehaviorManager : NetworkBehaviour
 
         tmpList = bossSkillManager.IsSkillInRange(dis, bossSkillManager.RandomSkills);
         tmpList = bossSkillManager.IsSkillCooldown(tmpList);
-        tmpList = bossSkillManager.CheckBackAttack(tmpList, bossStateManager.Players, bossStateManager.Boss);
+        tmpList = bossSkillManager.CheckBackAttack(tmpList, bossStateManager.AlivePlayers, bossStateManager.Boss);
 
         int randomIndex = UnityEngine.Random.Range(0, tmpList.Count);
 

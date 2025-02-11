@@ -221,17 +221,17 @@ public class BossAttackManager : NetworkBehaviour
         // 스킬위치 조정
         foreach (GameObject skillPos in circleSkillPos)
         {
-            if (bossStateManager.Players[cnt] == null)
+            if (bossStateManager.AlivePlayers[cnt] == null)
             {
                 skillPos.transform.position = new Vector3(-100f, 0f, -100f);
                 continue;
             }
 
-            skillPos.transform.position = new Vector3(bossStateManager.Players[cnt].transform.position.x, 0.3f, bossStateManager.Players[cnt].transform.position.z);
+            skillPos.transform.position = new Vector3(bossStateManager.AlivePlayers[cnt].transform.position.x, 0.3f, bossStateManager.AlivePlayers[cnt].transform.position.z);
 
             cnt++;
 
-            if (cnt == bossStateManager.Players.Length) break;
+            if (cnt == bossStateManager.AlivePlayers.Length) break;
         }
 
         // 스킬 데미지 설정
@@ -878,7 +878,7 @@ public class BossAttackManager : NetworkBehaviour
     // 랜덤 타겟 설정
     private void SetRandomTarget(ulong _index)
     {
-        randomTarget = bossStateManager.Players.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == _index);
+        randomTarget = bossStateManager.AlivePlayers.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == _index);
     }
 
     // 공격 초기화
@@ -916,14 +916,14 @@ public class BossAttackManager : NetworkBehaviour
 
         int playerCnt = 0;
 
-        foreach (GameObject player in bossStateManager.Players)
+        foreach (GameObject player in bossStateManager.AlivePlayers)
         {
             if (player != null) playerCnt++;
         }
 
         for (int i = 0; i < playerCnt; i++)
         {
-            Vector3 playerPos = new Vector3(bossStateManager.Players[i].transform.position.x, 0.5f, bossStateManager.Players[i].transform.position.z);
+            Vector3 playerPos = new Vector3(bossStateManager.AlivePlayers[i].transform.position.x, 0.5f, bossStateManager.AlivePlayers[i].transform.position.z);
             Vector3 dir = (playerPos - bossPos).normalized;
 
             RaycastHit[] hits = Physics.RaycastAll(bossPos, dir, 100f, defaultLayerMask);
@@ -934,10 +934,10 @@ public class BossAttackManager : NetworkBehaviour
             {
                 if (ray.collider.CompareTag("Rock"))
                 {
-                    bossStateManager.Players[i].tag = "BehindRock";
+                    bossStateManager.AlivePlayers[i].tag = "BehindRock";
                     break;
                 }
-                else if (ray.collider.gameObject == bossStateManager.Players[i])
+                else if (ray.collider.gameObject == bossStateManager.AlivePlayers[i])
                 {
                     break;
                 }
@@ -972,11 +972,11 @@ public class BossAttackManager : NetworkBehaviour
     // 태그 리셋
     private void ResetTag()
     {
-        for (int i = 0; i <  bossStateManager.Players.Length; i++)
+        for (int i = 0; i <  bossStateManager.AlivePlayers.Length; i++)
         {
-            if (bossStateManager.Players[i] == null) continue;
+            if (bossStateManager.AlivePlayers[i] == null) continue;
 
-            bossStateManager.Players[i].tag = "Player";
+            bossStateManager.AlivePlayers[i].tag = "Player";
         }
     }
     #endregion
