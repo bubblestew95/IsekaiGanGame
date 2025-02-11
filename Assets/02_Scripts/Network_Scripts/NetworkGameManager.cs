@@ -31,13 +31,31 @@ public class NetworkGameManager : NetworkBehaviour
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
     public void OnPlayerDamaged
-        (PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockbackDist)
+        (PlayerManager _damageReceiver, int _damage)
     {
         ulong clientId = _damageReceiver.PlayerNetworkManager.OwnerClientId;
 
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
-            PlayerDamagedRpc(clientId, _damage, _attackPos, _knockbackDist);
+            PlayerDamagedRpc(clientId, _damage);
+        }
+    }
+
+    /// <summary>
+    /// 플레이어가 넉백 효과를 받았음을 서버에게 알려주는 RPC를 호출한다.
+    /// </summary>
+    /// <param name="_damageReceiver"></param>
+    /// <param name="_damage"></param>
+    /// <param name="_attackPos"></param>
+    /// <param name="_knockbackDist"></param>
+    public void OnPlayerKnockback
+        (PlayerManager _target, Vector3 _attackPos, float _knockbackDist)
+    {
+        ulong clientId = _target.PlayerNetworkManager.OwnerClientId;
+
+        if (NetworkManager.Singleton.LocalClientId == clientId)
+        {
+            PlayerKnockbackRpc(clientId, _attackPos, _knockbackDist);
         }
     }
 
@@ -99,18 +117,29 @@ public class NetworkGameManager : NetworkBehaviour
     /// <summary>
     /// 플레이어가 데미지를 받았음을 서버에게 알린다.
     /// </summary>
-    /// <param name="_cliendId"></param>
+    /// <param name="_clientId"></param>
     /// <param name="_damage"></param>
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
     [Rpc(SendTo.Server)]
     private void PlayerDamagedRpc
-        (ulong _cliendId, int _damage, Vector3 _attackPos, float _knockbackDist)
+        (ulong _clientId, int _damage)
     {
         // 서버에서 다른 클라이언트들에게 특정 플레이어에게 데미지를 적용하라고 명령한다.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-        ApplyDamageToPlayerRpc(_cliendId, _damage, _attackPos, _knockbackDist);
+        ApplyDamageToPlayerRpc(_clientId, _damage);
     }
 
+    /// <summary>
+    /// 플레이어가 넉백상태임을 서버에게 알린다.
+    /// </summary>
+    /// <param name="_clientId"></param>
+    /// <param name="_attackPos"></param>
+    /// <param name="_knockbackDist"></param>
+    [Rpc(SendTo.Server)]
+    private void PlayerKnockbackRpc(ulong _clientId, Vector3 _attackPos, float _knockbackDist)
+    {
+        ApplyKnockbackRpc(_clientId, _attackPos, _knockbackDist);
+    }
 
         #endregion
 
@@ -124,21 +153,36 @@ public class NetworkGameManager : NetworkBehaviour
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
     [Rpc(SendTo.Everyone)]
-    private void ApplyDamageToPlayerRpc
-        (ulong _cliendId, int _damage, Vector3 _attackPos, float _knockbackDist)
+    private void ApplyDamageToPlayerRpc(ulong _cliendId, int _damage)
     {
         var obj = NetworkManager.ConnectedClients[_cliendId].PlayerObject;
 
         if(obj != null)
         {
-            GameManager.Instance.ApplyDamageToPlayer(
-                obj.GetComponent<PlayerManager>(),
-                _damage,
-                _attackPos,
-                _knockbackDist);
+            GameManager.Instance.ApplyDamageToPlayer(obj.GetComponent<PlayerManager>(), _damage);
         }
 
     }
+
+    /// <summary>
+    /// 서버에서 특정 플레이어에게 넉백 효과를 부여하도록 모든 클라이언트에게 명령한다.
+    /// </summary>
+    /// <param name="_cliendId"></param>
+    /// <param name="_damage"></param>
+    /// <param name="_attackPos"></param>
+    /// <param name="_knockbackDist"></param>
+    [Rpc(SendTo.Everyone)]
+    private void ApplyKnockbackRpc(ulong _cliendId, Vector3 _attackPos, float _knockbackDist)
+    {
+        var obj = NetworkManager.ConnectedClients[_cliendId].PlayerObject;
+
+        if (obj != null)
+        {
+            GameManager.Instance.ApplyKnockbackToPlayer
+                (obj.GetComponent<PlayerManager>(), _attackPos, _knockbackDist);
+        }
+    }
+
         #endregion
 
     #endregion
