@@ -16,6 +16,7 @@ public class PlayerInputManager
     private FloatingJoystick joystick = null;
 
     private Coroutine skillUICoroutine = null;
+    private int groundLayerMask = 0;
 
     #region Input Buffer
 
@@ -35,6 +36,7 @@ public class PlayerInputManager
         playerManager = _playerManager;
 
         joystick = _playerManager.BattleUIManager.MoveJoystick;
+        groundLayerMask = LayerMask.GetMask("Ground");
     }
 
     /// <summary>
@@ -91,7 +93,7 @@ public class PlayerInputManager
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100f))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100f, groundLayerMask))
         {
             result = hit.point;
             return true;
