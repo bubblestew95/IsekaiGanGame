@@ -10,6 +10,8 @@ public class PlayerAnimationManager
     private int animId_Damaged = 0;
     private int animId_Death = 0;
     private int animId_Speed = 0;
+    private int animId_GetRevived = 0;
+    private int animId_ReviveOther = 0;
 
     public int AnimId_Speed
     {
@@ -25,22 +27,33 @@ public class PlayerAnimationManager
         animId_Damaged = Animator.StringToHash("Damaged");
         animId_Death = Animator.StringToHash("Death");
         animId_Speed = Animator.StringToHash("Speed");
+        animId_GetRevived = Animator.StringToHash("GetRevived");
+        animId_ReviveOther = Animator.StringToHash("ReviveOther");
+
     }
 
     public void PlayDamagedAnimation()
     {
-        if (networkAnimator != null)
-            networkAnimator.SetTrigger(animId_Damaged);
-        else
+        if (GameManager.Instance.IsLocalGame)
             animator.SetTrigger(animId_Damaged);
+        else
+            networkAnimator.SetTrigger(animId_Damaged);
     }
 
     public void PlayDeathAnimation()
     {
-        if (networkAnimator != null)
-            networkAnimator.SetTrigger(animId_Death);
-        else
+        if (GameManager.Instance.IsLocalGame)
             animator.SetTrigger(animId_Death);
+        else
+            networkAnimator.SetTrigger(animId_Death);
+    }
+
+    public void PlayGetRevivedAnimation()
+    {
+        if (GameManager.Instance.IsLocalGame)
+            animator.SetTrigger(animId_GetRevived);
+        else
+            networkAnimator.SetTrigger(animId_GetRevived);
     }
 
     public void SetAnimatorWalkSpeed(float _speed)
