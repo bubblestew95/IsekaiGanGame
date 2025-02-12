@@ -126,9 +126,15 @@ public class GameManager : MonoBehaviour
         UpdatePlayerHpUI(_damageReceiver);
     }
 
-    public void ApplyKnockbackToPlayer(PlayerManager _targer, Vector3 _attackPos, float _knockbackDist)
+    public void ApplyKnockbackToPlayer(PlayerManager _target, Vector3 _attackPos, float _knockbackDist)
     {
-        _targer.AttackManager.KnockbackPlayer(_attackPos, _knockbackDist);
+        if(_target.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Damaged
+            || _target.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Death)
+        {
+            return;
+        }
+
+        _target.AttackManager.KnockbackPlayer(_attackPos, _knockbackDist);
     }
 
     #endregion
