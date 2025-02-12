@@ -10,6 +10,8 @@ public class BossBT : NetworkBehaviour
 {
     public static event Action AttackStartCallback;
     public static event Action AttackEndCallback;
+    public static event Action SpecialAttackStartCallback;
+    public static event Action SpecialAttackEndCallback;
 
     public delegate void BTDelegate();
     public BTDelegate behaviorEndCallback;
@@ -327,6 +329,8 @@ public class BossBT : NetworkBehaviour
         // 애니메이션 시작
         SetAnimBool(curState, true);
 
+        AttackStartCallback?.Invoke();
+
         // 공격 5 끝
         while (true)
         {
@@ -338,6 +342,8 @@ public class BossBT : NetworkBehaviour
 
             yield return null;
         }
+
+        AttackEndCallback?.Invoke();
 
         float elapseTime = 0f;
 
@@ -361,6 +367,8 @@ public class BossBT : NetworkBehaviour
             yield return null;
         }
 
+        AttackStartCallback?.Invoke();
+
         // 공격 5-1
         while (true)
         {
@@ -372,6 +380,8 @@ public class BossBT : NetworkBehaviour
 
             yield return null;
         }
+
+        AttackEndCallback?.Invoke();
 
         randomNum = bossStateManager.RandomPlayer();
         target = bossStateManager.AlivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == randomNum);
@@ -394,6 +404,8 @@ public class BossBT : NetworkBehaviour
         }
 
 
+        AttackStartCallback?.Invoke();
+
         // 공격 5-2
         while (true)
         {
@@ -405,6 +417,8 @@ public class BossBT : NetworkBehaviour
 
             yield return null;
         }
+
+        AttackEndCallback?.Invoke();
 
         randomNum = bossStateManager.RandomPlayer();
         target = bossStateManager.AlivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == randomNum);
@@ -426,6 +440,8 @@ public class BossBT : NetworkBehaviour
             yield return null;
         }
 
+        AttackStartCallback?.Invoke();
+
         // 공격 5-3
         while (true)
         {
@@ -438,8 +454,11 @@ public class BossBT : NetworkBehaviour
             yield return null;
         }
 
+        AttackEndCallback?.Invoke();
+
         // 가운데로 이동해서 특수패턴(전멸기)
         // 현재 위치에서 가운데 위치로 Lerp하게 이동(15~50프레임)하면서, 점프 애니메이션 실행하면 될듯
+        SpecialAttackStartCallback?.Invoke();
 
         Vector3 originPos = bossStateManager.Boss.transform.position;
 
@@ -477,6 +496,8 @@ public class BossBT : NetworkBehaviour
 
             yield return null;
         }
+
+        SpecialAttackEndCallback?.Invoke();
 
         // 상태를 chase로 변경
         curState = BossState.Chase;
