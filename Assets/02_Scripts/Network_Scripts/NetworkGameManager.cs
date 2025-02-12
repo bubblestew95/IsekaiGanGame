@@ -213,6 +213,9 @@ public class NetworkGameManager : NetworkBehaviour
 
     private void Start()
     {
+        if (GameManager.Instance.IsLocalGame)
+            return;
+
        LoadingCheckServerRpc();
 
         if (IsServer)
@@ -223,6 +226,9 @@ public class NetworkGameManager : NetworkBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.IsLocalGame)
+            return;
+
         if (spawnPlayer && loadingScene)
         {
             SynPlayerClientRpc(objectId);

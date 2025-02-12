@@ -15,8 +15,10 @@ MonoBehaviour:
   skillSlot: 3
   coolTime: 3
   skillParticle: {fileID: 0}
-  damage: 1
-  aggro: 1
+  damage: 3
+  aggro: 3
+  isBackattackEnable: 0
+  backAttackTimes: 3
   moveSpeed: 5
   moveTime: 1
   isForward: 1
