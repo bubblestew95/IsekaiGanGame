@@ -53,7 +53,14 @@ public class BossStateManager : NetworkBehaviour
 
     private void Awake()
     {
-        FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += InitMulti;
+        FindAnyObjectByType<NetworkGameManager>().playerDieCallback += PlayerDieCallback;
+        FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += () => 
+        {
+            InitMulti();
+            Invoke("ChangeBossState", 3f);
+        };
+
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -397,8 +404,6 @@ public class BossStateManager : NetworkBehaviour
         SetCallback();
 
         SetPlayerMulti();
-
-        bossBT.curState = BossState.Chase;
     }
 
     // 콜백 설정
@@ -416,6 +421,12 @@ public class BossStateManager : NetworkBehaviour
 
         // 초반 aggro 0이여서 세팅하는 함수
         GetHighestAggroTarget();
+    }
+
+    // 보스 상태 변경
+    private void ChangeBossState()
+    {
+        bossBT.curState = BossState.Chase;
     }
     #endregion
 

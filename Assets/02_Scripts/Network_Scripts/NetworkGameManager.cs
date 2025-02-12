@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class NetworkGameManager : NetworkBehaviour
 {
     public event Action loadingFinishCallback;
+    public event UnityAction<ulong> playerDieCallback;
 
     // 플레이어 로딩 동기화 관련 변수들
     private int playerCnt = 0;
@@ -108,11 +110,17 @@ public class NetworkGameManager : NetworkBehaviour
         return objectIds;
     }
 
+    // 플레이어 죽었을때 호출
+    private void PlayerDie(ulong _clientId)
+    {
+        playerDieCallback?.Invoke(_clientId);
+    }
+
     #endregion
 
     #region RPC
 
-        #region Client To Server RPC
+    #region Client To Server RPC
 
     /// <summary>
     /// 플레이어가 데미지를 받았음을 서버에게 알린다.
@@ -205,6 +213,7 @@ public class NetworkGameManager : NetworkBehaviour
         {
             SynPlayerClientRpc(objectId);
             LoadingFinishClientRpc();
+            SetPlayerDieCallback();
             spawnPlayer = false;
             loadingScene = false;
         }
@@ -243,6 +252,17 @@ public class NetworkGameManager : NetworkBehaviour
     private void LoadingFinishClientRpc()
     {
         loadingFinishCallback?.Invoke();
+    }
+
+    // 플레이어 사망 콜백 등록
+    private void SetPlayerDieCallback()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (players[i] == null) continue;
+
+            players[i].GetComponent<PlayerNetworkManager>().OnNetworkPlayerDeath += PlayerDie;
+        }
     }
 
     #endregion

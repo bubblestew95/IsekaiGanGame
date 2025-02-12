@@ -5,16 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/01_Scenes/LJH/LobbyTest.unity
     guid: 84a04911339349546a003347b493a183
-  - enabled: 1
+  - enabled: 0
     path: Assets/01_Scenes/LJH/GameTest.unity
     guid: a95c70bc12355374e97e68e55443ff5a
-  - enabled: 0
+  - enabled: 1
     path: Assets/01_Scenes/KSUTest/LobbyTest.unity
-    guid: ed0ab3aeb1bbeee4cba66aa31b78182b
-  - enabled: 0
+    guid: a8a95369a3bb1634eac51572423c0a5f
+  - enabled: 1
     path: Assets/01_Scenes/KSUTest/GolemSceneTest.unity
     guid: ff1f9fe5b6608204f80c0ec9bd26afd5
   m_configObjects:

@@ -1843,6 +1843,7 @@ MonoBehaviour:
   leaveRoomButton: {fileID: 531277266}
   codeButton: {fileID: 368607342}
   readyButton: {fileID: 1881519664}
+  startButton: {fileID: 1388174886}
   contentRect: {fileID: 1959464307}
   gameSceneName: GolemSceneTest
 --- !u!4 &797183973
@@ -1886,7 +1887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1202524491
+  GlobalObjectIdHash: 1324060818
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -3494,7 +3495,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 797183972}
         m_TargetAssemblyTypeName: RoomManager, Assembly-CSharp
-        m_MethodName: JoinRoom
+        m_MethodName: JoinCodeRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3760,7 +3761,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1388174887}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 797183972}
+        m_TargetAssemblyTypeName: RoomManager, Assembly-CSharp
+        m_MethodName: OnStartButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1388174887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5205,7 +5218,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 797183972}
         m_TargetAssemblyTypeName: RoomManager, Assembly-CSharp
-        m_MethodName: OnReadyButtonClick
+        m_MethodName: OnReadyButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
