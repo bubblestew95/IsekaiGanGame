@@ -15,6 +15,8 @@ public class PlayerInputManager
     /// </summary>
     private FloatingJoystick joystick = null;
 
+    private Coroutine skillUICoroutine = null;
+
     #region Input Buffer
 
     private Queue<InputBufferData> skillBuffer = new Queue<InputBufferData>();
@@ -99,6 +101,37 @@ public class PlayerInputManager
         return false;
     }
 
+    public void OnSkillKeyInput(SkillSlot _slot)
+    {
+        if (playerManager.SkillUIManager.SkillUIMap.TryGetValue(_slot, out SkillUI_Base skillUI))
+        {
+            if (skillUI.IsEnabled())
+            {
+                playerManager.InputManager.OnButtonInput
+                    (_slot, skillUI.GetSkillAimPoint());
+                playerManager.StopCoroutine(skillUICoroutine);
+                skillUI.SetEnabled(false);
+            }
+            else
+            {
+                skillUICoroutine = playerManager.
+                    StartCoroutine(SkillAimCoroutine(skillUI));
+            }
+        }
+        else
+        {
+            SkillPointData data = new SkillPointData();
+            data.type = SkillPointType.None;
+
+            if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mousePos))
+            {
+                Vector3 direction = (mousePos - playerManager.transform.position).normalized;
+                data.skillUsedRotation = Quaternion.LookRotation(direction);
+                playerManager.InputManager.OnButtonInput(_slot, data);
+            }
+        }
+    }
+
     /// <summary>
     /// 입력 버퍼에서 일정 시간마다 입력을 삭제하는 처리를 하는 코루틴
     /// </summary>
@@ -123,6 +156,22 @@ public class PlayerInputManager
                     skillBuffer.Dequeue();
 
                 yield return null;
+            }
+
+            yield return null;
+        }
+    }
+
+
+    private IEnumerator SkillAimCoroutine(SkillUI_Base _skillUI)
+    {
+        _skillUI.SetEnabled(true);
+
+        while (true)
+        {
+            if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 pos))
+            {
+                _skillUI.AimSkill(pos);
             }
 
             yield return null;
