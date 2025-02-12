@@ -104,16 +104,7 @@ public class IdleState : BasePlayerState
 
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    SkillPointData data = new SkillPointData();
-                    data.type = SkillPointType.Direction;
-
-                    if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mousePos))
-                    {
-                        Vector3 direction = (mousePos - playerManager.transform.position).normalized;
-                        data.skillUsedPosition = mousePos;
-                        data.skillUsedRotation = Quaternion.LookRotation(direction);
-                        playerManager.InputManager.OnButtonInput(SkillSlot.Dash, data);
-                    }
+                    playerManager.InputManager.OnSkillKeyInput(SkillSlot.Dash);
                 }
 
                 if (Input.GetMouseButtonDown(0))

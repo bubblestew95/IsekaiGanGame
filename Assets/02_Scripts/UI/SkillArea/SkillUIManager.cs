@@ -53,20 +53,42 @@ public class SkillUIManager : MonoBehaviour
     /// <summary>
     /// 스킬이 사용될 범위 혹은 스킬 사용 방향을 리턴한다.
     /// </summary>
-    /// <param name="_type">스킬 타입</param>
+    /// <param name="_slot">스킬 타입</param>
     /// <returns>스킬 범위 or 스킬 방향(Euler Angle)</returns>
-    public SkillPointData GetSkillAimPoint(SkillSlot _type)
+    public SkillPointData GetSkillAimPoint(SkillSlot _slot)
     {
-        if (skillUIMap.TryGetValue(_type, out var skillUI))
+        if (skillUIMap.TryGetValue(_slot, out var skillUI))
         {
             return skillUI.GetSkillAimPoint();
         }
         else
         {
-            Debug.LogFormat("{0} type skill don't need to show skill area!", _type);
+            Debug.LogFormat("{0} type skill don't need to show skill area!", _slot);
 
             return new SkillPointData();
         }
+    }
+
+    /// <summary>
+    /// 지정한 스킬 UI 외에 다른 스킬 UI가 활성화되어있는지 확인한다.
+    /// </summary>
+    /// <param name="_slot">지정 스킬 슬롯</param>
+    /// <param name="_otherSkillSlot">다른 활성화중인 스킬 UI의 슬롯</param>
+    /// <returns>다른 스킬 UI의 활성화 여부</returns>
+    public bool IsOtherSkillUIEnabled(SkillSlot _slot, out SkillSlot _otherSkillSlot)
+    {
+        foreach(var skillUIPair in skillUIMap)
+        {
+            if (skillUIPair.Key != _slot && skillUIPair.Value.IsEnabled())
+            {
+                _otherSkillSlot = skillUIPair.Key;
+                return true;
+            }
+        }
+
+        _otherSkillSlot = SkillSlot.None;
+
+        return false;
     }
 
     private void Awake()

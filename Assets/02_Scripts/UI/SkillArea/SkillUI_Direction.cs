@@ -2,8 +2,6 @@ using UnityEngine;
 
 using EnumTypes;
 using StructTypes;
-using System.Drawing;
-using static UnityEditor.PlayerSettings;
 
 public class SkillUI_Direction : SkillUI_Base
 {
@@ -18,7 +16,8 @@ public class SkillUI_Direction : SkillUI_Base
     public override void AimSkill(Vector3 position)
     {
         Vector3 direction = (position - arrowImagePivot.transform.position).normalized;
-        arrowImagePivot.LookAt(direction);
+
+        SetDirection(direction.x, direction.z);
     }
 
     public override SkillPointData GetSkillAimPoint()
@@ -37,6 +36,7 @@ public class SkillUI_Direction : SkillUI_Base
 
     public override bool IsEnabled()
     {
+        Debug.LogFormat("Hello? {0}", arrowImagePivot.gameObject.activeSelf);
         return arrowImagePivot.gameObject.activeSelf;
     }
 
