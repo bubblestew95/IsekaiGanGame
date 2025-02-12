@@ -657,14 +657,16 @@ public class BossBT : NetworkBehaviour
         // 패턴이 끝났음을 콜백
         behaviorEndCallback?.Invoke();
 
-        isCoroutineRunning = false; AttackEndCallback?.Invoke();
+        isCoroutineRunning = false;
+        AttackEndCallback?.Invoke();
 
         yield return null;
     }
 
     private IEnumerator Attack9()
     {
-        isCoroutineRunning = true; AttackStartCallback?.Invoke();
+        isCoroutineRunning = true; 
+        AttackStartCallback?.Invoke();
         previousBehavior = curState;
 
         // 애니메이션 시작
@@ -718,7 +720,8 @@ public class BossBT : NetworkBehaviour
         // 패턴이 끝났음을 콜백
         behaviorEndCallback?.Invoke();
 
-        isCoroutineRunning = false; AttackEndCallback?.Invoke();
+        isCoroutineRunning = false; 
+        AttackEndCallback?.Invoke();
 
         yield return null;
     }
