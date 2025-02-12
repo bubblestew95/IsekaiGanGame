@@ -10826,7 +10826,6 @@ GameObject:
   - component: {fileID: -6465391473038639350}
   - component: {fileID: 3892225392416952665}
   - component: {fileID: 1810080502444178791}
-  - component: {fileID: -1919779304200873968}
   m_Layer: 9
   m_Name: P_Assassin
   m_TagString: Player
@@ -11019,13 +11018,6 @@ MonoBehaviour:
     TransitionIndex: 5
   - IsCrossFadeExit: 0
     Layer: 0
-    OriginatingState: 1748754976
-    DestinationState: 968658227
-    TransitionDuration: 0.25
-    TriggerNameHash: 968658227
-    TransitionIndex: 6
-  - IsCrossFadeExit: 0
-    Layer: 0
     OriginatingState: 2081823275
     DestinationState: -1995584203
     TransitionDuration: 0.25
@@ -11059,13 +11051,6 @@ MonoBehaviour:
     TransitionDuration: 0.25
     TriggerNameHash: -326312663
     TransitionIndex: 5
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: 2081823275
-    DestinationState: 968658227
-    TransitionDuration: 0.25
-    TriggerNameHash: 968658227
-    TransitionIndex: 6
   m_Animator: {fileID: 9563318}
 --- !u!114 &1810080502444178791
 MonoBehaviour:
@@ -11103,27 +11088,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!65 &-1919779304200873968
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 179124}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &179126
 GameObject:
   m_ObjectHideFlags: 0
@@ -13744,15 +13708,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 199590}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000011920929, y: 0.32403672, z: -0.000000077299774, w: 0.9460445}
-  m_LocalPosition: {x: -0.076, y: -0, z: 0.107}
+  m_LocalRotation: {x: 0.00000012479722, y: 0.014964061, z: 0.000000011175871, w: 0.99988806}
+  m_LocalPosition: {x: -0.079, y: 0, z: 0.013}
   m_LocalScale: {x: 0.99999994, y: 1.0000002, z: 1.0000004}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8079153529471343035}
   - {fileID: 414466144940188812}
   m_Father: {fileID: 447138}
-  m_LocalEulerAnglesHint: {x: 0, y: 37.814, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 1.715, z: 0}
 --- !u!33 &3308194
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -18881,7 +18845,7 @@ GameObject:
   - component: {fileID: 4078196288199560792}
   - component: {fileID: 7317590795602069835}
   - component: {fileID: 3756708933765468229}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: MeleeWeaponTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18913,7 +18877,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0

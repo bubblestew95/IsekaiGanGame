@@ -5,7 +5,6 @@ using UnityEngine.Events;
 
 public class PlayerManager : MonoBehaviour
 {
-
     #region Variables
 
         #region Inspector Variables

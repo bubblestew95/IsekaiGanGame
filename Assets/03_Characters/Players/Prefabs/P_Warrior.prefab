@@ -210,8 +210,6 @@ GameObject:
   - component: {fileID: 6124878102137282868}
   - component: {fileID: -2252394323271902163}
   - component: {fileID: 2948108365831047824}
-  - component: {fileID: 8518432922043446484}
-  - component: {fileID: 1376921072521282111}
   m_Layer: 9
   m_Name: P_Warrior
   m_TagString: Player
@@ -408,13 +406,6 @@ MonoBehaviour:
   TransitionStateInfoList:
   - IsCrossFadeExit: 0
     Layer: 0
-    OriginatingState: 646380074
-    DestinationState: 2145700606
-    TransitionDuration: 0.25
-    TriggerNameHash: 2145700606
-    TransitionIndex: 0
-  - IsCrossFadeExit: 0
-    Layer: 0
     OriginatingState: 1748754976
     DestinationState: 1597856401
     TransitionDuration: 0.25
@@ -450,13 +441,6 @@ MonoBehaviour:
     TransitionIndex: 5
   - IsCrossFadeExit: 0
     Layer: 0
-    OriginatingState: 1748754976
-    DestinationState: 968658227
-    TransitionDuration: 0.25
-    TriggerNameHash: 968658227
-    TransitionIndex: 6
-  - IsCrossFadeExit: 0
-    Layer: 0
     OriginatingState: 2081823275
     DestinationState: 1597856401
     TransitionDuration: 0.25
@@ -490,47 +474,7 @@ MonoBehaviour:
     TransitionDuration: 0.25
     TriggerNameHash: -1761810982
     TransitionIndex: 5
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: 2081823275
-    DestinationState: 968658227
-    TransitionDuration: 0.25
-    TriggerNameHash: 968658227
-    TransitionIndex: 6
   m_Animator: {fileID: 8322631880830459007}
---- !u!114 &8518432922043446484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1733868696496733154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86f747be824be0b46946d3657625e317, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!65 &1376921072521282111
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1733868696496733154}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2221377582622383236
 GameObject:
   m_ObjectHideFlags: 0
