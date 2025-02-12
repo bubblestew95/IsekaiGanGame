@@ -4,7 +4,7 @@ using EnumTypes;
 using UnityEngine.Events;
 
 /// <summary>
-/// ÇÃ·¹ÀÌ¾î Ä³¸¯ÅÍ¸¦ ÃÑ°ýÀûÀ¸·Î °ü¸®ÇÏ´Â ¸Å´ÏÀú.
+/// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ä³ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ñ°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Å´ï¿½ï¿½ï¿½.
 /// </summary>
 public class PlayerManager : MonoBehaviour
 {
@@ -18,6 +18,8 @@ public class PlayerManager : MonoBehaviour
     private PlayerData playerData = null;
     [SerializeField]
     private UIBattleUIManager battleUIManager = null;
+    [SerializeField]
+    private SkillUIManager skillUIManager = null;
 
     [Header("Attack Settings")]
     [SerializeField]
@@ -116,6 +118,11 @@ public class PlayerManager : MonoBehaviour
         get { return movementManager; }
     }
 
+    public SkillUIManager SkillUIManager
+    {
+        get { return skillUIManager; }
+    }
+
         #endregion
 
     #endregion
@@ -125,9 +132,9 @@ public class PlayerManager : MonoBehaviour
         #region State Functions
 
     /// <summary>
-    /// ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ µ¿ÀÛ »óÅÂ¸¦ º¯°æÇÑ´Ù.
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
     /// </summary>
-    /// <param name="_type">º¯°æÇÏ°íÀÚ ÇÏ´Â µ¿ÀÛ »óÅÂ.</param>
+    /// <param name="_type">ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.</param>
     public void ChangeState(PlayerStateType _type)
     {
         Debug.LogFormat("Player State Change To {0}.", _type);
@@ -139,7 +146,7 @@ public class PlayerManager : MonoBehaviour
         #region Skill Functions
 
     /// <summary>
-    /// ½ºÅ³ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ½ÃÀÛÇÒ ¶§ È£ÃâµÇ´Â ÇÔ¼ö.
+    /// ï¿½ï¿½Å³ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½.
     /// </summary>
     public void StartSkill(SkillSlot _type)
     {
@@ -147,7 +154,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ½ºÅ³ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ Á¤»óÀûÀ¸·Î ³¡³µÀ» ¶§ È£ÃâµÇ´Â ÇÔ¼ö. 
+    /// ï¿½ï¿½Å³ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½. 
     /// </summary>
     public void EndSkill(SkillSlot _type)
     {
@@ -156,7 +163,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ½ºÅ³ ¾Ö´Ï¸ÞÀÌ¼Ç Áß ½ºÅ³ÀÌ ½ÇÁ¦·Î »ç¿ëµÉ ¶§ È£ÃâµÇ´Â ÇÔ¼ö.
+    /// ï¿½ï¿½Å³ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ ï¿½ï¿½Å³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½.
     /// </summary>
     public void UseSkill(SkillSlot _slot)
     {
@@ -170,7 +177,7 @@ public class PlayerManager : MonoBehaviour
     #region Private Functions
 
     /// <summary>
-    /// »óÅÂ ¸Ó½ÅÀ» ÃÊ±âÈ­ÇÑ´Ù.
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½Ó½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½Ñ´ï¿½.
     /// </summary>
     private void InitStates()
     {
@@ -184,7 +191,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾îÀÇ ¸Å´ÏÀú Å¬·¡½ºµéÀ» »ý¼ºÇÏ°í ÃÊ±âÈ­ÇÑ´Ù.
+    /// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½Å´ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ê±ï¿½È­ï¿½Ñ´ï¿½.
     /// </summary>
     private void InitManagers()
     {
@@ -224,24 +231,24 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        // ±âº» »óÅÂ¸¦ ´ë±â »óÅÂ·Î ¼³Á¤ÇÑ´Ù.
+        // ï¿½âº» ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
         stateMachine.ChangeState(PlayerStateType.Idle);
 
-        // ·ÎÄÃ °ÔÀÓÀÌ°Å³ª, ³×Æ®¿öÅ© ¿ÀºêÁ§Æ®ÀÇ ¼ÒÀ¯ÀÚÀÏ °æ¿ì¿¡¸¸ È°¼ºÈ­ÇÑ´Ù.
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì°Å³ï¿½, ï¿½ï¿½Æ®ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ È°ï¿½ï¿½È­ï¿½Ñ´ï¿½.
         if (GameManager.Instance.IsLocalGame || PlayerNetworkManager.IsOwner)
         {
-            // ÀüÅõ UI¸¦ È°¼ºÈ­ÇÏ°í, Ä³¸¯ÅÍ ÄÁÆ®·Ñ·¯¸¦ È°¼ºÈ­ÇÑ´Ù.
+            // ï¿½ï¿½ï¿½ï¿½ UIï¿½ï¿½ È°ï¿½ï¿½È­ï¿½Ï°ï¿½, Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ï¿½Ñ´ï¿½.
             battleUIManager.transform.parent.gameObject.SetActive(true);
             characterController.enabled = true;
 
-            // ÀÔ·Â ¹öÆÛÀÇ °»½ÅÀ» ½ÃÀÛÇÑ´Ù.
+            // ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
             InputManager.StartInputBufferPop();
         }
     }
 
     private void Update()
     {
-        // ÇöÀç »óÅÂ¿¡ µû¸¥ Çàµ¿À» ¾÷µ¥ÀÌÆ®ÇÑ´Ù.
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½àµ¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ñ´ï¿½.
         stateMachine.UpdateState();
 
         skillManager.DecreaseCoolTimes(Time.deltaTime);

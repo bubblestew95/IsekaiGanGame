@@ -15,6 +15,8 @@ public class PlayerInputManager
     /// </summary>
     private FloatingJoystick joystick = null;
 
+    private Coroutine skillUICoroutine = null;
+
     #region Input Buffer
 
     private Queue<InputBufferData> skillBuffer = new Queue<InputBufferData>();
@@ -46,7 +48,7 @@ public class PlayerInputManager
     }
 
     /// <summary>
-    /// 정해진 시간마다 스킬 입력 버퍼에서 입력를 하나씩 빼서 삭제하는 처리를 한다.
+    /// 정해진 시간마다 스킬 입력 버퍼에서 입력를 하나씩 빼서 삭제하는 처리를 하는 코루틴을 실행한다.
     /// </summary>
     public void StartInputBufferPop()
     {
@@ -85,6 +87,91 @@ public class PlayerInputManager
         return nullInputBuffer;
     }
 
+    public bool GetMouseRayHitPosition(out Vector3 result)
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100f))
+        {
+            result = hit.point;
+            return true;
+        }
+
+        result = Vector3.zero;
+        return false;
+    }
+
+    public void OnSkillKeyInput(SkillSlot _slot)
+    {
+        // 다른 스킬 UI가 활성화되어있을 경우 비활성화 처리
+        {
+            SkillSlot otherSkillSlot = SkillSlot.None;
+
+            if (playerManager.SkillUIManager.IsOtherSkillUIEnabled(_slot, out otherSkillSlot))
+            {
+                playerManager.StopCoroutine(skillUICoroutine);
+                skillUICoroutine = null;
+                playerManager.SkillUIManager.SkillUIMap[otherSkillSlot].SetEnabled(false);
+            }
+        }
+
+        // 대쉬 스킬일 경우 마우스 위치로 대쉬
+        if (_slot == SkillSlot.Dash)
+        {
+            SkillPointData data = new SkillPointData();
+            data.type = SkillPointType.Direction;
+
+            if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mousePos))
+            {
+                Vector3 direction = (mousePos - playerManager.transform.position).normalized;
+                data.skillUsedPosition = mousePos;
+                data.skillUsedRotation = Quaternion.LookRotation(direction);
+                playerManager.InputManager.OnButtonInput(SkillSlot.Dash, data);
+            }
+
+            return;
+        }
+
+        // 스킬 UI가 있을 경우
+        if (playerManager.SkillUIManager.SkillUIMap.TryGetValue(_slot, out SkillUI_Base skillUI))
+        {
+            // 스킬 UI가 활성화되어있을 경우 해당 스킬 UI 위치로 스킬을 사용했다는 걸 입력하고
+            // 스킬 UI 움직임을 담당하는 코루틴을 정지한다.
+            if (skillUI.IsEnabled())
+            {
+                Debug.LogFormat("{0} Skill Input!", _slot);
+                playerManager.InputManager.OnButtonInput
+                    (_slot, skillUI.GetSkillAimPoint());
+                playerManager.StopCoroutine(skillUICoroutine);
+                skillUI.SetEnabled(false);
+            }
+            // 스킬 UI가 비활성화되어있을 경우 스킬 UI 활성화 및 스킬 UI 움직임 코루틴 시작.
+            else
+            {
+                Debug.LogFormat("{0} Skill Ready!", _slot);
+                skillUICoroutine = playerManager.
+                    StartCoroutine(SkillAimCoroutine(skillUI));
+            }
+        }
+        // 스킬 UI가 없을 경우 마우스 위치로 스킬 사용을 입력.
+        else
+        {
+            SkillPointData data = new SkillPointData();
+            data.type = SkillPointType.None;
+
+            if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mousePos))
+            {
+                Vector3 direction = (mousePos - playerManager.transform.position).normalized;
+                data.skillUsedRotation = Quaternion.LookRotation(direction);
+                playerManager.InputManager.OnButtonInput(_slot, data);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 입력 버퍼에서 일정 시간마다 입력을 삭제하는 처리를 하는 코루틴
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator PopInputBufferCoroutine()
     {
         float remainTime = 0f;
@@ -105,6 +192,22 @@ public class PlayerInputManager
                     skillBuffer.Dequeue();
 
                 yield return null;
+            }
+
+            yield return null;
+        }
+    }
+
+
+    private IEnumerator SkillAimCoroutine(SkillUI_Base _skillUI)
+    {
+        _skillUI.SetEnabled(true);
+
+        while (true)
+        {
+            if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 pos))
+            {
+                _skillUI.AimSkill(pos);
             }
 
             yield return null;
