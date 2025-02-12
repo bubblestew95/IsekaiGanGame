@@ -53,11 +53,14 @@ public class BossStateManager : NetworkBehaviour
 
     private void Awake()
     {
+        FindAnyObjectByType<NetworkGameManager>().playerDieCallback += PlayerDieCallback;
         FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += () => 
         {
             InitMulti();
             Invoke("ChangeBossState", 3f);
         };
+
+
     }
 
     private void OnTriggerEnter(Collider other)
