@@ -20,6 +20,6 @@ MonoBehaviour:
   isBackattackEnable: 1
   backAttackTimes: 3
   attackRange: 3
-  moveSpeed: 6
+  moveSpeed: 8
   moveTime: 0.4
   isForward: 0

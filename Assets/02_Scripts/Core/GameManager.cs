@@ -56,9 +56,9 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î°¡ º¸½º¿¡°Ô µ¥¹ÌÁö¿Í ¾î±×·Î ¼öÄ¡¸¦ ´õÇÔ.
+    /// ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½×·ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
     /// </summary>
-    /// <param name="_damageSource">º¸½º¿¡°Ô µ¥¹ÌÁö¸¦ ÁÖ´Â ÇÃ·¹ÀÌ¾î</param>
+    /// <param name="_damageSource">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½</param>
     public void DamageToBoss(PlayerManager _damageGiver, int _damage, float _aggro)
     {
         ulong clientId = _damageGiver.GetComponent<NetworkObject>().OwnerClientId;
@@ -68,14 +68,14 @@ public class GameManager : MonoBehaviour
             DamageToBoss_Multi(clientId, _damage, _aggro);
         }
 
-        // UI µ¿±âÈ­
-        // ÃßÈÄ ¸ÖÆ¼ ¿¬µ¿ÇÒ ¶§ ÀÌ ºÎºÐÀº ¾Æ¸¶µµ ¼öÁ¤ÇØ¾ß ÇÒ µí?
+        // UI ï¿½ï¿½ï¿½ï¿½È­
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Îºï¿½ï¿½ï¿½ ï¿½Æ¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½ï¿½ ï¿½ï¿½?
         // UpdatePlayerHpUI(_damageGiver);
     }
 
 
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î¿¡°Ô µ¥¹ÌÁö¸¦ ÀÔÈû.
+    /// ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
     /// </summary>
     /// <param name="_damageReceiver"></param>
     public void DamageToPlayer(PlayerManager _damageReceiver, int _damage)
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î¿¡°Ô µ¥¹ÌÁö¸¦ ÀÔÈû°ú µ¿½Ã¿¡ ³Ë¹é È¿°ú¸¦ ºÎ¿©ÇÔ.
+    /// ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¿ï¿½ ï¿½Ë¹ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Î¿ï¿½ï¿½ï¿½.
     /// </summary>
     /// <param name="_damageReceiver"></param>
     public void DamageToPlayer(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDist)
@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ½ÇÁ¦·Î ÇÃ·¹ÀÌ¾î¿¡°Ô µ¥¹ÌÁö¸¦ Àû¿ë½ÃÅ°´Â ÇÔ¼ö
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½Ô¼ï¿½
     /// </summary>
     /// <param name="_damageReceiver"></param>
     /// <param name="_damage"></param>

@@ -134,7 +134,7 @@ public class NetworkGameManager : NetworkBehaviour
 
     #region RPC
 
-    #region Client To Server RPC
+        #region Client To Server RPC
 
     /// <summary>
     /// 플레이어가 데미지를 받았음을 서버에게 알린다.

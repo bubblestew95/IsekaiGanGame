@@ -3,12 +3,8 @@ using UnityEngine;
 using EnumTypes;
 using UnityEngine.Events;
 
-/// <summary>
-/// �÷��̾� ĳ���͸� �Ѱ������� �����ϴ� �Ŵ���.
-/// </summary>
 public class PlayerManager : MonoBehaviour
 {
-
     #region Variables
 
         #region Inspector Variables
@@ -131,19 +127,49 @@ public class PlayerManager : MonoBehaviour
 
         #region State Functions
 
-    /// <summary>
-    /// ���� �÷��̾��� ���� ���¸� �����Ѵ�.
-    /// </summary>
-    /// <param name="_type">�����ϰ��� �ϴ� ���� ����.</param>
     public void ChangeState(PlayerStateType _type)
     {
         Debug.LogFormat("Player State Change To {0}.", _type);
         StateMachine.ChangeState(_type);
     }
 
-        #endregion
+    public void RevivePlayer()
+    {
+        if (stateMachine.CurrentState.StateType != PlayerStateType.Death)
+        {
+            Debug.Log("Player Can't revive before died!");
 
-        #region Skill Functions
+            return;
+        }
+
+        if (!GameManager.Instance.IsLocalGame)
+        {
+            playerNetworkManager.NetworkRevivePlayer();
+        }
+        else
+        {
+            animationManager.PlayGetRevivedAnimation();
+            ApplyRevive();
+        }
+    }
+
+    public void ApplyRevive()
+    {
+        StatusManager.SetMaxHp(StatusManager.MaxHp / 2);
+        StatusManager.SetCurrentHp(StatusManager.MaxHp);
+
+        BattleUIManager.UpdatePlayerHp();
+        GetComponent<CharacterController>().enabled = true;
+
+        if(!GameManager.Instance.IsLocalGame)
+        {
+            PlayerNetworkManager.OnNetworkPlayerRevive?.Invoke(PlayerNetworkManager.OwnerClientId);
+        }
+    }
+
+    #endregion
+
+    #region Skill Functions
 
     /// <summary>
     /// ��ų �ִϸ��̼��� ������ �� ȣ��Ǵ� �Լ�.
@@ -176,9 +202,6 @@ public class PlayerManager : MonoBehaviour
 
     #region Private Functions
 
-    /// <summary>
-    /// ���� �ӽ��� �ʱ�ȭ�Ѵ�.
-    /// </summary>
     private void InitStates()
     {
         stateMachine = new PlayerStateMachine();
@@ -190,9 +213,6 @@ public class PlayerManager : MonoBehaviour
         stateMachine.AddState(PlayerStateType.Dash, new DashState(this));
     }
 
-    /// <summary>
-    /// �÷��̾��� �Ŵ��� Ŭ�������� �����ϰ� �ʱ�ȭ�Ѵ�.
-    /// </summary>
     private void InitManagers()
     {
         skillManager = new PlayerSkillManager();
@@ -231,24 +251,21 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        // �⺻ ���¸� ��� ���·� �����Ѵ�.
         stateMachine.ChangeState(PlayerStateType.Idle);
 
-        // ���� �����̰ų�, ��Ʈ��ũ ������Ʈ�� �������� ��쿡�� Ȱ��ȭ�Ѵ�.
         if (GameManager.Instance.IsLocalGame || PlayerNetworkManager.IsOwner)
         {
-            // ���� UI�� Ȱ��ȭ�ϰ�, ĳ���� ��Ʈ�ѷ��� Ȱ��ȭ�Ѵ�.
-            battleUIManager.transform.parent.gameObject.SetActive(true);
+            if(battleUIManager != null)
+                battleUIManager.transform.parent.gameObject.SetActive(true);
+
             characterController.enabled = true;
 
-            // �Է� ������ ������ �����Ѵ�.
             InputManager.StartInputBufferPop();
         }
     }
 
     private void Update()
     {
-        // ���� ���¿� ���� �ൿ�� ������Ʈ�Ѵ�.
         stateMachine.UpdateState();
 
         skillManager.DecreaseCoolTimes(Time.deltaTime);

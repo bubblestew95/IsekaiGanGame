@@ -10941,7 +10941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2786370610
+  GlobalObjectIdHash: 3709657405
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -13708,15 +13708,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 199590}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000011920929, y: 0.32403672, z: -0.000000077299774, w: 0.9460445}
-  m_LocalPosition: {x: -0.076, y: -0, z: 0.107}
+  m_LocalRotation: {x: 0.00000012479722, y: 0.014964061, z: 0.000000011175871, w: 0.99988806}
+  m_LocalPosition: {x: -0.079, y: 0, z: 0.013}
   m_LocalScale: {x: 0.99999994, y: 1.0000002, z: 1.0000004}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8079153529471343035}
   - {fileID: 414466144940188812}
   m_Father: {fileID: 447138}
-  m_LocalEulerAnglesHint: {x: 0, y: 37.814, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 1.715, z: 0}
 --- !u!33 &3308194
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -18845,7 +18845,7 @@ GameObject:
   - component: {fileID: 4078196288199560792}
   - component: {fileID: 7317590795602069835}
   - component: {fileID: 3756708933765468229}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: MeleeWeaponTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18877,7 +18877,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0

@@ -9,7 +9,8 @@ namespace EnumTypes
         Skill_B,
         Skill_C,
         BasicAttack,
-        Dash
+        Dash,
+        Revive,
     }
 
     public enum PlayerStateType
