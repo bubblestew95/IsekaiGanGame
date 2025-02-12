@@ -35,7 +35,8 @@ public class PlayerInputManager
     {
         playerManager = _playerManager;
 
-        joystick = _playerManager.BattleUIManager.MoveJoystick;
+        if(_playerManager.BattleUIManager != null)
+            joystick = _playerManager.BattleUIManager.MoveJoystick;
         groundLayerMask = LayerMask.GetMask("Ground");
     }
 

@@ -160,7 +160,6 @@ public class PlayerManager : MonoBehaviour
         StatusManager.SetCurrentHp(StatusManager.MaxHp);
 
         BattleUIManager.UpdatePlayerHp();
-        AnimationManager.PlayGetRevivedAnimation();
         GetComponent<CharacterController>().enabled = true;
 
         if(!GameManager.Instance.IsLocalGame)
@@ -253,24 +252,21 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        // �⺻ ���¸� ��� ���·� �����Ѵ�.
         stateMachine.ChangeState(PlayerStateType.Idle);
 
-        // ���� �����̰ų�, ��Ʈ��ũ ������Ʈ�� �������� ��쿡�� Ȱ��ȭ�Ѵ�.
         if (GameManager.Instance.IsLocalGame || PlayerNetworkManager.IsOwner)
         {
-            // ���� UI�� Ȱ��ȭ�ϰ�, ĳ���� ��Ʈ�ѷ��� Ȱ��ȭ�Ѵ�.
-            battleUIManager.transform.parent.gameObject.SetActive(true);
+            if(battleUIManager != null)
+                battleUIManager.transform.parent.gameObject.SetActive(true);
+
             characterController.enabled = true;
 
-            // �Է� ������ ������ �����Ѵ�.
             InputManager.StartInputBufferPop();
         }
     }
 
     private void Update()
     {
-        // ���� ���¿� ���� �ൿ�� ������Ʈ�Ѵ�.
         stateMachine.UpdateState();
 
         skillManager.DecreaseCoolTimes(Time.deltaTime);
