@@ -60,17 +60,17 @@ public class PlayerSkillManager
     /// 스킬 사용을 시도한다.
     /// </summary>
     /// <param name="_skillIdx">사용할 스킬의 스킬 리스트 상 인덱스</param>
-    public void UseSkill(SkillSlot _type)
+    public void UseSkill(SkillSlot _slot)
     {
         // 사용하려는 변수들의 유효성 체크.
-        if (skillDatas == null || currentCoolTimeMap == null)
+        if (skillDatas == null || currentCoolTimeMap == null || !skillDataMap.ContainsKey(_slot))
         {
             Debug.LogWarning("Skill List is not valid!");
             return;
         }
 
         // 스킬 사용
-        if(animatorIdMap.TryGetValue(_type, out int animId))
+        if(animatorIdMap.TryGetValue(_slot, out int animId))
         {
             if(GameManager.Instance.IsLocalGame)
             {
@@ -83,7 +83,7 @@ public class PlayerSkillManager
         }
 
         // 쿨타임 적용
-        currentCoolTimeMap[_type] = skillDataMap[_type].coolTime;
+        currentCoolTimeMap[_slot] = skillDataMap[_slot].coolTime;
     }
 
     public float GetCoolTime(SkillSlot _type)
@@ -112,6 +112,12 @@ public class PlayerSkillManager
     /// <returns></returns>
     public bool IsSkillUsable(SkillSlot _type)
     {
+        if(!skillDataMap.ContainsKey(_type))
+        {
+            Debug.LogFormat("{0} Skill is not usable in this character!", _type);
+            return false;
+        }
+
         // 쿨타임 체크
         if (currentCoolTimeMap[_type] > 0f)
         {
