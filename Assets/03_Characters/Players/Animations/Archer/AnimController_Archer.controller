@@ -63,10 +63,10 @@ AnimatorStateMachine:
     m_Position: {x: 570, y: 270, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5671188842074017793}
-    m_Position: {x: -20, y: 210, z: 0}
+    m_Position: {x: -20, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 260136741127308595}
-    m_Position: {x: 40, y: 80, z: 0}
+    m_Position: {x: 210, y: 100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2150689385580120725}
     m_Position: {x: -20, y: 500, z: 0}
@@ -97,21 +97,14 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: -2726958342615203770}
     m_Position: {x: 880, y: 550, z: 0}
-  - serializedVersion: 1
-    m_State: {fileID: 7050668370448136733}
-    m_Position: {x: -310, y: 510, z: 0}
-  - serializedVersion: 1
-    m_State: {fileID: 6654393826106549854}
-    m_Position: {x: -260, y: 220, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 7600468959979838111}
   - {fileID: -3673586472524709321}
-  - {fileID: 5825902609867837219}
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: -240, y: 80, z: 0}
+  m_AnyStatePosition: {x: -30, y: 50, z: 0}
   m_EntryPosition: {x: -270, y: 350, z: 0}
   m_ExitPosition: {x: 470, y: 110, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
@@ -507,7 +500,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Run
+  m_Name: archer_03_run
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -517,7 +510,6 @@ AnimatorState:
   - {fileID: 5450621508351742499}
   - {fileID: -5557413484498839887}
   - {fileID: -1501349049016232633}
-  - {fileID: -7024746231779246066}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -756,7 +748,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 855d4a0c81678d14fa8fddacd8bd4e70, type: 2}
+  m_Motion: {fileID: 7400000, guid: ea55cd476daf03843b498309545ee410, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -1014,7 +1006,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle
+  m_Name: archer_01_idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -1024,7 +1016,6 @@ AnimatorState:
   - {fileID: -1393581123705554828}
   - {fileID: 7085888040930911103}
   - {fileID: 3540230513223549344}
-  - {fileID: -8466358600610897279}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0

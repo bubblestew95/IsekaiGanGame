@@ -54,7 +54,7 @@ public class SkillButtonsManager : MonoBehaviour
 
     public void SetSkillButtonEnabled(SkillSlot _slot, bool _enabled)
     {
-        skillButtonMap[_slot].enabled = _enabled;
+        skillButtonMap[_slot].gameObject.SetActive(_enabled);
     }
 
     private void Awake()

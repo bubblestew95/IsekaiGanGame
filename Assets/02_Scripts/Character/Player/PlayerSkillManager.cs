@@ -51,6 +51,7 @@ public class PlayerSkillManager
             animatorIdMap.Add(SkillSlot.Skill_C, Animator.StringToHash("Skill_C"));
             animatorIdMap.Add(SkillSlot.BasicAttack, Animator.StringToHash("BasicAttack"));
             animatorIdMap.Add(SkillSlot.Dash, Animator.StringToHash("Dash"));
+            animatorIdMap.Add(SkillSlot.Revive, Animator.StringToHash("ReviveOther"));
         }
 
     }
