@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using EnumTypes;
 using StructTypes;
@@ -6,11 +7,11 @@ using UnityEngine;
 public class PlayerAiManager : MonoBehaviour
 {
     public bool isPlayerAiMode = true; // 현재 AI 모드인지 아닌지 확인하는 bool
+    public bool isMoveBack = false; // 도망 상태 확인하는 bool
     public PlayerManager playerManager; // 플레이어를 조종하기위해 PlayerManager 클래스 참조
     private List<Vector3> rocksPos = new List<Vector3>(); // 돌들의 위치를 저장하는 리스트
     public Vector3 mapCenterPos; // 맵의 중앙 위치 
     public float rockSize = 2.0f; // 돌의 크기 (예시로 설정, 실제 돌 크기에 맞게 조정)
-    WaitForSeconds wait = new WaitForSeconds(0.5f);
     float safeDistance = 1f;
 
     // SkillSlot 배열에 사용할 스킬을 나열
@@ -24,6 +25,8 @@ public class PlayerAiManager : MonoBehaviour
     private void Awake()
     {
         playerManager = GetComponent<PlayerManager>();
+        BossBT.AttackStartCallback += () => StartCoroutine(MoveBackwardsBoss()); // 보스 공격 콜백 코루틴 플레이어 도망 시작
+        BossBT.AttackEndCallback += () => isMoveBack = false;
     }
 
     #region 위치 파악
@@ -129,6 +132,18 @@ public class PlayerAiManager : MonoBehaviour
     {
         Vector3 directionToTarget = bossPos - transform.position;
         AiMove(directionToTarget.x, directionToTarget.z);
+    }    
+    private IEnumerator MoveBackwardsBoss()
+    {
+        isMoveBack = true;
+        while (isMoveBack == true)
+        {
+            Vector3 bossPos = GameManager.Instance.GetBossTransform().position;
+            Vector3 directionToTarget = transform.position - bossPos;
+            AiMove(directionToTarget.x, directionToTarget.z);
+            yield return null;
+        }
+        yield break;
     }
 
     #endregion
@@ -137,11 +152,13 @@ public class PlayerAiManager : MonoBehaviour
 
     private void Update()
     {
-        // 랜덤으로 하나의 스킬 선택
-        int randomIndex = Random.Range(0, skillSlots.Length);
-
-        // 선택된 스킬로 스킬을 사용하고, 적절히 이동
-        UseSkillWithApproach(skillSlots[randomIndex]);
+        if (isMoveBack == false)// 도망중이 아니라면
+        {
+            // 랜덤으로 하나의 스킬 선택
+            int randomIndex = Random.Range(0, skillSlots.Length);
+            // 선택된 스킬로 스킬을 사용하고, 적절히 이동
+            UseSkillWithApproach(skillSlots[randomIndex]);
+        }
     }
 
     #endregion
