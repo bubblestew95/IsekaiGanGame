@@ -14,9 +14,10 @@ public class DeathState : BasePlayerState
             ulong clientId = playerManager.PlayerNetworkManager.OwnerClientId;
             playerManager.PlayerNetworkManager.OnNetworkPlayerDeath?.Invoke(clientId);
         }
+        playerManager.GetComponent<CharacterController>().enabled = false;
 
+        playerManager.MovementManager.StopMove();
         playerManager.AnimationManager.PlayDeathAnimation();
-
     }
 
     public override void OnExitState()
