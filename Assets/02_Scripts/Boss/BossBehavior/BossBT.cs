@@ -293,8 +293,9 @@ public class BossBT : NetworkBehaviour
                 nvAgent.SetDestination(bossStateManager.AggroPlayer.transform.position);
             }
 
+            float t = elapseTime / duration;
             // 이동속도 설정
-            nvAgent.speed = Mathf.Lerp(3f, 12f, (elapseTime / duration));
+            nvAgent.speed = Mathf.Lerp(1f, 10f, t * t);
 
             elapseTime += Time.deltaTime;
             if (elapseTime >= duration)

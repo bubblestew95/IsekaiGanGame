@@ -31,7 +31,7 @@ public class BossStateManager : NetworkBehaviour
     public GameObject randomTarget;
     public float bestAggro = 0f;
     public bool isPhase2 = false;
-    public int maxHp = 100;
+    public int maxHp = 1000;
     public float chainTime = 0f;
     public GameObject[] allPlayers;
     public GameObject[] alivePlayers;
@@ -61,8 +61,6 @@ public class BossStateManager : NetworkBehaviour
             InitMulti();
             Invoke("ChangeBossState", 3f);
         };
-
-
     }
 
     private void OnTriggerEnter(Collider other)
