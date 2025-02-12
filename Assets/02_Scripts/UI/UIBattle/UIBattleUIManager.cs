@@ -63,6 +63,11 @@ public class UIBattleUIManager : MonoBehaviour
         skillUIManager.SetSkillAimPoint(_slot, _horizontal, _vertical);
     }
 
+    public void SetSkillButtonEnabled(SkillSlot _slot, bool _enabled)
+    {
+        skillButtonsManager.SetSkillButtonEnabled(_slot, _enabled);
+    }
+
     #endregion
 
     public void SetupAllUI() // 전체적으로 한번 싹 정하고 시작

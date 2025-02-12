@@ -52,12 +52,17 @@ public class SkillButtonsManager : MonoBehaviour
         battleUIManager.SendSkillDirectionToSkillUI(_slot, _horizontal, _vertical);
     }
 
+    public void SetSkillButtonEnabled(SkillSlot _slot, bool _enabled)
+    {
+        skillButtonMap[_slot].enabled = _enabled;
+    }
+
     private void Awake()
     {
         battleUIManager = GetComponentInParent<UIBattleUIManager>();
         skillButtonMap = new Dictionary<SkillSlot, ButtonSetting>();
 
-        ButtonSetting[] skillButtons = GetComponentsInChildren<ButtonSetting>();
+        ButtonSetting[] skillButtons = GetComponentsInChildren<ButtonSetting>(true);
 
         foreach(var skillButton in skillButtons)
         {

@@ -13,7 +13,7 @@ public class PlayerCheatManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O))
+        if (Input.GetKeyDown(KeyCode.D))
         {
             playerManager.StatusManager.OnDamaged(10);
             playerManager.BattleUIManager.UpdatePlayerHp();
@@ -21,7 +21,7 @@ public class PlayerCheatManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            if (playerManager.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Death)
+            if (playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Death)
             {
                 playerManager.StatusManager.SetMaxHp(playerManager.StatusManager.MaxHp / 2);
                 playerManager.StatusManager.SetCurrentHp(playerManager.StatusManager.MaxHp);
