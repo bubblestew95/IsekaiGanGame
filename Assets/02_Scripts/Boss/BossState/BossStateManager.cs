@@ -467,8 +467,21 @@ public class BossStateManager : NetworkBehaviour
 
             if (alivePlayers[i].GetComponent<NetworkObject>().OwnerClientId == _clientId)
             {
+                // 만약 죽은 플레이어가 bestAggro였다면 베스트 어그로도 초기화
+                if (i == aggroPlayerIndex.Value) bestAggro = 0;
+
                 playerAggro[i] = 0f;
                 alivePlayers[i] = null;
+
+                // 중간에 Best어그로 플레이어가 죽었을때 -> bestAggro 재설정
+                for (int j = 0; j < alivePlayers.Length; j++)
+                {
+                    if (bestAggro <= playerAggro[j])
+                    {
+                        bestAggro = playerAggro[j];
+                        aggroPlayerIndex.Value = j;
+                    }
+                }
             }
         }
 
