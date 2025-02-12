@@ -11,7 +11,7 @@ public class DeathState : BasePlayerState
     {
         if(!GameManager.Instance.IsLocalGame)
         {
-            ulong clientId = 0;
+            ulong clientId = playerManager.PlayerNetworkManager.OwnerClientId;
             playerManager.PlayerNetworkManager.OnNetworkPlayerDeath?.Invoke(clientId);
         }
 
