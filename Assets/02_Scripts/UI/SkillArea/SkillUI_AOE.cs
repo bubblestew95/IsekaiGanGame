@@ -26,7 +26,7 @@ public class SkillUI_AOE : SkillUI_Base
     {
         SkillPointData pointData = new SkillPointData();
         pointData.type = SkillPointType.Position;
-        pointData.point = targetRectTr.position;
+        pointData.skillUsedPosition = targetRectTr.position;
         return pointData;
     }
 

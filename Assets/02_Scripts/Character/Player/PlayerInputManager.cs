@@ -78,7 +78,7 @@ public class PlayerInputManager
     {
         if (skillBuffer.TryDequeue(out InputBufferData nextBuffer))
         {
-            lastSkillUsePoint = nextBuffer.pointData.point;
+            lastSkillUsePoint = nextBuffer.pointData.skillUsedPosition;
             return nextBuffer;
         }
 

@@ -27,7 +27,8 @@ namespace StructTypes
     public struct SkillPointData
     {
         public SkillPointType type;
-        public Vector3 point;
+        public Vector3 skillUsedPosition;
+        public Quaternion skillUsedRotation;
     }
 
     [Serializable]
