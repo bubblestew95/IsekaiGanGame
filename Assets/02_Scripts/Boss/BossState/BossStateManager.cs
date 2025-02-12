@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using Unity.Netcode;
+using static UnityEngine.GraphicsBuffer;
+using System.Linq;
 
 
 public class BossStateManager : NetworkBehaviour
@@ -279,7 +281,7 @@ public class BossStateManager : NetworkBehaviour
     {
         bool allAggroZero = true;
 
-        // 전부 어그로 0일때 -> 랜덤 1명 아무나 aggro 10으로 만들고 aggroPlayer 상태로
+        // 전부 어그로 0일때
         foreach (float aggro in playerAggro)
         {
             if (aggro != 0f)
@@ -288,18 +290,20 @@ public class BossStateManager : NetworkBehaviour
             }
         }
 
+        // 전부 어그로 0일때 -> 랜덤 1명 아무나 aggro 10으로 만들고 aggroPlayer 상태로
         if (allAggroZero)
         {
-            int len = 0;
-
-            foreach (GameObject player in alivePlayers)
+            for (int i = 0; i < 4; i++)
             {
-                if (player != null) len++;
+                if (alivePlayers[i] == null) continue;
+
+                if (alivePlayers[i] == alivePlayers.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == RandomPlayer()))
+                {
+                    playerAggro[i] = 10f;
+                    aggroPlayerIndex.Value = i;
+                }
             }
 
-            int num = UnityEngine.Random.Range(0, len);
-            playerAggro[num] = 10f;
-            aggroPlayerIndex.Value = num;
             SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
             return;
         }
@@ -419,8 +423,8 @@ public class BossStateManager : NetworkBehaviour
         alivePlayers = FindFirstObjectByType<NetworkGameManager>().Players;
         allPlayers = alivePlayers;
 
-        // 초반 aggro 0이여서 세팅하는 함수
-        GetHighestAggroTarget();
+        // 초반 aggro 0이여서 세팅하는 함수 -> 한 프레임뒤에 실행되도록 => 아직 allPlayers가 할당안됬다는 오류 때문에
+        Invoke("GetHighestAggroTarget", 0f);
     }
 
     // 보스 상태 변경

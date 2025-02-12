@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class NetworkGameManager : NetworkBehaviour
 {
@@ -20,6 +21,9 @@ public class NetworkGameManager : NetworkBehaviour
     [SerializeField] private Transform[] spwanTr = new Transform[4];
     public GameObject[] players = new GameObject[4];
     private ulong[] objectId = new ulong[4];
+
+    // »ç¸Á °ü·Ã º¯¼ö
+    private int playerDieCnt = 0;
 
     public GameObject[] Players { get { return players; } }
 
@@ -84,7 +88,7 @@ public class NetworkGameManager : NetworkBehaviour
 
             players[cnt] = Instantiate(playerObject, spwanTr[cnt].position, Quaternion.identity);
 
-            players[cnt].GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+            players[cnt].GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
 
             cnt++;
         }
@@ -114,6 +118,16 @@ public class NetworkGameManager : NetworkBehaviour
     private void PlayerDie(ulong _clientId)
     {
         playerDieCallback?.Invoke(_clientId);
+        playerDieCnt++;
+
+        // ÇÃ·¹ÀÌ¾î ÀüºÎ »ç¸Á½Ã ¾À³Ñ±è
+        if (playerDieCnt == NetworkManager.Singleton.ConnectedClients.Count)
+        {
+            if (IsServer)
+            {
+                NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
+            }
+        }
     }
 
     #endregion

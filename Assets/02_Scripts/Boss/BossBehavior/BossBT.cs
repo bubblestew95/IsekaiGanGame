@@ -287,7 +287,14 @@ public class BossBT : NetworkBehaviour
         while (true)
         {
             // 어그로 플레이어 따라다님
-            nvAgent.SetDestination(bossStateManager.AggroPlayer.transform.position);
+            if (bossStateManager.AggroPlayer == null)
+            {
+                Debug.Log("어그로 플레이어 null - Attack4");
+            }
+            else
+            {
+                nvAgent.SetDestination(bossStateManager.AggroPlayer.transform.position);
+            }
 
             elapseTime += Time.deltaTime;
             if (elapseTime >= duration)
