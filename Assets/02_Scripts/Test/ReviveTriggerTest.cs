@@ -10,7 +10,6 @@ public class ReviveTriggerTest : MonoBehaviour
 
         if (playerManager != null)
         {
-            Debug.Log("Hello?");
             playerManager.BattleUIManager.SetSkillButtonEnabled(SkillSlot.Revive, true);
         }
     }

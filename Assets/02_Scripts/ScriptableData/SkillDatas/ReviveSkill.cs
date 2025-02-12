@@ -6,11 +6,23 @@ public class ReviveSkill : PlayerSkillBase
 {
     public float reviveRange = 2f;
 
+    public override void StartSkill(PlayerManager _player)
+    {
+        base.StartSkill(_player);
+        _player.ChangeState(PlayerStateType.Action);
+    }
+
     public override void UseSkill(PlayerManager _player)
     {
         base.UseSkill(_player);
 
         ReviveNearPlayers(_player);
+    }
+
+    public override void EndSkill(PlayerManager _player)
+    {
+        base.EndSkill(_player);
+        _player.ChangeState(PlayerStateType.Idle);
     }
 
     private void ReviveNearPlayers(PlayerManager _player)
@@ -19,18 +31,12 @@ public class ReviveSkill : PlayerSkillBase
 
         foreach (Collider hitCollider in hits)
         {
-            Debug.LogFormat("{0} near by iii");
+            PlayerManager playerManager = hitCollider.GetComponent<PlayerManager>();
 
-            //PlayerManager playerManager = hitCollider.GetComponent<PlayerManager>();
-            //if (playerManager != null && playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Death)
-            //{
-            //    playerManager.StatusManager.SetMaxHp(playerManager.StatusManager.MaxHp / 2);
-            //    playerManager.StatusManager.SetCurrentHp(playerManager.StatusManager.MaxHp);
-
-            //    playerManager.BattleUIManager.UpdatePlayerHp();
-            //    playerManager.AnimationManager.PlayGetRevivedAnimation();
-            //    playerManager.GetComponent<CharacterController>().enabled = true;
-            //}
+            if (playerManager != null && playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Death)
+            {
+                playerManager.RevivePlayer();
+            }
         }
     }
 }

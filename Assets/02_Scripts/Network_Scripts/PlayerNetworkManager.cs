@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class PlayerNetworkManager : NetworkBehaviour
 {
     public UnityAction<ulong> OnNetworkPlayerDeath;
+    public UnityAction<ulong> OnNetworkPlayerRevive;
 
     private PlayerManager playerManager = null;
     private NetworkAnimator networkAnimator = null;
@@ -20,6 +21,29 @@ public class PlayerNetworkManager : NetworkBehaviour
 
         networkAnimator.SetTrigger(_hashId);
     }
+
+    public void NetworkRevivePlayer()
+    {
+        ServerRevivePlayerRpc(OwnerClientId);
+    }
+
+    [Rpc(SendTo.Server)]
+    private void ServerRevivePlayerRpc(ulong _clientId)
+    {
+        ApplyRevivePlayerRpc(_clientId);
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void ApplyRevivePlayerRpc(ulong _clientId)
+    {
+        var obj = NetworkManager.ConnectedClients[_clientId].PlayerObject;
+
+        if (obj != null)
+        {
+            obj.GetComponent<PlayerManager>().ApplyRevive();
+        }
+    }
+
     public override void OnNetworkSpawn()
     {
         FindAnyObjectByType<NetworkGameManager>().CheckPlayerSpawnServerRpc();
