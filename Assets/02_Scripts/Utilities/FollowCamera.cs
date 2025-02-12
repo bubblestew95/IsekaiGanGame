@@ -12,7 +12,8 @@ public class FollowCamera : MonoBehaviour
 
     private void Update()
     {
-        transform.position = playerManager.transform.position;
+        if(playerManager != null)
+            transform.position = playerManager.transform.position;
     }
 
 

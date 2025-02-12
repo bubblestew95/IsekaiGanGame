@@ -129,7 +129,8 @@ public class GameManager : MonoBehaviour
     public void ApplyKnockbackToPlayer(PlayerManager _target, Vector3 _attackPos, float _knockbackDist)
     {
         if(_target.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Damaged
-            || _target.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Death)
+            || _target.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Death
+            || _target.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Dash)
         {
             return;
         }
