@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Attack4
   coolDown: 30
-  damage: 4
+  damage: 20
   minRange: 0
   maxRange: 15
   attackRange: 5
