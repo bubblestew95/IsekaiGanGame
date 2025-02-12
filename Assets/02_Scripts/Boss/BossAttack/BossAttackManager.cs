@@ -569,7 +569,7 @@ public class BossAttackManager : NetworkBehaviour
         if (IsServer)
         {
             GameObject stone = Instantiate(P_Stone, rightHand);
-            stone.GetComponent<NetworkObject>().Spawn();
+            stone.GetComponent<NetworkObject>().Spawn(true);
             curStone = stone;
 
             stone.transform.SetParent(null);

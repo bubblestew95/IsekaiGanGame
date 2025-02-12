@@ -297,7 +297,7 @@ public class BossStateManager : NetworkBehaviour
             {
                 if (alivePlayers[i] == null) continue;
 
-                if (alivePlayers[i] == alivePlayers.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == RandomPlayer()))
+                if (alivePlayers[i] == alivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == RandomPlayer()))
                 {
                     playerAggro[i] = 10f;
                     aggroPlayerIndex.Value = i;
@@ -424,7 +424,7 @@ public class BossStateManager : NetworkBehaviour
         allPlayers = alivePlayers;
 
         // 초반 aggro 0이여서 세팅하는 함수 -> 한 프레임뒤에 실행되도록 => 아직 allPlayers가 할당안됬다는 오류 때문에
-        Invoke("GetHighestAggroTarget", 0f);
+        GetHighestAggroTarget();
     }
 
     // 보스 상태 변경

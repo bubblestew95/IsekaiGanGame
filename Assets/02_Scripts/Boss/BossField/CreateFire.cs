@@ -38,7 +38,7 @@ public class CreateFire : MonoBehaviour
                 // fire ÇÁ¸®ÆÕ »ý¼º
                 GameObject fire = Instantiate(firePrefab, spawnPosition, Quaternion.Euler(270, 0, 0));
 
-                fire.GetComponent<NetworkObject>().Spawn();
+                fire.GetComponent<NetworkObject>().Spawn(true);
             }
         }
     }
