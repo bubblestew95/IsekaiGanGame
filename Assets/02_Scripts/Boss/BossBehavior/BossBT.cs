@@ -280,9 +280,6 @@ public class BossBT : NetworkBehaviour
         float elapseTime = 0f;
         float elapseTime2 = 0f;
 
-        // 이동속도 설정
-        nvAgent.speed = 8f;
-
         // 애니메이션 4-1을 지속시간동안 실행
         while (true)
         {
@@ -295,6 +292,9 @@ public class BossBT : NetworkBehaviour
             {
                 nvAgent.SetDestination(bossStateManager.AggroPlayer.transform.position);
             }
+
+            // 이동속도 설정
+            nvAgent.speed = Mathf.Lerp(3f, 12f, (elapseTime / duration));
 
             elapseTime += Time.deltaTime;
             if (elapseTime >= duration)
