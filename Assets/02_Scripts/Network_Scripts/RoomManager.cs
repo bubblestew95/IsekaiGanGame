@@ -441,24 +441,6 @@ public class RoomManager : NetworkBehaviour
     {
         Debug.Log("[RoomManager] 로비 변경 감지!");
 
-        if (changes.PlayerJoined.Changed || changes.PlayerLeft.Changed || changes.PlayerData.Changed)
-        {
-            Debug.Log("[RoomManager] PlayerList UI 업데이트 시작");
-
-            // 최신 Lobby 정보 가져오기
-            try
-            {
-                currentLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
-            }
-            catch (LobbyServiceException e)
-            {
-                Debug.LogError($"[RoomManager] 최신 Lobby 정보 가져오기 실패: {e.Message}");
-                return;
-            }
-
-            await UpdatePlayerListUI();
-        }
-
         // 로비 삭제 확인
         if (changes.LobbyDeleted)
         {
@@ -474,6 +456,7 @@ public class RoomManager : NetworkBehaviour
                 Debug.Log($"[RoomManager] 플레이어 입장 감지: {player.Player.Id}");
                 playerJoined = true;
             }
+            await UpdatePlayerListUI();
         }
         // 새로운 플레이어가 입장하면 Start 버튼 비활성화
         if (playerJoined && NetworkManager.Singleton.IsHost)
@@ -481,7 +464,6 @@ public class RoomManager : NetworkBehaviour
             Debug.Log("[RoomManager] 새로운 플레이어가 입장하여 Start 버튼 비활성화");
             playerJoined = false;
             startButton.interactable = playerJoined;
-            
         }
 
         // 플레이어 퇴장 감지 → UI 갱신 필요
@@ -491,6 +473,7 @@ public class RoomManager : NetworkBehaviour
             {
                 Debug.Log($"[RoomManager] 플레이어 퇴장 감지: {playerId}");
             }
+            await UpdatePlayerListUI();
         }
 
         if (changes.PlayerJoined.Changed || changes.PlayerLeft.Changed)
