@@ -341,7 +341,7 @@ public class BossBT : NetworkBehaviour
         float elapseTime = 0f;
 
         ulong randomNum = bossStateManager.RandomPlayer();
-        GameObject target = bossStateManager.AlivePlayers.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == randomNum);
+        GameObject target = bossStateManager.AlivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == randomNum);
 
         // 잠시 다른 플레이어 쳐다보다가
         while (true)
@@ -373,7 +373,7 @@ public class BossBT : NetworkBehaviour
         }
 
         randomNum = bossStateManager.RandomPlayer();
-        target = bossStateManager.AlivePlayers.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == randomNum);
+        target = bossStateManager.AlivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == randomNum);
 
         // 또다른 플레이어 쳐다보다가
         while (true)
@@ -406,7 +406,7 @@ public class BossBT : NetworkBehaviour
         }
 
         randomNum = bossStateManager.RandomPlayer();
-        target = bossStateManager.AlivePlayers.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == randomNum);
+        target = bossStateManager.AlivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == randomNum);
 
         // 또다른 플레이어 쳐다보다가 
         while (true)
