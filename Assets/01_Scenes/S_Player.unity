@@ -428,6 +428,18 @@ PrefabInstance:
       propertyPath: meleeWeapon
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8208847430920535235, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
+      propertyPath: particleDataList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8208847430920535235, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
+      propertyPath: particleDataList.Array.data[0].particleName
+      value: Skill_C
+      objectReference: {fileID: 0}
+    - target: {fileID: 8208847430920535235, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
+      propertyPath: particleDataList.Array.data[0].particlePrefab
+      value: 
+      objectReference: {fileID: 2715471840370901047, guid: 9f9d665143204084d9f107a53d958642, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
