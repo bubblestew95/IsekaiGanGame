@@ -419,8 +419,8 @@ public class BossStateManager : NetworkBehaviour
     // 멀티 플레이어 설정
     private void SetPlayerMulti()
     {
-        alivePlayers = FindFirstObjectByType<NetworkGameManager>().Players;
-        allPlayers = alivePlayers;
+        allPlayers = FindFirstObjectByType<NetworkGameManager>().Players;
+        alivePlayers = (GameObject[])allPlayers.Clone();
 
         // 초반 aggro 0이여서 세팅하는 함수 -> 한 프레임뒤에 실행되도록 => 아직 allPlayers가 할당안됬다는 오류 때문에
         GetHighestAggroTarget();
