@@ -205,9 +205,6 @@ public class BossAttackManager : NetworkBehaviour
         // 파티클 재생
         ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack1, new Vector3(fanAttackCollider.transform.position.x + forwardOffset.x * 3f, 0.5f, fanAttackCollider.transform.position.z + forwardOffset.z * 3f));
 
-        // 사운드 재생
-        BossAudioManager.Instance.AudioPlay(BossAudioManager.Instance.Attack1);
-
         yield return attackColliderTime;
 
         // attackCollider 비활성화

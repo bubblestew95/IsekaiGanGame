@@ -2908,6 +2908,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9137032837993464747, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1827377928}
+    - targetCorrespondingSourceObject: {fileID: 9137032837993464747, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1827377941}
     - targetCorrespondingSourceObject: {fileID: 7261674707082634732, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -11369,7 +11372,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Attack1: {fileID: 8300000, guid: baebff1d5cb699742a8aa3b6da7cb788, type: 3}
   Attack2: {fileID: 8300000, guid: ead4ee367e814524ea1961aa6999f501, type: 3}
-  Attack3: {fileID: 8300000, guid: ad7fc9b9b21ac9940b60ee323bee2ade, type: 3}
+  Attack3: {fileID: 8300000, guid: ea6222b1bdacecc4f8d916fa14f6b917, type: 3}
   Attack4: {fileID: 8300000, guid: f6b256ad08e1091418d2d940e1fe6f21, type: 3}
   Attack5: {fileID: 0}
   Attack6: {fileID: 8300000, guid: 894ad9f6ab8560c4f89864742910da23, type: 3}
@@ -11787,6 +11790,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1827377941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457395390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18ee4f4a50402b74589d6468e278ed7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1837789831
 GameObject:
   m_ObjectHideFlags: 0
