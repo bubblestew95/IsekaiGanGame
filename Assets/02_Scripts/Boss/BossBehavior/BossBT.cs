@@ -896,6 +896,64 @@ public class BossBT : NetworkBehaviour
 
         yield return null;
     }
+
+    private IEnumerator TimeOut()
+    {
+        isCoroutineRunning = true;
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 가운데로 이동해서 특수패턴(전멸기)
+        // 현재 위치에서 가운데 위치로 Lerp하게 이동(15~50프레임)하면서, 점프 애니메이션 실행하면 될듯
+        float elapseTime = 0f;
+        Vector3 originPos = bossStateManager.Boss.transform.position;
+
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("TimeOut"))
+            {
+                elapseTime += Time.deltaTime;
+
+                if (elapseTime >= 0.5f && elapseTime <= 1.6f)
+                {
+                    float t = Mathf.InverseLerp(0.5f, 1.6f, elapseTime);
+                    bossStateManager.Boss.transform.position = Vector3.Lerp(originPos, center, t);
+                }
+            }
+
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("TimeOut") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                anim.SetBool("TimeOut2Flag", true);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // Roar(전멸기 패턴)
+        while (true)
+        {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("TimeOut2") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                anim.SetBool("TimeOut2Flag", false);
+                anim.SetBool("TimeOutFlag", false);
+                break;
+            }
+
+            yield return null;
+        }
+
+
+        // 상태를 chase로 변경
+        curState = BossState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
+    }
     #endregion
 
     #region [Function]

@@ -57,6 +57,11 @@ public class BossAudioAnimCallback : MonoBehaviour
         BossAudioManager.Instance.AudioPlay(BossAudioManager.Instance.SpecialAttack);
     }
 
+    public void Phase2Audio()
+    {
+        BossAudioManager.Instance.AudioPlay(BossAudioManager.Instance.Phase2);
+    }
+
     private void AudioStop()
     {
         BossAudioManager.Instance.StopAudioCoroutine();
