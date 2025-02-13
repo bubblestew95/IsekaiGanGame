@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ArcherData
   m_EditorClassIdentifier: 
   maxHp: 80
-  walkSpeed: 5
+  walkSpeed: 7.5
   skills:
   - {fileID: 11400000, guid: 80bb2f5d6853141458d13eab9d046ce7, type: 2}
   - {fileID: 11400000, guid: 9e1508392fed7064f85c1cf98b0cc22e, type: 2}
