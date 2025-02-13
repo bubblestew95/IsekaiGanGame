@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillSlot: 1
   coolTime: 10
-  skillParticle: {fileID: 2232111375016834011, guid: 7f80baed94a37294fa07eb5faf2668c7, type: 3}
-  damage: 3
+  damage: 4
   aggro: 2
   isBackattackEnable: 0
   backAttackTimes: 3

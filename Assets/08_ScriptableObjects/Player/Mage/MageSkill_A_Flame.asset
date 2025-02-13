@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: MageSkill_A_Flame
   m_EditorClassIdentifier: 
   skillSlot: 1
-  coolTime: 3
-  skillParticle: {fileID: 0}
-  damage: 1
+  coolTime: 5
+  damage: 5
   aggro: 1
   isBackattackEnable: 0
   backAttackTimes: 3

@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: AssassinSkill_B
   m_EditorClassIdentifier: 
   skillSlot: 2
-  coolTime: 3
-  skillParticle: {fileID: 0}
-  damage: 1
+  coolTime: 6
+  damage: 4
   aggro: 1
   isBackattackEnable: 1
   backAttackTimes: 3
