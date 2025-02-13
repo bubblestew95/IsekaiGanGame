@@ -11380,7 +11380,7 @@ MonoBehaviour:
   Attack7: {fileID: 8300000, guid: ea6222b1bdacecc4f8d916fa14f6b917, type: 3}
   Attack8: {fileID: 8300000, guid: 52e37bb3e933ec54eb745f04f779435c, type: 3}
   Attack9: {fileID: 8300000, guid: ea6222b1bdacecc4f8d916fa14f6b917, type: 3}
-  SpecialAttack: {fileID: 0}
+  SpecialAttack: {fileID: 8300000, guid: ad7fc9b9b21ac9940b60ee323bee2ade, type: 3}
 --- !u!1 &1805521282 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8172849020266659018, guid: 2af5562ce69fc2d448481a1587a352a5, type: 3}
