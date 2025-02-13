@@ -18,6 +18,6 @@ MonoBehaviour:
   aggro: 3
   isBackattackEnable: 0
   backAttackTimes: 3
-  attackAreaRadius: 1
+  attackAreaRadius: 4
   duration: 2
   damageTickTime: 0.5
