@@ -955,15 +955,10 @@ public class BossAttackManager : NetworkBehaviour
         Vector3 bossPos = new Vector3(bossStateManager.Boss.transform.position.x, 0.5f, bossStateManager.Boss.transform.position.z);
         LayerMask defaultLayerMask = LayerMask.GetMask("Player");
 
-        int playerCnt = 0;
-
-        foreach (GameObject player in bossStateManager.AlivePlayers)
+        for (int i = 0; i < 4; i++)
         {
-            if (player != null) playerCnt++;
-        }
+            if (bossStateManager.AlivePlayers[i] == null) continue;
 
-        for (int i = 0; i < playerCnt; i++)
-        {
             Vector3 playerPos = new Vector3(bossStateManager.AlivePlayers[i].transform.position.x, 0.5f, bossStateManager.AlivePlayers[i].transform.position.z);
             Vector3 dir = (playerPos - bossPos).normalized;
 
