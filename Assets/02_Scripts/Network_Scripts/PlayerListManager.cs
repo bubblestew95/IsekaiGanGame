@@ -47,16 +47,8 @@ public class PlayerListManager : MonoBehaviour
         playerItems.Add(playerId, playerItem);
         Debug.Log($"[PlayerListManager] Player 추가 완료: {playerId} {username}");
 
-        // 다음 프레임에서 정렬 실행
-        //StartCoroutine(DelayedSortPlayerList());
     }
 
-    // 한 프레임 뒤에 정렬을 실행하는 Coroutine 추가
-    private IEnumerator DelayedSortPlayerList()
-    {
-        yield return null; // 한 프레임 대기
-        SortPlayerList();
-    }
 
     public void UpdatePlayerStatus(string playerId, PlayerStatus status)
     {
