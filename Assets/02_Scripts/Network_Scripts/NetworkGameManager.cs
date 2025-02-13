@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -114,20 +115,33 @@ public class NetworkGameManager : NetworkBehaviour
         return objectIds;
     }
 
-    // 플레이어 죽었을때 호출
-    private void PlayerDie(ulong _clientId)
+    // 플레이어 전부 죽었는지 Check => 다 죽었다면 패배 코루틴 실행
+    private void CheckPlayerAllDie()
     {
-        playerDieCallback?.Invoke(_clientId);
-        playerDieCnt++;
-
         // 플레이어 전부 사망시 씬넘김
         if (playerDieCnt == NetworkManager.Singleton.ConnectedClients.Count)
         {
             if (IsServer)
             {
-                NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
+                StartCoroutine(FailCoroutine());
             }
         }
+    }
+
+    // 게임 오버시 실행되는 코루틴
+    private IEnumerator FailCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+
+        NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
+    }
+
+    // 게임 클리어시 실행되는 코루틴
+    private IEnumerator VictoryCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+
+        NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
     }
 
     #endregion
@@ -213,6 +227,11 @@ public class NetworkGameManager : NetworkBehaviour
 
     private void Start()
     {
+        if (IsServer)
+        {
+            FindAnyObjectByType<BossStateManager>().bossDieCallback += () => StartCoroutine(VictoryCoroutine());
+        }
+
        LoadingCheckServerRpc();
 
         if (IsServer)
@@ -275,7 +294,7 @@ public class NetworkGameManager : NetworkBehaviour
         {
             if (players[i] == null) continue;
 
-            players[i].GetComponent<PlayerNetworkManager>().OnNetworkPlayerDeath += PlayerDie;
+            players[i].GetComponent<PlayerNetworkManager>().OnNetworkPlayerDeath += PlayerDieClientRpc;
         }
     }
 
@@ -295,6 +314,19 @@ public class NetworkGameManager : NetworkBehaviour
             Debug.Log("SetPlayer : " + players[cnt]);
 
             cnt++;
+        }
+    }
+
+    // 플레이어 죽었을때 호출(모든 클라에 호출해야함. -> 모든 클라가 플레이어 정보를 가져야함)
+    [ClientRpc]
+    private void PlayerDieClientRpc(ulong _clientId)
+    {
+        playerDieCallback?.Invoke(_clientId);
+
+        if (IsServer)
+        {
+            playerDieCnt++;
+            CheckPlayerAllDie();
         }
     }
     #endregion
