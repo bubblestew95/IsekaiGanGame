@@ -368,7 +368,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &694182133
+--- !u!1001 &485044562
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -376,59 +376,63 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -2836398782895520287, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: -8203911682527767499, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1271522761
+      value: 4012549849
       objectReference: {fileID: 0}
-    - target: {fileID: 179124, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: 179124, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_Name
-      value: P_Archer
+      value: P_Assassin
       objectReference: {fileID: 0}
-    - target: {fileID: 494462, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: 494462, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 494462, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: 494462, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 494462, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: 494462, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 494462, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: 494462, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 494462, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: 494462, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 494462, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: 494462, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 494462, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: 494462, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 494462, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: 494462, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 494462, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: 494462, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 494462, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+    - target: {fileID: 494462, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4146515583710344192, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
+      propertyPath: meleeWeapon
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
 --- !u!1 &1386283772
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,7 +672,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLocalGame: 1
-  isPCMode: 0
+  isPCMode: 1
 --- !u!1001 &1546865054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1274,4 +1278,4 @@ SceneRoots:
   - {fileID: 1400561440}
   - {fileID: 1546865054}
   - {fileID: 1386283776}
-  - {fileID: 694182133}
+  - {fileID: 485044562}

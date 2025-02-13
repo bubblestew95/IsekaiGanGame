@@ -15,6 +15,6 @@ MonoBehaviour:
   skillSlot: 5
   coolTime: 3
   skillParticle: {fileID: 0}
-  dashSpeed: 6
+  dashSpeed: 6.5
   dashTime: 0.5
   isForward: 1

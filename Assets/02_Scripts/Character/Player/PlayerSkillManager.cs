@@ -74,6 +74,7 @@ public class PlayerSkillManager
         {
             if(GameManager.Instance.IsLocalGame)
             {
+                // if()
                 animator.SetTrigger(animId);
             }
             else
