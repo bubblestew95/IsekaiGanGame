@@ -66,7 +66,7 @@ public class UI_GameResultManager : MonoBehaviour
     public IEnumerator FadeInAndScaleIn()
     {
         // 애니메이션 지속 시간
-        float duration = 1f;
+        float duration = 0.5f;
 
         // 이미지들에 대해 페이드 인과 스케일 인 처리
         for (int i = 0; i < imgs.Count; i++)
