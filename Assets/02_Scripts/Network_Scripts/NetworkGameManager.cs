@@ -123,7 +123,7 @@ public class NetworkGameManager : NetworkBehaviour
         {
             if (IsServer)
             {
-                StartCoroutine(FailCoroutine());
+                FailClientRpc();
             }
         }
     }
@@ -131,17 +131,33 @@ public class NetworkGameManager : NetworkBehaviour
     // 게임 오버시 실행되는 코루틴
     private IEnumerator FailCoroutine()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
 
-        NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
+        FindAnyObjectByType<UIBattleUIManager>().FadeInResult(false);
+        FindAnyObjectByType<BgmController>().PlayDefeat();
+
+        yield return new WaitForSeconds(15f);
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
+        }
     }
 
     // 게임 클리어시 실행되는 코루틴
     private IEnumerator VictoryCoroutine()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
 
-        NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
+        FindAnyObjectByType<UIBattleUIManager>().FadeInResult(true);
+        FindAnyObjectByType<BgmController>().PlayVictory();
+
+        yield return new WaitForSeconds(15f);
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
+        }
     }
 
     #endregion
@@ -232,7 +248,7 @@ public class NetworkGameManager : NetworkBehaviour
 
         if (IsServer)
         {
-            FindAnyObjectByType<BossStateManager>().bossDieCallback += () => StartCoroutine(VictoryCoroutine());
+            FindAnyObjectByType<BossStateManager>().bossDieCallback += VictoryClientRpc;
         }
 
        LoadingCheckServerRpc();
@@ -334,6 +350,20 @@ public class NetworkGameManager : NetworkBehaviour
             playerDieCnt++;
             CheckPlayerAllDie();
         }
+    }
+
+    // 플레이어 다 죽었을때 클라에 호출됨
+    [ClientRpc]
+    private void FailClientRpc()
+    {
+        StartCoroutine(FailCoroutine());
+    }
+
+    // 보스 죽였을때 클라에 호출
+    [ClientRpc]
+    private void VictoryClientRpc()
+    {
+        StartCoroutine(VictoryCoroutine());
     }
     #endregion
 }

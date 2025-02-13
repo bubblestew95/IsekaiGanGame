@@ -114,7 +114,7 @@ public class BgmController : MonoBehaviour
         StartCoroutine(FadeInAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 인
     }
 
-    private void PlayVictory()
+    public void PlayVictory()
     {
         // 현재 오디오를 멈추고
         if (curPlayingAudio)
@@ -125,7 +125,7 @@ public class BgmController : MonoBehaviour
         curPlayingAudio.Play();
         StartCoroutine(FadeInAudio(curPlayingAudio, 1f)); // 1초 동안 페이드 인
     } // 승리 bgm 재생
-    private void PlayDefeat()
+    public void PlayDefeat()
     {
         // 이미 페이드 중이라면 예외 처리
         if (isFading)
