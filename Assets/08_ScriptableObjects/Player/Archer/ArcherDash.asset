@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ArcherDash
   m_EditorClassIdentifier: 
   skillSlot: 5
-  coolTime: 3
+  coolTime: 10
   skillParticle: {fileID: 0}
   dashSpeed: 7
   dashTime: 0.7
