@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using EnumTypes;
 using StructTypes;
-
 public class UIBattleUIManager : MonoBehaviour
 {
     [SerializeField]
@@ -18,7 +17,7 @@ public class UIBattleUIManager : MonoBehaviour
     private UIHpsManager ui_PlayerHp = null;
     private UIBossHpsManager ui_BossHp = null;
     private UIWarningManager ui_disconnect = null;
-
+    public List<UI_GameResultManager> ui_GameResultManager = new List<UI_GameResultManager>();
     public FloatingJoystick MoveJoystick
     {
         get { return moveJoystick; }
@@ -29,11 +28,21 @@ public class UIBattleUIManager : MonoBehaviour
         ui_PlayerHp = GetComponentInChildren<UIHpsManager>();
         ui_BossHp = GetComponentInChildren<UIBossHpsManager>();
         ui_disconnect = GetComponentInChildren<UIWarningManager>();
+        ui_GameResultManager = GetComponentsInChildren<UI_GameResultManager>().ToList();
+
     }
 
     private void Start()
     {
         SetupAllUI();
+    }
+
+    public void FadeInResult(bool _isWin)
+    {
+        foreach (UI_GameResultManager result in ui_GameResultManager)
+        {
+            result.StartFadeIn(_isWin);
+        }
     }
 
     #region Skill Button, Joysticks
