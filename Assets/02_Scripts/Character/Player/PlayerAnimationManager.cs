@@ -13,6 +13,8 @@ public class PlayerAnimationManager
     private int animId_GetRevived = 0;
     private int animId_ReviveOther = 0;
 
+    private float speedThreshold = 0.02f;
+
     public int AnimId_Speed
     {
         get { return animId_Speed; }
@@ -59,5 +61,17 @@ public class PlayerAnimationManager
     public void SetAnimatorWalkSpeed(float _speed)
     {
         animator.SetFloat(AnimId_Speed, _speed);
+
+        //if(GameManager.Instance.IsLocalGame)
+        //{
+        //    if (_speed >= speedThreshold)
+        //    {
+        //        playerManager.PlayerNetworkManager.SetNetworkAnimatorRun(true);
+        //    }
+        //    else
+        //    {
+        //        playerManager.PlayerNetworkManager.SetNetworkAnimatorRun(false);
+        //    }
+        //}
     }
 }
