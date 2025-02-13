@@ -28,10 +28,8 @@ namespace StructTypes
     {
         public SkillPointType type;
 
-        // ��ų ��� ���� ��ġ��
         public Vector3 skillUsedPosition;
 
-        // ��ų ��� ���� ȸ����
         public Quaternion skillUsedRotation;
     }
 
