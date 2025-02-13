@@ -90,7 +90,10 @@ public class UIBattleUIManager : MonoBehaviour
 
         ui_PlayerHp.SetMaxHp(playerManager.StatusManager.MaxHp);
         ui_PlayerHp.HpBarUIUpdate();
-
+        foreach (UI_GameResultManager result in ui_GameResultManager)
+        {
+            result.enabled = true;
+        }
         ui_disconnect.ReConnection(); // 연결 오류 UI 비활성화
     }
 
