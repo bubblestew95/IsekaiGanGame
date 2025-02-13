@@ -39,10 +39,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Warrior_Select
+  - Archor_Select
+  - Assasin_Select
+  - Magicion_Select
   m_SortingLayers:
   - name: Default
     uniqueID: 0
