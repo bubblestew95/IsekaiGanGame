@@ -20,4 +20,4 @@ MonoBehaviour:
   backAttackTimes: 3
   projectilePrefab: {fileID: 427886587031991148, guid: 4116ef1937f75e5458a9c2dc967f353c, type: 3}
   projectileDuration: 3
-  projectileSpeed: 10
+  projectileSpeed: 20

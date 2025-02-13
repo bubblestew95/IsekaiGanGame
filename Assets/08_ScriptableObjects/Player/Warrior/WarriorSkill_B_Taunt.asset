@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillSlot: 2
   coolTime: 10
-  skillParticle: {fileID: 0}
   damage: 2
   aggro: 20
   isBackattackEnable: 0
   backAttackTimes: 3
-  attackAreaRadius: 5
+  attackAreaRadius: 10
