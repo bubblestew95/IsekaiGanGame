@@ -2427,8 +2427,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 348654884}
   m_HandleRect: {fileID: 348654883}
   m_Direction: 0
-  m_Value: 0.4999991
-  m_Size: 0.9149999
+  m_Value: 0.49999866
+  m_Size: 0.91499984
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3022,7 +3022,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 454640061}
   m_HandleRect: {fileID: 454640060}
   m_Direction: 0
-  m_Value: 0.5000009
+  m_Value: 0.5000014
   m_Size: 0.9190477
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3110,7 +3110,7 @@ MonoBehaviour:
   readyButton: {fileID: 1881519664}
   startButton: {fileID: 1388174886}
   contentRect: {fileID: 1959464307}
-  gameSceneName: GameTest
+  gameSceneName: GolemSceneTest
   JobSelect_Panel: {fileID: 550021654}
 --- !u!4 &797183973
 Transform:
@@ -3153,7 +3153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2947938157
+  GlobalObjectIdHash: 3078920476
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
