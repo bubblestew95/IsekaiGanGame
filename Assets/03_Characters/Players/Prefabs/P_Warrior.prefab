@@ -406,6 +406,13 @@ MonoBehaviour:
   TransitionStateInfoList:
   - IsCrossFadeExit: 0
     Layer: 0
+    OriginatingState: 646380074
+    DestinationState: 2145700606
+    TransitionDuration: 0.25
+    TriggerNameHash: 2145700606
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
     OriginatingState: 1748754976
     DestinationState: 1597856401
     TransitionDuration: 0.25
@@ -441,6 +448,13 @@ MonoBehaviour:
     TransitionIndex: 5
   - IsCrossFadeExit: 0
     Layer: 0
+    OriginatingState: 1748754976
+    DestinationState: 968658227
+    TransitionDuration: 0.25
+    TriggerNameHash: 968658227
+    TransitionIndex: 6
+  - IsCrossFadeExit: 0
+    Layer: 0
     OriginatingState: 2081823275
     DestinationState: 1597856401
     TransitionDuration: 0.25
@@ -474,6 +488,13 @@ MonoBehaviour:
     TransitionDuration: 0.25
     TriggerNameHash: -1761810982
     TransitionIndex: 5
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: 968658227
+    TransitionDuration: 0.25
+    TriggerNameHash: 968658227
+    TransitionIndex: 6
   m_Animator: {fileID: 8322631880830459007}
 --- !u!1 &2221377582622383236
 GameObject:
@@ -2084,7 +2105,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7436998486931864826, guid: d9e58625f8178804e94f613990ab58c0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

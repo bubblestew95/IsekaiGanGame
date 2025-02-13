@@ -307,10 +307,6 @@ public class BossAttackManager : NetworkBehaviour
             ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack2, circleAttackCollider.transform.position);
         }
 
-
-        // 사운드 재생
-        BossAudioManager.Instance.AudioPlay(BossAudioManager.Instance.Attack2);
-
         yield return attackColliderTime;
 
         // attackCollider 비활성화
@@ -368,9 +364,6 @@ public class BossAttackManager : NetworkBehaviour
         // 파티클 재생
         ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack3, circleAttackColliders[0].transform.position, Quaternion.Euler(-90f, 0f, 0f));
 
-        // 사운드 재생
-        BossAudioManager.Instance.AudioPlay(BossAudioManager.Instance.Attack3);
-
         yield return attackColliderTime;
 
         // attackCollider 비활성화
@@ -415,8 +408,6 @@ public class BossAttackManager : NetworkBehaviour
         // 휠윈드 파티클
         attack4.SetActive(true);
 
-        // 사운드 재생
-        BossAudioManager.Instance.AudioPlay(BossAudioManager.Instance.Attack4);
 
         while (true)
         {
@@ -436,8 +427,6 @@ public class BossAttackManager : NetworkBehaviour
             yield return null;
         }
 
-        // 사운드 재생
-        BossAudioManager.Instance.AudioStop();
 
 
 
@@ -621,8 +610,6 @@ public class BossAttackManager : NetworkBehaviour
         // 파티클 재생
         ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack6, circleAttackColliders[0].transform.position);
 
-        // 사운드 재생
-        BossAudioManager.Instance.AudioPlay(BossAudioManager.Instance.Attack6);
 
         yield return attackColliderTime;
 
@@ -679,9 +666,6 @@ public class BossAttackManager : NetworkBehaviour
 
         // 파티클 재생
         ParticleManager.Instance.PlayParticle(ParticleManager.Instance.attack7, circleAttackColliders[0].transform.position);
-
-        // 사운드 재생
-        BossAudioManager.Instance.AudioPlay(BossAudioManager.Instance.Attack7);
 
         yield return attackColliderTime;
 
