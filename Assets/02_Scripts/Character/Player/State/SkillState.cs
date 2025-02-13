@@ -12,15 +12,21 @@ public class SkillState : BasePlayerState
 
     public override void OnEnterState()
     {
+        Debug.Log("Hello?");
     }
 
     public override void OnExitState()
     {
-        
+        playerManager.ParticleController.DespawnParticles();
     }
 
     public override void OnUpdateState()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            playerManager.InputManager.OnSkillKeyInput(SkillSlot.Dash);
+        }
+
         // 스킬 사용 상태일 때는 회피 사용 가능함. 회피 스킬 사용 체크.
         InputBufferData inputBuffer = playerManager.InputManager.GetNextInput();
 

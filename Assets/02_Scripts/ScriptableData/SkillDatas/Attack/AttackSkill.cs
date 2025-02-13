@@ -21,7 +21,7 @@ public abstract class AttackSkill : PlayerSkillBase
     {
         base.StartSkill(_player);
 
-        _player.ChangeState(PlayerStateType.Action);
+        _player.ChangeState(PlayerStateType.Skill);
     }
 
     public override void EndSkill(PlayerManager _player)
