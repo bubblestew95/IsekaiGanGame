@@ -148,7 +148,7 @@ public class PlayerSkillManager
         if (IsSkillUsable(_type))
         {
             // 캐릭터를 포인트로 지정한 방향을 보도록 한다.
-            if (_point.type == SkillPointType.Position || _point.type == SkillPointType.None)
+            if (_point.type == SkillPointType.Position)
             {
                 playerManager.transform.LookAt(_point.skillUsedPosition);
             }

@@ -55,6 +55,10 @@ public class UIBattleUIManager : MonoBehaviour
         pointData.type = SkillPointType.None;
         pointData.skillUsedPosition = GameManager.Instance.GetBossTransform().position;
 
+        Vector3 direction = GameManager.Instance.GetBossTransform().position - playerManager.transform.position;
+        direction.y = playerManager.transform.position.y;
+        pointData.skillUsedRotation = Quaternion.LookRotation(direction);
+
         playerManager.InputManager.OnButtonInput(_slot, pointData);
     }
 
