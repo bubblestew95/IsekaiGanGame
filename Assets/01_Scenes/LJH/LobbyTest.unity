@@ -680,8 +680,8 @@ Transform:
   m_GameObject: {fileID: 162906389}
   serializedVersion: 2
   m_LocalRotation: {x: 0.22168925, y: -0.0966579, z: 0.89169514, w: 0.38261065}
-  m_LocalPosition: {x: 1.5, y: 2, z: 0}
-  m_LocalScale: {x: 7, y: 7, z: 7}
+  m_LocalPosition: {x: 1.5, y: 2.75, z: 0}
+  m_LocalScale: {x: 9.5, y: 9.5, z: 9.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -749,7 +749,6 @@ GameObject:
   m_Component:
   - component: {fileID: 186013365}
   - component: {fileID: 186013368}
-  - component: {fileID: 186013367}
   - component: {fileID: 186013366}
   m_Layer: 0
   m_Name: 'Magicion_Camera '
@@ -817,14 +816,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &186013367
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186013364}
-  m_Enabled: 1
 --- !u!20 &186013368
 Camera:
   m_ObjectHideFlags: 0
@@ -886,7 +877,6 @@ GameObject:
   m_Component:
   - component: {fileID: 221658813}
   - component: {fileID: 221658816}
-  - component: {fileID: 221658815}
   - component: {fileID: 221658814}
   m_Layer: 0
   m_Name: Assasin_Camera
@@ -954,14 +944,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &221658815
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 221658812}
-  m_Enabled: 1
 --- !u!20 &221658816
 Camera:
   m_ObjectHideFlags: 0
@@ -1023,7 +1005,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224082766}
   - component: {fileID: 224082769}
-  - component: {fileID: 224082768}
   - component: {fileID: 224082767}
   m_Layer: 0
   m_Name: 'Archor_Camera '
@@ -1091,14 +1072,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &224082768
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 224082765}
-  m_Enabled: 1
 --- !u!20 &224082769
 Camera:
   m_ObjectHideFlags: 0
@@ -2849,7 +2822,6 @@ GameObject:
   m_Component:
   - component: {fileID: 646421779}
   - component: {fileID: 646421778}
-  - component: {fileID: 646421777}
   - component: {fileID: 646421776}
   m_Layer: 0
   m_Name: Warrior_Camera
@@ -2902,14 +2874,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &646421777
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 646421775}
-  m_Enabled: 1
 --- !u!20 &646421778
 Camera:
   m_ObjectHideFlags: 0
@@ -3147,6 +3111,7 @@ MonoBehaviour:
   startButton: {fileID: 1388174886}
   contentRect: {fileID: 1959464307}
   gameSceneName: GameTest
+  JobSelect_Panel: {fileID: 550021654}
 --- !u!4 &797183973
 Transform:
   m_ObjectHideFlags: 0
@@ -4307,7 +4272,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1031849465}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1031849467
 Camera:
   m_ObjectHideFlags: 0
