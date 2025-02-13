@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data;
 using Unity.Netcode;
 
 public class RoleManager : NetworkBehaviour
@@ -20,28 +21,23 @@ public class RoleManager : NetworkBehaviour
         }
     }
 
-    private void Start()
-    {
-        if (IsServer)
-        {
-            foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
-            {
-                if (!playerRoles.ContainsKey(clientId))
-                {
-                    playerRoles[clientId] = "";
-                }
-            }
-        }
-    }
-
-    // 플레이어가 다른 캐릭터 클릭할때마다 호출되야함
-    // 보내주는 role = 플레이어 프리펩 이름과 같아야함.
+    // 플레이어 역활과 id를 매칭해서 저장하는 함수
     [ServerRpc(RequireOwnership = false)]
     public void SetPlayerRoleServerRpc(ulong _clientId, string _role)
     {
         if (!playerRoles.ContainsKey(_clientId))
         {
-            playerRoles[_clientId] = _role;
+            playerRoles.Add(_clientId, _role);
+        }
+    }
+
+    // 저장된 정보 리셋시키는 함수
+    [ServerRpc(RequireOwnership = false)]
+    public void ResetPlayerRoleServerRpc(ulong _clientId)
+    {
+        if (playerRoles.ContainsKey(_clientId))
+        {
+            playerRoles.Remove(_clientId);
         }
     }
 
@@ -49,5 +45,35 @@ public class RoleManager : NetworkBehaviour
     public string GetPlayerRole(ulong clientId)
     {
         return playerRoles.ContainsKey(clientId) ? playerRoles[clientId]: "None";
+    }
+
+    // 전사 클릭시
+    public void ClickWarrior()
+    {
+        SetPlayerRoleServerRpc(NetworkManager.Singleton.LocalClientId, "P_Warrior");
+    }
+
+    // 아처 클릭시
+    public void ClickArcher()
+    {
+        SetPlayerRoleServerRpc(NetworkManager.Singleton.LocalClientId, "P_Archer");
+    }
+
+    // 어쌔신 클릭시
+    public void ClickAssassin()
+    {
+        SetPlayerRoleServerRpc(NetworkManager.Singleton.LocalClientId, "P_Assassin");
+    }
+
+    // 마법사 클릭시
+    public void ClickMagician()
+    {
+        SetPlayerRoleServerRpc(NetworkManager.Singleton.LocalClientId, "P_Magician");
+    }
+
+    // 직업 선택 되돌리기
+    public void ResetRole()
+    {
+        ResetPlayerRoleServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 }
