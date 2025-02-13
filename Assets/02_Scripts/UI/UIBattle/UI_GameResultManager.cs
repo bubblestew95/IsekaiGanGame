@@ -66,7 +66,26 @@ public class UI_GameResultManager : MonoBehaviour
     public IEnumerator FadeInAndScaleIn()
     {
         // 애니메이션 지속 시간
-        float duration = 0.5f;
+        float duration = 0.3f;
+
+        // 배경 이미지 페이드 인 처리 (가장 먼저 나타나야 함)
+        if (backgroundImg != null)
+        {
+            Color currentColor = initialBackgroundColor;
+
+            float timeElapsed = 0f;
+
+            while (timeElapsed < duration)
+            {
+                float t = timeElapsed / duration;
+                backgroundImg.color = new Color(currentColor.r, currentColor.g, currentColor.b, Mathf.Lerp(0f, currentColor.a, t)); // 알파 값 페이드 인
+
+                timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            backgroundImg.color = currentColor; // 원래 알파값으로 설정
+        }
 
         // 이미지들에 대해 페이드 인과 스케일 인 처리
         for (int i = 0; i < imgs.Count; i++)
@@ -112,28 +131,6 @@ public class UI_GameResultManager : MonoBehaviour
 
             text.color = currentColor; // 원래 알파값으로 설정
             text.transform.localScale = currentScale; // 원래 크기로 설정
-        }
-
-        // 배경 이미지도 페이드 인 처리
-        if (backgroundImg != null)
-        {
-            Color currentColor = initialBackgroundColor;
-            Vector3 currentScale = initialBackgroundScale;
-
-            float timeElapsed = 0f;
-
-            while (timeElapsed < duration)
-            {
-                float t = timeElapsed / duration;
-                backgroundImg.color = new Color(currentColor.r, currentColor.g, currentColor.b, Mathf.Lerp(0f, currentColor.a, t)); // 알파 값 페이드 인
-                backgroundImg.transform.localScale = Vector3.Lerp(Vector3.zero, currentScale, t); // 크기 증가
-
-                timeElapsed += Time.deltaTime;
-                yield return null;
-            }
-
-            backgroundImg.color = currentColor; // 원래 알파값으로 설정
-            backgroundImg.transform.localScale = currentScale; // 원래 크기로 설정
         }
 
         // 모든 UI 요소들이 다 페이드 인 되면 버튼을 활성화
