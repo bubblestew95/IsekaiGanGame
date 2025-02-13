@@ -7911,7 +7911,7 @@ GameObject:
   - component: {fileID: 1247431384}
   - component: {fileID: 1247431387}
   m_Layer: 5
-  m_Name: LoadingCanvas
+  m_Name: GolemSceneCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7995,6 +7995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 022e295775efb084db99f84a5286d880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadingImg: {fileID: 509548353}
 --- !u!1001 &1255791960
 PrefabInstance:
   m_ObjectHideFlags: 0
