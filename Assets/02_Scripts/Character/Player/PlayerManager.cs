@@ -37,6 +37,7 @@ public class PlayerManager : MonoBehaviour
     private PlayerAnimationManager animationManager = null;
     private PlayerMovementManager movementManager = null;
     private PlayerParticleController particleController = null;
+    private PlayerName playerNameUI = null;
 
             #endregion
 
@@ -125,13 +126,18 @@ public class PlayerManager : MonoBehaviour
         get { return particleController; }
     }
 
+    public PlayerName PlayerNameUI
+    {
+        get { return playerNameUI; }
+    }
+
         #endregion
 
     #endregion
 
     #region Public Functions
 
-        #region State Functions
+    #region State Functions
 
     public void ChangeState(PlayerStateType _type)
     {
@@ -248,10 +254,9 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
-
         playerNetworkManager = GetComponent<PlayerNetworkManager>();
-
         particleController = GetComponent<PlayerParticleController>();
+        playerNameUI = GetComponentInChildren<PlayerName>();
 
         InitStates();
 
