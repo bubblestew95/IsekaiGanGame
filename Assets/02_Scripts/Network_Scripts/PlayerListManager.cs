@@ -1,5 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
+using Unity.Services.Authentication;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerListManager : MonoBehaviour
 {
@@ -22,13 +25,13 @@ public class PlayerListManager : MonoBehaviour
         }
     }
 
-    public void AddPlayer(string username, PlayerStatus status)
+    public void AddPlayer(string playerId, string username, PlayerStatus status)
     {
         Debug.Log($"[PlayerListManager] AddPlayer 호출됨 - {username} / {status}");
 
-        if (playerItems.ContainsKey(username))
+        if (playerItems.ContainsKey(playerId))
         {
-            Debug.Log($"[PlayerListManager] 이미 존재하는 플레이어: {username}");
+            Debug.Log($"[PlayerListManager] 이미 존재하는 플레이어: {playerId}");
             return; // 중복 추가 방지
         }
 
@@ -40,25 +43,36 @@ public class PlayerListManager : MonoBehaviour
             Debug.LogError("[PlayerListManager] PlayerItem 컴포넌트가 없음!");
             return;
         }
-        playerItem.SetPlayerInfo(username, status);
-        playerItems.Add(username, playerItem);
-        Debug.Log($"[PlayerListManager] Player 추가 완료: {username}");
+        playerItem.SetPlayerInfo(playerId, username, status);
+        playerItems.Add(playerId, playerItem);
+        Debug.Log($"[PlayerListManager] Player 추가 완료: {playerId} {username}");
+
+        // 다음 프레임에서 정렬 실행
+        //StartCoroutine(DelayedSortPlayerList());
     }
 
-    public void UpdatePlayerStatus(string username, PlayerStatus status)
+    // 한 프레임 뒤에 정렬을 실행하는 Coroutine 추가
+    private IEnumerator DelayedSortPlayerList()
     {
-        if (playerItems.ContainsKey(username))
+        yield return null; // 한 프레임 대기
+        SortPlayerList();
+    }
+
+    public void UpdatePlayerStatus(string playerId, PlayerStatus status)
+    {
+        if (playerItems.ContainsKey(playerId))
         {
-            playerItems[username].SetStatus(status);
+            playerItems[playerId].SetStatus(status);
         }
     }
 
-    public void RemovePlayer(string username)
+    public void RemovePlayer(string playerId)
     {
-        if (playerItems.ContainsKey(username))
+        if (playerItems.ContainsKey(playerId))
         {
-            Destroy(playerItems[username].gameObject);
-            playerItems.Remove(username);
+            Destroy(playerItems[playerId].gameObject);
+            playerItems.Remove(playerId);
+            SortPlayerList();
         }
     }
 
@@ -79,9 +93,27 @@ public class PlayerListManager : MonoBehaviour
             Debug.Log($"[PlayerList] {playerId}의 Ready 상태가 {isReady}로 변경됨.");
         }
     }
-    public bool ContainsPlayer(string username)
+    public bool ContainsPlayer(string playerId)
     {
-        return playerItems.ContainsKey(username);
+        return playerItems.ContainsKey(playerId);
+    }
+
+    public void SortPlayerList()
+    {
+        Debug.Log("[PlayerListManager] PlayerList 정렬 시작...");
+
+        List<PlayerItem> sortedList = new List<PlayerItem>(playerItems.Values);
+
+        sortedList.Sort((a, b) => string.Compare(a.usernameText.text, b.usernameText.text, System.StringComparison.Ordinal));
+
+        // UI에서 순서 변경 및 RectTransform 강제 적용
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            sortedList[i].transform.SetSiblingIndex(i);
+            sortedList[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -50 * i); // Y축 정렬
+        }
+
+        Debug.Log("[PlayerListManager] PlayerList 정렬 완료!");
     }
 
 
