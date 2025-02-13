@@ -110,7 +110,7 @@ public class PlayerListManager : MonoBehaviour
         for (int i = 0; i < sortedList.Count; i++)
         {
             sortedList[i].transform.SetSiblingIndex(i);
-            sortedList[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -30 * i); // Y축 정렬
+            sortedList[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -50 * i); // Y축 정렬
         }
 
         Debug.Log("[PlayerListManager] PlayerList 정렬 완료!");

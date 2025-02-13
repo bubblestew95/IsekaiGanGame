@@ -357,9 +357,6 @@ public class RoomManager : NetworkBehaviour
         {
             Debug.Log($"[JoinRoomById] 방 참가 처리 시작: Lobby ID = {lobbyId}");
 
-            // 최신 Lobby 정보 가져오기
-            currentLobby = await LobbyService.Instance.GetLobbyAsync(lobbyId);
-
             // RelayJoinCode 확인 후 참가
             if (!currentLobby.Data.ContainsKey("RelayJoinCode") || string.IsNullOrEmpty(currentLobby.Data["RelayJoinCode"].Value))
             {
@@ -464,6 +461,14 @@ public class RoomManager : NetworkBehaviour
         {
             Debug.Log("[RoomManager] 로비가 삭제됨! UI에서 제거해야 함.");
             return;
+        }
+
+        // 너무 자주 호출하지 않도록 변경
+        if (changes.PlayerJoined.Changed || changes.PlayerLeft.Changed || changes.PlayerData.Changed)
+        {
+            Debug.Log("[RoomManager] 로비 업데이트 필요. 최신 정보 요청");
+            currentLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
+            await UpdatePlayerListUI();
         }
 
         // 플레이어 입장 감지 (호스트 및 클라이언트)
@@ -669,17 +674,6 @@ public class RoomManager : NetworkBehaviour
 
         bool allReady = true;
 
-        // 최신 Lobby 정보 가져오기 (Ready 상태 업데이트 반영)
-        try
-        {
-            currentLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
-        }
-        catch (LobbyServiceException e)
-        {
-            Debug.LogError($"[RoomManager] 최신 Lobby 정보 가져오기 실패: {e.Message}");
-            return;
-        }
-
         foreach (var player in currentLobby.Players)
         {
             Debug.Log($"[RoomManager] 체크 중 - 플레이어 {player.Id}");
@@ -854,18 +848,6 @@ public class RoomManager : NetworkBehaviour
     {
         if (string.IsNullOrEmpty(currentRoom)) return;
 
-        Debug.Log("[PlayerListManager] PlayerList UI 갱신 시작");
-
-        try
-        {
-            currentLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
-        }
-        catch (LobbyServiceException e)
-        {
-            Debug.LogError($"[PlayerListManager] 최신 Lobby 정보 가져오기 실패: {e.Message}");
-            return;
-        }
-
         Debug.Log($"[PlayerListManager] 최신 로비 정보 확인 - 총 {currentLobby.Players.Count}명 존재");
 
         foreach (var player in currentLobby.Players)
@@ -936,9 +918,6 @@ public class RoomManager : NetworkBehaviour
             {
                 // 현재 방에 입장한 상태라면 해당 방 UI만 갱신
                 Debug.Log($"[RoomManager] 방 내 UI 갱신: {currentLobby.Id}");
-
-                // 최신 방 정보 가져오기
-                currentLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
 
                 // 해당 방의 플레이어 수만 업데이트
                 TMP_Text playerCountText = roomList[currentLobby.Id].transform.Find("roomPlayers").GetComponent<TMP_Text>();
