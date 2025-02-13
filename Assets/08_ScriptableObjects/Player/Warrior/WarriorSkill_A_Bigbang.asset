@@ -16,8 +16,9 @@ MonoBehaviour:
   coolTime: 3
   skillParticle: {fileID: 0}
   damage: 3
-  aggro: 5
-  maxRange: 1
+  aggro: 3
+  isBackattackEnable: 0
+  backAttackTimes: 3
   attackAreaRadius: 1
   duration: 2
   damageTickTime: 0.5

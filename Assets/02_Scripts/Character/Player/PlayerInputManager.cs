@@ -164,7 +164,9 @@ public class PlayerInputManager
 
             if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mousePos))
             {
-                Vector3 direction = (mousePos - playerManager.transform.position).normalized;
+                Vector3 direction = mousePos - playerManager.transform.position;
+                direction.y = playerManager.transform.position.y;
+                direction.Normalize();
                 data.skillUsedRotation = Quaternion.LookRotation(direction);
                 playerManager.InputManager.OnButtonInput(_slot, data);
             }

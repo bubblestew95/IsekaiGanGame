@@ -7,7 +7,6 @@ public abstract class PlayerSkillBase : ScriptableObject
     [Header("Skill Base")]
     public SkillSlot skillSlot;
     public float coolTime = 3f;
-    public ParticleSystem skillParticle = null;
 
     /// <summary>
     /// 스킬 애니메이션 시작 시 이 함수를 호출하면 됨.

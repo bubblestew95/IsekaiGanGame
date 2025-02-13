@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: AssassinDash
   m_EditorClassIdentifier: 
   skillSlot: 5
-  coolTime: 3
+  coolTime: 10
   skillParticle: {fileID: 0}
-  dashSpeed: 5
-  dashTime: 1
+  dashSpeed: 7
+  dashTime: 0.5
   isForward: 1

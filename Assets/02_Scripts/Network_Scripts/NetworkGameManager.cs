@@ -227,6 +227,9 @@ public class NetworkGameManager : NetworkBehaviour
 
     private void Start()
     {
+        if (GameManager.Instance.IsLocalGame)
+            return;
+
         if (IsServer)
         {
             FindAnyObjectByType<BossStateManager>().bossDieCallback += () => StartCoroutine(VictoryCoroutine());
@@ -242,6 +245,9 @@ public class NetworkGameManager : NetworkBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.IsLocalGame)
+            return;
+
         if (spawnPlayer && loadingScene)
         {
             SynPlayerClientRpc(objectId);

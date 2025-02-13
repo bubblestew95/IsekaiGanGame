@@ -36,6 +36,7 @@ public class PlayerManager : MonoBehaviour
     private PlayerAttackManager attackManager = null;
     private PlayerAnimationManager animationManager = null;
     private PlayerMovementManager movementManager = null;
+    private PlayerParticleController particleController = null;
 
             #endregion
 
@@ -119,6 +120,11 @@ public class PlayerManager : MonoBehaviour
         get { return skillUIManager; }
     }
 
+    public PlayerParticleController ParticleController
+    {
+        get { return particleController; }
+    }
+
         #endregion
 
     #endregion
@@ -169,7 +175,7 @@ public class PlayerManager : MonoBehaviour
 
     #endregion
 
-    #region Skill Functions
+        #region Skill Functions
 
     /// <summary>
     /// ��ų �ִϸ��̼��� ������ �� ȣ��Ǵ� �Լ�.
@@ -196,7 +202,7 @@ public class PlayerManager : MonoBehaviour
         skillManager.SkillAction(_slot);
     }
 
-        #endregion
+    #endregion
 
     #endregion
 
@@ -211,6 +217,7 @@ public class PlayerManager : MonoBehaviour
         stateMachine.AddState(PlayerStateType.Death, new DeathState(this));
         stateMachine.AddState(PlayerStateType.Damaged, new DamagedState(this));
         stateMachine.AddState(PlayerStateType.Dash, new DashState(this));
+        stateMachine.AddState(PlayerStateType.Skill, new SkillState(this));
     }
 
     private void InitManagers()
@@ -243,6 +250,8 @@ public class PlayerManager : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 
         playerNetworkManager = GetComponent<PlayerNetworkManager>();
+
+        particleController = GetComponent<PlayerParticleController>();
 
         InitStates();
 

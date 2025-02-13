@@ -8,6 +8,7 @@ public class PlayerParticleController : MonoBehaviour
     [SerializeField]
     private List<PlayerParticleData> particleDataList = null;
 
+    private List<GameObject> spawnedParticleObjects = null;
     private PlayerManager playerManager = null;
 
     /// <summary>
@@ -81,18 +82,30 @@ public class PlayerParticleController : MonoBehaviour
         SpawnParticle(particlePrefab,
             playerManager.AttackManager.RangeAttackTransform.position,
             playerManager.transform.rotation);
+    } 
+
+    public void DespawnParticles()
+    {
+        foreach(var particleObject in spawnedParticleObjects)
+        {
+            Destroy(particleObject);
+        }
+
+        spawnedParticleObjects.Clear();
     }
 
     private void SpawnParticle(GameObject _prefab, Vector3 _position, Quaternion _rotation)
     {
-        ParticleLifetime particleLifetime = Instantiate
+        var spawnedParticleObj = Instantiate
             (
             _prefab,
             _position,
             _rotation
-            ).GetComponent<ParticleLifetime>();
+            );
 
-        particleLifetime.DestroyParticle();
+        spawnedParticleObjects.Add(spawnedParticleObj);
+
+        spawnedParticleObj.GetComponent<ParticleLifetime>().DestroyParticle();
     }
 
     private GameObject GetParticleObject(string _particleName)
@@ -111,5 +124,7 @@ public class PlayerParticleController : MonoBehaviour
     private void Awake()
     {
         playerManager = GetComponent<PlayerManager>();
+
+        spawnedParticleObjects = new List<GameObject>();
     }
 }
