@@ -17,6 +17,7 @@ public class BossAudioManager : MonoBehaviour
     public AudioClip SpecialAttack;
 
     private AudioSource audioSource;
+    private Coroutine curCoroutine;
 
     private void Awake()
     {
@@ -43,7 +44,7 @@ public class BossAudioManager : MonoBehaviour
     }
 
     // 오디오 재생 함수
-    public void AudioPlay(AudioClip _audioClip, bool isLoop = false, float fadeInTime = 0.5f)
+    public void AudioPlay(AudioClip _audioClip)
     {
         if (audioSource.isPlaying)
         {
@@ -51,61 +52,132 @@ public class BossAudioManager : MonoBehaviour
         }
 
         audioSource.clip = _audioClip;
-        audioSource.loop = isLoop;
+        audioSource.loop = false;
         audioSource.Play();
+    }
 
-        //if (fadeInTime > 0)
-        //{
-        //    StartCoroutine(FadeIn(audioSource, fadeInTime));
-        //}
+    // 오디오 재생 함수 딜레이 버전
+    public void AudioPlay(AudioClip _audioClip, float _delay)
+    {
+        curCoroutine = StartCoroutine(AudioPlayDelay(_audioClip, _delay));
+    }
+
+    // 점점 커졌다가 작아지는 오디오 재생 함수
+    public void AudioPlayFadeInAndOut(AudioClip _audioClip, float _duration, float _fadeIn, float _fadeOut)
+    {
+        curCoroutine = StartCoroutine(FadeInAndOut(_audioClip, _duration, _fadeIn, _fadeOut));
     }
 
     // 오디오 정지 함수
-    public void AudioStop(float fadeOutTime = 0.5f)
+    public void AudioStop(bool isStop = true, float fadeOutTime = 0.5f)
     {
-        audioSource.Stop();
+        if (isStop)
+        {
+            audioSource.Stop();
+        }
+        else
+        {
+            StartCoroutine(FadeOut(fadeOutTime));
+        }
+    }
 
-        //if (fadeOutTime > 0)
-        //{
-        //    StartCoroutine(FadeOut(audioSource, fadeOutTime));
-        //}
-        //else
-        //{
-        //    audioSource.Stop();
-        //}
+    // 오디오 코루틴 정지 함수
+    public void StopAudioCoroutine()
+    {
+        if (curCoroutine != null)
+        {
+            StopCoroutine(curCoroutine);
+            curCoroutine = null;
+            audioSource.volume = 1f;
+        }
     }
 
     // 페이드인 효과 (점점 소리 커짐)
-    private IEnumerator FadeIn(AudioSource source, float duration)
+    private IEnumerator FadeIn(AudioClip _audioClip, float duration)
     {
         float startVolume = 0f;
-        source.volume = startVolume;
+        audioSource.volume = startVolume;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
-            source.volume = Mathf.Lerp(startVolume, 1f, elapsedTime / duration);
+            audioSource.volume = Mathf.Lerp(startVolume, 1f, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        source.volume = 1f;
+        audioSource.volume = 1f;
     }
 
     // 페이드아웃 효과 (점점 소리 작아짐)
-    private IEnumerator FadeOut(AudioSource source, float duration)
+    private IEnumerator FadeOut(float duration)
     {
-        float startVolume = source.volume;
+        float startVolume = audioSource.volume;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
-            source.volume = Mathf.Lerp(startVolume, 0f, elapsedTime / duration);
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        source.volume = 0f;
-        source.Stop();
+        audioSource.volume = 0f;
+        audioSource.Stop();
+    }
+
+    // 페이드인 + 페이드아웃
+    private IEnumerator FadeInAndOut(AudioClip _audioClip, float _duration, float fadeInDuration, float fadeOutDuration)
+    {
+        // 페이드인 구간
+        float startVolume = 0f;
+        audioSource.volume = startVolume;
+        float elapsedTime = 0f;
+
+        audioSource.clip = _audioClip;
+        audioSource.loop = false;
+        audioSource.Play();
+
+        while (elapsedTime < fadeInDuration)
+        {
+            audioSource.volume = Mathf.Lerp(startVolume, 1f, elapsedTime / fadeInDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        audioSource.volume = 1f;
+
+        yield return new WaitForSeconds(_duration);
+
+        startVolume = audioSource.volume;
+        elapsedTime = 0f;
+
+        while (elapsedTime < fadeOutDuration)
+        {
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, elapsedTime / fadeOutDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        audioSource.volume = 0f;
+        audioSource.Stop();
+
+        audioSource.volume = 1f;
+
+
+    }
+
+    private IEnumerator AudioPlayDelay(AudioClip _audioClip, float _delay)
+    {
+        yield return new WaitForSeconds(_delay);
+
+        if (audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+
+        audioSource.clip = _audioClip;
+        audioSource.loop = false;
+        audioSource.Play();
     }
 }
