@@ -44,6 +44,11 @@ public class PlayerAttackManager
         return meleeWeapon.transform.position;
     }
 
+    public bool IsMeleeWeaponSet()
+    {
+        return meleeWeapon != null;
+    }
+
     /// <summary>
     /// 플레이어가 데미지를 받음.
     /// </summary>

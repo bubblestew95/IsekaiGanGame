@@ -12,12 +12,17 @@ public class SkillState : BasePlayerState
 
     public override void OnEnterState()
     {
-        Debug.Log("Hello?");
+        playerManager.MovementManager.StopMove();
     }
 
     public override void OnExitState()
     {
         playerManager.ParticleController.DespawnParticles();
+
+        if(playerManager.AttackManager.IsMeleeWeaponSet())
+        {
+            playerManager.AttackManager.DisableMeleeAttack();
+        }
     }
 
     public override void OnUpdateState()
