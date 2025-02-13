@@ -665,7 +665,15 @@ public class BossBT : NetworkBehaviour
         {
             if (isTriggerWall)
             {
-                bossStateManager.Boss.transform.LookAt(bossStateManager.AggroPlayer.transform.position);
+                if (bossStateManager.AggroPlayer == null)
+                {
+                    bossStateManager.Boss.transform.LookAt(bossStateManager.AlivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == bossStateManager.RandomPlayer()).transform.position);
+                }
+                else
+                {
+                    bossStateManager.Boss.transform.LookAt(bossStateManager.AggroPlayer.transform.position);
+                }
+
                 isTriggerWall = false;
                 Debug.Log("방향전환 호출됨");
             }
