@@ -395,6 +395,7 @@ public class RoomManager : NetworkBehaviour
             SetUIState(true);
             SetCurrentRoom(currentLobby.Id);
             UpdateRoomUI(currentLobby);
+            codeButton.GetComponentInChildren<TMP_Text>().text = currentLobby.LobbyCode;
 
             // 로비 이벤트 구독
             await SubscribeToLobbyEvents(currentLobby.Id);

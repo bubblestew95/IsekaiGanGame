@@ -14,9 +14,24 @@ public class Lobby_CharacterSelector : MonoBehaviour
         for (int i = 0; i < characterButtons.Length; i++)
         {
             int index = i;  // 클로저 문제 방지
-            characterButtons[i].onClick.AddListener(() => SelectCharacter(index));
+            characterButtons[i].onClick.AddListener(() => ToggleCharacterSelection(index));
         }
     }
+
+    void ToggleCharacterSelection(int index)
+    {
+        // 이미 선택한 캐릭터를 다시 클릭하면 선택 해제
+        if (selectedCharacter == index)
+        {
+            DeselectAllCharacters();
+            selectedCharacter = -1;
+        }
+        else
+        {
+            SelectCharacter(index);
+        }
+    }
+
 
     void SelectCharacter(int index)
     {
@@ -38,5 +53,15 @@ public class Lobby_CharacterSelector : MonoBehaviour
         }
 
         Debug.Log("선택한 캐릭터: " + index);
+    }
+    void DeselectAllCharacters()
+    {
+        for (int i = 0; i < characterModels.Length; i++)
+        {
+            characterModels[i].gameObject.SetActive(true);
+            characterImages[i].color = new Color(1f, 1f, 1f, 1f); // 모든 캐릭터 원래 색상으로 복귀
+        }
+
+        Debug.Log("선택 해제됨!");
     }
 }
