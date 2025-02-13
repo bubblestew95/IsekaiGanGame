@@ -13,7 +13,8 @@ public enum BossState
     Attack9,
 	Phase2,
     Stun,
-	Die
+	Die,
+	TimeOut
 }
 
 public enum BossChain

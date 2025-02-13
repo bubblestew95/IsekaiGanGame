@@ -16,6 +16,7 @@ public class BossStateManager : NetworkBehaviour
     public BossStateDelegate bossHpHalfCallback;
     public BossStateDelegate bossStunCallback;
     public BossStateDelegate bossWallTriggerCallback;
+    public BossStateDelegate bossTimeOutCallback;
     public BossStateDelegate2 bossRandomTargetCallback;
 
     // 프로퍼티
@@ -491,6 +492,7 @@ public class BossStateManager : NetworkBehaviour
         GetHighestAggroTarget();
     }
 
+    // 플레이어 살아났을때 호출
     private void PlayerReviveCallback(ulong _clientId)
     {
         // 죽은 플레이어를 alivePlayers배열에 추가
@@ -503,6 +505,12 @@ public class BossStateManager : NetworkBehaviour
                 alivePlayers[i] = allPlayers[i];
             }
         }
+    }
+
+    // 타임아웃 됬을때 호출되는 함수
+    private void TimeOutCallbakc()
+    {
+        bossTimeOutCallback?.Invoke();
     }
     #endregion
 

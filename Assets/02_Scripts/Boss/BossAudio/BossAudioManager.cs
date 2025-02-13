@@ -15,6 +15,7 @@ public class BossAudioManager : MonoBehaviour
     public AudioClip Attack8;
     public AudioClip Attack9;
     public AudioClip SpecialAttack;
+    public AudioClip Phase2;
 
     private AudioSource audioSource;
     private Coroutine curCoroutine;
