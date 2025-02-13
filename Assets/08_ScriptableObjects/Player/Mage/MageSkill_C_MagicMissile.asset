@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: MageSkill_C_MagicMissile
   m_EditorClassIdentifier: 
   skillSlot: 3
-  coolTime: 3
-  skillParticle: {fileID: 0}
-  damage: 1
+  coolTime: 2
+  damage: 2
   aggro: 1
+  isBackattackEnable: 0
+  backAttackTimes: 3
   projectilePrefab: {fileID: 427886587031991148, guid: 4116ef1937f75e5458a9c2dc967f353c, type: 3}
   projectileDuration: 3
   projectileSpeed: 10

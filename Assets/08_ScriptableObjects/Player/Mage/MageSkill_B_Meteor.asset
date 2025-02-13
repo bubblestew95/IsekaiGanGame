@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: MageSkill_B_Meteor
   m_EditorClassIdentifier: 
   skillSlot: 2
-  coolTime: 3
-  skillParticle: {fileID: 0}
-  damage: 1
+  coolTime: 15
+  damage: 55
   aggro: 1
   isBackattackEnable: 0
   backAttackTimes: 3
   maxRange: 5
   attackAreaRadius: 4
-  duration: 2
+  duration: 0.4
   damageTickTime: 0.5

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillSlot: 3
   coolTime: 20
-  damage: 3
+  damage: 10
   aggro: 3
   isBackattackEnable: 0
   backAttackTimes: 3

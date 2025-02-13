@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: ArcherSkill_C_PowerShot
   m_EditorClassIdentifier: 
   skillSlot: 3
-  coolTime: 5
-  skillParticle: {fileID: 0}
-  damage: 5
+  coolTime: 10
+  damage: 3
   aggro: 3
   isBackattackEnable: 1
   backAttackTimes: 3
