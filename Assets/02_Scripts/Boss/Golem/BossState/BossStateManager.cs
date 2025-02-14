@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using Unity.Netcode;
-using static UnityEngine.GraphicsBuffer;
 using System.Linq;
+
 
 
 public class BossStateManager : NetworkBehaviour
@@ -72,7 +72,6 @@ public class BossStateManager : NetworkBehaviour
             Debug.Log("벽이랑 부딛침");
         }
     }
-
 
     // 서버에서만 데미지 받는 함수 실행
     [ServerRpc(RequireOwnership = false)]
