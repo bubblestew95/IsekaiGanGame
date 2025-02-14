@@ -89,27 +89,27 @@ public class IdleState : BasePlayerState
             {
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    playerManager.InputManager.OnSkillKeyInput(SkillSlot.Skill_A);
+                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Skill_A);
                 }
 
                 if (Input.GetKeyDown(KeyCode.Alpha2))
                 {
-                    playerManager.InputManager.OnSkillKeyInput(SkillSlot.Skill_B);
+                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Skill_B);
                 }
 
                 if (Input.GetKeyDown(KeyCode.Alpha3))
                 {
-                    playerManager.InputManager.OnSkillKeyInput(SkillSlot.Skill_C);
+                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Skill_C);
                 }
 
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    playerManager.InputManager.OnSkillKeyInput(SkillSlot.Dash);
+                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Dash);
                 }
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    playerManager.InputManager.OnSkillKeyInput(SkillSlot.BasicAttack);
+                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.BasicAttack);
                 }
             }
 

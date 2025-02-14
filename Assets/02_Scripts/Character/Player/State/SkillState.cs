@@ -29,7 +29,7 @@ public class SkillState : BasePlayerState
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            playerManager.InputManager.OnSkillKeyInput(SkillSlot.Dash);
+            playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Dash);
         }
 
         // 스킬 사용 상태일 때는 회피 사용 가능함. 회피 스킬 사용 체크.

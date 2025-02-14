@@ -104,7 +104,11 @@ public class PlayerInputManager
         return false;
     }
 
-    public void OnSkillKeyInput(SkillSlot _slot)
+    /// <summary>
+    /// PC 환경에서 플레이어 캐릭터의 스킬 입력을 처리하는 함수.
+    /// </summary>
+    /// <param name="_slot"></param>
+    public void PC_OnSkillKeyInput(SkillSlot _slot)
     {
         // 다른 스킬 UI가 활성화되어있을 경우 비활성화 처리
         {
@@ -118,7 +122,7 @@ public class PlayerInputManager
             }
         }
 
-        // 대쉬 스킬일 경우 마우스 위치로 대쉬
+        // 대쉬 스킬일 경우 마우스 위치로 바로 대쉬
         if (_slot == SkillSlot.Dash)
         {
             SkillPointData data = new SkillPointData();
@@ -142,18 +146,16 @@ public class PlayerInputManager
             // 스킬 UI 움직임을 담당하는 코루틴을 정지한다.
             if (skillUI.IsEnabled())
             {
-                Debug.LogFormat("{0} Skill Input!", _slot);
                 playerManager.InputManager.OnButtonInput
                     (_slot, skillUI.GetSkillAimPoint());
                 playerManager.StopCoroutine(skillUICoroutine);
                 skillUI.SetEnabled(false);
             }
-            // 스킬 UI가 비활성화되어있을 경우 스킬 UI 활성화 및 스킬 UI 움직임 코루틴 시작.
+            // 스킬 UI가 비활성화되어있을 경우 스킬 UI 활성화 및 스킬 UI를 움직이는 코루틴 시작.
             else
             {
-                Debug.LogFormat("{0} Skill Ready!", _slot);
                 skillUICoroutine = playerManager.
-                    StartCoroutine(SkillAimCoroutine(skillUI));
+                    StartCoroutine(PC_SkillAimCoroutine(skillUI));
             }
         }
         // 스킬 UI가 없을 경우 마우스 위치로 스킬 사용을 입력.
@@ -203,7 +205,7 @@ public class PlayerInputManager
         }
     }
 
-    private IEnumerator SkillAimCoroutine(SkillUI_Base _skillUI)
+    private IEnumerator PC_SkillAimCoroutine(SkillUI_Base _skillUI)
     {
         _skillUI.SetEnabled(true);
 
