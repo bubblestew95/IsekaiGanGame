@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WarriorData
   m_EditorClassIdentifier: 
   maxHp: 120
-  walkSpeed: 6
+  walkSpeed: 5
   skills:
   - {fileID: 11400000, guid: ac1ce17dff93c654f81b7584e893063b, type: 2}
   - {fileID: 11400000, guid: 9dba0b179316bbb40ab7f4ffb8bbe57c, type: 2}

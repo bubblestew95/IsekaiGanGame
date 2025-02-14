@@ -2,6 +2,7 @@ using UnityEngine;
 
 using EnumTypes;
 using UnityEngine.Events;
+using Unity.Netcode;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -182,29 +183,29 @@ public class PlayerManager : MonoBehaviour
     #endregion
 
         #region Skill Functions
-
-    /// <summary>
-    /// ��ų �ִϸ��̼��� ������ �� ȣ��Ǵ� �Լ�.
-    /// </summary>
     public void StartSkill(SkillSlot _type)
     {
+        // 멀티 게임이면서 로컬 플레이어가 아닐 때는 스킬을 사용하지 않는다.
+        if (!GameManager.Instance.IsLocalGame && !PlayerNetworkManager.IsLocalPlayer)
+            return;
+
         skillManager.GetSkillData(_type).StartSkill(this);
     }
 
-    /// <summary>
-    /// ��ų �ִϸ��̼��� ���������� ������ �� ȣ��Ǵ� �Լ�. 
-    /// </summary>
     public void EndSkill(SkillSlot _type)
     {
-        Debug.LogFormat("End Skill type {0}", _type);
+        // 멀티 게임이면서 로컬 플레이어가 아닐 때는 스킬을 사용하지 않는다.
+        if (!GameManager.Instance.IsLocalGame && !PlayerNetworkManager.IsLocalPlayer)
+            return;
+
         skillManager.GetSkillData(_type).EndSkill(this);
     }
-
-    /// <summary>
-    /// ��ų �ִϸ��̼� �� ��ų�� ������ ���� �� ȣ��Ǵ� �Լ�.
-    /// </summary>
     public void UseSkill(SkillSlot _slot)
     {
+        // 멀티 게임이면서 로컬 플레이어가 아닐 때는 스킬을 사용하지 않는다.
+        if (!GameManager.Instance.IsLocalGame && !PlayerNetworkManager.IsLocalPlayer)
+            return;
+
         skillManager.SkillAction(_slot);
     }
 

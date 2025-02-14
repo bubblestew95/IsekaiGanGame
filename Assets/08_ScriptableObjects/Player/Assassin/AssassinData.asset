@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AssassinData
   m_EditorClassIdentifier: 
   maxHp: 100
-  walkSpeed: 7.5
+  walkSpeed: 6
   skills:
   - {fileID: 11400000, guid: b20b29e2de3b2e34ab7f5f9300a8cebe, type: 2}
   - {fileID: 11400000, guid: 4dd7d1dabb92d5f4c988adcdbe6c0e3e, type: 2}

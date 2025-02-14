@@ -21,8 +21,8 @@ public class IdleState : BasePlayerState
 
     public override void OnEnterState()
     {
-        // 로컬 게임이 아니고, 네트워크 오브젝트가 소유권을 가지고 있지 않다면 리턴.
-        if (!GameManager.Instance.IsLocalGame && !networkObj.IsOwner)
+        // 로컬 게임이 아니고, 네트워크 오브젝트가 로컬 플레이어가 아닐 때
+        if (!GameManager.Instance.IsLocalGame && !playerManager.PlayerNetworkManager.IsLocalPlayer)
             return;
 
         if(GameManager.Instance.IsPCMode)
@@ -89,27 +89,27 @@ public class IdleState : BasePlayerState
             {
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
-                    playerManager.InputManager.OnSkillKeyInput(SkillSlot.Skill_A);
+                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Skill_A);
                 }
 
                 if (Input.GetKeyDown(KeyCode.Alpha2))
                 {
-                    playerManager.InputManager.OnSkillKeyInput(SkillSlot.Skill_B);
+                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Skill_B);
                 }
 
                 if (Input.GetKeyDown(KeyCode.Alpha3))
                 {
-                    playerManager.InputManager.OnSkillKeyInput(SkillSlot.Skill_C);
+                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Skill_C);
                 }
 
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    playerManager.InputManager.OnSkillKeyInput(SkillSlot.Dash);
+                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Dash);
                 }
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    playerManager.InputManager.OnSkillKeyInput(SkillSlot.BasicAttack);
+                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.BasicAttack);
                 }
             }
 

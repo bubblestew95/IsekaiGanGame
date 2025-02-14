@@ -15,7 +15,8 @@ public class Teleport_AttackSkill : AttackSkill
         position += GameManager.Instance.GetBossTransform().forward * -1f * teleportDistance;
 
         _player.transform.position = position;
-        _player.transform.LookAt(GameManager.Instance.GetBossTransform().position);
+        _player.transform.LookAt
+            (new Vector3(GameManager.Instance.GetBossTransform().position.x, 0f, GameManager.Instance.GetBossTransform().position.z));
     }
 
     public override void UseSkill(PlayerManager _player)

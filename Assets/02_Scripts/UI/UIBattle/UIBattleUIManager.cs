@@ -29,7 +29,6 @@ public class UIBattleUIManager : MonoBehaviour
         ui_BossHp = GetComponentInChildren<UIBossHpsManager>();
         ui_disconnect = GetComponentInChildren<UIWarningManager>();
         ui_GameResultManager = GetComponentsInChildren<UI_GameResultManager>().ToList();
-
     }
 
     private void Start()
@@ -65,7 +64,8 @@ public class UIBattleUIManager : MonoBehaviour
         pointData.skillUsedPosition = GameManager.Instance.GetBossTransform().position;
 
         Vector3 direction = GameManager.Instance.GetBossTransform().position - playerManager.transform.position;
-        direction.y = playerManager.transform.position.y;
+        direction.y = 0f;
+        direction.Normalize();
         pointData.skillUsedRotation = Quaternion.LookRotation(direction);
 
         playerManager.InputManager.OnButtonInput(_slot, pointData);

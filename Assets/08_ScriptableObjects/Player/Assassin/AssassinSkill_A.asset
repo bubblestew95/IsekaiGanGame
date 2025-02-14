@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillSlot: 1
   coolTime: 3
-  skillParticle: {fileID: 0}
   damage: 1
   aggro: 1
   isBackattackEnable: 1
   backAttackTimes: 3
-  teleportDistance: 3
+  teleportDistance: 2

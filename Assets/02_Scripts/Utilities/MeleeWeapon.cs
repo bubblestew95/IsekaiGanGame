@@ -6,7 +6,7 @@ public class MeleeWeapon : MonoBehaviour
     PlayerManager playerManager = null;
 
     [HideInInspector]
-    public int maxHitCount = 5;
+    public int maxHitCount = 1;
     [HideInInspector]
     public int damage = 0;
     [HideInInspector]

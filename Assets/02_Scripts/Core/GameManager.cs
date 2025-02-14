@@ -55,10 +55,6 @@ public class GameManager : MonoBehaviour
         return -1;
     }
 
-    /// <summary>
-    /// �÷��̾ �������� �������� ��׷� ��ġ�� ����.
-    /// </summary>
-    /// <param name="_damageSource">�������� �������� �ִ� �÷��̾�</param>
     public void DamageToBoss(PlayerManager _damageGiver, int _damage, float _aggro)
     {
         ulong clientId = _damageGiver.GetComponent<NetworkObject>().OwnerClientId;
@@ -67,17 +63,9 @@ public class GameManager : MonoBehaviour
         {
             DamageToBoss_Multi(clientId, _damage, _aggro);
         }
-
-        // UI ����ȭ
-        // ���� ��Ƽ ������ �� �� �κ��� �Ƹ��� �����ؾ� �� ��?
-        // UpdatePlayerHpUI(_damageGiver);
     }
 
 
-    /// <summary>
-    /// �÷��̾�� �������� ����.
-    /// </summary>
-    /// <param name="_damageReceiver"></param>
     public void DamageToPlayer(PlayerManager _damageReceiver, int _damage)
     {
         if (isLocalGame)
@@ -88,10 +76,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// �÷��̾�� �������� ������ ���ÿ� �˹� ȿ���� �ο���.
-    /// </summary>
-    /// <param name="_damageReceiver"></param>
+
     public void DamageToPlayer(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDist)
     {
         DamageToPlayer(_damageReceiver, _damage);
@@ -111,13 +96,7 @@ public class GameManager : MonoBehaviour
         bossStateManager.BossDamageReceiveServerRpc(_clientId, _damage, _aggro);
     }
 
-    /// <summary>
-    /// ������ �÷��̾�� �������� �����Ű�� �Լ�
-    /// </summary>
-    /// <param name="_damageReceiver"></param>
-    /// <param name="_damage"></param>
-    /// <param name="_attackPos"></param>
-    /// <param name="_knockbackDist"></param>
+
     public void ApplyDamageToPlayer
         (PlayerManager _damageReceiver, int _damage)
     {

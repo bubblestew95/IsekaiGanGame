@@ -24,7 +24,7 @@ public class SkillUI_AOE : SkillUI_Base
 
     public override void AimSkill(Vector3 position)
     {
-        position.y = targetRectTr.position.y;
+        position.y = defaultY;
 
         targetRectTr.position = position;
     }

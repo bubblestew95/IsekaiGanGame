@@ -91,6 +91,14 @@ public class SkillUIManager : MonoBehaviour
         return false;
     }
 
+    public void SetAllSkillUIEnabled(bool _enabled)
+    {
+        foreach (var skillUI in skillUIMap.Values)
+        {
+            skillUI.SetEnabled(_enabled);
+        }
+    }
+
     private void Awake()
     {
         skillUIMap = new Dictionary<SkillSlot, SkillUI_Base>();

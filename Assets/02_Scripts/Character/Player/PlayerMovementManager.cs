@@ -67,8 +67,9 @@ public class PlayerMovementManager
         playerManager.AnimationManager.SetAnimatorWalkSpeed(1f);
 
         float speed = playerManager.PlayerData.walkSpeed;
-        Vector3 direction = (_destination - playerManager.transform.position).normalized;
-
+        Vector3 direction = _destination - playerManager.transform.position;
+        direction.y = 0f;
+        direction.Normalize();  
         Quaternion targetRotation = Quaternion.LookRotation(direction);
 
         while (Vector3.Distance(playerManager.transform.position, _destination) > 0.5f)
