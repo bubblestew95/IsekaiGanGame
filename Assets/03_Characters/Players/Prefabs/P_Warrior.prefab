@@ -316,9 +316,11 @@ MonoBehaviour:
   - particleName: Taunt
     particlePrefab: {fileID: 9080140021571130472, guid: 4d18279ad5186744a8c5a2d5e1a23578, type: 3}
     forceDestroyable: 1
+    autoDestroyTime: 1
   - particleName: Bigbang
     particlePrefab: {fileID: 9027514048236820045, guid: 64384c1a6dee77941a6d743aa85b5438, type: 3}
     forceDestroyable: 0
+    autoDestroyTime: 2
 --- !u!114 &4633109146552052760
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,9 +8,10 @@ public class PlayerParticleController : MonoBehaviour
     [Serializable]
     private class PlayerParticleData
     {
-        public string particleName;
-        public GameObject particlePrefab;
-        public bool forceDestroyable;
+        public string particleName = string.Empty;
+        public GameObject particlePrefab = null;
+        public bool forceDestroyable = false;
+        public float autoDestroyTime = 1f;
     }
 
     [SerializeField]
@@ -96,7 +97,8 @@ public class PlayerParticleController : MonoBehaviour
     {
         foreach(var particle in forceDestroyParticles)
         {
-            Destroy(particle);
+            if(particle != null)
+                Destroy(particle);
         }
 
         forceDestroyParticles.Clear();
@@ -117,7 +119,9 @@ public class PlayerParticleController : MonoBehaviour
             _rotation
             );
 
-        if(_particleData.forceDestroyable)
+        Destroy(spawnedParticleObj, _particleData.autoDestroyTime);
+
+        if (_particleData.forceDestroyable)
             forceDestroyParticles.Add(spawnedParticleObj);
     }
 

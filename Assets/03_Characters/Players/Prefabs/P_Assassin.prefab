@@ -10933,9 +10933,11 @@ MonoBehaviour:
   - particleName: Skill_A
     particlePrefab: {fileID: 2060900179291159282, guid: 28eef6dcf964ba64cb131ec687a97a60, type: 3}
     forceDestroyable: 1
+    autoDestroyTime: 1
   - particleName: Skill_C
     particlePrefab: {fileID: 2715471840370901047, guid: 9f9d665143204084d9f107a53d958642, type: 3}
     forceDestroyable: 1
+    autoDestroyTime: 0.7
 --- !u!114 &-8203911682527767499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10948,7 +10950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3883834047
+  GlobalObjectIdHash: 3709657405
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
