@@ -57,7 +57,7 @@ public class PlayerSkillManager
     }
 
     /// <summary>
-    /// 스킬 사용을 시도한다.
+    /// 실제로 스킬을 사용한다.
     /// </summary>
     /// <param name="_skillIdx">사용할 스킬의 스킬 리스트 상 인덱스</param>
     public void UseSkill(SkillSlot _slot)
@@ -65,16 +65,17 @@ public class PlayerSkillManager
         // 사용하려는 변수들의 유효성 체크.
         if (skillDatas == null || currentCoolTimeMap == null || !skillDataMap.ContainsKey(_slot))
         {
-            Debug.LogWarning("Skill List is not valid!");
+            Debug.LogWarning("Skill is not valid!");
             return;
         }
 
+        playerManager.MovementManager.StopMove();
+
         // 스킬 사용
-        if(animatorIdMap.TryGetValue(_slot, out int animId))
+        if (animatorIdMap.TryGetValue(_slot, out int animId))
         {
             if(GameManager.Instance.IsLocalGame)
             {
-                // if()
                 animator.SetTrigger(animId);
             }
             else

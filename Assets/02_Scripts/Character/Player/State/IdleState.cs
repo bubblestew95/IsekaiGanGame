@@ -51,6 +51,10 @@ public class IdleState : BasePlayerState
     {
     }
 
+    /// <summary>
+    /// 대기 상태일 때 모바일 입력 처리를 하는 코루틴.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator IdleMobileCoroutine()
     {
         while(true)
@@ -71,20 +75,16 @@ public class IdleState : BasePlayerState
         }
     }
 
+    /// <summary>
+    /// 대기 상태일 때 PC 입력에 대한 처리를 하는 코루틴
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator IdlePCCoroutine()
     {
         Camera mainCamera = Camera.main;
-
-        while(true)
+        Vector3 mouseRayPosition = Vector3.zero;
+        while (true)
         {
-            // 오른 쪽 마우스 입력을 감지했을 때 이동 가능한 곳에 마우스가 있을 시
-            if(Input.GetMouseButtonDown(1) && 
-                playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mouseRayPosition))
-            {
-                // 지정한 위치로 이동.
-                playerManager.MovementManager.MoveToPosition(mouseRayPosition);
-            }
-
             // 스킬 입력 처리
             {
                 if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -113,16 +113,39 @@ public class IdleState : BasePlayerState
                 }
             }
 
-            // 대기 상태일 때만 스킬이 사용 가능함. 스킬 사용 체크.
-            InputBufferData inputBuffer = playerManager.InputManager.GetNextInput();
-
-            if (inputBuffer.skillType != SkillSlot.None)
+            // 스킬 사용 처리
             {
-                playerManager.SkillManager.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
-                playerManager.MovementManager.StopMove();
+                InputBufferData inputBuffer = playerManager.InputManager.GetNextInput();
+
+                if (inputBuffer.skillType != SkillSlot.None)
+                {
+                    playerManager.SkillManager.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
+                }
             }
 
             yield return null;
+
+            // 플레이어 이동 처리
+            {
+                // 오른 쪽 마우스 입력을 감지했을 때 이동 가능한 곳에 마우스가 있을 시
+                if (Input.GetMouseButton(1))
+                {
+                    mouseRayPosition = Vector3.zero;
+                    if (playerManager.InputManager.GetMouseRayHitPosition(out mouseRayPosition))
+                    {
+                        // 지정한 위치로 이동.
+                        playerManager.MovementManager.MoveToPosition(mouseRayPosition);
+                    }
+                    else
+                    {
+                        playerManager.MovementManager.StopMove();
+                    }
+                }
+                if (Input.GetMouseButtonUp(1))
+                {
+                    playerManager.MovementManager.StopMove();
+                }
+            }
         }
     }
 }
