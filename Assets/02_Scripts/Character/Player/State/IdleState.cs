@@ -21,8 +21,8 @@ public class IdleState : BasePlayerState
 
     public override void OnEnterState()
     {
-        // 로컬 게임이 아니고, 네트워크 오브젝트가 소유권을 가지고 있지 않다면 리턴.
-        if (!GameManager.Instance.IsLocalGame && !networkObj.IsOwner)
+        // 로컬 게임이 아니고, 네트워크 오브젝트가 로컬 플레이어가 아닐 때
+        if (!GameManager.Instance.IsLocalGame && !playerManager.PlayerNetworkManager.IsLocalPlayer)
             return;
 
         if(GameManager.Instance.IsPCMode)

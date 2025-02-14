@@ -29,7 +29,6 @@ public class UIBattleUIManager : MonoBehaviour
         ui_BossHp = GetComponentInChildren<UIBossHpsManager>();
         ui_disconnect = GetComponentInChildren<UIWarningManager>();
         ui_GameResultManager = GetComponentsInChildren<UI_GameResultManager>().ToList();
-
     }
 
     private void Start()

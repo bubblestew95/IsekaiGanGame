@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
@@ -27,10 +28,26 @@ public class PlayerNetworkManager : NetworkBehaviour
         ServerRevivePlayerRpc(OwnerClientId);
     }
 
+    public void ServerSetSpeedAnimator(float _speed)
+    {
+        ServerSetSpeedAnimRpc(OwnerClientId, _speed);
+    }
+
     [Rpc(SendTo.Server)]
     private void ServerRevivePlayerRpc(ulong _clientId)
     {
         ApplyRevivePlayerRpc(_clientId);
+    }
+
+
+    [Rpc(SendTo.Server)]
+    private void ServerSetSpeedAnimRpc(ulong _clientId, float _speed)
+    {
+        var obj = NetworkManager.ConnectedClients[_clientId].PlayerObject;
+        if(obj != null)
+        {
+            obj.GetComponent<PlayerManager>().AnimationManager.ApplyAnimatorWalkSpeed(_speed);
+        }
     }
 
     [Rpc(SendTo.Everyone)]
@@ -54,4 +71,5 @@ public class PlayerNetworkManager : NetworkBehaviour
         playerManager = GetComponent<PlayerManager>();
         networkAnimator = playerManager.GetComponent<NetworkAnimator>();
     }
+
 }
