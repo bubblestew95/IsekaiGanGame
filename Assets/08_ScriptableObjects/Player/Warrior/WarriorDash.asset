@@ -15,5 +15,5 @@ MonoBehaviour:
   skillSlot: 5
   coolTime: 7
   dashSpeed: 10
-  dashTime: 0.5
+  dashTime: 0.45
   isForward: 1

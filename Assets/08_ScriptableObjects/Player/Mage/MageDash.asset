@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MageDash
   m_EditorClassIdentifier: 
   skillSlot: 5
-  coolTime: 15
+  coolTime: 10
   dashSpeed: 10
   dashTime: 0.5
   isForward: 1
