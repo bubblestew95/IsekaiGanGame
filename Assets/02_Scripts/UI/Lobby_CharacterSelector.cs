@@ -120,20 +120,52 @@ public class Lobby_CharacterSelector : NetworkBehaviour
             playerSelections.Add(clientId, selectedCharacter);
         }
 
+        UpdateCharacterUI();
+
+        //for (int i = 0; i < characterButtons.Length; i++)
+        //{
+        //    characterButtons[i].interactable = !playerSelections.ContainsValue(i);
+        //    Debug.Log($"[Client] 버튼 {i}: {(characterButtons[i].interactable ? "활성화" : "비활성화")}");
+        //}
+
+        //Debug.Log($"[Client] UI 업데이트 완료: Player {clientId} -> 캐릭터 {selectedCharacter}");
+
+        //// Ready 버튼 활성화 (캐릭터 선택 후)
+        //if (NetworkManager.Singleton.LocalClientId == clientId)
+        //{
+        //    readyButton.interactable = true;
+        //    Debug.Log($"[Client] Ready 버튼 활성화!");
+        //}
+    }
+
+    private void UpdateCharacterUI()
+    {
         for (int i = 0; i < characterButtons.Length; i++)
         {
-            characterButtons[i].interactable = !playerSelections.ContainsValue(i);
-            Debug.Log($"[Client] 버튼 {i}: {(characterButtons[i].interactable ? "활성화" : "비활성화")}");
+            // 기본 반투명 처리
+            characterImages[i].color = new Color(1f, 1f, 1f, 0.5f);
+            characterButtons[i].interactable = true;
         }
 
-        Debug.Log($"[Client] UI 업데이트 완료: Player {clientId} -> 캐릭터 {selectedCharacter}");
-
-        // Ready 버튼 활성화 (캐릭터 선택 후)
-        if (NetworkManager.Singleton.LocalClientId == clientId)
+        // 본인이 선택한 캐릭터는 불투명
+        if (playerSelections.ContainsKey(NetworkManager.Singleton.LocalClientId))
         {
-            readyButton.interactable = true;
-            Debug.Log($"[Client] Ready 버튼 활성화!");
+            int selected = playerSelections[NetworkManager.Singleton.LocalClientId];
+            characterImages[selected].color = new Color(1f, 1f, 1f, 1f); // 완전 불투명
+            characterButtons[selected].interactable = true;
         }
+
+        // 다른 플레이어가 선택한 캐릭터는 검은색 반투명 & 선택 불가
+        foreach (var entry in playerSelections)
+        {
+            if (entry.Key != NetworkManager.Singleton.LocalClientId)
+            {
+                characterImages[entry.Value].color = new Color(0f, 0f, 0f, 0.5f); // 검은색 반투명
+                characterButtons[entry.Value].interactable = false;
+            }
+        }
+
+        Debug.Log("[Client] 캐릭터 UI 업데이트 완료!");
     }
 
     // Ready 상태 변경 시 UI 업데이트
