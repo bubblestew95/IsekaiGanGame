@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ArcherDash
   m_EditorClassIdentifier: 
   skillSlot: 5
-  coolTime: 2
-  dashSpeed: 7
-  dashTime: 0.7
+  coolTime: 7
+  dashSpeed: 10
+  dashTime: 0.5
   isForward: 1

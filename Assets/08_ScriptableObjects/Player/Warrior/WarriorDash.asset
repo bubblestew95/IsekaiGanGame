@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: WarriorDash
   m_EditorClassIdentifier: 
   skillSlot: 5
-  coolTime: 10
-  skillParticle: {fileID: 0}
-  dashSpeed: 6.5
+  coolTime: 7
+  dashSpeed: 10
   dashTime: 0.5
   isForward: 1
