@@ -1,14 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using StructTypes;
+using System;
 
 public class PlayerParticleController : MonoBehaviour
 {
+    [Serializable]
+    private class PlayerParticleData
+    {
+        public string particleName;
+        public GameObject particlePrefab;
+        public bool forceDestroyable;
+    }
+
     [SerializeField]
     private List<PlayerParticleData> particleDataList = null;
 
-    private List<GameObject> spawnedParticleObjects = null;
+    private List<GameObject> forceDestroyParticles = null;
     private PlayerManager playerManager = null;
 
     /// <summary>
@@ -17,15 +25,15 @@ public class PlayerParticleController : MonoBehaviour
     /// <param name="_particleName"></param>
     public void SpawnParticleToPlayer(string _particleName)
     {
-        var particlePrefab = GetParticleObject(_particleName);
+        var particleData = GetParticleData(_particleName);
 
-        if(particlePrefab == null)
+        if(particleData == null)
         {
             Debug.LogWarningFormat("{0} name particle is not exist in list!");
             return;
         }
 
-        SpawnParticle(particlePrefab, transform.position, transform.rotation);
+        SpawnParticle(particleData, transform.position, transform.rotation);
     }
 
     /// <summary>
@@ -34,15 +42,15 @@ public class PlayerParticleController : MonoBehaviour
     /// <param name="_particleName"></param>
     public void SpawnParticleToSkillUsedPoint(string _particleName)
     {
-        var particlePrefab = GetParticleObject(_particleName);
+        var particleData = GetParticleData(_particleName);
 
-        if (particlePrefab == null)
+        if (particleData == null)
         {
             Debug.LogWarningFormat("{0} name particle is not exist in list!");
             return;
         }
 
-        SpawnParticle(particlePrefab, playerManager.InputManager.lastSkillUsePoint, transform.rotation);
+        SpawnParticle(particleData, playerManager.InputManager.lastSkillUsePoint, transform.rotation);
     }
 
     /// <summary>
@@ -51,16 +59,16 @@ public class PlayerParticleController : MonoBehaviour
     /// <param name="_particleName"></param>
     public void SpawnParticleToMeleeWeapon(string _particleName)
     {
-        var particlePrefab = GetParticleObject(_particleName);
+        var particleData = GetParticleData(_particleName);
 
-        if (particlePrefab == null)
+        if (particleData == null)
         {
             Debug.LogWarningFormat("{0} name particle is not exist in list!");
             return;
         }
 
         SpawnParticle(
-            particlePrefab,
+            particleData,
             playerManager.AttackManager.GetMeleeWeaponPostion(),
             transform.rotation);
     }
@@ -71,50 +79,55 @@ public class PlayerParticleController : MonoBehaviour
     /// <param name="_particleName"></param>
     public void SpawnParticleToRangeWeapon(string _particleName)
     {
-        var particlePrefab = GetParticleObject(_particleName);
+        var particleData = GetParticleData(_particleName);
 
-        if (particlePrefab == null)
+        if (particleData == null)
         {
             Debug.LogWarningFormat("{0} name particle is not exist in list!", _particleName);
             return;
         }
 
-        SpawnParticle(particlePrefab,
+        SpawnParticle(particleData,
             playerManager.AttackManager.RangeAttackTransform.position,
             playerManager.transform.rotation);
     } 
 
-    public void DespawnParticles()
+    public void ForceDestroyParticles()
     {
-        foreach(var particleObject in spawnedParticleObjects)
+        foreach(var particle in forceDestroyParticles)
         {
-            Destroy(particleObject);
+            Destroy(particle);
         }
 
-        spawnedParticleObjects.Clear();
+        forceDestroyParticles.Clear();
     }
 
-    private void SpawnParticle(GameObject _prefab, Vector3 _position, Quaternion _rotation)
+    private void SpawnParticle(PlayerParticleData _particleData, Vector3 _position, Quaternion _rotation)
     {
+        if (_particleData == null)
+        {
+            Debug.LogWarning("Particle Data is null!");
+            return;
+        }
+
         var spawnedParticleObj = Instantiate
             (
-            _prefab,
+            _particleData.particlePrefab,
             _position,
             _rotation
             );
 
-        spawnedParticleObjects.Add(spawnedParticleObj);
-
-        spawnedParticleObj.GetComponent<ParticleLifetime>().DestroyParticle();
+        if(_particleData.forceDestroyable)
+            forceDestroyParticles.Add(spawnedParticleObj);
     }
 
-    private GameObject GetParticleObject(string _particleName)
+    private PlayerParticleData GetParticleData(string _particleName)
     {
         foreach(var particleData in particleDataList)
         {
             if (particleData.particleName == _particleName)
             {
-                return particleData.particlePrefab;
+                return particleData;
             }
         }
 
@@ -125,6 +138,6 @@ public class PlayerParticleController : MonoBehaviour
     {
         playerManager = GetComponent<PlayerManager>();
 
-        spawnedParticleObjects = new List<GameObject>();
+        forceDestroyParticles = new List<GameObject>();
     }
 }

@@ -32,11 +32,4 @@ namespace StructTypes
 
         public Quaternion skillUsedRotation;
     }
-
-    [Serializable]
-    public struct PlayerParticleData
-    {
-        public string particleName;
-        public GameObject particlePrefab;
-    }
 }

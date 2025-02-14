@@ -18,7 +18,7 @@ public class SkillState : BasePlayerState
 
     public override void OnExitState()
     {
-        playerManager.ParticleController.DespawnParticles();
+        playerManager.ParticleController.ForceDestroyParticles();
 
         if(playerManager.AttackManager.IsMeleeWeaponSet())
         {

@@ -10931,12 +10931,16 @@ MonoBehaviour:
   particleDataList:
   - particleName: ArrowRain
     particlePrefab: {fileID: 2232111375016833989, guid: 7f80baed94a37294fa07eb5faf2668c7, type: 3}
+    forceDestroyable: 0
   - particleName: BackJump
     particlePrefab: {fileID: 1141330259687333427, guid: 833991be4f51dc7439d6474656e963a7, type: 3}
+    forceDestroyable: 1
   - particleName: Shot
     particlePrefab: {fileID: 1141330259687333427, guid: 833991be4f51dc7439d6474656e963a7, type: 3}
+    forceDestroyable: 1
   - particleName: Charging
     particlePrefab: {fileID: 7131401307255788800, guid: cd07e56b4e09e284d86a48d3b4463de6, type: 3}
+    forceDestroyable: 1
 --- !u!114 &-2836398782895520287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10949,7 +10953,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 62939418
+  GlobalObjectIdHash: 3037940728
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
