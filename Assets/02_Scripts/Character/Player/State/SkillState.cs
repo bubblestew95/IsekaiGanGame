@@ -13,6 +13,7 @@ public class SkillState : BasePlayerState
     public override void OnEnterState()
     {
         playerManager.MovementManager.StopMove();
+        playerManager.AnimationManager.SetAnimatorWalkSpeed(0f);
     }
 
     public override void OnExitState()

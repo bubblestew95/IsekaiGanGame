@@ -130,20 +130,24 @@ public class IdleState : BasePlayerState
                 // 오른 쪽 마우스 입력을 감지했을 때 이동 가능한 곳에 마우스가 있을 시
                 if (Input.GetMouseButton(1))
                 {
-                    mouseRayPosition = Vector3.zero;
+                    // 마우스의 위치에 이동 가능한 지형이 있을 때만 이동.
                     if (playerManager.InputManager.GetMouseRayHitPosition(out mouseRayPosition))
                     {
                         // 지정한 위치로 이동.
                         playerManager.MovementManager.MoveToPosition(mouseRayPosition);
                     }
+                    // 마우스의 위치에 이동 가능한 지형이 없으면 이동 중지.
                     else
                     {
                         playerManager.MovementManager.StopMove();
+                        playerManager.AnimationManager.SetAnimatorWalkSpeed(0f);
                     }
                 }
+                // 마우스 클릭을 멈추면 이동 중지.
                 if (Input.GetMouseButtonUp(1))
                 {
                     playerManager.MovementManager.StopMove();
+                    playerManager.AnimationManager.SetAnimatorWalkSpeed(0f);
                 }
             }
         }

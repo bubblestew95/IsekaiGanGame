@@ -56,7 +56,6 @@ public class PlayerMovementManager
     public void StopMove()
     {
         characterController.Move(Vector3.zero);
-        playerManager.AnimationManager.SetAnimatorWalkSpeed(0f);
     }
 
     /// <summary>

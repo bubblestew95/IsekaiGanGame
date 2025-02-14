@@ -68,10 +68,6 @@ public class PlayerSkillManager
             Debug.LogWarning("Skill is not valid!");
             return;
         }
-
-        // 스킬을 사용하기 전에 먼저 이동을 정지한다.
-        playerManager.MovementManager.StopMove();
-
         // 스킬 사용
         if (animatorIdMap.TryGetValue(_slot, out int animId))
         {
