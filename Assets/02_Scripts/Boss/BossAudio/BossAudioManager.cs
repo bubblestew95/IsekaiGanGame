@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Audio;
 
 public class BossAudioManager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class BossAudioManager : MonoBehaviour
     public AudioClip Attack9;
     public AudioClip SpecialAttack;
     public AudioClip Phase2;
+    public AudioMixer audioMixer; // 임의 추가 황승원 02.14 오디오 믹서
 
     private AudioSource audioSource;
     private Coroutine curCoroutine;
@@ -35,13 +37,15 @@ public class BossAudioManager : MonoBehaviour
     private void Start()
     {
         audioSource = FindAnyObjectByType<BossStateManager>().GetComponent<AudioSource>();
-
         audioSource.loop = false; // 반복 재생 여부
         audioSource.playOnAwake = false; // 자동 재생 비활성화 (수동으로 제어)
         audioSource.spatialBlend = 1f; // 3D 사운드 (0 = 2D, 1 = 3D)
         audioSource.rolloffMode = AudioRolloffMode.Linear; // 소리가 거리 비례 감소
         audioSource.minDistance = 15f; // 이 거리까지는 볼륨이 유지됨
         audioSource.maxDistance = 40f; // 이 거리 이상에서는 소리가 거의 안 들림
+
+        AudioMixerGroup[] mixerGroups = audioMixer.FindMatchingGroups("SFX"); // 임의 추가 황승원 02.14 오디오 믹서 SFX 그룹 찾기
+        audioSource.outputAudioMixerGroup = mixerGroups[0]; // 임의 추가 황승원 02.14 오디오 믹서 out put 설정
     }
 
     // 오디오 재생 함수

@@ -51,7 +51,7 @@ public class BgmController : MonoBehaviour
         {
             PlayBossBgm();
         }// 보스 테마
-        if(Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             PlayBossRageBgm();
         }// 보스 테마 +1
