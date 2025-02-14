@@ -69,6 +69,7 @@ public class PlayerSkillManager
             return;
         }
 
+        // 스킬을 사용하기 전에 먼저 이동을 정지한다.
         playerManager.MovementManager.StopMove();
 
         // 스킬 사용
@@ -175,7 +176,9 @@ public class PlayerSkillManager
         // 스킬 발동에 성공했다면
         if (IsSkillUsable(_type))
         {
-            playerManager.transform.LookAt(_position);
+            Vector3 direction = _position - playerManager.transform.position;
+            direction.y = 0f;
+            playerManager.transform.rotation = Quaternion.LookRotation(direction);
 
             UseSkill(_type);
 
