@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8609387667474027210}
   - component: {fileID: 2991328921473913795}
   m_Layer: 0
-  m_Name: the-glorious-army-warhammer-Choir Magician 72bpm
+  m_Name: MagicianBgm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -372,7 +372,7 @@ GameObject:
   - component: {fileID: 909648170124246169}
   - component: {fileID: 6935415088711736674}
   m_Layer: 0
-  m_Name: fantasy-pagan-medieval Achor 120bpm
+  m_Name: ArcherBgm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1108,7 +1108,7 @@ GameObject:
   - component: {fileID: 4513875369742577262}
   - component: {fileID: 7786817343367144726}
   m_Layer: 0
-  m_Name: intense-battle-scene-MetalRock Rogue 90bpm
+  m_Name: AssassinBgm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1250,7 +1250,7 @@ GameObject:
   - component: {fileID: 5363548339137316440}
   - component: {fileID: 1671236122163160353}
   m_Layer: 0
-  m_Name: beyond-the-dark-battle-epic-orchestral Warrior 134bpm
+  m_Name: WarriorBgm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

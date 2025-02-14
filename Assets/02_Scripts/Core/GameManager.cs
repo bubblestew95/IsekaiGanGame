@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private bool isPCMode = false;
 
+    [SerializeField]
+    private BgmController bgmController = null;
+
     #endregion
 
     #region Private Variables
@@ -148,6 +151,13 @@ public class GameManager : MonoBehaviour
         bossStateManager = FindAnyObjectByType<BossStateManager>();
         networkGameManager = FindAnyObjectByType<NetworkGameManager>();
     }
+
+    private void Start()
+    {
+        // 캐릭터 종류에 따라서 인덱스를 다르게 두어서 각각 다른 BGM을 재생시킨다.
+        bgmController.SetCurCharacterIndex(0);
+    }
+}
 
     #endregion
 
