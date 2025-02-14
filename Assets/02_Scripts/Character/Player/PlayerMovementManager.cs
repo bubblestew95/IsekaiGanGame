@@ -9,11 +9,12 @@ public class PlayerMovementManager
     private PlayerManager playerManager = null;
     private CharacterController characterController = null;
     private Coroutine moveCoroutine = null;
-
+    private float speed = 0f;
     public void Init(PlayerManager _playerManager)
     {
         playerManager = _playerManager;
         characterController = playerManager.GetComponent<CharacterController>();
+        speed = playerManager.PlayerData.walkSpeed;
     }
 
     public void MoveByJoystick(JoystickInputData _inputData)
@@ -37,9 +38,16 @@ public class PlayerMovementManager
 
     public void MoveToPosition(Vector3 _destination)
     {
-        StopMove();
+        playerManager.AnimationManager.SetAnimatorWalkSpeed(1f);
+        Vector3 direction = _destination - playerManager.transform.position;
+        direction.y = 0f;
+        direction.Normalize();
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
 
-        moveCoroutine = playerManager.StartCoroutine(MoveCoroutine(_destination));
+        characterController.Move(direction * speed * Time.deltaTime);
+
+        playerManager.transform.rotation =
+            Quaternion.Slerp(playerManager.transform.rotation, targetRotation, Time.deltaTime * 10f);
     }
 
     /// <summary>
@@ -47,12 +55,7 @@ public class PlayerMovementManager
     /// </summary>
     public void StopMove()
     {
-        if(moveCoroutine != null)
-        {
-            playerManager.StopCoroutine(moveCoroutine);
-            moveCoroutine = null;
-        }
-
+        characterController.Move(Vector3.zero);
         playerManager.AnimationManager.SetAnimatorWalkSpeed(0f);
     }
 
@@ -61,12 +64,11 @@ public class PlayerMovementManager
     /// </summary>
     /// <param name="_destination"></param>
     /// <returns></returns>
-    private IEnumerator MoveCoroutine(Vector3 _destination)
+    private IEnumerator PCMoveCoroutine(Vector3 _destination)
     {
         // 달리기 애니메이션 재생 시작
         playerManager.AnimationManager.SetAnimatorWalkSpeed(1f);
 
-        float speed = playerManager.PlayerData.walkSpeed;
         Vector3 direction = _destination - playerManager.transform.position;
         direction.y = 0f;
         direction.Normalize();  
