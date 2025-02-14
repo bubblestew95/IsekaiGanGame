@@ -4923,7 +4923,6 @@ GameObject:
   - component: {fileID: 2232111375016834008}
   - component: {fileID: 2232111375016834011}
   - component: {fileID: 2232111375016834010}
-  - component: {fileID: -3112290876019882306}
   m_Layer: 0
   m_Name: P_ArrowRainEffect
   m_TagString: Untagged
@@ -9759,19 +9758,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &-3112290876019882306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2232111375016833989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5f43f496e704914cb42452c3405c4c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifeTime: 2
 --- !u!1 &2232111375138000941
 GameObject:
   m_ObjectHideFlags: 0

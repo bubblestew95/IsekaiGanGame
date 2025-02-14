@@ -5954,8 +5954,12 @@ MonoBehaviour:
   particleDataList:
   - particleName: Skill_A
     particlePrefab: {fileID: 2060900179291159282, guid: 28eef6dcf964ba64cb131ec687a97a60, type: 3}
+    forceDestroyable: 1
+    autoDestroyTime: 1
   - particleName: Skill_C
     particlePrefab: {fileID: 2715471840370901047, guid: 9f9d665143204084d9f107a53d958642, type: 3}
+    forceDestroyable: 1
+    autoDestroyTime: 0.7
 --- !u!114 &-8203911682527767499
 MonoBehaviour:
   m_ObjectHideFlags: 0

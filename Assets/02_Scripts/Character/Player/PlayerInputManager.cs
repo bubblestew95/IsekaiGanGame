@@ -21,7 +21,7 @@ public class PlayerInputManager
     #region Input Buffer
 
     private Queue<InputBufferData> skillBuffer = new Queue<InputBufferData>();
-    private readonly float checkDequeueTime = 0.03f;
+    private readonly float checkDequeueTime = 0.3f;
     private float remainDequeueTime = 0f;
     private InputBufferData nullInputBuffer = new InputBufferData();
 
@@ -144,6 +144,10 @@ public class PlayerInputManager
         // 스킬 UI가 있을 경우
         if (playerManager.SkillUIManager.SkillUIMap.TryGetValue(_slot, out SkillUI_Base skillUI))
         {
+            // 스킬이 사용 가능할 때만 UI를 출력해야 함.
+            if (!playerManager.SkillManager.IsSkillUsable(_slot))
+                return;
+
             // 스킬 UI가 활성화되어있을 경우 해당 스킬 UI 위치로 스킬을 사용했다는 걸 입력하고
             // 스킬 UI 움직임을 담당하는 코루틴을 정지한다.
             if (skillUI.IsEnabled())
@@ -197,8 +201,6 @@ public class PlayerInputManager
                 // Dequeue 시도
                 if (skillBuffer.Count > 0)
                     skillBuffer.Dequeue();
-
-                yield return null;
             }
 
             yield return null;

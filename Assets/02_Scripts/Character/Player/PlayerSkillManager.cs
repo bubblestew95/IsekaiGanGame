@@ -68,9 +68,6 @@ public class PlayerSkillManager
             Debug.LogWarning("Skill is not valid!");
             return;
         }
-
-        playerManager.MovementManager.StopMove();
-
         // 스킬 사용
         if (animatorIdMap.TryGetValue(_slot, out int animId))
         {
@@ -175,7 +172,9 @@ public class PlayerSkillManager
         // 스킬 발동에 성공했다면
         if (IsSkillUsable(_type))
         {
-            playerManager.transform.LookAt(_position);
+            Vector3 direction = _position - playerManager.transform.position;
+            direction.y = 0f;
+            playerManager.transform.rotation = Quaternion.LookRotation(direction);
 
             UseSkill(_type);
 

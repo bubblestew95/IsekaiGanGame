@@ -16700,10 +16700,16 @@ MonoBehaviour:
   particleDataList:
   - particleName: MeteorAura
     particlePrefab: {fileID: 3280519133390621005, guid: 83d8b73ebbb3c6342aee040c4ff245a1, type: 3}
+    forceDestroyable: 1
+    autoDestroyTime: 2
   - particleName: Meteor
     particlePrefab: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
+    forceDestroyable: 1
+    autoDestroyTime: 1
   - particleName: FlameThrower
     particlePrefab: {fileID: 8400424712307853490, guid: efa44bbb7410de0459f8b24e062b9482, type: 3}
+    forceDestroyable: 1
+    autoDestroyTime: 2
 --- !u!114 &1735406565476749645
 MonoBehaviour:
   m_ObjectHideFlags: 0
