@@ -3,6 +3,7 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
+// 보스의 상태를 관리
 public class MushStateManager : NetworkBehaviour
 {
     // 델리게이트
@@ -249,6 +250,7 @@ public class MushStateManager : NetworkBehaviour
     #endregion
 
     #region [Function]
+
     // 초기화
     private void Init()
     {

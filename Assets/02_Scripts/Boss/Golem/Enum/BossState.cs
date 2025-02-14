@@ -26,4 +26,11 @@ public enum BossChain
     Rogue
 }
 
+public enum MushState
+{
+	Idle,
+	Chase,
+	Die
+}
+
 
