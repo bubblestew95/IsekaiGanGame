@@ -247,7 +247,7 @@ public class PlayerAiManager : MonoBehaviour
         Vector3 bossPos = GameManager.Instance.GetBossTransform().position;
         Vector3 playerPos = transform.position;
         float distanceToBoss = Vector3.Distance(playerPos, bossPos);
-        if (isMoveBack == false || distanceToBoss > safeDistance)// 도망중이 아니라면
+        if (isMoveBack == false)// 도망중이 아니라면
         {
             // 랜덤으로 하나의 스킬 선택
             int randomIndex = UnityEngine.Random.Range(0, skillSlots.Length);
