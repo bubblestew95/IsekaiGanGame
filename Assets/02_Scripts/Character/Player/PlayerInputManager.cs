@@ -21,7 +21,7 @@ public class PlayerInputManager
     #region Input Buffer
 
     private Queue<InputBufferData> skillBuffer = new Queue<InputBufferData>();
-    private readonly float checkDequeueTime = 0.05f;
+    private readonly float checkDequeueTime = 0.03f;
     private float remainDequeueTime = 0f;
     private InputBufferData nullInputBuffer = new InputBufferData();
 
@@ -130,7 +130,9 @@ public class PlayerInputManager
 
             if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mousePos))
             {
-                Vector3 direction = (mousePos - playerManager.transform.position).normalized;
+                Vector3 direction = mousePos - playerManager.transform.position;
+                direction.y = 0f;
+                direction.Normalize();
                 data.skillUsedPosition = mousePos;
                 data.skillUsedRotation = Quaternion.LookRotation(direction);
                 playerManager.InputManager.OnButtonInput(SkillSlot.Dash, data);
@@ -167,7 +169,7 @@ public class PlayerInputManager
             if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 mousePos))
             {
                 Vector3 direction = mousePos - playerManager.transform.position;
-                direction.y = playerManager.transform.position.y;
+                direction.y = 0f;
                 direction.Normalize();
                 data.skillUsedRotation = Quaternion.LookRotation(direction);
                 playerManager.InputManager.OnButtonInput(_slot, data);
@@ -181,18 +183,16 @@ public class PlayerInputManager
     /// <returns></returns>
     private IEnumerator PopInputBufferCoroutine()
     {
-        float remainTime = 0f;
-
         while(true)
         {
             // 입력 버퍼가 비어있지 않고, Dequeue 시간이 남아있을 때만 시간을 감소시킨다.
-            if (skillBuffer.Count > 0 && remainTime > 0f)
-                remainTime -= Time.deltaTime;
+            if (skillBuffer.Count > 0 && remainDequeueTime > 0f)
+                remainDequeueTime -= Time.deltaTime;
 
             // Dequeue 시간이 다 되었을 때 Dequeue를 시도한다.
-            if (remainTime <= 0f)
+            if (remainDequeueTime <= 0f)
             {
-                remainTime = checkDequeueTime;
+                remainDequeueTime = checkDequeueTime;
 
                 // Dequeue 시도
                 if (skillBuffer.Count > 0)

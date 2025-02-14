@@ -284,8 +284,6 @@ public class PlayerManager : MonoBehaviour
         stateMachine.UpdateState();
 
         skillManager.DecreaseCoolTimes(Time.deltaTime);
-
-        Debug.LogFormat("Current {0} Character Speed : {1}", gameObject.name, animationManager.Speed);
     }
 
     #endregion
