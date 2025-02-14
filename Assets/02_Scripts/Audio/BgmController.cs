@@ -65,6 +65,10 @@ public class BgmController : MonoBehaviour
         }// 승리 Bgm
 #endif
     }
+    public void SetCurCharacterIndex(int _int)
+    {
+        curCharacterIndex = _int;
+    }
     #region 재생
     private void PlayCharacterBgm()      //캐릭터 테마 재생
     {
@@ -143,20 +147,6 @@ public class BgmController : MonoBehaviour
     } // 패배 bgm 재생
     #endregion
     #region 볼륨컨트롤
-    public void VolumeControl(float _level)
-    {
-        if(_level < 0 || _level > 100)
-        {
-            Debug.Log("Volume Range is 0 ~ 100");
-            return;
-        }
-        float volume = _level/100;
-        foreach (AudioSource audioSource in audioList)
-        {
-            audioSource.volume = volume * maxVolumeSound;
-        }
-    } //  1~100 까지 실수를 받아서 볼륨제어
-
     private IEnumerator FadeOutAudio(AudioSource audioSource, float duration)
     {
         isFading = true; // 페이드 시작

@@ -154,7 +154,7 @@ public class PlayerAiManager : MonoBehaviour
 
     private void UseRangeSkill(SkillSlot skillType, Vector3 bossPos)
     {
-        playerManager.InputManager.lastSkillUsePoint = new Vector3(bossPos.x, transform.position.y, bossPos.z);
+        playerManager.InputManager.lastSkillUsePoint = new Vector3(bossPos.x, 0, bossPos.z);
         playerManager.SkillManager.TryUseSkill(skillType, bossPos);
         Debug.Log("범위스킬");
     }
