@@ -249,7 +249,12 @@ public class NetworkGameManager : NetworkBehaviour
 
         if (IsServer)
         {
-            FindAnyObjectByType<BossStateManager>().bossDieCallback += VictoryClientRpc;
+            BossStateManager Boss = FindAnyObjectByType<BossStateManager>();
+
+            if (Boss != null)
+            {
+                Boss.bossDieCallback += VictoryClientRpc;
+            }
         }
 
        LoadingCheckServerRpc();
@@ -344,10 +349,9 @@ public class NetworkGameManager : NetworkBehaviour
     [ClientRpc]
     private void PlayerDieClientRpc(ulong _clientId)
     {
-        playerDieCallback?.Invoke(_clientId);
-
         if (IsServer)
         {
+            playerDieCallback?.Invoke(_clientId);
             playerDieCnt++;
             CheckPlayerAllDie();
         }
