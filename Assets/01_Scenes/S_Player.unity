@@ -607,7 +607,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLocalGame: 1
-  isPCMode: 1
+  isPCMode: 0
+  bgmController: {fileID: 0}
 --- !u!1001 &1546865054
 PrefabInstance:
   m_ObjectHideFlags: 0
