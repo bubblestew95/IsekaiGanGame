@@ -30,6 +30,7 @@ public class MushBehaviorManager : NetworkBehaviour
         {
             mushBT.behaviorEndCallback += () => StartCoroutine(BossPerformAction());
             mushStateManager.bossDieCallback += SetDie;
+            mushStateManager.bossChangeStateCallback += SetChase;
         }
     }
 
@@ -76,6 +77,11 @@ public class MushBehaviorManager : NetworkBehaviour
     private void SetDie()
     {
         SetBossBehavior(MushState.Die);
+    }
+
+    private void SetChase()
+    {
+        SetBossBehavior(MushState.Chase);
     }
 
     #endregion

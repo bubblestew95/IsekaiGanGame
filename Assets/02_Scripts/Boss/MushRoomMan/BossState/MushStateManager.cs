@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // 보스의 상태를 관리
@@ -23,6 +24,7 @@ public class MushStateManager : NetworkBehaviour
     public GameObject[] allPlayers;
     public GameObject[] alivePlayers;
     public GameObject aggroPlayer;
+    public GameObject randomPlayer;
     public float bestAggro;
     public int maxHp;
 
@@ -30,7 +32,7 @@ public class MushStateManager : NetworkBehaviour
     public DamageParticle damageParticle;
     public UIBossHpsManager bossHpUI;
     public BgmController bgmController;
-    public BossBT bossBT;
+    public MushBT mushBT;
     public GameObject boss;
 
 
@@ -38,6 +40,7 @@ public class MushStateManager : NetworkBehaviour
     public GameObject Boss { get { return boss; } }
     public GameObject AggroPlayer { get { return aggroPlayer; } }
     public GameObject[] AlivePlayers { get { return alivePlayers; } }
+    public GameObject RandomPlayer { get { return randomPlayer; } }
 
     private void Awake()
     {
@@ -107,7 +110,7 @@ public class MushStateManager : NetworkBehaviour
             {
                 if (alivePlayers[i] == null) continue;
 
-                if (alivePlayers[i] == alivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == RandomPlayer()))
+                if (alivePlayers[i] == alivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == RandomPlayerId()))
                 {
                     playerAggro[i] = 10f;
                     aggroPlayerIndex.Value = i;
@@ -276,7 +279,7 @@ public class MushStateManager : NetworkBehaviour
         damageParticle = FindFirstObjectByType<DamageParticle>();
         bossHpUI = FindFirstObjectByType<UIBossHpsManager>();
         bgmController = FindFirstObjectByType<BgmController>();
-        bossBT = FindAnyObjectByType<BossBT>();
+        mushBT = FindAnyObjectByType<MushBT>();
 
         // ui초기 설정
         bossHpUI.SetMaxHp(maxHp);
@@ -286,15 +289,18 @@ public class MushStateManager : NetworkBehaviour
         allPlayers = (GameObject[])FindFirstObjectByType<NetworkGameManager>().Players.Clone();
         alivePlayers = (GameObject[])allPlayers.Clone();
 
-        // 어그로 플레이어 설정
-        GetHighestAggroTarget();
+        if (IsServer)
+        {
+            // 어그로 플레이어 설정
+            GetHighestAggroTarget();
+        }
 
         // 설정 끝났으니 보스 상태 바꾸라고 콜백
         bossChangeStateCallback?.Invoke();
     }
 
     // 랜덤한 플레이어를 호출하는 함수
-    public ulong RandomPlayer()
+    public ulong RandomPlayerId()
     {
         List<ulong> numList = new List<ulong>();
 
@@ -308,6 +314,26 @@ public class MushStateManager : NetworkBehaviour
         ulong randomNum = numList[Random.Range(0, numList.Count)];
 
         return randomNum;
+    }
+
+
+    public void SetRandomPlayer()
+    {
+        SetRandomPlayerClientRpc(RandomPlayerId());
+    }
+
+    [ClientRpc]
+    private void SetRandomPlayerClientRpc(ulong _clientId)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            if (alivePlayers[i] == null) continue;
+
+            if (alivePlayers[i].GetComponent<NetworkObject>().OwnerClientId == _clientId)
+            {
+                randomPlayer = alivePlayers[i];
+            }
+        }
     }
 
     #endregion

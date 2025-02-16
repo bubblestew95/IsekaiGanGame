@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 // 보스의 행동에 맞게 Animation 재생 및 Transform 이동
 public class MushBT : NetworkBehaviour
@@ -18,6 +19,7 @@ public class MushBT : NetworkBehaviour
     private NavMeshAgent nvAgent;
     private MushStateManager mushStateManager;
     private BossSkillManager mushSkillManager;
+    private Transform[] randomPos;
 
     // 보스BT 데이터
     private MushState curState;
@@ -33,17 +35,24 @@ public class MushBT : NetworkBehaviour
     // 초기화
     private void Awake()
     {
-        anim = FindAnyObjectByType<Animator>();
-        nvAgent = FindAnyObjectByType<NavMeshAgent>();
-        mushStateManager = FindAnyObjectByType<MushStateManager>();
-        mushSkillManager = FindAnyObjectByType<BossSkillManager>();
-
         curState = MushState.Idle;
         previousBehavior = MushState.Idle;
         isCoroutineRunning = false;
         isDie = false;
         patternDelay = 2f;
         curCoroutine = null;
+        randomPos = new Transform[4];
+
+        anim = FindAnyObjectByType<Animator>();
+        nvAgent = FindAnyObjectByType<NavMeshAgent>();
+        mushStateManager = FindAnyObjectByType<MushStateManager>();
+        mushSkillManager = FindAnyObjectByType<BossSkillManager>();
+
+        GameObject pos = GameObject.Find("RandomPos");
+        randomPos[0] = pos.transform.GetChild(0);
+        randomPos[1] = pos.transform.GetChild(1);
+        randomPos[2] = pos.transform.GetChild(2);
+        randomPos[3] = pos.transform.GetChild(3);
     }
 
     private void Update()
@@ -110,6 +119,464 @@ public class MushBT : NetworkBehaviour
         isCoroutineRunning = false;
     }
 
+    private IEnumerator Attack1()
+    {
+        Debug.Log(curState.ToString());
+
+        isCoroutineRunning = true;
+        AttackStartCallback?.Invoke();
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 쿨타임 실행, 보스 공격력 설정
+        foreach (BossSkill skill in mushSkillManager.RandomSkills)
+        {
+            if (skill.SkillData.SkillName == curState.ToString())
+            {
+                skill.UseSkill();
+            }
+        }
+
+        // attack1 애니메이션 끝
+        while (true)
+        {
+            if (CheckEndAnim(curState))
+            {
+                SetAnimBool("Attack1-1", true);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // attack1-1 애니메이션 끝
+        while (true)
+        {
+            if (CheckEndAnim("Attack1-1"))
+            {
+                SetAnimBool("Attack1", false);
+                SetAnimBool("Attack1-1", false);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 상태를 chase로 변경
+        curState = MushState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
+        AttackEndCallback?.Invoke();
+    }
+
+    private IEnumerator Attack2()
+    {
+        Debug.Log(curState.ToString());
+
+        isCoroutineRunning = true;
+        AttackStartCallback?.Invoke();
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 쿨타임 실행, 보스 공격력 설정
+        foreach (BossSkill skill in mushSkillManager.RandomSkills)
+        {
+            if (skill.SkillData.SkillName == curState.ToString())
+            {
+                skill.UseSkill();
+            }
+        }
+
+        // 애니메이션 끝
+        while (true)
+        {
+            if (CheckEndAnim(curState))
+            {
+                SetAnimBool(curState, false);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 상태를 chase로 변경
+        curState = MushState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
+        AttackEndCallback?.Invoke();
+    }
+
+    private IEnumerator Attack3()
+    {
+        Debug.Log(curState.ToString());
+
+        isCoroutineRunning = true;
+        AttackStartCallback?.Invoke();
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 쿨타임 실행, 보스 공격력 설정
+        foreach (BossSkill skill in mushSkillManager.RandomSkills)
+        {
+            if (skill.SkillData.SkillName == curState.ToString())
+            {
+                skill.UseSkill();
+            }
+        }
+
+        float elapseTime = 0f;
+        Vector3 originPos = mushStateManager.Boss.transform.position;
+        Quaternion originRot = mushStateManager.Boss.transform.rotation;
+        Vector3 targetPos = RandomPos().transform.position;
+        Quaternion targetRot = RandomPos().transform.rotation;
+
+        // 애니메이션 attack3
+        while (true)
+        {
+            // 점프 이동
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack3"))
+            {
+                elapseTime += Time.deltaTime;
+
+                if (elapseTime >= 0.5f && elapseTime <= 1.6f)
+                {
+                    float t = Mathf.InverseLerp(0.5f, 1.6f, elapseTime);
+                    mushStateManager.Boss.transform.position = Vector3.Lerp(originPos, targetPos, t);
+                    mushStateManager.Boss.transform.rotation = Quaternion.Slerp(originRot, targetRot, t);
+                }
+            }
+
+            if (CheckEndAnim(curState))
+            {
+                SetAnimBool("Attack3-1", true);
+                break;
+            }
+
+            yield return null;
+        }
+
+        elapseTime = 0f;
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+            mushStateManager.Boss.transform.LookAt(mushStateManager.AggroPlayer.transform);
+
+            if (elapseTime >= 2f)
+            {
+                break;
+            }
+            yield return null;
+        }
+
+        // 애니메이션 attack3-1
+        while (true)
+        {
+            if (CheckEndAnim("Attack3-1"))
+            {
+                SetAnimBool("Attack3-2", true);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 애니메이션 attack3-2
+        while (true)
+        {
+            if (CheckEndAnim("Attack3-2"))
+            {
+                SetAnimBool("Attack3", false);
+                SetAnimBool("Attack3-1", false);
+                SetAnimBool("Attack3-2", false);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 상태를 chase로 변경
+        curState = MushState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
+        AttackEndCallback?.Invoke();
+    }
+
+    private IEnumerator Attack4()
+    {
+        Debug.Log(curState.ToString());
+
+        isCoroutineRunning = true;
+        AttackStartCallback?.Invoke();
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 쿨타임 실행, 보스 공격력 설정
+        foreach (BossSkill skill in mushSkillManager.RandomSkills)
+        {
+            if (skill.SkillData.SkillName == curState.ToString())
+            {
+                skill.UseSkill();
+            }
+        }
+
+
+
+        float elapseTime = 0f;
+        float animSpd = 1f;
+        mushStateManager.SetRandomPlayer();
+        mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
+        Vector3 originPos = mushStateManager.Boss.transform.position;
+        Vector3 targetPos = mushStateManager.RandomPlayer.transform.position;
+
+        // attack4
+        while (true)
+        {
+            // 점프 이동
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4"))
+            {
+                elapseTime += Time.deltaTime;
+
+                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.6f / animSpd))
+                {
+                    float t = Mathf.InverseLerp(0.5f, 1.6f, elapseTime);
+                    mushStateManager.Boss.transform.position = Vector3.Lerp(originPos, targetPos, t);
+                }
+            }
+
+            if (CheckEndAnim(curState))
+            {
+                SetAnimBool("Attack4-1", true);
+                break;
+            }
+
+            yield return null;
+        }
+
+        elapseTime = 0f;
+        animSpd = 1.5f;
+        mushStateManager.SetRandomPlayer();
+        mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
+        originPos = mushStateManager.Boss.transform.position;
+        targetPos = mushStateManager.RandomPlayer.transform.position;
+
+        // 애니메이션 attack4-1
+        while (true)
+        {
+            // 점프 이동
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-1"))
+            {
+                elapseTime += Time.deltaTime;
+
+                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.6f / animSpd))
+                {
+                    float t = Mathf.InverseLerp((0.5f / animSpd), (1.6f / animSpd), elapseTime);
+                    mushStateManager.Boss.transform.position = Vector3.Lerp(originPos, targetPos, t);
+                }
+            }
+
+            if (CheckEndAnim("Attack4-1"))
+            {
+                SetAnimBool("Attack4-2", true);
+                break;
+            }
+
+            yield return null;
+        }
+
+        elapseTime = 0f;
+        animSpd = 2f;
+        mushStateManager.SetRandomPlayer();
+        mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
+        originPos = mushStateManager.Boss.transform.position;
+        targetPos = mushStateManager.RandomPlayer.transform.position;
+
+        // 애니메이션 attack4-2
+        while (true)
+        {
+            // 점프 이동
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-2"))
+            {
+                elapseTime += Time.deltaTime;
+
+                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.6f / animSpd))
+                {
+                    float t = Mathf.InverseLerp((0.5f / animSpd), (1.6f / animSpd), elapseTime);
+                    mushStateManager.Boss.transform.position = Vector3.Lerp(originPos, targetPos, t);
+                }
+            }
+
+            if (CheckEndAnim("Attack4-2"))
+            {
+                SetAnimBool("Attack4-3", true);
+                break;
+            }
+
+            yield return null;
+        }
+
+        elapseTime = 0f;
+        animSpd = 2.5f;
+        mushStateManager.SetRandomPlayer();
+        mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
+        originPos = mushStateManager.Boss.transform.position;
+        targetPos = mushStateManager.RandomPlayer.transform.position;
+
+        // 애니메이션 attack4-3
+        while (true)
+        {
+            // 점프 이동
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-3"))
+            {
+                elapseTime += Time.deltaTime;
+
+                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.6f / animSpd))
+                {
+                    float t = Mathf.InverseLerp((0.5f / animSpd), (1.6f / animSpd), elapseTime);
+                    mushStateManager.Boss.transform.position = Vector3.Lerp(originPos, targetPos, t);
+                }
+            }
+
+            if (CheckEndAnim("Attack4-3"))
+            {
+                SetAnimBool("Attack4", false);
+                SetAnimBool("Attack4-1", false);
+                SetAnimBool("Attack4-2", false);
+                SetAnimBool("Attack4-3", false);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 상태를 chase로 변경
+        curState = MushState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
+        AttackEndCallback?.Invoke();
+    }
+
+    private IEnumerator Attack5()
+    {
+        Debug.Log(curState.ToString());
+
+        isCoroutineRunning = true;
+        AttackStartCallback?.Invoke();
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 쿨타임 실행, 보스 공격력 설정
+        foreach (BossSkill skill in mushSkillManager.RandomSkills)
+        {
+            if (skill.SkillData.SkillName == curState.ToString())
+            {
+                skill.UseSkill();
+            }
+        }
+
+        float elapseTime = 0f;
+        mushStateManager.Boss.transform.LookAt(mushStateManager.AggroPlayer.transform);
+        Vector3 originPos = mushStateManager.Boss.transform.position;
+        Vector3 targetPos = mushStateManager.AggroPlayer.transform.position;
+
+        // 애니메이션 끝
+        while (true)
+        {
+            // 점프 이동
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5"))
+            {
+                elapseTime += Time.deltaTime;
+
+                if (elapseTime >= 0.5f && elapseTime <= 1.6f)
+                {
+                    float t = Mathf.InverseLerp(0.5f, 1.6f, elapseTime);
+                    mushStateManager.Boss.transform.position = Vector3.Lerp(originPos, targetPos, t);
+                }
+            }
+
+            if (CheckEndAnim(curState))
+            {
+                SetAnimBool(curState, false);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 상태를 chase로 변경
+        curState = MushState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
+        AttackEndCallback?.Invoke();
+    }
+
+    private IEnumerator Attack6()
+    {
+        Debug.Log(curState.ToString());
+
+        isCoroutineRunning = true;
+        AttackStartCallback?.Invoke();
+        previousBehavior = curState;
+
+        // 애니메이션 시작
+        SetAnimBool(curState, true);
+
+        // 쿨타임 실행, 보스 공격력 설정
+        foreach (BossSkill skill in mushSkillManager.RandomSkills)
+        {
+            if (skill.SkillData.SkillName == curState.ToString())
+            {
+                skill.UseSkill();
+            }
+        }
+
+        // 애니메이션 끝
+        while (true)
+        {
+            if (CheckEndAnim(curState))
+            {
+                SetAnimBool(curState, false);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 상태를 chase로 변경
+        curState = MushState.Chase;
+
+        // 패턴이 끝났음을 콜백
+        behaviorEndCallback?.Invoke();
+
+        isCoroutineRunning = false;
+        AttackEndCallback?.Invoke();
+    }
+
     private IEnumerator Die()
     {
         anim.Play("Die");
@@ -120,10 +587,16 @@ public class MushBT : NetworkBehaviour
     #endregion
 
     #region [Anim]
+
     // 애니메이션 bool값 설정
     private void SetAnimBool(MushState _state, bool _isActive)
     {
         anim.SetBool(_state.ToString() + "Flag", _isActive);
+    }
+
+    private void SetAnimBool(string _stateName, bool _isActive)
+    {
+        anim.SetBool(_stateName + "Flag", _isActive);
     }
 
     // 애니메이션 끝났는지 check하는 조건문
@@ -137,6 +610,29 @@ public class MushBT : NetworkBehaviour
         {
             return false;
         }
+    }
+
+    // 애니메이션 끝났는지 check하는 조건문
+    private bool CheckEndAnim(string _stateName)
+    {
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName(_stateName) && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    #endregion
+
+    #region [Function]
+
+    // Random한 위치 설정하는 함수
+    private Transform RandomPos()
+    {
+        return randomPos[UnityEngine.Random.Range(0, 4)];
     }
 
     #endregion
