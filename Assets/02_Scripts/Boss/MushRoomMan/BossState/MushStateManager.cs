@@ -17,6 +17,7 @@ public class MushStateManager : NetworkBehaviour
     // 네트워크로 동기화 할것들
     public NetworkVariable<int> aggroPlayerIndex = new NetworkVariable<int>(-1);
     public NetworkVariable<int> curHp = new NetworkVariable<int>(-1);
+    public NetworkVariable<float> bestAggro = new NetworkVariable<float>(-1f);
     public NetworkList<float> playerDamage = new NetworkList<float>();
     public NetworkList<float> playerAggro = new NetworkList<float>();
 
@@ -25,7 +26,6 @@ public class MushStateManager : NetworkBehaviour
     public GameObject[] alivePlayers;
     public GameObject aggroPlayer;
     public GameObject randomPlayer;
-    public float bestAggro;
     public int maxHp;
 
     // 참조 목록
@@ -62,11 +62,13 @@ public class MushStateManager : NetworkBehaviour
         // 데미지를 입힘(공유되는 변수에 저장)
         TakeDamage(_damage);
 
-        // 클라이언트 모두 어그로 플레이어 설정하는 함수
-        GetHighestAggroTarget();
+        if (IsServer)
+        {
+            GetHighestAggroTarget();
+        }
 
         // 클라이언트 모두 보스 피격 파티클 실행
-        DamageParticleClientRpc(_damage);
+        DamageParticleClientRpc(_damage, _clientId);
 
         // 클라이언트 모두 보스 UI설정
         UpdateBossUIClientRpc(_damage);
@@ -106,13 +108,18 @@ public class MushStateManager : NetworkBehaviour
         // 전부 어그로 0일때 -> 랜덤 1명 아무나 aggro 10으로 만들고 aggroPlayer 상태로
         if (allAggroZero)
         {
+            // 랜덤 플레이어 설정
+            ulong randomIndex = RandomPlayerId();
+            GameObject randomPlayer = alivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == randomIndex);
+
             for (int i = 0; i < 4; i++)
             {
                 if (alivePlayers[i] == null) continue;
 
-                if (alivePlayers[i] == alivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == RandomPlayerId()))
+                if (alivePlayers[i] == randomPlayer)
                 {
                     playerAggro[i] = 10f;
+                    bestAggro.Value = playerAggro[i];
                     aggroPlayerIndex.Value = i;
                 }
             }
@@ -124,9 +131,9 @@ public class MushStateManager : NetworkBehaviour
         // 기존의 어그로 왕보다 어그로가 1.2배 크면 어그로 바뀜
         for (int i = 0; i < alivePlayers.Length; i++)
         {
-            if (bestAggro * 1.2f <= playerAggro[i])
+            if (bestAggro.Value * 1.2f <= playerAggro[i])
             {
-                bestAggro = playerAggro[i];
+                bestAggro.Value = playerAggro[i];
                 aggroPlayerIndex.Value = i;
             }
         }
@@ -162,11 +169,20 @@ public class MushStateManager : NetworkBehaviour
     #region [Particle]
 
     // 데미지 파티클 실행
+    // 데미지 파티클 실행
     [ClientRpc]
-    private void DamageParticleClientRpc(float _damage)
+    private void DamageParticleClientRpc(float _damage, ulong _clientId)
     {
-        damageParticle.SetupAndPlayParticles(_damage);
+        if (NetworkManager.Singleton.LocalClientId == _clientId)
+        {
+            damageParticle.SetupAndPlayParticlesMine(_damage);
+        }
+        else
+        {
+            damageParticle.SetupAndPlayParticles(_damage);
+        }
     }
+
 
     #endregion
 
@@ -206,6 +222,9 @@ public class MushStateManager : NetworkBehaviour
     // 플레이어가 죽었을때 호출되는 함수
     private void PlayerDieCallback(ulong _clientId)
     {
+        int playerIndex = -1;
+        bool IsAggroDie = false;
+
         // 죽은 플레이어의 Aggro수치 리셋 && Player리스트에서 빼기
         for (int i = 0; i < 4; ++i)
         {
@@ -214,22 +233,36 @@ public class MushStateManager : NetworkBehaviour
             if (alivePlayers[i].GetComponent<NetworkObject>().OwnerClientId == _clientId)
             {
                 // 만약 죽은 플레이어가 bestAggro였다면 베스트 어그로도 초기화
-                if (i == aggroPlayerIndex.Value) bestAggro = 0;
-
+                if (i == aggroPlayerIndex.Value)
+                {
+                    bestAggro.Value = 0f;
+                    IsAggroDie = true;
+                }
                 playerAggro[i] = 0f;
                 alivePlayers[i] = null;
+                playerIndex = i;
 
-                // 중간에 Best어그로 플레이어가 죽었을때 -> bestAggro 재설정
-                for (int j = 0; j < alivePlayers.Length; j++)
+                // Aggro플레이어가 죽었다면, bestAggro 재설정
+                if (IsAggroDie)
                 {
-                    if (bestAggro <= playerAggro[j])
+                    // bestAggro 재설정
+                    for (int j = 0; j < alivePlayers.Length; j++)
                     {
-                        bestAggro = playerAggro[j];
-                        aggroPlayerIndex.Value = j;
+                        if (bestAggro.Value <= playerAggro[j])
+                        {
+                            bestAggro.Value = playerAggro[j];
+                            aggroPlayerIndex.Value = j;
+                        }
                     }
                 }
             }
         }
+
+        // alivePlayer 동기화
+        SetAlivePlayerClientRpc(playerIndex);
+
+        // 어그로 플레이어 변경(클라 모두)
+        SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
 
         // 어그로 재설정을 위한 어그로 세팅 함수 호출
         GetHighestAggroTarget();
@@ -258,7 +291,6 @@ public class MushStateManager : NetworkBehaviour
     private void Init()
     {
         // 초기 값 설정
-        bestAggro = 0f;
         maxHp = 5000;
 
         // 서버에서 저장할거 설정
@@ -272,6 +304,7 @@ public class MushStateManager : NetworkBehaviour
 
             curHp.Value = maxHp;
             aggroPlayerIndex.Value = 0;
+            bestAggro.Value = 0f;
         }
 
         // 참조 가져오기
@@ -316,7 +349,6 @@ public class MushStateManager : NetworkBehaviour
         return randomNum;
     }
 
-
     public void SetRandomPlayer()
     {
         SetRandomPlayerClientRpc(RandomPlayerId());
@@ -334,6 +366,12 @@ public class MushStateManager : NetworkBehaviour
                 randomPlayer = alivePlayers[i];
             }
         }
+    }
+
+    [ClientRpc]
+    private void SetAlivePlayerClientRpc(int _index)
+    {
+        alivePlayers[_index] = null;
     }
 
     #endregion

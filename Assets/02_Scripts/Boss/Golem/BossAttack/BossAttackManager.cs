@@ -231,6 +231,7 @@ public class BossAttackManager : NetworkBehaviour
             if (bossStateManager.AlivePlayers[cnt] == null)
             {
                 skillPos.transform.position = new Vector3(-100f, 0f, -100f);
+                cnt++;
                 continue;
             }
 

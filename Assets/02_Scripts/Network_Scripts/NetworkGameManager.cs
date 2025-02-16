@@ -349,10 +349,9 @@ public class NetworkGameManager : NetworkBehaviour
     [ClientRpc]
     private void PlayerDieClientRpc(ulong _clientId)
     {
-        playerDieCallback?.Invoke(_clientId);
-
         if (IsServer)
         {
+            playerDieCallback?.Invoke(_clientId);
             playerDieCnt++;
             CheckPlayerAllDie();
         }

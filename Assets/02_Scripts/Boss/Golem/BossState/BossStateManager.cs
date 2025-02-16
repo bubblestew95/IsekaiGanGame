@@ -30,7 +30,6 @@ public class BossStateManager : NetworkBehaviour
     public List<BossChain> activeChain = new List<BossChain>();
     public bool[] hpCheck = new bool[9];
     public GameObject randomTarget;
-    public float bestAggro = 0f;
     public bool isPhase2 = false;
     public int maxHp = 1000;
     public float chainTime = 0f;
@@ -39,6 +38,7 @@ public class BossStateManager : NetworkBehaviour
     public GameObject aggroPlayer;
 
     // 네트워크로 동기화 할것들
+    public NetworkVariable<float> bestAggro;
     public NetworkVariable<int> aggroPlayerIndex = new NetworkVariable<int>(-1);
     public NetworkVariable<int> curHp = new NetworkVariable<int>(-1);
     public NetworkList<float> playerDamage = new NetworkList<float>();
@@ -90,11 +90,14 @@ public class BossStateManager : NetworkBehaviour
         // 데미지를 입힘(공유되는 변수에 저장)
         TakeDamage(_damage);
 
-        // 클라이언트 모두 어그로 플레이어 설정하는 함수
-        GetHighestAggroTarget();
+        // 클라이언트 모두 어그로 플레이어 설정하는 함수 (네트워크에서 계산후 쏴줌)
+        if (IsServer)
+        {
+            GetHighestAggroTarget();
+        }
 
         // 클라이언트 모두 보스 피격 파티클 실행
-        DamageParticleClientRpc(_damage);
+        DamageParticleClientRpc(_damage, _clientId);
 
         // 클라이언트 모두 보스 UI설정
         UpdateBossUIClientRpc(_damage);
@@ -116,9 +119,16 @@ public class BossStateManager : NetworkBehaviour
 
     // 데미지 파티클 실행
     [ClientRpc]
-    private void DamageParticleClientRpc(float _damage)
+    private void DamageParticleClientRpc(float _damage, ulong _clientId)
     {
-        damageParticle.SetupAndPlayParticles(_damage);
+        if (NetworkManager.Singleton.LocalClientId == _clientId)
+        {
+            damageParticle.SetupAndPlayParticlesMine(_damage);
+        }
+        else
+        {
+            damageParticle.SetupAndPlayParticles(_damage);
+        }
     }
 
     // 보스 UI 업데이트
@@ -140,6 +150,12 @@ public class BossStateManager : NetworkBehaviour
     private void RandomPlayerClientRpc(ulong _num)
     {
         bossRandomTargetCallback?.Invoke(_num);
+    }
+
+    [ClientRpc]
+    private void SetAlivePlayerClientRpc(int _index)
+    {
+        alivePlayers[_index] = null;
     }
     #endregion
 
@@ -291,13 +307,18 @@ public class BossStateManager : NetworkBehaviour
         // 전부 어그로 0일때 -> 랜덤 1명 아무나 aggro 10으로 만들고 aggroPlayer 상태로
         if (allAggroZero)
         {
+            // 랜덤 플레이어 설정
+            ulong randomIndex = RandomPlayer();
+            GameObject randomPlayer = alivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == randomIndex);
+
             for (int i = 0; i < 4; i++)
             {
                 if (alivePlayers[i] == null) continue;
 
-                if (alivePlayers[i] == alivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == RandomPlayer()))
+                if (alivePlayers[i] == randomPlayer)
                 {
                     playerAggro[i] = 10f;
+                    bestAggro.Value = playerAggro[i];
                     aggroPlayerIndex.Value = i;
                 }
             }
@@ -309,9 +330,9 @@ public class BossStateManager : NetworkBehaviour
         // 기존의 어그로 왕보다 어그로가 1.2배 크면 어그로 바뀜
         for (int i = 0; i < alivePlayers.Length; i++)
         {
-            if (bestAggro * 1.2f <= playerAggro[i])
+            if (bestAggro.Value * 1.2f <= playerAggro[i])
             {
-                bestAggro = playerAggro[i];
+                bestAggro.Value = playerAggro[i];
                 aggroPlayerIndex.Value = i;
             }
         }
@@ -369,7 +390,6 @@ public class BossStateManager : NetworkBehaviour
         {
             hpCheck[i] = false;
         }
-        bestAggro = 0f;
 
         // 참조 가져오기
         boss = transform.gameObject;
@@ -399,6 +419,7 @@ public class BossStateManager : NetworkBehaviour
 
             curHp.Value = maxHp;
             aggroPlayerIndex.Value = 0;
+            bestAggro.Value = 0f;
         }
 
         Init();
@@ -421,8 +442,11 @@ public class BossStateManager : NetworkBehaviour
         allPlayers = FindFirstObjectByType<NetworkGameManager>().Players;
         alivePlayers = (GameObject[])allPlayers.Clone();
 
-        // 초반 aggro 0이여서 세팅하는 함수 -> 한 프레임뒤에 실행되도록 => 아직 allPlayers가 할당안됬다는 오류 때문에
-        GetHighestAggroTarget();
+        // 초반 aggro 0이여서 세팅하는 함수
+        if (IsServer)
+        {
+            GetHighestAggroTarget();
+        }
     }
 
     // 보스 상태 변경
@@ -462,6 +486,9 @@ public class BossStateManager : NetworkBehaviour
     // 플레이어가 죽었을때 호출되는 함수
     private void PlayerDieCallback(ulong _clientId)
     {
+        int playerIndex = -1;
+        bool IsAggroDie = false;
+
         // 죽은 플레이어의 Aggro수치 리셋 && Player리스트에서 빼기
         for (int i = 0; i < 4; ++i)
         {
@@ -470,22 +497,36 @@ public class BossStateManager : NetworkBehaviour
             if (alivePlayers[i].GetComponent<NetworkObject>().OwnerClientId == _clientId)
             {
                 // 만약 죽은 플레이어가 bestAggro였다면 베스트 어그로도 초기화
-                if (i == aggroPlayerIndex.Value) bestAggro = 0;
-
+                if (i == aggroPlayerIndex.Value)
+                {
+                    bestAggro.Value = 0f;
+                    IsAggroDie = true;
+                }
                 playerAggro[i] = 0f;
                 alivePlayers[i] = null;
+                playerIndex = i;
 
-                // 중간에 Best어그로 플레이어가 죽었을때 -> bestAggro 재설정
-                for (int j = 0; j < alivePlayers.Length; j++)
+                // Aggro플레이어가 죽었다면, bestAggro 재설정
+                if (IsAggroDie)
                 {
-                    if (bestAggro <= playerAggro[j])
+                    // bestAggro 재설정
+                    for (int j = 0; j < alivePlayers.Length; j++)
                     {
-                        bestAggro = playerAggro[j];
-                        aggroPlayerIndex.Value = j;
+                        if (bestAggro.Value <= playerAggro[j])
+                        {
+                            bestAggro.Value = playerAggro[j];
+                            aggroPlayerIndex.Value = j;
+                        }
                     }
                 }
             }
         }
+
+        // alivePlayer 동기화
+        SetAlivePlayerClientRpc(playerIndex);
+
+        // 어그로 플레이어 변경(클라 모두)
+        SetAggroPlayerClientRpc(aggroPlayerIndex.Value);
 
         // 어그로 재설정을 위한 어그로 세팅 함수 호출
         GetHighestAggroTarget();

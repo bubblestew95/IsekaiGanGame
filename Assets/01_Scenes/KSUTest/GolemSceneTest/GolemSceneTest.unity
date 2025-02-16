@@ -154,7 +154,6 @@ Transform:
   - {fileID: 2007179111}
   - {fileID: 2009921602}
   - {fileID: 8313238874817310683}
-  - {fileID: 2141927563}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &45983753
@@ -9800,6 +9799,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1562387887}
   - component: {fileID: 1562387888}
+  - component: {fileID: 1562387889}
   m_Layer: 10
   m_Name: ParticleManager
   m_TagString: Untagged
@@ -9844,6 +9844,34 @@ MonoBehaviour:
   attack8: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
   attack9: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
   SpecialAttack: {fileID: 198399678132347108, guid: 045d5fbbf8161ea478959fe3c8e41207, type: 3}
+--- !u!114 &1562387889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562387886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e34f63dc003acae4d8b7bf21520d11f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  P_Particle: {fileID: 8572015441863317618, guid: cbaf2733c5c02f141bb9639f40792ad0, type: 3}
+  P_ParticleMine: {fileID: 8572015441863317618, guid: ee00f422ccf8daa428f0b48986976f72, type: 3}
+  bossStateManager: {fileID: 457395389}
+  digitParticles: []
+  numberSprites:
+  - {fileID: 21300000, guid: 7fafe1b67efeb404e9866e0c114d4850, type: 2}
+  - {fileID: 21300000, guid: 36053b8d0a5d6384aaa085c31be480ba, type: 2}
+  - {fileID: 21300000, guid: d878f81166f401045b88dee4f4a6c95a, type: 2}
+  - {fileID: 21300000, guid: 3da69aa3da693b84482392b14540faf0, type: 2}
+  - {fileID: 21300000, guid: c284f74c04c8ea044a7479e09c4b6b1c, type: 2}
+  - {fileID: 21300000, guid: 7959d413152a8a746a0464a9073e7388, type: 2}
+  - {fileID: 21300000, guid: 235b20c2715bf16458f868a28735acb6, type: 2}
+  - {fileID: 21300000, guid: ed1d26da0af1ae643bca3b73af5607af, type: 2}
+  - {fileID: 21300000, guid: 99606ddfd20cf8e40a5c69b89d26120e, type: 2}
+  - {fileID: 21300000, guid: 1545f2c821fcef946bc1db31007d997e, type: 2}
+  damage: 20
 --- !u!1 &1566495077
 GameObject:
   m_ObjectHideFlags: 0
@@ -13899,65 +13927,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!1 &2141927562
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2141927563}
-  - component: {fileID: 2141927564}
-  m_Layer: 0
-  m_Name: DamageParticle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2141927563
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141927562}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15.101664, y: 1.7581124, z: -14.56789}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 27146643}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2141927564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141927562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e34f63dc003acae4d8b7bf21520d11f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  P_Particle: {fileID: 8572015441863317618, guid: cbaf2733c5c02f141bb9639f40792ad0, type: 3}
-  bossStateManager: {fileID: 457395389}
-  digitParticles: []
-  numberSprites:
-  - {fileID: 21300000, guid: 7fafe1b67efeb404e9866e0c114d4850, type: 2}
-  - {fileID: 21300000, guid: 36053b8d0a5d6384aaa085c31be480ba, type: 2}
-  - {fileID: 21300000, guid: d878f81166f401045b88dee4f4a6c95a, type: 2}
-  - {fileID: 21300000, guid: 3da69aa3da693b84482392b14540faf0, type: 2}
-  - {fileID: 21300000, guid: c284f74c04c8ea044a7479e09c4b6b1c, type: 2}
-  - {fileID: 21300000, guid: 7959d413152a8a746a0464a9073e7388, type: 2}
-  - {fileID: 21300000, guid: 235b20c2715bf16458f868a28735acb6, type: 2}
-  - {fileID: 21300000, guid: ed1d26da0af1ae643bca3b73af5607af, type: 2}
-  - {fileID: 21300000, guid: 99606ddfd20cf8e40a5c69b89d26120e, type: 2}
-  - {fileID: 21300000, guid: 1545f2c821fcef946bc1db31007d997e, type: 2}
-  damage: 20
 --- !u!1001 &3401187972123551675
 PrefabInstance:
   m_ObjectHideFlags: 0
