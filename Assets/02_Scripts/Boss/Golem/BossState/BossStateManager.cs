@@ -388,6 +388,8 @@ public class BossStateManager : NetworkBehaviour
 
                 bestAggro.Value -= reduceAggro;
 
+                if (bestAggro.Value <= 0) bestAggro.Value = 0;
+
                 elapseTime = 0f;
             }
             yield return null;
