@@ -215,7 +215,6 @@ public class PlayerInputManager
         {
             if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 pos))
             {
-                Debug.LogFormat("Mouse Position : {0}", pos);
                 _skillUI.AimSkill(pos);
             }
 

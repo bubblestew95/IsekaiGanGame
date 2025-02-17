@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class GameManager : MonoBehaviour
 {
@@ -71,9 +72,16 @@ public class GameManager : MonoBehaviour
 
     public void DamageToPlayer(PlayerManager _damageReceiver, int _damage)
     {
+        if (_damageReceiver.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Damaged
+            || _damageReceiver.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Death
+            || _damageReceiver.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Dash)
+        {
+            return;
+        }
+
         if (isLocalGame)
             ApplyDamageToPlayer(_damageReceiver, _damage);
-        else
+        else 
         {
             networkGameManager.OnPlayerDamaged(_damageReceiver, _damage);
         }
@@ -82,6 +90,13 @@ public class GameManager : MonoBehaviour
 
     public void DamageToPlayer(PlayerManager _damageReceiver, int _damage, Vector3 _attackPos, float _knockBackDist)
     {
+        if (_damageReceiver.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Damaged
+        || _damageReceiver.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Death
+        || _damageReceiver.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Dash)
+        {
+            return;
+        }
+
         DamageToPlayer(_damageReceiver, _damage);
 
         if (isLocalGame)
@@ -110,13 +125,6 @@ public class GameManager : MonoBehaviour
 
     public void ApplyKnockbackToPlayer(PlayerManager _target, Vector3 _attackPos, float _knockbackDist)
     {
-        if(_target.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Damaged
-            || _target.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Death
-            || _target.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Dash)
-        {
-            return;
-        }
-
         _target.AttackManager.KnockbackPlayer(_attackPos, _knockbackDist);
     }
 

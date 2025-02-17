@@ -93,9 +93,13 @@ public class SkillUIManager : MonoBehaviour
 
     public void SetAllSkillUIEnabled(bool _enabled)
     {
-        foreach (var skillUI in skillUIMap.Values)
+        if(skillUIMap != null)
         {
-            skillUI.SetEnabled(_enabled);
+            foreach (var skillUI in skillUIMap.Values)
+            {
+                if(skillUI != null)
+                    skillUI.SetEnabled(_enabled);
+            }
         }
     }
 

@@ -26,12 +26,12 @@ public class SkillUI_AOE : SkillUI_Base
     {
         position.y = transform.position.y;
 
-        if(Vector3.Distance(position, transform.position) > maxRangeRadius)
+        if(Vector3.Distance(position, transform.position) > (maxRangeRadius / 2f))
         {
             Debug.Log("Hello?");
             Vector3 dir = position - transform.position;
             dir.Normalize();
-            targetRectTr.position = transform.position + dir * maxRangeRadius;
+            targetRectTr.position = transform.position + dir * (maxRangeRadius / 2f);
         }
         else
             targetRectTr.position = position;

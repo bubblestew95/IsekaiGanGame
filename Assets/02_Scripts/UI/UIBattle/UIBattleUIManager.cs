@@ -99,14 +99,20 @@ public class UIBattleUIManager : MonoBehaviour
 
     public void UpdatePlayerHp()
     {
-        ui_PlayerHp.SetCurrentHp(playerManager.StatusManager.CurrentHp);
-        ui_PlayerHp.HpBarUIUpdate();
+        if(playerManager.StatusManager != null && ui_PlayerHp != null)
+        {
+            ui_PlayerHp.SetCurrentHp(playerManager.StatusManager.CurrentHp);
+            ui_PlayerHp.HpBarUIUpdate();
+        }
     }
 
     public void UpdateBossHp()
     {
-        ui_BossHp.SetCurrentHp(GameManager.Instance.GetBossHp());
-        ui_BossHp.HpBarUIUpdate();
+        if(ui_BossHp != null)
+        {
+            ui_BossHp.SetCurrentHp(GameManager.Instance.GetBossHp());
+            ui_BossHp.HpBarUIUpdate();
+        }
     }
 
     /// <summary>

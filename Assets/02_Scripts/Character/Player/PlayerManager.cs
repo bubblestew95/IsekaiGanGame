@@ -142,7 +142,21 @@ public class PlayerManager : MonoBehaviour
 
     public void ChangeState(PlayerStateType _type)
     {
+        if(GameManager.Instance.IsLocalGame)
+        {
+            ChangeState_Local(_type);
+        }
+        else if(playerNetworkManager.IsClientPlayer())
+        {
+            playerNetworkManager.NetworkChangeState(_type);
+        }
+
+    }
+
+    public void ChangeState_Local(PlayerStateType _type)
+    {
         Debug.LogFormat("Player State Change To {0}.", _type);
+
         StateMachine.ChangeState(_type);
     }
 
