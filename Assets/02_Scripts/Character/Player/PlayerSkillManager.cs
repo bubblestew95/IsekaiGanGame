@@ -75,7 +75,7 @@ public class PlayerSkillManager
             {
                 animator.SetTrigger(animId);
             }
-            else
+            else if (playerManager.PlayerNetworkManager.IsClientPlayer())
             {
                 playerManager.PlayerNetworkManager.SetNetworkAnimatorTrigger(animId);
             }
