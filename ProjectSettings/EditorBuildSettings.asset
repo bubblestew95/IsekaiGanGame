@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/01_Scenes/KSUTest/Login.unity
     guid: 224b127dc5b0b834aa2147ff1eb0f956
-  - enabled: 1
+  - enabled: 0
     path: Assets/01_Scenes/KSUTest/GolemSceneTest/Login.unity
     guid: a875e19e6032d6643bfc4b3be3c5af2a
   - enabled: 1
