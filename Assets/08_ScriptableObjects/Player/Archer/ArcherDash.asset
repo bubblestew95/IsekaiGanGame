@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillSlot: 5
   coolTime: 7
-  dashSpeed: 10
+  dashSpeed: 12
   dashTime: 0.5
   isForward: 1

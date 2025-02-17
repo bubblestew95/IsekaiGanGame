@@ -298,6 +298,8 @@ public class PlayerManager : MonoBehaviour
         stateMachine.UpdateState();
 
         skillManager.DecreaseCoolTimes(Time.deltaTime);
+
+
     }
 
     #endregion

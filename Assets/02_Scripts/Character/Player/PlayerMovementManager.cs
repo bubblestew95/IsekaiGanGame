@@ -55,7 +55,8 @@ public class PlayerMovementManager
     /// </summary>
     public void StopMove()
     {
-        characterController.Move(Vector3.zero);
+        if(characterController != null)
+            characterController.Move(Vector3.zero);
     }
 
     /// <summary>

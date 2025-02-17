@@ -40,7 +40,7 @@ public class PlayerAnimationManager
     {
         if (GameManager.Instance.IsLocalGame)
             animator.SetTrigger(animId_Damaged);
-        else
+        else if(playerManager.PlayerNetworkManager.IsClientPlayer())
             networkAnimator.SetTrigger(animId_Damaged);
     }
 
@@ -48,7 +48,7 @@ public class PlayerAnimationManager
     {
         if (GameManager.Instance.IsLocalGame)
             animator.SetTrigger(animId_Death);
-        else
+        else if (playerManager.PlayerNetworkManager.IsClientPlayer())
             networkAnimator.SetTrigger(animId_Death);
     }
 
@@ -56,7 +56,7 @@ public class PlayerAnimationManager
     {
         if (GameManager.Instance.IsLocalGame)
             animator.SetTrigger(animId_GetRevived);
-        else
+        else if (playerManager.PlayerNetworkManager.IsClientPlayer())
             networkAnimator.SetTrigger(animId_GetRevived);
     }
 

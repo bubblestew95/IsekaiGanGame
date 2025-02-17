@@ -21,7 +21,8 @@ public class PlayerNetworkManager : NetworkBehaviour
             return;
         }
 
-        networkAnimator.SetTrigger(_hashId);
+        if (IsClientPlayer())
+            networkAnimator.SetTrigger(_hashId);
     }
 
     public bool IsClientPlayer()
@@ -49,13 +50,13 @@ public class PlayerNetworkManager : NetworkBehaviour
         SetSpeedAnimServerRpc(OwnerClientId, _speed);
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server)]
     private void RevivePlayerServerRpc(ulong _clientId)
     {
         ApplyRevivePlayerClientRpc(_clientId);
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server, Delivery = RpcDelivery.Unreliable)]
     private void SetSpeedAnimServerRpc(ulong _clientId, float _speed)
     {
         var obj = NetworkManager.ConnectedClients[_clientId].PlayerObject;
@@ -65,13 +66,13 @@ public class PlayerNetworkManager : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server, Delivery = RpcDelivery.Reliable)]
     private void ChangeStateServerRpc(ulong _clientId, PlayerStateType _state)
     {
         ChangeStateClientRpc(_clientId, _state);
     }
 
-    [ClientRpc]
+    [Rpc(SendTo.Everyone, Delivery = RpcDelivery.Reliable)]
     private void ApplyRevivePlayerClientRpc(ulong _clientId)
     {
         var obj = NetworkManager.ConnectedClients[_clientId].PlayerObject;
@@ -83,7 +84,7 @@ public class PlayerNetworkManager : NetworkBehaviour
     }
 
 
-    [ClientRpc]
+    [Rpc(SendTo.Everyone, Delivery = RpcDelivery.Reliable)]
     private void ChangeStateClientRpc(ulong _clientId, PlayerStateType _state)
     {
         var obj = NetworkManager.ConnectedClients[_clientId].PlayerObject;

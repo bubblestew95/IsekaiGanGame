@@ -174,7 +174,7 @@ public class NetworkGameManager : NetworkBehaviour
     /// <param name="_damage"></param>
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
-    [ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server, Delivery = RpcDelivery.Reliable)]
     private void PlayerDamagedServerRpc
         (ulong _clientId, int _damage)
     {
@@ -188,7 +188,7 @@ public class NetworkGameManager : NetworkBehaviour
     /// <param name="_clientId"></param>
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
-    [ServerRpc(RequireOwnership = false)]
+    [Rpc(SendTo.Server, Delivery = RpcDelivery.Reliable)]
     private void PlayerKnockbackServerRpc(ulong _clientId, Vector3 _attackPos, float _knockbackDist)
     {
         ApplyKnockbackClientRpc(_clientId, _attackPos, _knockbackDist);
@@ -205,7 +205,7 @@ public class NetworkGameManager : NetworkBehaviour
     /// <param name="_damage"></param>
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
-    [ClientRpc]
+    [Rpc(SendTo.Everyone, Delivery = RpcDelivery.Reliable)]
     private void ApplyDamageToPlayerClientRpc(ulong _cliendId, int _damage)
     {
         var obj = NetworkManager.ConnectedClients[_cliendId].PlayerObject;
@@ -224,7 +224,7 @@ public class NetworkGameManager : NetworkBehaviour
     /// <param name="_damage"></param>
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
-    [ClientRpc]
+    [Rpc(SendTo.Everyone, Delivery = RpcDelivery.Reliable)]
     private void ApplyKnockbackClientRpc(ulong _cliendId, Vector3 _attackPos, float _knockbackDist)
     {
         var obj = NetworkManager.ConnectedClients[_cliendId].PlayerObject;

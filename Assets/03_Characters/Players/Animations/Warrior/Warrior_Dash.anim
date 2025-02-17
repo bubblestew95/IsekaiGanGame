@@ -48928,14 +48928,14 @@ AnimationClip:
     floatParameter: 0
     intParameter: 5
     messageOptions: 0
-  - time: 0.06666667
+  - time: 0.1
     functionName: UseSkill
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 5
     messageOptions: 0
-  - time: 0.53333336
+  - time: 0.56666666
     functionName: EndSkill
     data: 
     objectReferenceParameter: {fileID: 0}
