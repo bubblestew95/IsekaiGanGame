@@ -17,7 +17,7 @@ public class Lobby_CharacterSelector : NetworkBehaviour
     //전체 플레이어들의 선택 상태를 저장하는 딕셔너리
     private Dictionary<ulong, int> playerSelections = new Dictionary<ulong, int>();
 
-    void Start()
+    private void Start()
     {
         for (int i = 0; i < characterButtons.Length; i++)
         {
@@ -26,18 +26,28 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         }
     }
 
-    // 캐릭터 선택 요청 (클라이언트 → 서버)
+    // 캐릭터 선택 요청 (클라이언트 -> 서버)
     private void RequestCharacterSelection(int index)
     {
         if (isReady) return; // Ready 상태에서는 변경 불가능
 
-        if (NetworkManager.Singleton.IsServer)
+        // 본인이 선택한 캐릭터를 다시 클릭하면 선택 해제
+        if (playerSelections.ContainsKey(NetworkManager.Singleton.LocalClientId) &&
+            playerSelections[NetworkManager.Singleton.LocalClientId] == index)
         {
-            RoomManager.Instance.SelectCharacterServerRpc(NetworkManager.Singleton.LocalClientId, index);
+            Debug.Log($"[Client] Player {NetworkManager.Singleton.LocalClientId} 캐릭터 선택 해제: {index}");
+            RoomManager.Instance.DeselectCharacterServerRpc(NetworkManager.Singleton.LocalClientId);
         }
         else
         {
-            RoomManager.Instance.SelectCharacterServerRpc(NetworkManager.Singleton.LocalClientId, index);
+            if (NetworkManager.Singleton.IsServer)
+            {
+                RoomManager.Instance.SelectCharacterServerRpc(NetworkManager.Singleton.LocalClientId, index);
+            }
+            else
+            {
+                RoomManager.Instance.SelectCharacterServerRpc(NetworkManager.Singleton.LocalClientId, index);
+            }
         }
     }
 
@@ -110,64 +120,62 @@ public class Lobby_CharacterSelector : NetworkBehaviour
     {
         Debug.Log($"[Client] Player {clientId} 선택한 캐릭터: {selectedCharacter}");
 
-        if (playerSelections.ContainsKey(clientId))
+        if (selectedCharacter == -1) // 선택 해제 시
         {
-            Debug.Log($"[Client] Player {clientId} 기존 선택 {playerSelections[clientId]} → {selectedCharacter}");
-            playerSelections[clientId] = selectedCharacter;
+            if (playerSelections.ContainsKey(clientId))
+            {
+                playerSelections.Remove(clientId);
+            }
         }
         else
         {
-            playerSelections.Add(clientId, selectedCharacter);
+            playerSelections[clientId] = selectedCharacter;
         }
 
+        // UI 업데이트
         UpdateCharacterUI();
-
-        //for (int i = 0; i < characterButtons.Length; i++)
-        //{
-        //    characterButtons[i].interactable = !playerSelections.ContainsValue(i);
-        //    Debug.Log($"[Client] 버튼 {i}: {(characterButtons[i].interactable ? "활성화" : "비활성화")}");
-        //}
-
-        //Debug.Log($"[Client] UI 업데이트 완료: Player {clientId} -> 캐릭터 {selectedCharacter}");
-
-        //// Ready 버튼 활성화 (캐릭터 선택 후)
-        //if (NetworkManager.Singleton.LocalClientId == clientId)
-        //{
-        //    readyButton.interactable = true;
-        //    Debug.Log($"[Client] Ready 버튼 활성화!");
-        //}
     }
-
     private void UpdateCharacterUI()
     {
+        bool isSelfSelected = playerSelections.ContainsKey(NetworkManager.Singleton.LocalClientId);
+
         for (int i = 0; i < characterButtons.Length; i++)
         {
-            // 기본 반투명 처리
-            characterImages[i].color = new Color(1f, 1f, 1f, 0.5f);
+            // 기본 상태 (선택하지 않았을 경우 불투명)
+            characterImages[i].color = new Color(1f, 1f, 1f, 1f);
             characterButtons[i].interactable = true;
         }
 
-        // 본인이 선택한 캐릭터는 불투명
-        if (playerSelections.ContainsKey(NetworkManager.Singleton.LocalClientId))
+        // 본인이 선택한 캐릭터 처리
+        if (isSelfSelected)
         {
-            int selected = playerSelections[NetworkManager.Singleton.LocalClientId];
-            characterImages[selected].color = new Color(1f, 1f, 1f, 1f); // 완전 불투명
-            characterButtons[selected].interactable = true;
+            int selfSelected = playerSelections[NetworkManager.Singleton.LocalClientId];
+
+            // 본인이 선택한 캐릭터는 불투명 유지
+            characterImages[selfSelected].color = new Color(1f, 1f, 1f, 1f);
+
+            // 다른 캐릭터들은 반투명 처리
+            for (int i = 0; i < characterButtons.Length; i++)
+            {
+                if (i != selfSelected)
+                {
+                    characterImages[i].color = new Color(1f, 1f, 1f, 0.5f); // 반투명
+                }
+            }
         }
 
-        // 다른 플레이어가 선택한 캐릭터는 검은색 반투명 & 선택 불가
+        // 남이 선택한 캐릭터 처리 (검은색 반투명)
         foreach (var entry in playerSelections)
         {
-            if (entry.Key != NetworkManager.Singleton.LocalClientId)
+            if (entry.Key != NetworkManager.Singleton.LocalClientId) // 본인 제외
             {
-                characterImages[entry.Value].color = new Color(0f, 0f, 0f, 0.5f); // 검은색 반투명
+                characterImages[entry.Value].color = new Color(0f, 0f, 0f, 0.8f); // 검은색 반투명
                 characterButtons[entry.Value].interactable = false;
             }
         }
 
         Debug.Log("[Client] 캐릭터 UI 업데이트 완료!");
     }
-
     // Ready 상태 변경 시 UI 업데이트
     public void SetReadyState(bool ready)
     {

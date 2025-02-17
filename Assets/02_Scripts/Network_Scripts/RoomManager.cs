@@ -458,11 +458,11 @@ public class RoomManager : NetworkBehaviour
 
         Debug.Log($"[RoomManager] 로비 이벤트 구독 완료: {lobbyId}");
     }
-    // 클라이언트가 캐릭터를 선택하면 서버에서 저장
     [ServerRpc(RequireOwnership = false)]
     public void SelectCharacterServerRpc(ulong clientId, int characterIndex)
     {
         Debug.Log($"[Server] Player {clientId} 캐릭터 선택 요청: {characterIndex}");
+
         if (playerSelectedCharacters.ContainsKey(clientId))
         {
             Debug.Log($"[Server] Player {clientId} 기존 캐릭터 {playerSelectedCharacters[clientId]} 해제");
@@ -475,8 +475,8 @@ public class RoomManager : NetworkBehaviour
 
         Debug.Log($"[Server] Player {clientId} 캐릭터 {characterIndex} 선택 완료, 데이터 저장됨");
 
-        // 로비 데이터 업데이트 (클라이언트 동기화)
-        UpdateLobbyData();
+        // 모든 클라이언트에게 캐릭터 선택 상태 동기화
+        UpdateCharacterSelectionClientRpc(clientId, characterIndex);
     }
 
     // 현재 선택된 캐릭터 정보를 반환 (씬 전환 후 캐릭터 스폰 시 사용)
@@ -673,6 +673,22 @@ public class RoomManager : NetworkBehaviour
         }
     }
 
+    // 클라이언트가 캐릭터 선택 해제 요청
+    [ServerRpc(RequireOwnership = false)]
+    public void DeselectCharacterServerRpc(ulong clientId)
+    {
+        Debug.Log($"[Server] Player {clientId} 캐릭터 선택 해제 요청");
+
+        if (playerSelectedCharacters.ContainsKey(clientId))
+        {
+            playerSelectedCharacters.Remove(clientId);
+        }
+
+        Debug.Log($"[Server] Player {clientId} 캐릭터 선택 해제 완료, 데이터 저장됨");
+
+        // 모든 클라이언트에게 캐릭터 선택 해제 동기화
+        UpdateCharacterSelectionClientRpc(clientId, -1);
+    }
     [ServerRpc(RequireOwnership = false)]
     public void RequestPlayerListUpdateServerRpc()
     {
@@ -787,6 +803,7 @@ public class RoomManager : NetworkBehaviour
             PlayerListManager.Instance.UpdatePlayerReadyState(playerId, true);
         }
     }
+
 
     private void NotifyPlayersReady(string playerId)
     {
