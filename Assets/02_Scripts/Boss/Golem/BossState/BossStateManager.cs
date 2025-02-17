@@ -33,6 +33,8 @@ public class BossStateManager : NetworkBehaviour
     public bool isPhase2 = false;
     public int maxHp = 1000;
     public float chainTime = 0f;
+    public float reduceAggro = 5f;
+    public float reduceAggroTime = 10f;
     public GameObject[] allPlayers;
     public GameObject[] alivePlayers;
     public GameObject aggroPlayer;
@@ -271,12 +273,14 @@ public class BossStateManager : NetworkBehaviour
 
     #region [Damage && Aggro]
     // 어그로 수치 초기화 하는 함수
-    private void ResetAggro()
+    public void ResetAggro()
     {
         for (int i = 0; i < playerAggro.Count; i++)
         {
             playerAggro[i] = 0f;
         }
+
+        bestAggro.Value = 0f;
 
         GetHighestAggroTarget();
     }
@@ -360,6 +364,30 @@ public class BossStateManager : NetworkBehaviour
             bossDieCallback?.Invoke();
         }
     }
+
+    private IEnumerator ReduceAggroCoroutine()
+    {
+        float elapseTime = 0f;
+
+        while (true)
+        {
+            if (elapseTime >= reduceAggroTime)
+            {
+                for (int i = 0; i < 4; ++i)
+                {
+                    playerAggro[i] -= reduceAggro;
+
+                    if (playerAggro[i] <= 0)
+                    {
+                        playerAggro[i] = 0;
+                    }
+                }
+
+                bestAggro.Value -= reduceAggro;
+            }
+            yield return null;
+        }
+    }
     #endregion
 
     #region [BGM]
@@ -435,11 +463,17 @@ public class BossStateManager : NetworkBehaviour
         SetCallback();
 
         SetPlayerMulti();
+
+        if (IsServer)
+        {
+            StartCoroutine(ReduceAggroCoroutine());
+        }
     }
 
     // 콜백 설정
     private void SetCallback()
     {
+        BossBT.SpecialAttackEndCallback += ResetAggro;
         attackCollider.rockCollisionCallback += BossStun;
         bossBT.phase2BehaviorStartCallback += ChangePhase2BGM;
     }
