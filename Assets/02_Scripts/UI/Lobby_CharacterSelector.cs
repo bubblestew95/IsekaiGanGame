@@ -135,6 +135,23 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         // UI 업데이트
         UpdateCharacterUI();
     }
+    // 기존 선택된 캐릭터 정보를 클라이언트에게 강제 적용
+    [ClientRpc]
+    private void ForceUpdateCharacterSelectionClientRpc(ulong targetClientId, ulong playerId, int characterIndex)
+    {
+        if (NetworkManager.Singleton.LocalClientId == targetClientId)
+        {
+            Debug.Log($"[Client] 기존 선택 정보 수신 - Player {playerId} 캐릭터 {characterIndex}");
+
+            if (!playerSelections.ContainsKey(playerId))
+            {
+                playerSelections[playerId] = characterIndex;
+            }
+
+            UpdateCharacterUI();
+        }
+    }
+
     private void UpdateCharacterUI()
     {
         bool isSelfSelected = playerSelections.ContainsKey(NetworkManager.Singleton.LocalClientId);

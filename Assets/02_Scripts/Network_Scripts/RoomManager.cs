@@ -492,39 +492,33 @@ public class RoomManager : NetworkBehaviour
         return -1; // 선택 안 한 경우
     }
 
-    // 로비 데이터 업데이트 (서버에서 모든 플레이어 선택 정보 저장)
-    //private async void UpdateLobbyData()
-    //{
-    //    if (currentLobby == null) return;
-
-    //    await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, new UpdateLobbyOptions
-    //    {
-    //        Data = currentLobby.Data
-    //    });
-
-    //    Debug.Log("[RoomManager] 로비 데이터 업데이트 완료!");
-    //}
-
-    //로비 데이터를 갱신하여 모든 클라이언트에 동기화
-    private async void UpdateLobbyData()
+    public void SyncExistingSelectionsToNewPlayer(ulong newPlayerId)
     {
-        if (currentLobby == null) return;
-
-        Dictionary<string, PlayerDataObject> updatedData = new Dictionary<string, PlayerDataObject>();
+        Debug.Log($"[Server] 새로운 플레이어 {newPlayerId} 입장 - 기존 선택 데이터 동기화 시작");
 
         foreach (var entry in playerSelectedCharacters)
         {
-            updatedData[$"Character_{entry.Key}"] = new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, entry.Value.ToString());
+            Debug.Log($"[Server] 기존 플레이어 {entry.Key} 캐릭터 {entry.Value} 정보 전송");
+
+            // 새로운 플레이어에게 기존 선택된 캐릭터 정보 강제 동기화
+            ForceUpdateCharacterSelectionClientRpc(newPlayerId, entry.Key, entry.Value);
         }
-
-        await LobbyService.Instance.UpdatePlayerAsync(currentLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions
-        {
-            Data = updatedData
-        });
-
-        Debug.Log("[RoomManager] 로비 데이터 업데이트 완료!");
     }
 
+    // 클라이언트에게 기존 선택 정보 강제 전송
+    [ClientRpc]
+    private void ForceUpdateCharacterSelectionClientRpc(ulong targetClientId, ulong playerId, int characterIndex)
+    {
+        if (NetworkManager.Singleton.LocalClientId == targetClientId)
+        {
+            Debug.Log($"[Client] 기존 선택 정보 수신 - Player {playerId} 캐릭터 {characterIndex}");
+
+            foreach (var selector in FindObjectsByType<Lobby_CharacterSelector>(FindObjectsSortMode.None))
+            {
+                selector.UpdateCharacterSelection(playerId, characterIndex);
+            }
+        }
+    }
 
     private async void OnLobbyChanged(ILobbyChanges changes)
     {
@@ -550,11 +544,34 @@ public class RoomManager : NetworkBehaviour
         {
             Debug.Log($"[RoomManager] PlayerJoined 이벤트 감지됨. 총 {changes.PlayerJoined.Value.Count}명의 플레이어 추가됨.");
 
-            foreach (var player in changes.PlayerJoined.Value)
+            // 현재 로비에 있는 모든 플레이어의 캐릭터 선택 상태 확인
+            foreach (var player in currentLobby.Players)
             {
-                Debug.Log($"[RoomManager] 입장한 플레이어 ID: {player.Player.Id}");
+                ulong playerId = Convert.ToUInt64(player.Id);
+                string characterInfo = playerSelectedCharacters.ContainsKey(playerId)
+                    ? $"선택한 캐릭터: {playerSelectedCharacters[playerId]}"
+                    : "캐릭터 선택 안됨";
+
+                Debug.Log($"[RoomManager] 플레이어 {playerId} - {characterInfo}");
             }
 
+            foreach (var player in changes.PlayerJoined.Value)
+            {
+                try
+                {
+                    ulong newPlayerId = Convert.ToUInt64(player.Player.Id);
+                    Debug.Log($"[RoomManager] 새로운 플레이어 ID 변환 완료: {newPlayerId}");
+
+                    // 기존 선택된 캐릭터 정보 강제 동기화
+                    SyncExistingSelectionsToNewPlayer(newPlayerId);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"[RoomManager] 플레이어 ID 변환 실패: {ex.Message}");
+                }
+            }
+
+            changes.ApplyToLobby(currentLobby);
             await UpdatePlayerListUI(); // PlayerList UI 갱신
         }
 
@@ -622,12 +639,13 @@ public class RoomManager : NetworkBehaviour
 
                             playerSelectedCharacters[(ulong)playerId] = selectedCharacter;
 
-                            // 클라이언트 UI 업데이트
+                            //모든 클라이언트에게 캐릭터 선택 상태 동기화
                             UpdateCharacterSelectionClientRpc((ulong)playerId, selectedCharacter);
                         }
                     }
                 }
             }
+
             CheckAllPlayersReady();
             await UpdatePlayerListUI();
             Debug.Log("Ready 이벤트 끝");
