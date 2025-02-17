@@ -439,6 +439,10 @@ PrefabInstance:
       propertyPath: buttonSkillType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1857508758369894103, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 61646524299746778}
     - target: {fileID: 1927616227122048122, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -467,9 +471,29 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 2435564422184784714, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2435564422184784714, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2719241147373707445, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2719241147373707445, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2753883462998251982, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: buttonSkillType
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3000713837098418721, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3364944419301081637, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: m_Layer
@@ -487,6 +511,30 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4189068848260046653, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4189068848260046653, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4189068848260046653, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5013592061628796523, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5103350113402745231, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5103350113402745231, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5354783371576177253, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: buttonSkillType
       value: 4
@@ -498,6 +546,18 @@ PrefabInstance:
     - target: {fileID: 5581724624537877088, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5719954418673238612, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5719954418673238612, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5719954418673238612, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5758725221495443921, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: m_Layer
@@ -522,6 +582,18 @@ PrefabInstance:
     - target: {fileID: 7570119167788962637, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: buttonSkillType
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7659550961171152348, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7659550961171152348, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7659550961171152348, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7895803505749026427, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: m_Name
@@ -666,6 +738,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2915941459313883653}
   m_SourcePrefab: {fileID: 100100000, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+--- !u!114 &61646524299746778 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3016992725397567302, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+  m_PrefabInstance: {fileID: 2955911434112101020}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2681508953607187297 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 879085824762528253, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
