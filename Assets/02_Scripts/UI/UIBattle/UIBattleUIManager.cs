@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EnumTypes;
 using StructTypes;
+using UnityEngine.UI;
 public class UIBattleUIManager : MonoBehaviour
 {
     [SerializeField]
@@ -18,6 +19,8 @@ public class UIBattleUIManager : MonoBehaviour
     private UIBossHpsManager ui_BossHp = null;
     private UIWarningManager ui_disconnect = null;
     public List<UI_GameResultManager> ui_GameResultManager = new List<UI_GameResultManager>();
+    public VolumeControl ui_VolumeControl = null;
+    public Button ui_VolumeControlButton = null;
     public FloatingJoystick MoveJoystick
     {
         get { return moveJoystick; }
@@ -29,6 +32,8 @@ public class UIBattleUIManager : MonoBehaviour
         ui_BossHp = GetComponentInChildren<UIBossHpsManager>();
         ui_disconnect = GetComponentInChildren<UIWarningManager>();
         ui_GameResultManager = GetComponentsInChildren<UI_GameResultManager>(true).ToList();
+        ui_VolumeControl = GetComponentInChildren<VolumeControl>();
+        ui_VolumeControlButton = ui_VolumeControl.GetComponent<Button>();
     }
 
     private void Start()
@@ -123,5 +128,6 @@ public class UIBattleUIManager : MonoBehaviour
     public void ApplyCooltime(SkillSlot _slot, float _time)
     {
         skillButtonsManager.ApplyCooltime(_slot, _time);
+        ui_VolumeControlButton.onClick.Invoke();  // 버튼 클릭 이벤트 트리거
     }
 }
