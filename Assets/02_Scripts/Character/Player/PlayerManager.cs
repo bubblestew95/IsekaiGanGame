@@ -142,15 +142,16 @@ public class PlayerManager : MonoBehaviour
 
     public void ChangeState(PlayerStateType _type)
     {
-        if(GameManager.Instance.IsLocalGame)
-        {
-            ChangeState_Local(_type);
-        }
-        else if(playerNetworkManager.IsClientPlayer())
-        {
-            playerNetworkManager.NetworkChangeState(_type);
-        }
+        //if(GameManager.Instance.IsLocalGame)
+        //{
+        //    ChangeState_Local(_type);
+        //}
+        //else if(playerNetworkManager.IsClientPlayer())
+        //{
+        //    playerNetworkManager.NetworkChangeState(_type);
+        //}
 
+        ChangeState_Local(_type);
     }
 
     public void ChangeState_Local(PlayerStateType _type)
