@@ -65,7 +65,7 @@ public class PlayerAnimationManager
         if (GameManager.Instance.IsLocalGame)
             ApplyAnimatorWalkSpeed(_speed);
         else
-            playerManager.PlayerNetworkManager.ServerSetSpeedAnimator(_speed);
+            playerManager.PlayerNetworkManager.NetworkSetSpeedAnimator(_speed);
     }
 
     public void ApplyAnimatorWalkSpeed(float _speed)

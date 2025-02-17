@@ -34,7 +34,7 @@ public class StatusManager
     {
         currentHp = Mathf.Clamp(_hp, 0, maxHp);
 
-        if (currentHp <= 0)
+        if (currentHp <= 0 && playerMng.StateMachine.CurrentState.StateType != PlayerStateType.Death)
             playerMng.ChangeState(PlayerStateType.Death);
     }
 

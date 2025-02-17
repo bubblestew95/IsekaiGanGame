@@ -55,15 +55,15 @@ public class PlayerAttackManager
     /// <param name="_damage"></param>
     public void TakeDamage(int _damage)
     {
-        if (playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Damaged
-            ||
-            playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Death
-            ||
-            playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Dash)
-        {
-            Debug.Log("Player is not damageable!");
-            return;
-        }
+        //if (playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Damaged
+        //    ||
+        //    playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Death
+        //    ||
+        //    playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Dash)
+        //{
+        //    Debug.Log("Player is not damageable!");
+        //    return;
+        //}
 
         playerManager.StatusManager.OnDamaged(_damage);
     }
