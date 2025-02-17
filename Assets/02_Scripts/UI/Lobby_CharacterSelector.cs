@@ -24,6 +24,8 @@ public class Lobby_CharacterSelector : NetworkBehaviour
             int index = i;
             characterButtons[i].onClick.AddListener(() => RequestCharacterSelection(index));
         }
+        RequestExistingSelectionsServerRpc(NetworkManager.Singleton.LocalClientId);
+
     }
 
     // 캐릭터 선택 요청 (클라이언트 -> 서버)
@@ -36,7 +38,6 @@ public class Lobby_CharacterSelector : NetworkBehaviour
             playerSelections[NetworkManager.Singleton.LocalClientId] == index)
         {
             Debug.Log($"[Client] Player {NetworkManager.Singleton.LocalClientId} 캐릭터 선택 해제: {index}");
-            RoomManager.Instance.DeselectCharacterServerRpc(NetworkManager.Singleton.LocalClientId);
         }
         else
         {
@@ -51,67 +52,20 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         }
     }
 
-    //서버에서 캐릭터 선택 처리 (서버 RPC)
     [ServerRpc(RequireOwnership = false)]
-    void ToggleCharacterSelectionServerRpc(ulong clientId, int index)
+    public void RequestExistingSelectionsServerRpc(ulong clientId)
     {
-        ToggleCharacterSelection(clientId, index);
-    }
+        Debug.Log($"[Server] 클라이언트 {clientId} 가 기존 선택 정보를 요청함.");
 
-    //서버에서 캐릭터 선택 변경 및 동기화
-    void ToggleCharacterSelection(ulong clientId, int index)
-    {
-        if (playerSelections.ContainsKey(clientId) && playerSelections[clientId] == index)
+        // RoomManager 인스턴스를 찾아서 실행
+        RoomManager roomManager = Object.FindFirstObjectByType<RoomManager>();
+        if (roomManager != null)
         {
-            //이미 선택한 캐릭터를 다시 클릭하면 선택 해제
-            playerSelections.Remove(clientId);
-            if (clientId == OwnerClientId)
-                selectedCharacter.Value = -1;  // 선택 해제 시 -1로 설정
+
         }
         else
         {
-            //기존 선택한 캐릭터 해제 후 새 캐릭터 선택
-            if (playerSelections.ContainsKey(clientId))
-            {
-                playerSelections.Remove(clientId);
-            }
-            playerSelections[clientId] = index;
-
-            if (clientId == OwnerClientId)
-                selectedCharacter.Value = index;  //현재 플레이어의 선택을 selectedCharacter에 저장
-        }
-
-        // 모든 클라이언트 UI 업데이트
-        UpdateCharacterSelectionClientRpc();
-    }
-
-    //클라이언트에서 UI 업데이트 (서버 -> 클라이언트 동기화)
-    [ClientRpc]
-    void UpdateCharacterSelectionClientRpc()
-    {
-        //모든 캐릭터를 기본 상태(반투명)로 초기화
-        for (int i = 0; i < characterModels.Length; i++)
-        {
-            characterModels[i].gameObject.SetActive(true);
-            characterImages[i].color = new Color(1f, 1f, 1f, 0.5f);
-            characterButtons[i].interactable = true;
-        }
-
-        //본인이 선택한 캐릭터 불투명 설정
-        if (selectedCharacter.Value != -1)
-        {
-            characterImages[selectedCharacter.Value].color = new Color(1f, 1f, 1f, 1f);
-            characterButtons[selectedCharacter.Value].interactable = true;
-        }
-
-        //남이 선택한 캐릭터는 검은색 반투명 & 선택 불가
-        foreach (var entry in playerSelections)
-        {
-            if (entry.Key != OwnerClientId)
-            {
-                characterImages[entry.Value].color = new Color(0f, 0f, 0f, 0.5f);
-                characterButtons[entry.Value].interactable = false;
-            }
+            Debug.LogError("[Server] RoomManager를 찾을 수 없습니다. SyncExistingSelectionsToNewPlayer 실행 실패.");
         }
     }
 
@@ -135,23 +89,6 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         // UI 업데이트
         UpdateCharacterUI();
     }
-    // 기존 선택된 캐릭터 정보를 클라이언트에게 강제 적용
-    [ClientRpc]
-    private void ForceUpdateCharacterSelectionClientRpc(ulong targetClientId, ulong playerId, int characterIndex)
-    {
-        if (NetworkManager.Singleton.LocalClientId == targetClientId)
-        {
-            Debug.Log($"[Client] 기존 선택 정보 수신 - Player {playerId} 캐릭터 {characterIndex}");
-
-            if (!playerSelections.ContainsKey(playerId))
-            {
-                playerSelections[playerId] = characterIndex;
-            }
-
-            UpdateCharacterUI();
-        }
-    }
-
     private void UpdateCharacterUI()
     {
         bool isSelfSelected = playerSelections.ContainsKey(NetworkManager.Singleton.LocalClientId);
