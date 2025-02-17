@@ -75,7 +75,7 @@ public class BossStateManager : NetworkBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             BossDamageReceiveServerRpc(100, 100, 0);
         }
@@ -478,6 +478,7 @@ public class BossStateManager : NetworkBehaviour
     public ulong RandomPlayer()
     {
         List<ulong> numList = new List<ulong>();
+        ulong randomNum = 0;
 
         for (int i = 0; i < 4; ++i)
         {
@@ -486,7 +487,15 @@ public class BossStateManager : NetworkBehaviour
             numList.Add(alivePlayers[i].GetComponent<NetworkObject>().OwnerClientId);
         }
 
-        ulong randomNum = numList[Random.Range(0, numList.Count)];
+        if (numList.Count != 0)
+        {
+            randomNum = numList[Random.Range(0, numList.Count)];
+        }
+        else
+        {
+            randomNum = 0;
+        }
+
 
         return randomNum;
     }
