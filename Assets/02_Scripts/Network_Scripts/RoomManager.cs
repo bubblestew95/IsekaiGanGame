@@ -17,6 +17,7 @@ using Unity.Collections;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
 using System.Linq;
+using System.Xml;
 
 public class RoomManager : NetworkBehaviour
 {
@@ -47,8 +48,10 @@ public class RoomManager : NetworkBehaviour
     private Lobby currentLobby;
     private bool playerJoined = false; // 플레이어가 들어왔을때의 상태를 나타낼 변수
     private bool isReady = false; //Ready 상태를 저장하는 변수
+    private Dictionary<ulong, bool> playerReadyStates = new Dictionary<ulong, bool>(); // Ready 상태 저장
 
     private HashSet<string> previousPlayerIDs = new HashSet<string>(); // 기존 플레이어 ID 저장
+    private Dictionary<ulong, int> playerSelectedCharacters = new Dictionary<ulong, int>(); // 선택한 캐릭터 저장
 
     private void Awake()
     {
@@ -395,6 +398,7 @@ public class RoomManager : NetworkBehaviour
             SetUIState(true);
             SetCurrentRoom(currentLobby.Id);
             UpdateRoomUI(currentLobby);
+            codeButton.GetComponentInChildren<TMP_Text>().text = currentLobby.LobbyCode;
 
             // 로비 이벤트 구독
             await SubscribeToLobbyEvents(currentLobby.Id);
@@ -454,6 +458,74 @@ public class RoomManager : NetworkBehaviour
 
         Debug.Log($"[RoomManager] 로비 이벤트 구독 완료: {lobbyId}");
     }
+    [ServerRpc(RequireOwnership = false)]
+    public void SelectCharacterServerRpc(ulong clientId, int characterIndex)
+    {
+        Debug.Log($"[Server] Player {clientId} 캐릭터 선택 요청: {characterIndex}");
+
+        if (playerSelectedCharacters.ContainsKey(clientId))
+        {
+            Debug.Log($"[Server] Player {clientId} 기존 캐릭터 {playerSelectedCharacters[clientId]} 해제");
+            playerSelectedCharacters[clientId] = characterIndex;
+        }
+        else
+        {
+            playerSelectedCharacters.Add(clientId, characterIndex);
+        }
+
+        Debug.Log($"[Server] Player {clientId} 캐릭터 {characterIndex} 선택 완료, 데이터 저장됨");
+
+        // 모든 클라이언트에게 캐릭터 선택 상태 동기화
+        UpdateCharacterSelectionClientRpc(clientId, characterIndex);
+    }
+
+    // 현재 선택된 캐릭터 정보를 반환 (씬 전환 후 캐릭터 스폰 시 사용)
+    public int GetSelectedCharacter(ulong clientId)
+    {
+        string playerKey = $"Character_{clientId}";
+
+        if (currentLobby != null && currentLobby.Data.ContainsKey(playerKey))
+        {
+            return int.Parse(currentLobby.Data[playerKey].Value);
+        }
+
+        return -1; // 선택 안 한 경우
+    }
+
+    // 로비 데이터 업데이트 (서버에서 모든 플레이어 선택 정보 저장)
+    //private async void UpdateLobbyData()
+    //{
+    //    if (currentLobby == null) return;
+
+    //    await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, new UpdateLobbyOptions
+    //    {
+    //        Data = currentLobby.Data
+    //    });
+
+    //    Debug.Log("[RoomManager] 로비 데이터 업데이트 완료!");
+    //}
+
+    //로비 데이터를 갱신하여 모든 클라이언트에 동기화
+    private async void UpdateLobbyData()
+    {
+        if (currentLobby == null) return;
+
+        Dictionary<string, PlayerDataObject> updatedData = new Dictionary<string, PlayerDataObject>();
+
+        foreach (var entry in playerSelectedCharacters)
+        {
+            updatedData[$"Character_{entry.Key}"] = new PlayerDataObject(PlayerDataObject.VisibilityOptions.Public, entry.Value.ToString());
+        }
+
+        await LobbyService.Instance.UpdatePlayerAsync(currentLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions
+        {
+            Data = updatedData
+        });
+
+        Debug.Log("[RoomManager] 로비 데이터 업데이트 완료!");
+    }
+
+
     private async void OnLobbyChanged(ILobbyChanges changes)
     {
         Debug.Log("[RoomManager] 로비 변경 감지!");
@@ -516,15 +588,42 @@ public class RoomManager : NetworkBehaviour
                 int playerId = playerData.Key;
                 var playerChanges = playerData.Value;
 
+                string playerKey = $"Character_{playerId}";
+
                 if (playerChanges.ChangedData.Changed)
                 {
                     var newData = playerChanges.ChangedData.Value;
+
                     if (newData.ContainsKey("Ready"))
                     {
                         var readyStatus = newData["Ready"];
                         if (readyStatus.Changed)
                         {
+                            //isReady = bool.Parse(readyStatus.Value);
+                            bool isReady = false;
+                            if (readyStatus.Value != null && !string.IsNullOrEmpty(readyStatus.Value.ToString()))
+                            {
+                                bool.TryParse(readyStatus.Value.ToString(), out isReady);
+                            }
                             Debug.Log($"[RoomManager] 플레이어 {playerId} Ready 상태 변경: {readyStatus.Value}");
+
+                            // 클라이언트에게 Ready 상태 업데이트 전송
+                            UpdateReadyStateClientRpc((ulong)playerId, isReady);
+                        }
+                    }
+                    if (playerChanges.ChangedData.Changed && playerChanges.ChangedData.Value.ContainsKey(playerKey))
+                    {
+                        var characterIndex = playerChanges.ChangedData.Value[playerKey];
+
+                        if (characterIndex.Changed)
+                        {
+                            int selectedCharacter = int.Parse(characterIndex.Value.ToString());
+                            Debug.Log($"[RoomManager] 플레이어 {playerId} 캐릭터 변경 감지: {selectedCharacter}");
+
+                            playerSelectedCharacters[(ulong)playerId] = selectedCharacter;
+
+                            // 클라이언트 UI 업데이트
+                            UpdateCharacterSelectionClientRpc((ulong)playerId, selectedCharacter);
                         }
                     }
                 }
@@ -564,6 +663,32 @@ public class RoomManager : NetworkBehaviour
     //    }
     //}
 
+    // 클라이언트 UI 업데이트 (선택한 캐릭터 동기화)
+    [ClientRpc]
+    private void UpdateCharacterSelectionClientRpc(ulong clientId, int selectedCharacter)
+    {
+        foreach (var selector in FindObjectsByType<Lobby_CharacterSelector>(FindObjectsSortMode.None))
+        {
+            selector.UpdateCharacterSelection(clientId, selectedCharacter);
+        }
+    }
+
+    // 클라이언트가 캐릭터 선택 해제 요청
+    [ServerRpc(RequireOwnership = false)]
+    public void DeselectCharacterServerRpc(ulong clientId)
+    {
+        Debug.Log($"[Server] Player {clientId} 캐릭터 선택 해제 요청");
+
+        if (playerSelectedCharacters.ContainsKey(clientId))
+        {
+            playerSelectedCharacters.Remove(clientId);
+        }
+
+        Debug.Log($"[Server] Player {clientId} 캐릭터 선택 해제 완료, 데이터 저장됨");
+
+        // 모든 클라이언트에게 캐릭터 선택 해제 동기화
+        UpdateCharacterSelectionClientRpc(clientId, -1);
+    }
     [ServerRpc(RequireOwnership = false)]
     public void RequestPlayerListUpdateServerRpc()
     {
@@ -620,7 +745,9 @@ public class RoomManager : NetworkBehaviour
             Debug.Log("[OnReadyButtonClicked] Ready 버튼 클릭!");
 
             isReady = !isReady;
+            playerReadyStates[NetworkManager.Singleton.LocalClientId] = isReady;
 
+            // LobbyService에 Ready 상태 저장
             UpdatePlayerOptions options = new UpdatePlayerOptions
             {
                 Data = new Dictionary<string, PlayerDataObject>
@@ -636,12 +763,29 @@ public class RoomManager : NetworkBehaviour
             // Ready 버튼 텍스트 변경
             readyButton.GetComponentInChildren<TMP_Text>().text = isReady ? "On Ready" : "Not Ready";
 
+            UpdateReadyStateClientRpc(NetworkManager.Singleton.LocalClientId, isReady);
+
             CheckAllPlayersReady();
         }
         catch (LobbyServiceException e)
         {
             Debug.LogError($"[OnReadyButtonClicked] Ready 상태 업데이트 실패: {e.Message}");
         }
+    }
+
+    [ClientRpc]
+    private void UpdateReadyStateClientRpc(ulong clientId, bool isReady)
+    {
+        playerReadyStates[clientId] = isReady; //Ready 상태 저장
+
+        //Ready 버튼 UI 업데이트
+        if (NetworkManager.Singleton.LocalClientId == clientId)
+        {
+            readyButton.GetComponentInChildren<TMP_Text>().text = isReady ? "On Ready" : "Not Ready";
+        }
+
+        //모든 플레이어가 Ready 상태인지 확인
+        CheckAllPlayersReady();
     }
 
     [ClientRpc]
@@ -660,6 +804,7 @@ public class RoomManager : NetworkBehaviour
         }
     }
 
+
     private void NotifyPlayersReady(string playerId)
     {
         if (IsServer)
@@ -668,13 +813,13 @@ public class RoomManager : NetworkBehaviour
         }
     }
 
-    private async void CheckAllPlayersReady()
+    private void CheckAllPlayersReady()
     {
         if (!NetworkManager.Singleton.IsHost) return; // 호스트만 실행
 
         Debug.Log("[RoomManager] 모든 플레이어의 Ready 상태 확인 시작...");
 
-        bool allReady = true;
+        bool allClientsReady = true;
 
         foreach (var player in currentLobby.Players)
         {
@@ -687,32 +832,35 @@ public class RoomManager : NetworkBehaviour
                 continue;
             }
 
-            // player.Data가 null인지 확인 후 처리
+            // 플레이어 데이터가 null인지 확인
             if (player.Data == null)
             {
                 Debug.Log($"[RoomManager] {player.Id} - player.Data가 null! (동기화 지연 가능)");
-                allReady = false;
+                allClientsReady = false;
                 break;
             }
 
+            // Ready 데이터가 없으면 false 처리
             if (!player.Data.ContainsKey("Ready"))
             {
                 Debug.Log($"[RoomManager] {player.Id} - Ready 데이터 없음");
-                allReady = false;
+                allClientsReady = false;
                 break;
             }
 
-            if (player.Data["Ready"].Value != "true") // Ready가 아닌 경우 즉시 종료
+            // Ready 상태 확인
+            if (player.Data["Ready"].Value != "true")
             {
                 Debug.Log($"[RoomManager] {player.Id} - Ready 상태 아님: {player.Data["Ready"].Value}");
-                allReady = false;
+                allClientsReady = false;
                 break;
             }
 
             Debug.Log($"[RoomManager] {player.Id} - Ready 상태 확인 완료");
         }
 
-        startButton.interactable = allReady;
+        // 모든 클라이언트가 Ready 상태일 때만 Start 버튼 활성화
+        startButton.interactable = allClientsReady;
         Debug.Log($"[RoomManager] Start 버튼 상태 업데이트: {startButton.interactable}");
     }
 
@@ -895,8 +1043,8 @@ public class RoomManager : NetworkBehaviour
         }
 
         // 추가: PlayerList 정렬
-        PlayerListManager.Instance.SortPlayerList();
-        Debug.Log("[PlayerListManager] PlayerList UI 갱신 완료");
+        //PlayerListManager.Instance.SortPlayerList();
+        //Debug.Log("[PlayerListManager] PlayerList UI 갱신 완료");
     }
 
 
