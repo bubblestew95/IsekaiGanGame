@@ -118,6 +118,13 @@ public class GameManager : MonoBehaviour
     public void ApplyDamageToPlayer
         (PlayerManager _damageReceiver, int _damage)
     {
+        if (_damageReceiver.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Damaged
+        || _damageReceiver.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Death
+        || _damageReceiver.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Dash)
+        {
+            return;
+        }
+
         _damageReceiver.AttackManager.TakeDamage(_damage);
 
         UpdatePlayerHpUI(_damageReceiver);
