@@ -25,7 +25,7 @@ public class PlayerListManager : MonoBehaviour
         }
     }
 
-    public void AddPlayer(string playerId, string username, PlayerStatus status)
+    public void AddPlayer(string playerId, string username, PlayerStatus status, int selectedCharacter = -1)
     {
         Debug.Log($"[PlayerListManager] AddPlayer 호출됨 - {username} / {status}");
 
@@ -44,11 +44,20 @@ public class PlayerListManager : MonoBehaviour
             return;
         }
         playerItem.SetPlayerInfo(playerId, username, status);
+        playerItem.SetCharacterSelection(selectedCharacter); // 선택한 캐릭터 설정
         playerItems.Add(playerId, playerItem);
         Debug.Log($"[PlayerListManager] Player 추가 완료: {playerId} {username}");
 
     }
-
+    // 플레이어의 캐릭터 선택 변경
+    public void UpdatePlayerCharacter(string playerId, int selectedCharacter)
+    {
+        if (playerItems.ContainsKey(playerId))
+        {
+            playerItems[playerId].SetCharacterSelection(selectedCharacter);
+            Debug.Log($"[PlayerListManager] {playerId}의 캐릭터 선택 상태가 {selectedCharacter}로 변경됨.");
+        }
+    }
 
     public void UpdatePlayerStatus(string playerId, PlayerStatus status)
     {

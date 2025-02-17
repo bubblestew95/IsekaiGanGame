@@ -969,6 +969,7 @@ public class RoomManager : NetworkBehaviour
             string playerName = "알 수 없음";
             bool isHost = false;
             bool isReady = false;
+            int selectedCharacter = -1; // 기본값 (선택 안됨)
 
             // 추가: 플레이어 데이터가 비어 있으면 3회 재시도
             int retryCount = 0;
@@ -984,6 +985,15 @@ public class RoomManager : NetworkBehaviour
                 playerName = player.Data["Username"].Value;
                 isHost = player.Id == currentLobby.HostId;
                 isReady = player.Data.ContainsKey("Ready") && player.Data["Ready"].Value == "true";
+
+                // 캐릭터 선택 정보 확인
+                if (player.Data.ContainsKey("CharacterSelection"))
+                {
+                    if (int.TryParse(player.Data["CharacterSelection"].Value, out int charIndex))
+                    {
+                        selectedCharacter = charIndex;
+                    }
+                }
             }
             else
             {
@@ -996,12 +1006,13 @@ public class RoomManager : NetworkBehaviour
             if (!PlayerListManager.Instance.ContainsPlayer(player.Id))
             {
                 Debug.Log($"[PlayerListManager] 새 플레이어 추가: {playerName} / 상태: {status}");
-                PlayerListManager.Instance.AddPlayer(player.Id,playerName, status);
+                PlayerListManager.Instance.AddPlayer(player.Id,playerName, status, selectedCharacter);
             }
             else
             {
-                Debug.Log($"[PlayerListManager] 기존 플레이어 상태 업데이트: {playerName} -> {status}");
+                Debug.Log($"[PlayerListManager] 기존 플레이어 상태 업데이트: {playerName} -> {status} / 선택한 캐릭터: {selectedCharacter}");
                 PlayerListManager.Instance.UpdatePlayerStatus(player.Id, status);
+                PlayerListManager.Instance.UpdatePlayerCharacter(player.Id, selectedCharacter);
             }
         }
     }
