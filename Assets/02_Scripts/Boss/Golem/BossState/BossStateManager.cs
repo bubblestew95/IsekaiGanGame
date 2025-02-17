@@ -131,6 +131,7 @@ public class BossStateManager : NetworkBehaviour
     [ClientRpc]
     private void DamageParticleClientRpc(float _damage, ulong _clientId)
     {
+        // 데미지 폰트
         if (NetworkManager.Singleton.LocalClientId == _clientId)
         {
             damageParticle.SetupAndPlayParticlesMine(_damage);
@@ -139,6 +140,11 @@ public class BossStateManager : NetworkBehaviour
         {
             damageParticle.SetupAndPlayParticles(_damage);
         }
+
+        Vector3 pos = new Vector3(Boss.transform.position.x, 3f, Boss.transform.position.z);
+
+        // 히트 파티클
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.hitParticle, pos);
     }
 
     // 보스 UI 업데이트
