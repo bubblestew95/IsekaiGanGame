@@ -31,6 +31,11 @@ public class PlayerItem : MonoBehaviour
         SetStatus(status);
     }
 
+    public void SetCharacterSelection(int selectedCharacter)
+    {
+        Debug.Log($"[PlayerItem] Player {playerId} 선택한 캐릭터: {selectedCharacter}");
+    }
+
     public void SetStatus(PlayerStatus status)
     {
         string labelKey = "LobbyPlayerIcons"; // 지정한 Label 사용

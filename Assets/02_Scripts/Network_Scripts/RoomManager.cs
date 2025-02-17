@@ -46,11 +46,9 @@ public class RoomManager : NetworkBehaviour
     private string username;
     private bool isInitialized = false;
     private Lobby currentLobby;
-    private bool playerJoined = false; // 플레이어가 들어왔을때의 상태를 나타낼 변수
     private bool isReady = false; //Ready 상태를 저장하는 변수
     private Dictionary<ulong, bool> playerReadyStates = new Dictionary<ulong, bool>(); // Ready 상태 저장
 
-    private HashSet<string> previousPlayerIDs = new HashSet<string>(); // 기존 플레이어 ID 저장
     private Dictionary<ulong, int> playerSelectedCharacters = new Dictionary<ulong, int>(); // 선택한 캐릭터 저장
 
     private void Awake()
@@ -527,35 +525,41 @@ public class RoomManager : NetworkBehaviour
         {
             Debug.Log($"[RoomManager] PlayerJoined 이벤트 감지됨. 총 {changes.PlayerJoined.Value.Count}명의 플레이어 추가됨.");
 
-            foreach (var newPlayer in changes.PlayerJoined.Value)
+            if (changes.PlayerData.Changed)
             {
-                try
+                foreach (var playerData in changes.PlayerData.Value)
                 {
-                    ulong newPlayerId = Convert.ToUInt64(newPlayer.Player.Id);
-                    Debug.Log($"[RoomManager] 새로운 플레이어 ID 변환 완료: {newPlayerId}");
+                    string playerId = playerData.Key.ToString();
+                    var playerChanges = playerData.Value;
 
-                    // 기존 플레이어들의 캐릭터 선택 정보 출력
-                    Debug.Log("[RoomManager] 현재 로비 내 모든 플레이어의 캐릭터 선택 상태:");
-
-                    foreach (var player in currentLobby.Players)
+                    if (playerChanges.ChangedData.Changed)
                     {
-                        ulong playerId = Convert.ToUInt64(player.Id);
-                        int selectedCharacter = player.Data.ContainsKey("CharacterSelection") ? int.Parse(player.Data["CharacterSelection"].Value) : -1;
-                        string charInfo = selectedCharacter != -1 ? $"선택한 캐릭터: {selectedCharacter}" : "캐릭터 선택 안됨";
+                        var newData = playerChanges.ChangedData.Value;
 
-                        Debug.Log($"[RoomManager] 플레이어 {playerId} - {charInfo}");
-
-                        // 신규 플레이어에게 기존 선택 정보를 강제 동기화
-                        if (selectedCharacter != -1)
+                        // 캐릭터 선택 데이터가 있는지 확인
+                        if (newData.ContainsKey("CharacterSelection"))
                         {
-                            UpdateCharacterSelectionClientRpc(playerId, selectedCharacter);
+                            var characterData = newData["CharacterSelection"];
+                            if (characterData.Changed)
+                            {
+                                if (int.TryParse(characterData.Value.ToString(), out int selectedCharacter))
+                                {
+                                    Debug.Log($"[RoomManager] 플레이어 {playerId} - 캐릭터 선택 확인: {selectedCharacter}");
+
+                                    // 모든 클라이언트에게 캐릭터 선택 동기화
+                                    UpdateCharacterSelectionClientRpc(ulong.Parse(playerId), selectedCharacter);
+                                }
+                                else
+                                {
+                                    Debug.LogError($"[RoomManager] 플레이어 {playerId} - 캐릭터 선택 데이터 변환 실패: {characterData.Value}");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log($"[RoomManager] 플레이어 {playerId} - 캐릭터 선택 데이터 없음");
                         }
                     }
-
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"[RoomManager] 플레이어 ID 변환 실패: {ex.Message}");
                 }
             }
             changes.ApplyToLobby(currentLobby);
@@ -992,6 +996,11 @@ public class RoomManager : NetworkBehaviour
                     if (int.TryParse(player.Data["CharacterSelection"].Value, out int charIndex))
                     {
                         selectedCharacter = charIndex;
+                        Debug.Log($"[PlayerListManager] 플레이어 {player.Id} 선택한 캐릭터: {selectedCharacter}");
+                    }
+                    else
+                    {
+                        Debug.LogError($"[PlayerListManager] 플레이어 {player.Id} - 캐릭터 데이터 변환 실패: {player.Data["CharacterSelection"].Value}");
                     }
                 }
             }
