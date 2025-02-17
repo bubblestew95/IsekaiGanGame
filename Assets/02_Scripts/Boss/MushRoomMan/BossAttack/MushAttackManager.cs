@@ -5,9 +5,13 @@ using static UnityEngine.GraphicsBuffer;
 
 public class MushAttackManager : MonoBehaviour
 {
-    [Header("브레스 관련")]
+    [Header("Attack1 - 브레스")]
     [SerializeField] private GameObject bressDecal;
     [SerializeField] private GameObject bress;
+
+    [Header("Attack2 - 독구름")]
+    [SerializeField] private GameObject P_PoisonCloud;
+
 
     // 참조 할것들
     private Animator anim;
@@ -116,6 +120,11 @@ public class MushAttackManager : MonoBehaviour
 
     private IEnumerator Attack2()
     {
+        GameObject attack2Object;
+        Vector3 pos = mushStateManager.Boss.transform.position + mushStateManager.Boss.transform.forward * 1f;
+
+        attack2Object = Instantiate(P_PoisonCloud, new Vector3(pos.x, 0f, pos.z), Quaternion.identity, null);
+
         yield return null;
     }
 
