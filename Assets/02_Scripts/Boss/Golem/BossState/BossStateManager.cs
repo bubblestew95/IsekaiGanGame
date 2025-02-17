@@ -365,12 +365,15 @@ public class BossStateManager : NetworkBehaviour
         }
     }
 
+    // 어그로 수치 감소시키는 코루틴
     private IEnumerator ReduceAggroCoroutine()
     {
         float elapseTime = 0f;
 
         while (true)
         {
+            elapseTime += Time.deltaTime;
+
             if (elapseTime >= reduceAggroTime)
             {
                 for (int i = 0; i < 4; ++i)
@@ -384,6 +387,8 @@ public class BossStateManager : NetworkBehaviour
                 }
 
                 bestAggro.Value -= reduceAggro;
+
+                elapseTime = 0f;
             }
             yield return null;
         }
