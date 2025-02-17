@@ -2587,6 +2587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   P_Particle: {fileID: 8572015441863317618, guid: cbaf2733c5c02f141bb9639f40792ad0, type: 3}
+  P_ParticleMine: {fileID: 0}
   bossStateManager: {fileID: 0}
   digitParticles: []
   numberSprites:
@@ -7186,7 +7187,7 @@ MonoBehaviour:
   readyButton: {fileID: 1881519664}
   startButton: {fileID: 1388174886}
   contentRect: {fileID: 1959464307}
-  gameSceneName: GameTest
+  gameSceneName: GolemSceneTest
   JobSelect_Panel: {fileID: 550021654}
 --- !u!4 &797183973
 Transform:
