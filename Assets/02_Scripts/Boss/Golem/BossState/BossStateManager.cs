@@ -73,6 +73,14 @@ public class BossStateManager : NetworkBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            BossDamageReceiveServerRpc(100, 100, 0);
+        }
+    }
+
     // 서버에서만 데미지 받는 함수 실행
     [ServerRpc(RequireOwnership = false)]
     public void BossDamageReceiveServerRpc(ulong _clientId, int _damage, float _aggro)
@@ -486,6 +494,8 @@ public class BossStateManager : NetworkBehaviour
     // 플레이어가 죽었을때 호출되는 함수
     private void PlayerDieCallback(ulong _clientId)
     {
+        Debug.LogWarning("해당 플레이어가 죽음 : " + _clientId);
+
         int playerIndex = -1;
         bool IsAggroDie = false;
 
