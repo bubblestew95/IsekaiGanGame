@@ -24,7 +24,7 @@ public class Lobby_CharacterSelector : NetworkBehaviour
             int index = i;
             characterButtons[i].onClick.AddListener(() => RequestCharacterSelection(index));
         }
-        RequestExistingSelectionsServerRpc(NetworkManager.Singleton.LocalClientId);
+        RequestExistingSelections();
 
     }
 
@@ -52,20 +52,16 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestExistingSelectionsServerRpc(ulong clientId)
+    public void RequestExistingSelections()
     {
-        Debug.Log($"[Server] 클라이언트 {clientId} 가 기존 선택 정보를 요청함.");
-
-        // RoomManager 인스턴스를 찾아서 실행
-        RoomManager roomManager = Object.FindFirstObjectByType<RoomManager>();
-        if (roomManager != null)
+        if (RoomManager.Instance != null)
         {
-
+            Debug.Log("[Client] 기존 캐릭터 선택 정보 요청.");
+            RoomManager.Instance.RequestExistingSelectionsServerRpc(NetworkManager.Singleton.LocalClientId);
         }
         else
         {
-            Debug.LogError("[Server] RoomManager를 찾을 수 없습니다. SyncExistingSelectionsToNewPlayer 실행 실패.");
+            Debug.LogError("[Client] RoomManager 인스턴스를 찾을 수 없음.");
         }
     }
 
