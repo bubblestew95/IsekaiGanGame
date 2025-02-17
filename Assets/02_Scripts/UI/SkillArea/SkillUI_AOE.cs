@@ -24,9 +24,17 @@ public class SkillUI_AOE : SkillUI_Base
 
     public override void AimSkill(Vector3 position)
     {
-        position.y = defaultY;
+        position.y = transform.position.y;
 
-        targetRectTr.position = position;
+        if(Vector3.Distance(position, transform.position) > maxRangeRadius)
+        {
+            Debug.Log("Hello?");
+            Vector3 dir = position - transform.position;
+            dir.Normalize();
+            targetRectTr.position = transform.position + dir * maxRangeRadius;
+        }
+        else
+            targetRectTr.position = position;
     }
 
     public override SkillPointData GetSkillAimPoint()

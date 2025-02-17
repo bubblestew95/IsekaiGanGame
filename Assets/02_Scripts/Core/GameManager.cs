@@ -154,8 +154,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // 캐릭터 종류에 따라서 인덱스를 다르게 두어서 각각 다른 BGM을 재생시킨다.
-        bgmController.SetCurCharacterIndex(0);
+        if(bgmController != null)
+        {
+            // 캐릭터 종류에 따라서 인덱스를 다르게 두어서 각각 다른 BGM을 재생시킨다.
+            bgmController.SetCurCharacterIndex(0);
+        }
     }
 }
 

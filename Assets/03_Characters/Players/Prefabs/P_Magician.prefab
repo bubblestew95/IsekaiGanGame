@@ -16705,7 +16705,7 @@ MonoBehaviour:
   - particleName: Meteor
     particlePrefab: {fileID: 8378648546881499446, guid: 867c572a5be680d42a042d2349f10143, type: 3}
     forceDestroyable: 1
-    autoDestroyTime: 1
+    autoDestroyTime: 2
   - particleName: FlameThrower
     particlePrefab: {fileID: 8400424712307853490, guid: efa44bbb7410de0459f8b24e062b9482, type: 3}
     forceDestroyable: 1
@@ -16722,7 +16722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 822026061
+  GlobalObjectIdHash: 4090568991
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -19025,6 +19025,14 @@ PrefabInstance:
     - target: {fileID: 5349502811382016277, guid: d9e58625f8178804e94f613990ab58c0, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5960925047362426426, guid: d9e58625f8178804e94f613990ab58c0, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 4.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5960925047362426426, guid: d9e58625f8178804e94f613990ab58c0, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7436998486931864826, guid: d9e58625f8178804e94f613990ab58c0, type: 3}
       propertyPath: m_Name
