@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/01_Scenes/KSUTest/GolemSceneTest/GolemSceneTest.unity
     guid: ff1f9fe5b6608204f80c0ec9bd26afd5
   - enabled: 1
+    path: Assets/01_Scenes/KSUTest/GolemSceneTest/Login.unity
+    guid: a875e19e6032d6643bfc4b3be3c5af2a
+  - enabled: 1
     path: Assets/01_Scenes/KSUTest/MushRoomSceneTest/LobbyTest.unity
     guid: 4227d2f5ff83afb488c7d96d99d3f6e6
   - enabled: 1
