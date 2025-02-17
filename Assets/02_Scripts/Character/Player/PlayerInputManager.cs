@@ -21,7 +21,7 @@ public class PlayerInputManager
     #region Input Buffer
 
     private Queue<InputBufferData> skillBuffer = new Queue<InputBufferData>();
-    private readonly float checkDequeueTime = 0.3f;
+    private readonly float checkDequeueTime = 0.05f;
     private float remainDequeueTime = 0f;
     private InputBufferData nullInputBuffer = new InputBufferData();
 

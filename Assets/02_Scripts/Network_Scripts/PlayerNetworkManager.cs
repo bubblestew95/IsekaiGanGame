@@ -15,13 +15,13 @@ public class PlayerNetworkManager : NetworkBehaviour
 
     public void SetNetworkAnimatorTrigger(int _hashId)
     {
-        if(networkAnimator == null)
+        if (networkAnimator == null)
         {
             Debug.Log("Network Animator is not valid!");
             return;
         }
 
-        if (IsClientPlayer())
+        if(IsClientPlayer())
             networkAnimator.SetTrigger(_hashId);
     }
 
@@ -56,7 +56,7 @@ public class PlayerNetworkManager : NetworkBehaviour
         ApplyRevivePlayerClientRpc(_clientId);
     }
 
-    [Rpc(SendTo.Server, Delivery = RpcDelivery.Unreliable)]
+    [Rpc(SendTo.Server)]
     private void SetSpeedAnimServerRpc(ulong _clientId, float _speed)
     {
         var obj = NetworkManager.ConnectedClients[_clientId].PlayerObject;
@@ -66,13 +66,19 @@ public class PlayerNetworkManager : NetworkBehaviour
         }
     }
 
-    [Rpc(SendTo.Server, Delivery = RpcDelivery.Reliable)]
+    [Rpc(SendTo.Server)]
     private void ChangeStateServerRpc(ulong _clientId, PlayerStateType _state)
     {
         ChangeStateClientRpc(_clientId, _state);
     }
 
-    [Rpc(SendTo.Everyone, Delivery = RpcDelivery.Reliable)]
+    [Rpc(SendTo.Server)]
+    private void SetAnimationTriggerRpc(ulong _clientId, int _hashId)
+    {
+        networkAnimator.SetTrigger(_hashId);
+    }
+
+    [Rpc(SendTo.Everyone)]
     private void ApplyRevivePlayerClientRpc(ulong _clientId)
     {
         var obj = NetworkManager.ConnectedClients[_clientId].PlayerObject;
@@ -84,7 +90,7 @@ public class PlayerNetworkManager : NetworkBehaviour
     }
 
 
-    [Rpc(SendTo.Everyone, Delivery = RpcDelivery.Reliable)]
+    [Rpc(SendTo.Everyone)]
     private void ChangeStateClientRpc(ulong _clientId, PlayerStateType _state)
     {
         var obj = NetworkManager.ConnectedClients[_clientId].PlayerObject;

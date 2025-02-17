@@ -14253,6 +14253,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6235850401738319467, guid: d9e58625f8178804e94f613990ab58c0, type: 3}
+      propertyPath: maxRangeRadius
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7378266134710429896, guid: d9e58625f8178804e94f613990ab58c0, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1

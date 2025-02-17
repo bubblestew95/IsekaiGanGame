@@ -11,7 +11,6 @@ public class IdleState : BasePlayerState
     private NetworkObject networkObj = null;
     private Coroutine updateCoroutine = null;
 
-
     public IdleState(PlayerManager _playerManager) : base(_playerManager)
     {
         stateType = PlayerStateType.Idle;
@@ -22,7 +21,7 @@ public class IdleState : BasePlayerState
     public override void OnEnterState()
     {
         // 로컬 게임이 아니고, 네트워크 오브젝트가 로컬 플레이어가 아닐 때
-        if (!GameManager.Instance.IsLocalGame && !playerManager.PlayerNetworkManager.IsLocalPlayer)
+        if (!GameManager.Instance.IsLocalGame && !playerManager.PlayerNetworkManager.IsClientPlayer())
             return;
 
         if(GameManager.Instance.IsPCMode)

@@ -151,7 +151,8 @@ public class PlayerManager : MonoBehaviour
         //    playerNetworkManager.NetworkChangeState(_type);
         //}
 
-        ChangeState_Local(_type);
+        if(GameManager.Instance.IsLocalGame || playerNetworkManager.IsClientPlayer())
+            ChangeState_Local(_type);
     }
 
     public void ChangeState_Local(PlayerStateType _type)
@@ -201,7 +202,7 @@ public class PlayerManager : MonoBehaviour
     public void StartSkill(SkillSlot _type)
     {
         // 멀티 게임이면서 로컬 플레이어가 아닐 때는 스킬을 사용하지 않는다.
-        if (!GameManager.Instance.IsLocalGame && !PlayerNetworkManager.IsLocalPlayer)
+        if (!GameManager.Instance.IsLocalGame && !PlayerNetworkManager.IsClientPlayer())
             return;
 
         skillManager.GetSkillData(_type).StartSkill(this);
@@ -210,7 +211,7 @@ public class PlayerManager : MonoBehaviour
     public void EndSkill(SkillSlot _type)
     {
         // 멀티 게임이면서 로컬 플레이어가 아닐 때는 스킬을 사용하지 않는다.
-        if (!GameManager.Instance.IsLocalGame && !PlayerNetworkManager.IsLocalPlayer)
+        if (!GameManager.Instance.IsLocalGame && !PlayerNetworkManager.IsClientPlayer())
             return;
 
         skillManager.GetSkillData(_type).EndSkill(this);
@@ -218,7 +219,7 @@ public class PlayerManager : MonoBehaviour
     public void UseSkill(SkillSlot _slot)
     {
         // 멀티 게임이면서 로컬 플레이어가 아닐 때는 스킬을 사용하지 않는다.
-        if (!GameManager.Instance.IsLocalGame && !PlayerNetworkManager.IsLocalPlayer)
+        if (!GameManager.Instance.IsLocalGame && !PlayerNetworkManager.IsClientPlayer())
             return;
 
         skillManager.SkillAction(_slot);
