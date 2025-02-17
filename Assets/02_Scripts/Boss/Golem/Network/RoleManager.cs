@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using Unity.Netcode;
+using UnityEngine;
 
 public class RoleManager : NetworkBehaviour
 {
@@ -78,6 +79,7 @@ public class RoleManager : NetworkBehaviour
     // 직업 선택 되돌리기
     public void ResetRole()
     {
+        Debug.Log("클라 아이디 : " + NetworkManager.Singleton.LocalClientId);
         ResetPlayerRoleServerRpc(NetworkManager.Singleton.LocalClientId);
     }
 }
