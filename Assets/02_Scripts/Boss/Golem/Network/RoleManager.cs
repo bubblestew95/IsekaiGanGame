@@ -50,24 +50,28 @@ public class RoleManager : NetworkBehaviour
     // 전사 클릭시
     public void ClickWarrior()
     {
+        ResetRole();
         SetPlayerRoleServerRpc(NetworkManager.Singleton.LocalClientId, "P_Warrior");
     }
 
     // 아처 클릭시
     public void ClickArcher()
     {
+        ResetRole();
         SetPlayerRoleServerRpc(NetworkManager.Singleton.LocalClientId, "P_Archer");
     }
 
     // 어쌔신 클릭시
     public void ClickAssassin()
     {
+        ResetRole();
         SetPlayerRoleServerRpc(NetworkManager.Singleton.LocalClientId, "P_Assassin");
     }
 
     // 마법사 클릭시
     public void ClickMagician()
     {
+        ResetRole();
         SetPlayerRoleServerRpc(NetworkManager.Singleton.LocalClientId, "P_Magician");
     }
 
