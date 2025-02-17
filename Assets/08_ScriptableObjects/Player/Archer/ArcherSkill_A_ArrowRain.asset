@@ -19,6 +19,6 @@ MonoBehaviour:
   isBackattackEnable: 0
   backAttackTimes: 3
   maxRange: 10
-  attackAreaRadius: 1
+  attackAreaRadius: 2
   duration: 2
   damageTickTime: 0.5
