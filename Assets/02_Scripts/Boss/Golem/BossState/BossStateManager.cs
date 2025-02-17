@@ -75,7 +75,7 @@ public class BossStateManager : NetworkBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             BossDamageReceiveServerRpc(100, 100, 0);
         }
