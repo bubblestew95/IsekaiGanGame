@@ -386,21 +386,22 @@ public class BossAttackManager : NetworkBehaviour
         GetComponent<BossAttackCollider>().SkillName = skillName;
         GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
-        // 공격 콜라이더 설정(크기, 위치, 각도 등)
-        GetComponent<BoxCollider>().enabled = true;
-        Vector3 originSize = GetComponent<BoxCollider>().size;
-        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
-        bossStateManager.Boss.tag = "BossAttack";
 
-        // 공격 끝났는지 Check
+        // 공격 4-1인지 확인
         while (true)
         {
-            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-1"))
             {
                 break;
             }
             yield return null;
         }
+
+        // 공격 콜라이더 설정(크기, 위치, 각도 등)
+        GetComponent<BoxCollider>().enabled = true;
+        Vector3 originSize = GetComponent<BoxCollider>().size;
+        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
+        bossStateManager.Boss.tag = "BossAttack";
 
         // ParticleManager.Instance.PlayParticleSetParent(ParticleManager.Instance.attack4, bossStateManager.Boss.transform.position, bossStateManager.Boss, duration + 1f);
 
