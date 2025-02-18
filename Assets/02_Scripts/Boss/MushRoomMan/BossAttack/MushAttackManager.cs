@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -23,7 +24,8 @@ public class MushAttackManager : NetworkBehaviour
     [SerializeField] private DecalProjector attckJumpChargeDecal;
     [SerializeField] private GameObject P_AttackJump;
 
-
+    [Header("Attack6 - 똥뿌리기")]
+    [SerializeField] private GameObject P_Attack6;
 
     // 참조 할것들
     private Animator anim;
@@ -81,6 +83,7 @@ public class MushAttackManager : NetworkBehaviour
 
     #region [Attack]
 
+    // 브레스
     private IEnumerator Attack1()
     {
         // 데칼 키고 위치변경
@@ -133,6 +136,7 @@ public class MushAttackManager : NetworkBehaviour
 
     }
 
+    // 독구름
     private IEnumerator Attack2()
     {
         GameObject attack2Object;
@@ -143,6 +147,7 @@ public class MushAttackManager : NetworkBehaviour
         yield return null;
     }
 
+    // 길다란 독장판
     private IEnumerator Attack3_1()
     {
         // 네모 데칼 설정
@@ -171,6 +176,7 @@ public class MushAttackManager : NetworkBehaviour
         yield return null;
     }
 
+    // 미친 점프
     private IEnumerator Attack4()
     {
         float spd = 1f;
@@ -202,7 +208,7 @@ public class MushAttackManager : NetworkBehaviour
         knockBackDis = skill.KnockbackDistance;
 
         // 스킬위치 조정
-        attckJumpDecalPos.transform.position = new Vector3(mushStateManager.RandomPlayer.transform.position.x, 0.3f, mushStateManager.RandomPlayer.transform.position.x);
+        attckJumpDecalPos.transform.position = new Vector3(mushStateManager.RandomPlayer.transform.position.x, 0.3f, mushStateManager.RandomPlayer.transform.position.z);
 
         // 스킬 보이게 스킬범위데칼 설정
         attckJumpFullDecal.size = new Vector3(range, range, 1f);
@@ -228,18 +234,65 @@ public class MushAttackManager : NetworkBehaviour
         attckJumpFullDecal.size = Vector3.zero;
 
         // 프리펩 생성
-
+        Instantiate(P_AttackJump, attckJumpDecalPos.transform.position, Quaternion.identity, null);
 
         yield return null;
     }
 
+    // 그냥 점프
     private IEnumerator Attack5()
     {
+        // 스킬설정
+        skill = mushSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack5").SkillData;
+
+        skillName = skill.SkillName;
+        range = skill.AttackRange;
+        damage = skill.Damage;
+        delay = skill.AttackColliderDelay;
+        knockBackDis = skill.KnockbackDistance;
+
+        // 스킬위치 조정
+        attckJumpDecalPos.transform.position = new Vector3(mushStateManager.AggroPlayer.transform.position.x, 0.3f, mushStateManager.AggroPlayer.transform.position.z);
+
+        // 스킬 보이게 스킬범위데칼 설정
+        attckJumpFullDecal.size = new Vector3(range, range, 1f);
+
+        float elapseTime = 0f;
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+
+            attckJumpChargeDecal.size = new Vector3(range * (elapseTime / delay), range * (elapseTime / delay), 1f);
+
+            if (elapseTime >= delay)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 데칼 범위 초기화
+        attckJumpChargeDecal.size = Vector3.zero;
+        attckJumpFullDecal.size = Vector3.zero;
+
+        // 프리펩 생성
+        Instantiate(P_AttackJump, attckJumpDecalPos.transform.position, Quaternion.identity, null);
+
         yield return null;
     }
 
+    // 똥뿌리기
     private IEnumerator Attack6()
     {
+        for (int i = 0; i < 4; i++)
+        {
+            if (mushStateManager.AlivePlayers[i] == null) continue;
+
+            GameObject attack6 = Instantiate(P_Attack6, mushStateManager.AlivePlayers[i].transform);
+        }
+
         yield return null;
     }
     #endregion
