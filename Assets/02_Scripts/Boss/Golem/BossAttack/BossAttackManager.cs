@@ -923,7 +923,7 @@ public class BossAttackManager : NetworkBehaviour
     // 랜덤 타겟 설정
     private void SetRandomTarget(ulong _index)
     {
-        randomTarget = bossStateManager.AlivePlayers.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == _index);
+        randomTarget = bossStateManager.AlivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == _index);
     }
 
     // 공격 초기화

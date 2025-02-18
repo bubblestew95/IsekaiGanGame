@@ -14,6 +14,7 @@ public class ParticleManager : MonoBehaviour
     public ParticleSystem attack7;
     public ParticleSystem attack8;
     public ParticleSystem attack9;
+    public ParticleSystem hitParticle;
 
     public ParticleSystem SpecialAttack;
 
