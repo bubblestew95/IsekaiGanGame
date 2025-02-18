@@ -68,7 +68,17 @@ public class PlayerSkillManager
             Debug.LogWarning("Skill is not valid!");
             return;
         }
-        // 스킬 사용
+
+        if(!IsSkillUsable(_slot))
+        {
+            Debug.LogWarning("Skill is not usable at this time!");
+            return;
+        }
+
+        // 쿨타임 적용
+        currentCoolTimeMap[_slot] = skillDataMap[_slot].coolTime;
+
+        // 스킬 애니메이션 시작
         if (animatorIdMap.TryGetValue(_slot, out int animId))
         {
             if(GameManager.Instance.IsLocalGame)
@@ -80,9 +90,6 @@ public class PlayerSkillManager
                 playerManager.PlayerNetworkManager.SetNetworkAnimatorTrigger(animId);
             }
         }
-
-        // 쿨타임 적용
-        currentCoolTimeMap[_slot] = skillDataMap[_slot].coolTime;
     }
 
     public float GetCoolTime(SkillSlot _type)

@@ -18,6 +18,6 @@ MonoBehaviour:
   aggro: 3
   isBackattackEnable: 0
   backAttackTimes: 3
-  moveSpeed: 12
+  moveSpeed: 10
   moveTime: 1.5
   isForward: 1
