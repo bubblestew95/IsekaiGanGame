@@ -110,6 +110,9 @@ public class PlayerInputManager
     /// <param name="_slot"></param>
     public void PC_OnSkillKeyInput(SkillSlot _slot)
     {
+        if (!playerManager.SkillManager.IsSkillUsable(_slot))
+            return;
+
         // 다른 스킬 UI가 활성화되어있을 경우 비활성화 처리
         {
             SkillSlot otherSkillSlot = SkillSlot.None;

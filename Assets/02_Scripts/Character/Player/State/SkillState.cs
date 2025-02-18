@@ -28,6 +28,9 @@ public class SkillState : BasePlayerState
 
     public override void OnUpdateState()
     {
+        if (!GameManager.Instance.IsLocalGame && playerManager.PlayerNetworkManager.IsClientPlayer())
+            return;
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Dash);
@@ -41,6 +44,4 @@ public class SkillState : BasePlayerState
             playerManager.SkillManager.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
         }
     }
-
-
 }
