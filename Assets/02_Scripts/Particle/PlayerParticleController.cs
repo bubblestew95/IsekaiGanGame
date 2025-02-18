@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-using System;
 
-public class PlayerParticleController : MonoBehaviour
+public class PlayerParticleController : NetworkBehaviour
 {
     [Serializable]
     private class PlayerParticleData
@@ -26,15 +27,7 @@ public class PlayerParticleController : MonoBehaviour
     /// <param name="_particleName"></param>
     public void SpawnParticleToPlayer(string _particleName)
     {
-        var particleData = GetParticleData(_particleName);
-
-        if(particleData == null)
-        {
-            Debug.LogWarningFormat("{0} name particle is not exist in list!");
-            return;
-        }
-
-        SpawnParticle(particleData, transform.position, transform.rotation);
+        SpawnParticle(_particleName, transform.position, transform.rotation);
     }
 
     /// <summary>
@@ -43,15 +36,7 @@ public class PlayerParticleController : MonoBehaviour
     /// <param name="_particleName"></param>
     public void SpawnParticleToSkillUsedPoint(string _particleName)
     {
-        var particleData = GetParticleData(_particleName);
-
-        if (particleData == null)
-        {
-            Debug.LogWarningFormat("{0} name particle is not exist in list!");
-            return;
-        }
-
-        SpawnParticle(particleData, playerManager.InputManager.lastSkillUsePoint, transform.rotation);
+        SpawnParticle(_particleName, playerManager.InputManager.lastSkillUsePoint, transform.rotation);
     }
 
     /// <summary>
@@ -60,16 +45,8 @@ public class PlayerParticleController : MonoBehaviour
     /// <param name="_particleName"></param>
     public void SpawnParticleToMeleeWeapon(string _particleName)
     {
-        var particleData = GetParticleData(_particleName);
-
-        if (particleData == null)
-        {
-            Debug.LogWarningFormat("{0} name particle is not exist in list!");
-            return;
-        }
-
         SpawnParticle(
-            particleData,
+            _particleName,
             playerManager.AttackManager.GetMeleeWeaponPostion(),
             transform.rotation);
     }
@@ -80,15 +57,7 @@ public class PlayerParticleController : MonoBehaviour
     /// <param name="_particleName"></param>
     public void SpawnParticleToRangeWeapon(string _particleName)
     {
-        var particleData = GetParticleData(_particleName);
-
-        if (particleData == null)
-        {
-            Debug.LogWarningFormat("{0} name particle is not exist in list!", _particleName);
-            return;
-        }
-
-        SpawnParticle(particleData,
+        SpawnParticle(_particleName,
             playerManager.AttackManager.RangeAttackTransform.position,
             playerManager.transform.rotation);
     } 
@@ -104,25 +73,10 @@ public class PlayerParticleController : MonoBehaviour
         forceDestroyParticles.Clear();
     }
 
-    private void SpawnParticle(PlayerParticleData _particleData, Vector3 _position, Quaternion _rotation)
+    private void SpawnParticle(string _particleName, Vector3 _position, Quaternion _rotation)
     {
-        if (_particleData == null)
-        {
-            Debug.LogWarning("Particle Data is null!");
-            return;
-        }
-
-        var spawnedParticleObj = Instantiate
-            (
-            _particleData.particlePrefab,
-            _position,
-            _rotation
-            );
-
-        Destroy(spawnedParticleObj, _particleData.autoDestroyTime);
-
-        if (_particleData.forceDestroyable)
-            forceDestroyParticles.Add(spawnedParticleObj);
+        if(playerManager.PlayerNetworkManager.IsClientPlayer())
+            SpawnParticleServerRpc(_particleName, _position, _rotation);
     }
 
     private PlayerParticleData GetParticleData(string _particleName)
@@ -136,6 +90,30 @@ public class PlayerParticleController : MonoBehaviour
         }
 
         return null;
+    }
+
+    [ServerRpc]
+    private void SpawnParticleServerRpc(string _particleName, Vector3 _position, Quaternion _rotation)
+    {
+        SpawnParticleClientRpc(_particleName, _position, _rotation);
+    }
+
+    [ClientRpc]
+    private void SpawnParticleClientRpc(string _particleName, Vector3 _position, Quaternion _rotation)
+    {
+        var particleData = GetParticleData(_particleName);
+
+        if (particleData == null)
+        {
+            Debug.LogWarningFormat("{0} name particle is not exist in list!");
+            return;
+        }
+
+        var spawnedParticleObj = Instantiate(particleData.particlePrefab, _position, _rotation);
+        Destroy(spawnedParticleObj, particleData.autoDestroyTime);
+
+        if (particleData.forceDestroyable)
+            forceDestroyParticles.Add(spawnedParticleObj);
     }
 
     private void Awake()
