@@ -473,16 +473,25 @@ public class RoomManager : NetworkBehaviour
 
         Debug.Log($"[Server] Player {clientId} 캐릭터 {characterIndex} 선택 완료, 데이터 저장됨");
 
-        // 모든 클라이언트에게 캐릭터 선택 상태 동기화
+        // 모든 클라이언트에게 선택한 캐릭터 동기화
         UpdateCharacterSelectionClientRpc(clientId, characterIndex);
+
+        // 서버에서 LobbyService에 저장
+        UpdateCharacterSelection(clientId, characterIndex);
     }
 
-    public async void UpdateCharacterSelection(int selectedCharacter)
+    public async void UpdateCharacterSelection(ulong clientId, int selectedCharacter)
     {
-        if (currentLobby == null) return;
+        if (currentLobby == null)
+        {
+            Debug.LogError("[RoomManager] 현재 로비가 null입니다. 캐릭터 선택 업데이트 불가.");
+            return;
+        }
 
         try
         {
+            string playerId = clientId.ToString();
+
             // 현재 플레이어의 PlayerData 업데이트
             UpdatePlayerOptions options = new UpdatePlayerOptions
             {
@@ -491,6 +500,7 @@ public class RoomManager : NetworkBehaviour
                     { "CharacterSelection", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, selectedCharacter.ToString()) }
                 }
             };
+            Debug.Log($"[RoomManager] {AuthenticationService.Instance.PlayerId} 플레이어 데이터 업데이트 요청 - 캐릭터 선택: {selectedCharacter}");
 
             await LobbyService.Instance.UpdatePlayerAsync(currentLobby.Id, AuthenticationService.Instance.PlayerId, options);
             Debug.Log($"[RoomManager] 플레이어 {AuthenticationService.Instance.PlayerId} - 캐릭터 {selectedCharacter} 선택 업데이트 완료.");
@@ -706,10 +716,15 @@ public class RoomManager : NetworkBehaviour
     {
         Debug.Log($"[Client] Player {playerId} 선택한 캐릭터: {selectedCharacter}");
 
-        foreach (var selector in FindObjectsByType<Lobby_CharacterSelector>(FindObjectsSortMode.None))
-        {
-            selector.UpdateCharacterSelection(playerId, selectedCharacter);
-        }
+        // 클라이언트에서 본인 또는 다른 플레이어의 선택한 캐릭터 UI를 업데이트
+        //if (Lobby_CharacterSelector.Instance != null)
+        //{
+        //    Lobby_CharacterSelector.Instance.UpdateCharacterSelection(playerId, selectedCharacter);
+        //}
+        //else
+        //{
+        //    Debug.LogError("[Client] Lobby_CharacterSelector 인스턴스를 찾을 수 없습니다.");
+        //}
     }
 
     [ServerRpc(RequireOwnership = false)]

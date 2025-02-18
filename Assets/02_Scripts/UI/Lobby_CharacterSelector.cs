@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class Lobby_CharacterSelector : NetworkBehaviour
 {
+    public static Lobby_CharacterSelector Instance { get; private set; }
+
     public RawImage[] characterImages;  // 캐릭터 미리보기 UI
     public Transform[] characterModels; // 3D 캐릭터 모델
     public Button[] characterButtons;   // UI 버튼 (각 슬롯)
@@ -16,6 +18,18 @@ public class Lobby_CharacterSelector : NetworkBehaviour
 
     //전체 플레이어들의 선택 상태를 저장하는 딕셔너리
     private Dictionary<ulong, int> playerSelections = new Dictionary<ulong, int>();
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -65,26 +79,6 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         }
     }
 
-    // 클라이언트 UI 업데이트 (서버에서 캐릭터 선택 동기화)
-    public void UpdateCharacterSelection(ulong clientId, int selectedCharacter)
-    {
-        Debug.Log($"[Client] Player {clientId} 선택한 캐릭터: {selectedCharacter}");
-
-        if (selectedCharacter == -1) // 선택 해제 시
-        {
-            if (playerSelections.ContainsKey(clientId))
-            {
-                playerSelections.Remove(clientId);
-            }
-        }
-        else
-        {
-            playerSelections[clientId] = selectedCharacter;
-        }
-
-        // UI 업데이트
-        UpdateCharacterUI();
-    }
     private void UpdateCharacterUI()
     {
         bool isSelfSelected = playerSelections.ContainsKey(NetworkManager.Singleton.LocalClientId);
