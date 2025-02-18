@@ -19,6 +19,7 @@ public class IdleState : BasePlayerState
 
     public override void OnEnterState()
     {
+        /*
         //// 로컬 게임이 아니고, 네트워크 오브젝트가 로컬 플레이어가 아닐 때
         //if (!GameManager.Instance.IsLocalGame && !playerManager.PlayerNetworkManager.IsClientPlayer())
         //    return;
@@ -31,6 +32,7 @@ public class IdleState : BasePlayerState
         //{
         //    updateCoroutine = playerManager.StartCoroutine(IdleMobileCoroutine());
         //}
+        */
 
         mainCamera = Camera.main;
         mouseRayPosition = Vector3.zero;
@@ -128,6 +130,7 @@ public class IdleState : BasePlayerState
         }
     }
 
+    /*
     /// <summary>
     /// 대기 상태일 때 모바일 입력 처리를 하는 코루틴.
     /// </summary>
@@ -229,4 +232,5 @@ public class IdleState : BasePlayerState
             }
         }
     }
+    */
 }
