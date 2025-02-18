@@ -35266,19 +35266,19 @@ AnimationClip:
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
-  - time: 0.4
-    functionName: SpawnParticleToSkillUsedPoint
-    data: ArrowRain
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
   - time: 0.5
     functionName: UseSkill
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 1
+    messageOptions: 0
+  - time: 0.5
+    functionName: SpawnParticleToSkillUsedPoint
+    data: ArrowRain
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
     messageOptions: 0
   - time: 0.96666664
     functionName: EndSkill
