@@ -5584,8 +5584,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 348654884}
   m_HandleRect: {fileID: 348654883}
   m_Direction: 0
-  m_Value: 0.4999991
-  m_Size: 0.9149999
+  m_Value: 0.49999642
+  m_Size: 0.9150001
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6208,7 +6208,7 @@ MonoBehaviour:
   - {fileID: 857748947}
   - {fileID: 1746900207}
   - {fileID: 55974404}
-  worldCamera: {fileID: 0}
+  worldCamera: {fileID: 1220199372}
   canvas: {fileID: 1232669484}
 --- !u!114 &619273736
 MonoBehaviour:
@@ -6611,7 +6611,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 454640060}
   m_Direction: 0
   m_Value: 0.5000009
-  m_Size: 0.9190477
+  m_Size: 0.91904753
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
