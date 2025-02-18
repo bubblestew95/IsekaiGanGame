@@ -31,7 +31,7 @@ public class MushStateManager : NetworkBehaviour
     public float reduceAggroTime;
 
     // 참조 목록
-    public DamageParticle damageParticle;
+    public MushDamageParticle damageParticle;
     public UIBossHpsManager bossHpUI;
     public BgmController bgmController;
     public MushBT mushBT;
@@ -205,6 +205,8 @@ public class MushStateManager : NetworkBehaviour
     [ClientRpc]
     private void DamageParticleClientRpc(float _damage, ulong _clientId)
     {
+        Debug.LogWarning("데미지 파티클 실행됨");
+
         if (NetworkManager.Singleton.LocalClientId == _clientId)
         {
             damageParticle.SetupAndPlayParticlesMine(_damage);
@@ -343,7 +345,7 @@ public class MushStateManager : NetworkBehaviour
 
         // 참조 가져오기
         boss = transform.gameObject;
-        damageParticle = FindFirstObjectByType<DamageParticle>();
+        damageParticle = FindFirstObjectByType<MushDamageParticle>();
         bossHpUI = FindFirstObjectByType<UIBossHpsManager>();
         bgmController = FindFirstObjectByType<BgmController>();
         mushBT = FindAnyObjectByType<MushBT>();

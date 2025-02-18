@@ -1,8 +1,14 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 public class MushAttack6 : MonoBehaviour
 {
+    [SerializeField] private int damage = 0;
+    [SerializeField] private float dis = 0f;
+    [SerializeField] private float TickTime = 1f;
+    private float stayTime = 0f;
+
     private GameObject boom;
     private GameObject poisionFloor;
     private GameObject poisionSun;
@@ -24,6 +30,7 @@ public class MushAttack6 : MonoBehaviour
         StartCoroutine(ChangePoisionSunColor());
     }
 
+    // 색이 초록 -> 검정으로 바꾸는 코루틴
     private IEnumerator ChangePoisionSunColor()
     {
         float elapseTime = 0f;
@@ -53,7 +60,40 @@ public class MushAttack6 : MonoBehaviour
 
 
         transform.SetParent(null);
+
+        yield return new WaitForSeconds(0.5f);
+
         poisionFloor.SetActive(true);
         boom.SetActive(true);
+        GetComponent<MeshCollider>().enabled = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player" && gameObject.tag == "BossAttack" && other.gameObject.GetComponent<NetworkObject>().OwnerClientId == NetworkManager.Singleton.LocalClientId)
+        {
+            // 플레이어 데미지 입도록 설정
+            GameManager.Instance.DamageToPlayer(other.gameObject.GetComponent<PlayerManager>(), damage);
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Player" && gameObject.tag == "BossAttack" && other.gameObject.GetComponent<NetworkObject>().OwnerClientId == NetworkManager.Singleton.LocalClientId)
+        {
+            stayTime += Time.deltaTime;
+
+            if (stayTime > TickTime)
+            {
+                // 플레이어 데미지 입도록 설정
+                GameManager.Instance.DamageToPlayer(other.gameObject.GetComponent<PlayerManager>(), damage);
+                stayTime = 0f;
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        stayTime = 0f;
     }
 }

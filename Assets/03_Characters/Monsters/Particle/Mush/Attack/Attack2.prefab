@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 7674950821896014897}
   - component: {fileID: 7184900525500743496}
   - component: {fileID: 953255089006617633}
+  - component: {fileID: 613804440788145529}
   m_Layer: 0
   m_Name: Attack2
-  m_TagString: Untagged
+  m_TagString: BossAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,6 +77,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ed00c68cb4848f644b9091b54f0dd932, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &613804440788145529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 636999385710452063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 871955805828fa24ba4e6af338903759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2037109704884801591
