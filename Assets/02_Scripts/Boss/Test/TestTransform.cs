@@ -6,7 +6,7 @@ public class TestTransform : MonoBehaviour
 
     private void Start()
     {
-        transform.position = target.position + target.forward * 1f + target.right * 1f;
+        transform.position = target.position + target.forward * 2f;
         transform.rotation = target.localRotation;
     }
 }
