@@ -11425,6 +11425,8 @@ MonoBehaviour:
   moveJoystick: {fileID: 0}
   playerManager: {fileID: 0}
   ui_GameResultManager: []
+  ui_VolumeControl: {fileID: 0}
+  ui_VolumeControlButtons: []
 --- !u!1 &8006339919685914553
 GameObject:
   m_ObjectHideFlags: 0
