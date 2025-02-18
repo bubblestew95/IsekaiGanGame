@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WarriorSkill_B_Taunt
   m_EditorClassIdentifier: 
   skillSlot: 2
-  coolTime: 10
+  coolTime: 20
   damage: 2
   aggro: 20
   isBackattackEnable: 0

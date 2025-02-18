@@ -205,8 +205,8 @@ GameObject:
   - component: {fileID: 8322631880830459007}
   - component: {fileID: 7084700428342503342}
   - component: {fileID: 6878838860696070794}
-  - component: {fileID: 5613403271390671927}
   - component: {fileID: 4633109146552052760}
+  - component: {fileID: 5613403271390671927}
   - component: {fileID: 6124878102137282868}
   - component: {fileID: -2252394323271902163}
   - component: {fileID: 2948108365831047824}
@@ -303,6 +303,31 @@ MonoBehaviour:
   skillUIManager: {fileID: 3401456665348540240}
   rangeAttackStartTr: {fileID: 0}
   meleeWeapon: {fileID: 8597105898812681551}
+--- !u!114 &4633109146552052760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1733868696496733154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1907002772
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &5613403271390671927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,31 +350,10 @@ MonoBehaviour:
     particlePrefab: {fileID: 9027514048236820045, guid: 64384c1a6dee77941a6d743aa85b5438, type: 3}
     forceDestroyable: 0
     autoDestroyTime: 2
---- !u!114 &4633109146552052760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1733868696496733154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3742813864
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
+  - particleName: Shot
+    particlePrefab: {fileID: 1141330259687333427, guid: 6f5057eb3e90df14c9e10e413fa8b9e0, type: 3}
+    forceDestroyable: 0
+    autoDestroyTime: 1
 --- !u!114 &6124878102137282868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,12 +511,16 @@ MonoBehaviour:
   audioDataList:
   - sfxName: Taunt
     sfxClip: {fileID: 8300000, guid: 00b60ca3f11db9a4793370dd0f66bb14, type: 3}
+    startTime: 0
   - sfxName: BasicAttack
     sfxClip: {fileID: 8300000, guid: 6faf5b6f62073df4da7523ed9b951701, type: 3}
+    startTime: 0
   - sfxName: BigbangAOE
     sfxClip: {fileID: 8300000, guid: 526e7459304b73b4993f0f77673a5671, type: 3}
+    startTime: 0
   - sfxName: Bigbang
     sfxClip: {fileID: 8300000, guid: 6b090227abcbe3c4780c969c82094fa0, type: 3}
+    startTime: 0
 --- !u!82 &6093756530547855441
 AudioSource:
   m_ObjectHideFlags: 0
