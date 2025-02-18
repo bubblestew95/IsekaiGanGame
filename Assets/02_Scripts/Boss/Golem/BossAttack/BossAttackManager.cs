@@ -701,7 +701,7 @@ public class BossAttackManager : NetworkBehaviour
         // 돌진 데칼 설정
         recDecalPos.transform.position = bossStateManager.Boss.transform.position + bossStateManager.Boss.transform.forward * 2f;
         recDecalPos.transform.rotation = bossStateManager.Boss.transform.localRotation;
-        recDecal.size = new Vector3(0f, 1f, 50f);
+        recDecal.size = new Vector3(0f, 0f, 0f);
         recDecalPos.SetActive(true);
         StartCoroutine(rushDecalCoroutine(0.5f));
 
@@ -1037,12 +1037,45 @@ public class BossAttackManager : NetworkBehaviour
         }
     }
 
-    // 돌진 데칼 찍는 코루틴
+    // attack8 데칼 찍는 코루틴
     private IEnumerator rushDecalCoroutine(float _delayTime)
     {
         float elapseTime = 0f;
-        Vector3 startSize = new Vector3(0f, 1f, 50f);
-        Vector3 targetSize = new Vector3(3f, 1f, 50f);
+        float dis = CheckDistanceToWall();
+
+        recDecal.pivot = new Vector3(0f, 0f, dis / 2f);
+        Vector3 startSize = new Vector3(0f, 1f, dis);
+        Vector3 targetSize = new Vector3(3f, 1f, dis);
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapseTime / _delayTime);
+            recDecal.size = Vector3.Lerp(startSize, targetSize, t);
+
+            if (elapseTime >= _delayTime)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        recDecalPos.SetActive(false);
+    }
+
+    // Attack5 데칼 찍는 코루틴2
+    private IEnumerator rushDecalCoroutine2(float _delayTime)
+    {
+        float elapseTime = 0f;
+        float dis = CheckDistanceToWall();
+
+        if (dis >= 18f) dis = 18f;
+
+        recDecal.pivot = new Vector3(0f, 0f, dis / 2f);
+        Vector3 startSize = new Vector3(0f, 1f, dis);
+        Vector3 targetSize = new Vector3(3f, 1f, dis);
 
         while (true)
         {
@@ -1067,9 +1100,29 @@ public class BossAttackManager : NetworkBehaviour
         // 돌진 데칼 설정
         recDecalPos.transform.position = bossStateManager.Boss.transform.position + bossStateManager.Boss.transform.forward * 2f;
         recDecalPos.transform.rotation = bossStateManager.Boss.transform.localRotation;
-        recDecal.size = new Vector3(0f, 1f, 50f);
+        recDecal.size = new Vector3(0f, 0f, 0f);
         recDecalPos.SetActive(true);
-        StartCoroutine(rushDecalCoroutine(0.5f));
+        StartCoroutine(rushDecalCoroutine2(0.5f));
+    }
+
+    // 벽까지 거리 계산하는 코드
+    private float CheckDistanceToWall()
+    {
+        float distance = 0f;
+
+        int layer = LayerMask.GetMask("Wall");
+
+        // 앞쪽방향 설정
+        Vector3 direction = bossStateManager.Boss.transform.forward;
+        direction.y = 0f;
+        direction = direction.normalized;
+
+        if (Physics.Raycast(bossStateManager.Boss.transform.position, direction, out RaycastHit hit, 100f, layer))
+        {
+            distance = hit.distance;
+        }
+
+        return distance;
     }
     #endregion
 }
