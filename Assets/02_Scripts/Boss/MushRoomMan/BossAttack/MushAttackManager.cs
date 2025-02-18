@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -23,7 +24,8 @@ public class MushAttackManager : NetworkBehaviour
     [SerializeField] private DecalProjector attckJumpChargeDecal;
     [SerializeField] private GameObject P_AttackJump;
 
-
+    [Header("Attack6 - 똥뿌리기")]
+    [SerializeField] private GameObject P_Attack6;
 
     // 참조 할것들
     private Animator anim;
@@ -81,8 +83,22 @@ public class MushAttackManager : NetworkBehaviour
 
     #region [Attack]
 
+    // 브레스
     private IEnumerator Attack1()
     {
+        // 스킬 정보를 브레스에 넣는 코드
+        skill = mushSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack1").SkillData;
+
+        skillName = skill.SkillName;
+        damage = skill.Damage;
+        knockBackDis = skill.KnockbackDistance;
+
+        MushAttackCollider attack1 = bress.GetComponent<MushAttackCollider>();
+
+        attack1.SkillName = skillName;
+        attack1.Damage = damage;
+        attack1.KnockBackDistance = knockBackDis;
+
         // 데칼 키고 위치변경
         bressDecal.transform.position = mushStateManager.Boss.transform.position + mushStateManager.Boss.transform.forward * 1f + mushStateManager.Boss.transform.right * 1f;
         bressDecal.transform.rotation = mushStateManager.Boss.transform.localRotation;
@@ -104,14 +120,6 @@ public class MushAttackManager : NetworkBehaviour
 
     private IEnumerator Attack1_1()
     {
-        // 스킬 정보 가져오고
-        skill = mushSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack1").SkillData;
-
-        // 스킬에 맞게 세팅
-        skillName = skill.SkillName;
-        damage = skill.Damage;
-        knockBackDis = skill.KnockbackDistance;
-
         // 위치 설정 및 자식으로
         bress.transform.position = mushStateManager.Boss.transform.position + mushStateManager.Boss.transform.forward * 2f;
         bress.transform.rotation = mushStateManager.Boss.transform.rotation;
@@ -133,16 +141,31 @@ public class MushAttackManager : NetworkBehaviour
 
     }
 
+    // 독구름
     private IEnumerator Attack2()
     {
+        // 스킬 정보를 독구름에 넣는 코드
+        skill = mushSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack2").SkillData;
+
+        skillName = skill.SkillName;
+        damage = skill.Damage;
+        knockBackDis = skill.KnockbackDistance;
+
         GameObject attack2Object;
         Vector3 pos = mushStateManager.Boss.transform.position + mushStateManager.Boss.transform.forward * 1f;
 
         attack2Object = Instantiate(P_PoisonCloud, new Vector3(pos.x, 0f, pos.z), Quaternion.identity, null);
 
+        MushAttackCollider attack2 = attack2Object.GetComponent<MushAttackCollider>();
+
+        attack2.SkillName = skillName;
+        attack2.Damage = damage;
+        attack2.KnockBackDistance = knockBackDis;
+
         yield return null;
     }
 
+    // 길다란 독장판
     private IEnumerator Attack3_1()
     {
         // 네모 데칼 설정
@@ -165,12 +188,27 @@ public class MushAttackManager : NetworkBehaviour
         {
             Vector3 pos = mushStateManager.Boss.transform.position + mushStateManager.Boss.transform.forward * 2f;
             Quaternion rot = mushStateManager.Boss.transform.localRotation;
-            Instantiate(P_PoisionRay, pos, rot, null).GetComponent<NetworkObject>().Spawn(true);
+            GameObject attack3Object = Instantiate(P_PoisionRay, pos, rot, null);
+            attack3Object.GetComponent<NetworkObject>().Spawn(true);
+
+            // 스킬 정보를 길다란 독장판에 넣는 코드
+            skill = mushSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack3").SkillData;
+
+            skillName = skill.SkillName;
+            damage = skill.Damage;
+            knockBackDis = skill.KnockbackDistance;
+
+            MushAttackCollider attack3 = attack3Object.GetComponent<MushAttackCollider>();
+
+            attack3.SkillName = skillName;
+            attack3.Damage = damage;
+            attack3.KnockBackDistance = knockBackDis;
         }
 
         yield return null;
     }
 
+    // 미친 점프
     private IEnumerator Attack4()
     {
         float spd = 1f;
@@ -202,7 +240,7 @@ public class MushAttackManager : NetworkBehaviour
         knockBackDis = skill.KnockbackDistance;
 
         // 스킬위치 조정
-        attckJumpDecalPos.transform.position = new Vector3(mushStateManager.RandomPlayer.transform.position.x, 0.3f, mushStateManager.RandomPlayer.transform.position.x);
+        attckJumpDecalPos.transform.position = new Vector3(mushStateManager.RandomPlayer.transform.position.x, 0.3f, mushStateManager.RandomPlayer.transform.position.z);
 
         // 스킬 보이게 스킬범위데칼 설정
         attckJumpFullDecal.size = new Vector3(range, range, 1f);
@@ -228,18 +266,77 @@ public class MushAttackManager : NetworkBehaviour
         attckJumpFullDecal.size = Vector3.zero;
 
         // 프리펩 생성
+        GameObject attack4Object = Instantiate(P_AttackJump, attckJumpDecalPos.transform.position, Quaternion.identity, null);
 
+        MushAttackCollider attack4 = attack4Object.GetComponent<MushAttackCollider>();
+
+        attack4.SkillName = skillName;
+        attack4.Damage = damage;
+        attack4.KnockBackDistance = knockBackDis;
 
         yield return null;
     }
 
+    // 그냥 점프
     private IEnumerator Attack5()
     {
+        // 스킬설정
+        skill = mushSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack5").SkillData;
+
+        skillName = skill.SkillName;
+        range = skill.AttackRange;
+        damage = skill.Damage;
+        delay = skill.AttackColliderDelay;
+        knockBackDis = skill.KnockbackDistance;
+
+        // 스킬위치 조정
+        attckJumpDecalPos.transform.position = new Vector3(mushStateManager.AggroPlayer.transform.position.x, 0.3f, mushStateManager.AggroPlayer.transform.position.z);
+
+        // 스킬 보이게 스킬범위데칼 설정
+        attckJumpFullDecal.size = new Vector3(range, range, 1f);
+
+        float elapseTime = 0f;
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+
+            attckJumpChargeDecal.size = new Vector3(range * (elapseTime / delay), range * (elapseTime / delay), 1f);
+
+            if (elapseTime >= delay)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 데칼 범위 초기화
+        attckJumpChargeDecal.size = Vector3.zero;
+        attckJumpFullDecal.size = Vector3.zero;
+
+        // 프리펩 생성
+        GameObject attack5Object = Instantiate(P_AttackJump, attckJumpDecalPos.transform.position, Quaternion.identity, null);
+
+        // 스킬 데미지 설정
+        MushAttackCollider attack5 = attack5Object.GetComponent<MushAttackCollider>();
+        attack5.SkillName = skillName;
+        attack5.Damage = damage;
+        attack5.KnockBackDistance = knockBackDis;
+
         yield return null;
     }
 
+    // 똥뿌리기
     private IEnumerator Attack6()
     {
+        for (int i = 0; i < 4; i++)
+        {
+            if (mushStateManager.AlivePlayers[i] == null) continue;
+
+            GameObject attack6Object = Instantiate(P_Attack6, mushStateManager.AlivePlayers[i].transform);
+        }
+
         yield return null;
     }
     #endregion
@@ -259,12 +356,12 @@ public class MushAttackManager : NetworkBehaviour
         }
     }
 
-    // 돌진 데칼 찍는 코루틴
+    // Attack3 데칼 찍는 코루틴
     private IEnumerator Attack3DecalCoroutine(float _delayTime)
     {
         float elapseTime = 0f;
-        Vector3 startSize = new Vector3(0f, 2f, 100f);
-        Vector3 targetSize = new Vector3(3f, 2f, 100f);
+        Vector3 startSize = new Vector3(0f, 3f, 100f);
+        Vector3 targetSize = new Vector3(3f, 3f, 100f);
 
         while (true)
         {

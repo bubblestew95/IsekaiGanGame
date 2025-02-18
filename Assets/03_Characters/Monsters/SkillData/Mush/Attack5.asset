@@ -17,6 +17,6 @@ MonoBehaviour:
   damage: 20
   minRange: 0
   maxRange: 10
-  attackRange: 10
+  attackRange: 8
   attackColliderDelay: 1.57
   knockbackDistance: 2
