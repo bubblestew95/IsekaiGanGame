@@ -5843,8 +5843,8 @@ GameObject:
   - component: {fileID: 9563318}
   - component: {fileID: 6093684178934932082}
   - component: {fileID: 4146515583710344192}
-  - component: {fileID: 8208847430920535235}
   - component: {fileID: -8203911682527767499}
+  - component: {fileID: 8208847430920535235}
   - component: {fileID: -6465391473038639350}
   - component: {fileID: 3892225392416952665}
   - component: {fileID: 1810080502444178791}
@@ -5940,27 +5940,6 @@ MonoBehaviour:
   skillUIManager: {fileID: 1222662255935922909}
   rangeAttackStartTr: {fileID: 6632752334010623226}
   meleeWeapon: {fileID: 5784963127292875751}
---- !u!114 &8208847430920535235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 179124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90a88b3501676794bbaba1a9e2f8a27e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particleDataList:
-  - particleName: Skill_A
-    particlePrefab: {fileID: 2060900179291159282, guid: 28eef6dcf964ba64cb131ec687a97a60, type: 3}
-    forceDestroyable: 1
-    autoDestroyTime: 1
-  - particleName: Skill_C
-    particlePrefab: {fileID: 2715471840370901047, guid: 9f9d665143204084d9f107a53d958642, type: 3}
-    forceDestroyable: 1
-    autoDestroyTime: 0.7
 --- !u!114 &-8203911682527767499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5986,6 +5965,28 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &8208847430920535235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a88b3501676794bbaba1a9e2f8a27e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  particleDataList:
+  - particleName: Skill_A
+    particlePrefab: {fileID: 2060900179291159282, guid: 28eef6dcf964ba64cb131ec687a97a60, type: 3}
+    forceDestroyable: 1
+    autoDestroyTime: 1
+  - particleName: Skill_C
+    particlePrefab: {fileID: 2715471840370901047, guid: 9f9d665143204084d9f107a53d958642, type: 3}
+    forceDestroyable: 1
+    autoDestroyTime: 0.7
 --- !u!114 &-6465391473038639350
 MonoBehaviour:
   m_ObjectHideFlags: 0

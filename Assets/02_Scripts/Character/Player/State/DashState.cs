@@ -1,6 +1,8 @@
 using UnityEngine;
 
 using EnumTypes;
+using StructTypes;
+using System.Collections;
 
 public class DashState : BasePlayerState
 {
@@ -11,7 +13,6 @@ public class DashState : BasePlayerState
 
     public override void OnEnterState()
     {
-        
     }
 
     public override void OnExitState()

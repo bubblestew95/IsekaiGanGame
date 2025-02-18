@@ -75,7 +75,9 @@ public class PlayerParticleController : NetworkBehaviour
 
     private void SpawnParticle(string _particleName, Vector3 _position, Quaternion _rotation)
     {
-        if(playerManager.PlayerNetworkManager.IsClientPlayer())
+        if (GameManager.Instance.IsLocalGame)
+            SpawnParticleLocal(_particleName, _position, _rotation);
+        else if (playerManager.PlayerNetworkManager.IsClientPlayer())
             SpawnParticleServerRpc(_particleName, _position, _rotation);
     }
 
@@ -100,6 +102,23 @@ public class PlayerParticleController : NetworkBehaviour
 
     [ClientRpc]
     private void SpawnParticleClientRpc(string _particleName, Vector3 _position, Quaternion _rotation)
+    {
+        var particleData = GetParticleData(_particleName);
+
+        if (particleData == null)
+        {
+            Debug.LogWarningFormat("{0} name particle is not exist in list!");
+            return;
+        }
+
+        var spawnedParticleObj = Instantiate(particleData.particlePrefab, _position, _rotation);
+        Destroy(spawnedParticleObj, particleData.autoDestroyTime);
+
+        if (particleData.forceDestroyable)
+            forceDestroyParticles.Add(spawnedParticleObj);
+    }
+
+    private void SpawnParticleLocal(string _particleName, Vector3 _position, Quaternion _rotation)
     {
         var particleData = GetParticleData(_particleName);
 

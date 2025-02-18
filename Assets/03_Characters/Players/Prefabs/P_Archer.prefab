@@ -10821,8 +10821,8 @@ GameObject:
   - component: {fileID: 9563318}
   - component: {fileID: 6093684178934932082}
   - component: {fileID: 4146515583710344192}
-  - component: {fileID: 768737984502602709}
   - component: {fileID: -2836398782895520287}
+  - component: {fileID: 768737984502602709}
   - component: {fileID: 8742243076319004022}
   - component: {fileID: -287821195716040168}
   - component: {fileID: -8549285457553216154}
@@ -10917,35 +10917,6 @@ MonoBehaviour:
   skillUIManager: {fileID: 2481139205278611692}
   rangeAttackStartTr: {fileID: 3783926205617964531}
   meleeWeapon: {fileID: 0}
---- !u!114 &768737984502602709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 179124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90a88b3501676794bbaba1a9e2f8a27e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particleDataList:
-  - particleName: ArrowRain
-    particlePrefab: {fileID: 2232111375016833989, guid: 7f80baed94a37294fa07eb5faf2668c7, type: 3}
-    forceDestroyable: 0
-    autoDestroyTime: 2
-  - particleName: BackJump
-    particlePrefab: {fileID: 1141330259687333427, guid: 833991be4f51dc7439d6474656e963a7, type: 3}
-    forceDestroyable: 1
-    autoDestroyTime: 0.5
-  - particleName: Shot
-    particlePrefab: {fileID: 1141330259687333427, guid: 833991be4f51dc7439d6474656e963a7, type: 3}
-    forceDestroyable: 1
-    autoDestroyTime: 0.5
-  - particleName: Charging
-    particlePrefab: {fileID: 7131401307255788800, guid: cd07e56b4e09e284d86a48d3b4463de6, type: 3}
-    forceDestroyable: 1
-    autoDestroyTime: 1
 --- !u!114 &-2836398782895520287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10971,6 +10942,36 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &768737984502602709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a88b3501676794bbaba1a9e2f8a27e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  particleDataList:
+  - particleName: ArrowRain
+    particlePrefab: {fileID: 2232111375016833989, guid: 7f80baed94a37294fa07eb5faf2668c7, type: 3}
+    forceDestroyable: 0
+    autoDestroyTime: 2
+  - particleName: BackJump
+    particlePrefab: {fileID: 1141330259687333427, guid: 833991be4f51dc7439d6474656e963a7, type: 3}
+    forceDestroyable: 1
+    autoDestroyTime: 0.5
+  - particleName: Shot
+    particlePrefab: {fileID: 1141330259687333427, guid: 833991be4f51dc7439d6474656e963a7, type: 3}
+    forceDestroyable: 1
+    autoDestroyTime: 0.5
+  - particleName: Charging
+    particlePrefab: {fileID: 7131401307255788800, guid: cd07e56b4e09e284d86a48d3b4463de6, type: 3}
+    forceDestroyable: 1
+    autoDestroyTime: 1
 --- !u!114 &8742243076319004022
 MonoBehaviour:
   m_ObjectHideFlags: 0
