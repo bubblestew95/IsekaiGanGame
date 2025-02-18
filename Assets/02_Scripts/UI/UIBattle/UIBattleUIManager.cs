@@ -39,6 +39,20 @@ public class UIBattleUIManager : MonoBehaviour
     private void Start()
     {
         SetupAllUI();
+
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+
+        if(moveJoystick != null)
+        {
+            moveJoystick.gameObject.SetActive(false);
+        }
+
+        if(skillButtonsManager != null)
+        {
+            skillButtonsManager.DisableButtonInteractable();
+        }
+
+#endif
     }
 
     public void FadeInResult(bool _isWin)
