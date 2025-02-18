@@ -526,6 +526,8 @@ public class BossAttackManager : NetworkBehaviour
         // 플레이어 한테 레이쏴서 돌뒤 플레이어 태그 변경
         CheckPlayerBehindRock();
 
+        yield return new WaitForSeconds(0.1f);
+
         // attackCollider 활성화
         circleAttackColliders[0].SetActive(true);
 
@@ -966,10 +968,15 @@ public class BossAttackManager : NetworkBehaviour
 
             RaycastHit[] hits = Physics.RaycastAll(bossPos, dir, 100f, defaultLayerMask);
 
+            // Ray 시각적으로 표시
+            Debug.DrawRay(bossPos, dir * 100f, Color.green, 2f);
+
             System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
             foreach (RaycastHit ray in hits)
             {
+                Debug.LogWarning("레이를 쏜 플레이어 :" + bossStateManager.AlivePlayers[i].name + " || 레이에 맞은 물체 :" + ray.collider.gameObject.name);
+
                 if (ray.collider.CompareTag("Rock"))
                 {
                     bossStateManager.AlivePlayers[i].tag = "BehindRock";
