@@ -196,6 +196,12 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void OnPlayerDamageEnd()
+    {
+        if(statusManager.CurrentHp > 0)
+            ChangeState(PlayerStateType.Idle);
+    }
+
     #endregion
 
         #region Skill Functions
