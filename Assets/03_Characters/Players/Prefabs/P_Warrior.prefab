@@ -2331,6 +2331,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_StateDebug
       objectReference: {fileID: 0}
+    - target: {fileID: 1803530286454360388, guid: b833e640e5232ee41bd5a1a009879b89, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2669016988343742048, guid: b833e640e5232ee41bd5a1a009879b89, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
