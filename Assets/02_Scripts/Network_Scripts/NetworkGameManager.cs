@@ -197,6 +197,7 @@ public class NetworkGameManager : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void PlayerDeathServerRpc(ulong _clientId)
     {
+        Debug.LogWarningFormat("Server Death!!! : {0}", _clientId);
         PlayerDieClientRpc(_clientId);
     }
 
