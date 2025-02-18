@@ -74041,6 +74041,20 @@ AnimationClip:
     floatParameter: 0
     intParameter: 1
     messageOptions: 0
+  - time: 0.06666667
+    functionName: PlaySFX
+    data: Bigbang
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.72860086
+    functionName: PlaySFX
+    data: BigbangAOE
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.72860086
     functionName: UseSkill
     data: 
