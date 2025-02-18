@@ -2845,9 +2845,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 705871687}
     - target: {fileID: 6881833285181368674, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: bossSpd
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6881833285181368674, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: tileFire
       value: 
       objectReference: {fileID: 899497084}
+    - target: {fileID: 6881833285181368674, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
+      propertyPath: bossAnimSpd
+      value: 1.25
+      objectReference: {fileID: 0}
     - target: {fileID: 6881833285181368674, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: phase1Particle
       value: 
@@ -2858,7 +2866,7 @@ PrefabInstance:
       objectReference: {fileID: 1005370971}
     - target: {fileID: 7796279537819312077, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: maxHp
-      value: 5000
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 8468617057500289297, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: m_LocalPosition.x

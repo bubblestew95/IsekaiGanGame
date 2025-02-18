@@ -55,15 +55,15 @@ public class PlayerAttackManager
     /// <param name="_damage"></param>
     public void TakeDamage(int _damage)
     {
-        if (playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Damaged
-            ||
-            playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Death
-            ||
-            playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Dash)
-        {
-            Debug.Log("Player is not damageable!");
-            return;
-        }
+        //if (playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Damaged
+        //    ||
+        //    playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Death
+        //    ||
+        //    playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Dash)
+        //{
+        //    Debug.Log("Player is not damageable!");
+        //    return;
+        //}
 
         playerManager.StatusManager.OnDamaged(_damage);
     }
@@ -75,7 +75,9 @@ public class PlayerAttackManager
     /// <param name="_distance"></param>
     public void KnockbackPlayer(Vector3 _attackOriginPos, float _distance)
     {
-        playerManager.ChangeState(PlayerStateType.Damaged);
+        // playerManager.ChangeState(PlayerStateType.Damaged);
+
+        playerManager.AnimationManager.PlayDamagedAnimation();
 
         if (characterController.enabled)
         {

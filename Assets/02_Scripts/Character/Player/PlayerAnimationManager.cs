@@ -40,23 +40,24 @@ public class PlayerAnimationManager
     {
         if (GameManager.Instance.IsLocalGame)
             animator.SetTrigger(animId_Damaged);
-        else
-            networkAnimator.SetTrigger(animId_Damaged);
+        else if(playerManager.PlayerNetworkManager.IsClientPlayer())
+            playerManager.PlayerNetworkManager.SetNetworkAnimatorTrigger(animId_Damaged);
+
     }
 
     public void PlayDeathAnimation()
     {
         if (GameManager.Instance.IsLocalGame)
             animator.SetTrigger(animId_Death);
-        else
-            networkAnimator.SetTrigger(animId_Death);
+        else if (playerManager.PlayerNetworkManager.IsClientPlayer())
+            playerManager.PlayerNetworkManager.SetNetworkAnimatorTrigger(animId_Death);
     }
 
     public void PlayGetRevivedAnimation()
     {
         if (GameManager.Instance.IsLocalGame)
             animator.SetTrigger(animId_GetRevived);
-        else
+        else if (playerManager.PlayerNetworkManager.IsClientPlayer())
             networkAnimator.SetTrigger(animId_GetRevived);
     }
 
@@ -65,7 +66,7 @@ public class PlayerAnimationManager
         if (GameManager.Instance.IsLocalGame)
             ApplyAnimatorWalkSpeed(_speed);
         else
-            playerManager.PlayerNetworkManager.ServerSetSpeedAnimator(_speed);
+            playerManager.PlayerNetworkManager.NetworkSetSpeedAnimator(_speed);
     }
 
     public void ApplyAnimatorWalkSpeed(float _speed)

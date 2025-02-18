@@ -44,7 +44,7 @@ public class NetworkGameManager : NetworkBehaviour
 
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
-            PlayerDamagedRpc(clientId, _damage);
+            PlayerDamagedServerRpc(clientId, _damage);
         }
     }
 
@@ -62,8 +62,13 @@ public class NetworkGameManager : NetworkBehaviour
 
         if (NetworkManager.Singleton.LocalClientId == clientId)
         {
-            PlayerKnockbackRpc(clientId, _attackPos, _knockbackDist);
+            PlayerKnockbackServerRpc(clientId, _attackPos, _knockbackDist);
         }
+    }
+
+    public void OnPlayerDeath(ulong _clientId)
+    {
+        PlayerDeathServerRpc(_clientId);
     }
 
     #endregion
@@ -175,11 +180,11 @@ public class NetworkGameManager : NetworkBehaviour
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
     [Rpc(SendTo.Server)]
-    private void PlayerDamagedRpc
+    private void PlayerDamagedServerRpc
         (ulong _clientId, int _damage)
     {
         // 서버에서 다른 클라이언트들에게 특정 플레이어에게 데미지를 적용하라고 명령한다.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-        ApplyDamageToPlayerRpc(_clientId, _damage);
+        ApplyDamageToPlayerClientRpc(_clientId, _damage);
     }
 
     /// <summary>
@@ -189,14 +194,21 @@ public class NetworkGameManager : NetworkBehaviour
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
     [Rpc(SendTo.Server)]
-    private void PlayerKnockbackRpc(ulong _clientId, Vector3 _attackPos, float _knockbackDist)
+    private void PlayerKnockbackServerRpc(ulong _clientId, Vector3 _attackPos, float _knockbackDist)
     {
-        ApplyKnockbackRpc(_clientId, _attackPos, _knockbackDist);
+        ApplyKnockbackClientRpc(_clientId, _attackPos, _knockbackDist);
     }
 
-        #endregion
+    [Rpc(SendTo.Server)]
+    public void PlayerDeathServerRpc(ulong _clientId)
+    {
+        Debug.LogWarningFormat("Server Death!!! : {0}", _clientId);
+        PlayerDieClientRpc(_clientId);
+    }
 
-        #region Server To Client RPC
+    #endregion
+
+    #region Server To Client RPC
 
     /// <summary>
     /// 서버에서 특정 플레이어에게 데미지를 적용하도록 모든 클라이언트에게 명령한다.
@@ -206,7 +218,7 @@ public class NetworkGameManager : NetworkBehaviour
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
     [Rpc(SendTo.Everyone)]
-    private void ApplyDamageToPlayerRpc(ulong _cliendId, int _damage)
+    private void ApplyDamageToPlayerClientRpc(ulong _cliendId, int _damage)
     {
         var obj = NetworkManager.ConnectedClients[_cliendId].PlayerObject;
 
@@ -225,7 +237,7 @@ public class NetworkGameManager : NetworkBehaviour
     /// <param name="_attackPos"></param>
     /// <param name="_knockbackDist"></param>
     [Rpc(SendTo.Everyone)]
-    private void ApplyKnockbackRpc(ulong _cliendId, Vector3 _attackPos, float _knockbackDist)
+    private void ApplyKnockbackClientRpc(ulong _cliendId, Vector3 _attackPos, float _knockbackDist)
     {
         var obj = NetworkManager.ConnectedClients[_cliendId].PlayerObject;
 
@@ -274,7 +286,7 @@ public class NetworkGameManager : NetworkBehaviour
         {
             SynPlayerClientRpc(objectId);
             LoadingFinishClientRpc();
-            SetPlayerDieCallback();
+            SetPlayerDieCallbackClientRpc();
             spawnPlayer = false;
             loadingScene = false;
         }
@@ -316,15 +328,18 @@ public class NetworkGameManager : NetworkBehaviour
     }
 
     // 플레이어 사망 콜백 등록
-    private void SetPlayerDieCallback()
+    [ClientRpc]
+    private void SetPlayerDieCallbackClientRpc()
     {
         for (int i = 0; i < 4; i++)
         {
             if (players[i] == null) continue;
 
-            players[i].GetComponent<PlayerNetworkManager>().OnNetworkPlayerDeath += PlayerDieClientRpc;
+            players[i].GetComponent<PlayerNetworkManager>().OnNetworkPlayerDeath += OnPlayerDeath;
         }
     }
+
+
 
     #endregion
 

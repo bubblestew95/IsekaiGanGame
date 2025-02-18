@@ -14,12 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillSlot: 2
   coolTime: 7
-  skillParticle: {fileID: 0}
   damage: 2
   aggro: 1
   isBackattackEnable: 1
   backAttackTimes: 3
   attackRange: 3
-  moveSpeed: 8
+  moveSpeed: 10
   moveTime: 0.4
   isForward: 0

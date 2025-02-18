@@ -386,21 +386,22 @@ public class BossAttackManager : NetworkBehaviour
         GetComponent<BossAttackCollider>().SkillName = skillName;
         GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
-        // 공격 콜라이더 설정(크기, 위치, 각도 등)
-        GetComponent<BoxCollider>().enabled = true;
-        Vector3 originSize = GetComponent<BoxCollider>().size;
-        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
-        bossStateManager.Boss.tag = "BossAttack";
 
-        // 공격 끝났는지 Check
+        // 공격 4-1인지 확인
         while (true)
         {
-            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-1"))
             {
                 break;
             }
             yield return null;
         }
+
+        // 공격 콜라이더 설정(크기, 위치, 각도 등)
+        GetComponent<BoxCollider>().enabled = true;
+        Vector3 originSize = GetComponent<BoxCollider>().size;
+        GetComponent<BoxCollider>().size = new Vector3(3f, 3f, 3f);
+        bossStateManager.Boss.tag = "BossAttack";
 
         // ParticleManager.Instance.PlayParticleSetParent(ParticleManager.Instance.attack4, bossStateManager.Boss.transform.position, bossStateManager.Boss, duration + 1f);
 
@@ -524,6 +525,8 @@ public class BossAttackManager : NetworkBehaviour
 
         // 플레이어 한테 레이쏴서 돌뒤 플레이어 태그 변경
         CheckPlayerBehindRock();
+
+        yield return new WaitForSeconds(0.1f);
 
         // attackCollider 활성화
         circleAttackColliders[0].SetActive(true);
@@ -965,10 +968,15 @@ public class BossAttackManager : NetworkBehaviour
 
             RaycastHit[] hits = Physics.RaycastAll(bossPos, dir, 100f, defaultLayerMask);
 
+            // Ray 시각적으로 표시
+            Debug.DrawRay(bossPos, dir * 100f, Color.green, 2f);
+
             System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
             foreach (RaycastHit ray in hits)
             {
+                Debug.LogWarning("레이를 쏜 플레이어 :" + bossStateManager.AlivePlayers[i].name + " || 레이에 맞은 물체 :" + ray.collider.gameObject.name);
+
                 if (ray.collider.CompareTag("Rock"))
                 {
                     bossStateManager.AlivePlayers[i].tag = "BehindRock";

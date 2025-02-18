@@ -33,6 +33,8 @@ public class BossStateManager : NetworkBehaviour
     public bool isPhase2 = false;
     public int maxHp = 1000;
     public float chainTime = 0f;
+    public float reduceAggro = 5f;
+    public float reduceAggroTime = 10f;
     public GameObject[] allPlayers;
     public GameObject[] alivePlayers;
     public GameObject aggroPlayer;
@@ -70,6 +72,14 @@ public class BossStateManager : NetworkBehaviour
         {
             bossWallTriggerCallback?.Invoke();
             Debug.Log("벽이랑 부딛침");
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            BossDamageReceiveServerRpc(100, 100, 0);
         }
     }
 
@@ -263,12 +273,14 @@ public class BossStateManager : NetworkBehaviour
 
     #region [Damage && Aggro]
     // 어그로 수치 초기화 하는 함수
-    private void ResetAggro()
+    public void ResetAggro()
     {
         for (int i = 0; i < playerAggro.Count; i++)
         {
             playerAggro[i] = 0f;
         }
+
+        bestAggro.Value = 0f;
 
         GetHighestAggroTarget();
     }
@@ -352,6 +364,37 @@ public class BossStateManager : NetworkBehaviour
             bossDieCallback?.Invoke();
         }
     }
+
+    // 어그로 수치 감소시키는 코루틴
+    private IEnumerator ReduceAggroCoroutine()
+    {
+        float elapseTime = 0f;
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+
+            if (elapseTime >= reduceAggroTime)
+            {
+                for (int i = 0; i < 4; ++i)
+                {
+                    playerAggro[i] -= reduceAggro;
+
+                    if (playerAggro[i] <= 0)
+                    {
+                        playerAggro[i] = 0;
+                    }
+                }
+
+                bestAggro.Value -= reduceAggro;
+
+                if (bestAggro.Value <= 0) bestAggro.Value = 0;
+
+                elapseTime = 0f;
+            }
+            yield return null;
+        }
+    }
     #endregion
 
     #region [BGM]
@@ -427,11 +470,17 @@ public class BossStateManager : NetworkBehaviour
         SetCallback();
 
         SetPlayerMulti();
+
+        if (IsServer)
+        {
+            StartCoroutine(ReduceAggroCoroutine());
+        }
     }
 
     // 콜백 설정
     private void SetCallback()
     {
+        BossBT.SpecialAttackEndCallback += ResetAggro;
         attackCollider.rockCollisionCallback += BossStun;
         bossBT.phase2BehaviorStartCallback += ChangePhase2BGM;
     }
@@ -470,6 +519,7 @@ public class BossStateManager : NetworkBehaviour
     public ulong RandomPlayer()
     {
         List<ulong> numList = new List<ulong>();
+        ulong randomNum = 0;
 
         for (int i = 0; i < 4; ++i)
         {
@@ -478,7 +528,15 @@ public class BossStateManager : NetworkBehaviour
             numList.Add(alivePlayers[i].GetComponent<NetworkObject>().OwnerClientId);
         }
 
-        ulong randomNum = numList[Random.Range(0, numList.Count)];
+        if (numList.Count != 0)
+        {
+            randomNum = numList[Random.Range(0, numList.Count)];
+        }
+        else
+        {
+            randomNum = 0;
+        }
+
 
         return randomNum;
     }
@@ -486,6 +544,8 @@ public class BossStateManager : NetworkBehaviour
     // 플레이어가 죽었을때 호출되는 함수
     private void PlayerDieCallback(ulong _clientId)
     {
+        Debug.LogWarning("해당 플레이어가 죽음 : " + _clientId);
+
         int playerIndex = -1;
         bool IsAggroDie = false;
 

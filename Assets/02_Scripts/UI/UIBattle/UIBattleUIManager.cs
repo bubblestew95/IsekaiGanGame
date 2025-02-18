@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EnumTypes;
 using StructTypes;
+using UnityEngine.UI;
 public class UIBattleUIManager : MonoBehaviour
 {
     [SerializeField]
@@ -18,6 +19,8 @@ public class UIBattleUIManager : MonoBehaviour
     private UIBossHpsManager ui_BossHp = null;
     private UIWarningManager ui_disconnect = null;
     public List<UI_GameResultManager> ui_GameResultManager = new List<UI_GameResultManager>();
+    public VolumeControl ui_VolumeControl = null;
+    public List<Button> ui_VolumeControlButtons = new List<Button>();
     public FloatingJoystick MoveJoystick
     {
         get { return moveJoystick; }
@@ -28,7 +31,9 @@ public class UIBattleUIManager : MonoBehaviour
         ui_PlayerHp = GetComponentInChildren<UIHpsManager>();
         ui_BossHp = GetComponentInChildren<UIBossHpsManager>();
         ui_disconnect = GetComponentInChildren<UIWarningManager>();
-        ui_GameResultManager = GetComponentsInChildren<UI_GameResultManager>().ToList();
+        ui_GameResultManager = GetComponentsInChildren<UI_GameResultManager>(true).ToList();
+        ui_VolumeControl = GetComponentInChildren<VolumeControl>();
+        ui_VolumeControlButtons = ui_VolumeControl.GetComponentsInChildren<Button>(true).ToList();
     }
 
     private void Start()
@@ -99,14 +104,20 @@ public class UIBattleUIManager : MonoBehaviour
 
     public void UpdatePlayerHp()
     {
-        ui_PlayerHp.SetCurrentHp(playerManager.StatusManager.CurrentHp);
-        ui_PlayerHp.HpBarUIUpdate();
+        if(playerManager.StatusManager != null && ui_PlayerHp != null)
+        {
+            ui_PlayerHp.SetCurrentHp(playerManager.StatusManager.CurrentHp);
+            ui_PlayerHp.HpBarUIUpdate();
+        }
     }
 
     public void UpdateBossHp()
     {
-        ui_BossHp.SetCurrentHp(GameManager.Instance.GetBossHp());
-        ui_BossHp.HpBarUIUpdate();
+        if(ui_BossHp != null)
+        {
+            ui_BossHp.SetCurrentHp(GameManager.Instance.GetBossHp());
+            ui_BossHp.HpBarUIUpdate();
+        }
     }
 
     /// <summary>
@@ -117,5 +128,6 @@ public class UIBattleUIManager : MonoBehaviour
     public void ApplyCooltime(SkillSlot _slot, float _time)
     {
         skillButtonsManager.ApplyCooltime(_slot, _time);
+        ui_VolumeControlButtons[1].onClick.Invoke();  // 버튼 클릭 이벤트 트리거
     }
 }

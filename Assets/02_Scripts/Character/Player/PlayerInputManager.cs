@@ -21,7 +21,7 @@ public class PlayerInputManager
     #region Input Buffer
 
     private Queue<InputBufferData> skillBuffer = new Queue<InputBufferData>();
-    private readonly float checkDequeueTime = 0.3f;
+    private readonly float checkDequeueTime = 0.05f;
     private float remainDequeueTime = 0f;
     private InputBufferData nullInputBuffer = new InputBufferData();
 
@@ -110,6 +110,9 @@ public class PlayerInputManager
     /// <param name="_slot"></param>
     public void PC_OnSkillKeyInput(SkillSlot _slot)
     {
+        if (!playerManager.SkillManager.IsSkillUsable(_slot))
+            return;
+
         // 다른 스킬 UI가 활성화되어있을 경우 비활성화 처리
         {
             SkillSlot otherSkillSlot = SkillSlot.None;
@@ -215,7 +218,6 @@ public class PlayerInputManager
         {
             if (playerManager.InputManager.GetMouseRayHitPosition(out Vector3 pos))
             {
-                Debug.LogFormat("Mouse Position : {0}", pos);
                 _skillUI.AimSkill(pos);
             }
 

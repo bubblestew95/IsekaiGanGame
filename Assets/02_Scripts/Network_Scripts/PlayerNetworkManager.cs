@@ -1,3 +1,4 @@
+using EnumTypes;
 using System;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -14,34 +15,49 @@ public class PlayerNetworkManager : NetworkBehaviour
 
     public void SetNetworkAnimatorTrigger(int _hashId)
     {
-        if(networkAnimator == null)
+        if (networkAnimator == null)
         {
             Debug.Log("Network Animator is not valid!");
             return;
         }
 
-        networkAnimator.SetTrigger(_hashId);
+        if(IsClientPlayer())
+            networkAnimator.SetTrigger(_hashId);
+    }
+
+    public bool IsClientPlayer()
+    {
+        ulong clientId = NetworkManager.LocalClientId;
+
+        if (clientId != OwnerClientId)
+            return false;
+
+        return true;
     }
 
     public void NetworkRevivePlayer()
     {
-        ServerRevivePlayerRpc(OwnerClientId);
+        RevivePlayerServerRpc(OwnerClientId);
     }
 
-    public void ServerSetSpeedAnimator(float _speed)
+    public void NetworkChangeState(PlayerStateType _state)
     {
-        ServerSetSpeedAnimRpc(OwnerClientId, _speed);
+        ChangeStateServerRpc(OwnerClientId, _state);
+    }
+
+    public void NetworkSetSpeedAnimator(float _speed)
+    {
+        SetSpeedAnimServerRpc(OwnerClientId, _speed);
     }
 
     [Rpc(SendTo.Server)]
-    private void ServerRevivePlayerRpc(ulong _clientId)
+    private void RevivePlayerServerRpc(ulong _clientId)
     {
-        ApplyRevivePlayerRpc(_clientId);
+        ApplyRevivePlayerClientRpc(_clientId);
     }
 
-
     [Rpc(SendTo.Server)]
-    private void ServerSetSpeedAnimRpc(ulong _clientId, float _speed)
+    private void SetSpeedAnimServerRpc(ulong _clientId, float _speed)
     {
         var obj = NetworkManager.ConnectedClients[_clientId].PlayerObject;
         if(obj != null)
@@ -50,14 +66,38 @@ public class PlayerNetworkManager : NetworkBehaviour
         }
     }
 
+    [Rpc(SendTo.Server)]
+    private void ChangeStateServerRpc(ulong _clientId, PlayerStateType _state)
+    {
+        ChangeStateClientRpc(_clientId, _state);
+    }
+
+    [Rpc(SendTo.Server)]
+    private void SetAnimationTriggerRpc(ulong _clientId, int _hashId)
+    {
+        networkAnimator.SetTrigger(_hashId);
+    }
+
     [Rpc(SendTo.Everyone)]
-    private void ApplyRevivePlayerRpc(ulong _clientId)
+    private void ApplyRevivePlayerClientRpc(ulong _clientId)
     {
         var obj = NetworkManager.ConnectedClients[_clientId].PlayerObject;
 
         if (obj != null)
         {
             obj.GetComponent<PlayerManager>().ApplyRevive();
+        }
+    }
+
+
+    [Rpc(SendTo.Everyone)]
+    private void ChangeStateClientRpc(ulong _clientId, PlayerStateType _state)
+    {
+        var obj = NetworkManager.ConnectedClients[_clientId].PlayerObject;
+
+        if (obj != null)
+        {
+            obj.GetComponent<PlayerManager>().ChangeState_Local(_state);
         }
     }
 
