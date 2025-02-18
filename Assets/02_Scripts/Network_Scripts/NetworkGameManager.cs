@@ -194,6 +194,12 @@ public class NetworkGameManager : NetworkBehaviour
         ApplyKnockbackClientRpc(_clientId, _attackPos, _knockbackDist);
     }
 
+    [Rpc(SendTo.Server)]
+    public void PlayerDeathServerRpc(ulong _clientId)
+    {
+        PlayerDieClientRpc(_clientId);
+    }
+
     #endregion
 
     #region Server To Client RPC
@@ -322,9 +328,11 @@ public class NetworkGameManager : NetworkBehaviour
         {
             if (players[i] == null) continue;
 
-            players[i].GetComponent<PlayerNetworkManager>().OnNetworkPlayerDeath += PlayerDieClientRpc;
+            players[i].GetComponent<PlayerNetworkManager>().OnNetworkPlayerDeath += PlayerDeathServerRpc;
         }
     }
+
+
 
     #endregion
 

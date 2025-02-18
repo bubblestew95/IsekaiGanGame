@@ -110,7 +110,6 @@ public class PlayerNetworkManager : NetworkBehaviour
     {
         playerManager = GetComponent<PlayerManager>();
         networkAnimator = playerManager.GetComponent<NetworkAnimator>();
-        OnNetworkPlayerDeath += (ulong _clientId) => Debug.LogFormat("OnNetworkPlayerDeath Called! {0}", _clientId);
     }
 
 }
