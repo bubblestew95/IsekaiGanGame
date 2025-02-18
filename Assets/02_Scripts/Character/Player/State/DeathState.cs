@@ -12,6 +12,7 @@ public class DeathState : BasePlayerState
         // 플레이어가 죽었을 때, 로컬 게임이 아닌 경우에만 네트워크에게 죽음을 알림.
         if (!GameManager.Instance.IsLocalGame)
         {
+            Debug.Log("Hello!");
             ulong clientId = playerManager.PlayerNetworkManager.OwnerClientId;
             playerManager.PlayerNetworkManager.OnNetworkPlayerDeath?.Invoke(clientId);
         }

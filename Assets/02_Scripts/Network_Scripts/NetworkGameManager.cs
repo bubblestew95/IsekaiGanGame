@@ -66,6 +66,11 @@ public class NetworkGameManager : NetworkBehaviour
         }
     }
 
+    public void OnPlayerDeath(ulong _clientId)
+    {
+        PlayerDeathServerRpc(_clientId);
+    }
+
     #endregion
 
     #region [Private Funtions]
@@ -281,7 +286,7 @@ public class NetworkGameManager : NetworkBehaviour
         {
             SynPlayerClientRpc(objectId);
             LoadingFinishClientRpc();
-            SetPlayerDieCallback();
+            SetPlayerDieCallbackClientRpc();
             spawnPlayer = false;
             loadingScene = false;
         }
@@ -323,13 +328,14 @@ public class NetworkGameManager : NetworkBehaviour
     }
 
     // 플레이어 사망 콜백 등록
-    private void SetPlayerDieCallback()
+    [ClientRpc]
+    private void SetPlayerDieCallbackClientRpc()
     {
         for (int i = 0; i < 4; i++)
         {
             if (players[i] == null) continue;
 
-            players[i].GetComponent<PlayerNetworkManager>().OnNetworkPlayerDeath += PlayerDeathServerRpc;
+            players[i].GetComponent<PlayerNetworkManager>().OnNetworkPlayerDeath += OnPlayerDeath;
         }
     }
 
