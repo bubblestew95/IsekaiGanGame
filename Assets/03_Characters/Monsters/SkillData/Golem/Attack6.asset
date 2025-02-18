@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Attack6
   coolDown: 30
-  damage: 20
+  damage: 10
   minRange: 0
   maxRange: 1000
   attackRange: 5

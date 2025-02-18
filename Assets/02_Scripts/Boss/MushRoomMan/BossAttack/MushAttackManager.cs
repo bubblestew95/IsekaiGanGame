@@ -21,6 +21,7 @@ public class MushAttackManager : NetworkBehaviour
     [SerializeField] private GameObject attckJumpDecalPos;
     [SerializeField] private DecalProjector attckJumpFullDecal;
     [SerializeField] private DecalProjector attckJumpChargeDecal;
+    [SerializeField] private GameObject P_AttackJump;
 
 
 
@@ -203,13 +204,16 @@ public class MushAttackManager : NetworkBehaviour
         // 스킬위치 조정
         attckJumpDecalPos.transform.position = new Vector3(mushStateManager.RandomPlayer.transform.position.x, 0.3f, mushStateManager.RandomPlayer.transform.position.x);
 
+        // 스킬 보이게 스킬범위데칼 설정
+        attckJumpFullDecal.size = new Vector3(range, range, 1f);
+
         float elapseTime = 0f;
 
         while (true)
         {
             elapseTime += Time.deltaTime;
 
-
+            attckJumpChargeDecal.size = new Vector3(range * (elapseTime / delay), range * (elapseTime / delay), 1f);
 
             if (elapseTime >= delay)
             {
@@ -218,6 +222,13 @@ public class MushAttackManager : NetworkBehaviour
 
             yield return null;
         }
+
+        // 데칼 범위 초기화
+        attckJumpChargeDecal.size = Vector3.zero;
+        attckJumpFullDecal.size = Vector3.zero;
+
+        // 프리펩 생성
+
 
         yield return null;
     }
