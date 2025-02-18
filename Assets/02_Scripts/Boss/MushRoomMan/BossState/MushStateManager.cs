@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
@@ -27,6 +28,8 @@ public class MushStateManager : NetworkBehaviour
     public GameObject aggroPlayer;
     public GameObject randomPlayer;
     public int maxHp;
+    public float reduceAggro;
+    public float reduceAggroTime;
 
     // 참조 목록
     public DamageParticle damageParticle;
@@ -164,11 +167,41 @@ public class MushStateManager : NetworkBehaviour
         aggroPlayer = alivePlayers[_num];
     }
 
+    // 어그로 수치 감소시키는 코루틴
+    private IEnumerator ReduceAggroCoroutine()
+    {
+        float elapseTime = 0f;
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+
+            if (elapseTime >= reduceAggroTime)
+            {
+                for (int i = 0; i < 4; ++i)
+                {
+                    playerAggro[i] -= reduceAggro;
+
+                    if (playerAggro[i] <= 0)
+                    {
+                        playerAggro[i] = 0;
+                    }
+                }
+
+                bestAggro.Value -= reduceAggro;
+
+                if (bestAggro.Value <= 0) bestAggro.Value = 0;
+
+                elapseTime = 0f;
+            }
+            yield return null;
+        }
+    }
+
     #endregion
 
     #region [Particle]
 
-    // 데미지 파티클 실행
     // 데미지 파티클 실행
     [ClientRpc]
     private void DamageParticleClientRpc(float _damage, ulong _clientId)
@@ -292,6 +325,8 @@ public class MushStateManager : NetworkBehaviour
     {
         // 초기 값 설정
         maxHp = 5000;
+        reduceAggro = 5f;
+        reduceAggroTime = 10f;
 
         // 서버에서 저장할거 설정
         if (IsServer)
@@ -330,6 +365,11 @@ public class MushStateManager : NetworkBehaviour
 
         // 설정 끝났으니 보스 상태 바꾸라고 콜백
         bossChangeStateCallback?.Invoke();
+
+        if (IsServer)
+        {
+            StartCoroutine(ReduceAggroCoroutine());
+        }
     }
 
     // 랜덤한 플레이어를 호출하는 함수
@@ -358,6 +398,7 @@ public class MushStateManager : NetworkBehaviour
         return randomNum;
     }
 
+    // 클라 모두가 랜덤 플레이어 세팅
     public void SetRandomPlayer()
     {
         SetRandomPlayerClientRpc(RandomPlayerId());

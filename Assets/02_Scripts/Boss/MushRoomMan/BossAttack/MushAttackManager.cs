@@ -1,9 +1,9 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using static UnityEngine.GraphicsBuffer;
 
-public class MushAttackManager : MonoBehaviour
+public class MushAttackManager : NetworkBehaviour
 {
     [Header("Attack1 - 브레스")]
     [SerializeField] private GameObject bressDecal;
@@ -11,6 +11,17 @@ public class MushAttackManager : MonoBehaviour
 
     [Header("Attack2 - 독구름")]
     [SerializeField] private GameObject P_PoisonCloud;
+
+    [Header("Attack3 - 길다란 독장판")]
+    [SerializeField] private GameObject attack3DecalPos;
+    [SerializeField] private DecalProjector attack3Decal;
+    [SerializeField] private GameObject P_PoisionRay;
+
+    [Header("Attack4 - 여러번 Jump공격")]
+    [SerializeField] private GameObject attckJumpDecalPos;
+    [SerializeField] private DecalProjector attckJumpFullDecal;
+    [SerializeField] private DecalProjector attckJumpChargeDecal;
+
 
 
     // 참조 할것들
@@ -47,8 +58,11 @@ public class MushAttackManager : MonoBehaviour
             case "Attack2":
                 StartCoroutine(Attack2());
                 break;
-            case "Attack3":
-                StartCoroutine(Attack3());
+            case "Attack3_1":
+                StartCoroutine(Attack3_1());
+                break;
+            case "Attack3_2":
+                StartCoroutine(Attack3_2());
                 break;
             case "Attack4":
                 StartCoroutine(Attack4());
@@ -128,13 +142,83 @@ public class MushAttackManager : MonoBehaviour
         yield return null;
     }
 
-    private IEnumerator Attack3()
+    private IEnumerator Attack3_1()
     {
+        // 네모 데칼 설정
+        attack3DecalPos.transform.position = mushStateManager.Boss.transform.position + mushStateManager.Boss.transform.forward * 2f;
+        attack3DecalPos.transform.rotation = mushStateManager.Boss.transform.localRotation;
+        attack3Decal.size = new Vector3(0f, 2f, 100f);
+        attack3DecalPos.transform.SetParent(mushStateManager.Boss.transform);
+        attack3DecalPos.SetActive(true);
+        StartCoroutine(Attack3DecalCoroutine(0.5f));
+
+        yield return null;
+    }
+    private IEnumerator Attack3_2()
+    {
+        // 데칼 안보이게 설정
+        attack3DecalPos.SetActive(false);
+
+        // 일자로 버섯 포자 공격 서버에서 생성
+        if (IsServer)
+        {
+            Vector3 pos = mushStateManager.Boss.transform.position + mushStateManager.Boss.transform.forward * 2f;
+            Quaternion rot = mushStateManager.Boss.transform.localRotation;
+            Instantiate(P_PoisionRay, pos, rot, null).GetComponent<NetworkObject>().Spawn(true);
+        }
+
         yield return null;
     }
 
     private IEnumerator Attack4()
     {
+        float spd = 1f;
+
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4"))
+        {
+            spd = 1f;
+        }
+        else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-1"))
+        {
+            spd = 1.5f;
+        }
+        else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-2"))
+        {
+            spd = 2f;
+        }
+        else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-3"))
+        {
+            spd = 2.5f;
+        }
+
+        // 스킬설정
+        skill = mushSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "Attack4").SkillData;
+
+        skillName = skill.SkillName;
+        range = skill.AttackRange;
+        damage = skill.Damage;
+        delay = skill.AttackColliderDelay / spd;
+        knockBackDis = skill.KnockbackDistance;
+
+        // 스킬위치 조정
+        attckJumpDecalPos.transform.position = new Vector3(mushStateManager.RandomPlayer.transform.position.x, 0.3f, mushStateManager.RandomPlayer.transform.position.x);
+
+        float elapseTime = 0f;
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+
+
+
+            if (elapseTime >= delay)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
         yield return null;
     }
 
@@ -161,6 +245,29 @@ public class MushAttackManager : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+
+    // 돌진 데칼 찍는 코루틴
+    private IEnumerator Attack3DecalCoroutine(float _delayTime)
+    {
+        float elapseTime = 0f;
+        Vector3 startSize = new Vector3(0f, 2f, 100f);
+        Vector3 targetSize = new Vector3(3f, 2f, 100f);
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapseTime / _delayTime);
+            attack3Decal.size = Vector3.Lerp(startSize, targetSize, t);
+
+            if (elapseTime >= _delayTime)
+            {
+                break;
+            }
+
+            yield return null;
         }
     }
 
