@@ -198,8 +198,8 @@ public class PlayerManager : MonoBehaviour
 
     public void OnPlayerDamageEnd()
     {
-        if(statusManager.CurrentHp > 0)
-            ChangeState(PlayerStateType.Idle);
+        //if(statusManager.CurrentHp > 0)
+        //    ChangeState(PlayerStateType.Idle);
     }
 
     #endregion

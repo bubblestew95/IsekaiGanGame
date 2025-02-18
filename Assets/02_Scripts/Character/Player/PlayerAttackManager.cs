@@ -75,7 +75,9 @@ public class PlayerAttackManager
     /// <param name="_distance"></param>
     public void KnockbackPlayer(Vector3 _attackOriginPos, float _distance)
     {
-        playerManager.ChangeState(PlayerStateType.Damaged);
+        // playerManager.ChangeState(PlayerStateType.Damaged);
+
+        playerManager.AnimationManager.PlayDamagedAnimation();
 
         if (characterController.enabled)
         {
