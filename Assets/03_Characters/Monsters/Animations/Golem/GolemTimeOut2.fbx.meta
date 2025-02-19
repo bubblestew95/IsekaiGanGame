@@ -60,12 +60,12 @@ ModelImporter:
       events:
       - time: 0
         functionName: PerformAttack
-        data: SpecialAttack
+        data: TimeOut
         objectReferenceParameter: {fileID: 9137032837993464747, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.02352941
+      - time: 0.028314104
         functionName: SpecialAttackAudio
         data: 
         objectReferenceParameter: {fileID: 9137032837993464747, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
