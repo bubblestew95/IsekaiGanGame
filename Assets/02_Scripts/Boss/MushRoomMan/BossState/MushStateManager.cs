@@ -353,7 +353,7 @@ public class MushStateManager : NetworkBehaviour
     private void Init()
     {
         // 초기 값 설정
-        maxHp = 5000;
+        maxHp = 3000;
         reduceAggro = 5f;
         reduceAggroTime = 10f;
         hpCheck = new bool[3];
