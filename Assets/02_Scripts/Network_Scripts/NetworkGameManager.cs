@@ -144,9 +144,19 @@ public class NetworkGameManager : NetworkBehaviour
 
         yield return new WaitForSeconds(15f);
 
-        if (IsServer)
+        if (GameManager.Instance.IsGolem)
         {
-            NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
+            if (IsServer)
+            {
+                NetworkManager.Singleton.SceneManager.LoadScene("GolemSceneTest", LoadSceneMode.Single);
+            }
+        }
+        else if (GameManager.Instance.IsMush)
+        {
+            if (IsServer)
+            {
+                NetworkManager.Singleton.SceneManager.LoadScene("MushSceneTest", LoadSceneMode.Single);
+            }
         }
     }
 

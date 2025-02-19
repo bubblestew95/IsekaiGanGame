@@ -26,10 +26,10 @@ public class GameManager : MonoBehaviour
 
 
     [SerializeField]
-    private bool IsGolem = false;
+    public bool IsGolem = false;
 
     [SerializeField]
-    private bool IsMush = false;
+    public bool IsMush = false;
     #endregion
 
     #region Private Variables
