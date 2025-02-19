@@ -115,8 +115,8 @@ public class RoomManager : NetworkBehaviour
         if (string.IsNullOrEmpty(username))
         {
             //Debug.LogError("Username not found!");
-            username = "Player";
-            Debug.Log($"Player - Welcome : , {username}!");
+            username = $"Player{NetworkManager.Singleton.IsClient}";
+            Debug.Log($"Player{NetworkManager.Singleton.IsClient} - Welcome : , {username}!");
         }
         else
         {
