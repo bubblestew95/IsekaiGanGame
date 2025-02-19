@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 
 public class UI_GameResultManager : MonoBehaviour
 {
@@ -136,7 +137,22 @@ public class UI_GameResultManager : MonoBehaviour
         // 모든 UI 요소들이 다 페이드 인 되면 버튼을 활성화
         foreach (var button in buttons)
         {
-            button.interactable = true;
+            if (NetworkManager.Singleton.IsHost)
+            {
+                if (isGood == true)
+                {
+                    button.transform.GetChild(0).GetComponent<TMP_Text>().text = "Go Lobby";
+                }
+                else
+                {
+                    button.transform.GetChild(0).GetComponent<TMP_Text>().text = "Try Again";
+                }
+                button.interactable = true;
+            }
+            else
+            {
+                button.transform.GetChild(0).GetComponent<TMP_Text>().text = "Wait";
+            }
         }
     }
 
