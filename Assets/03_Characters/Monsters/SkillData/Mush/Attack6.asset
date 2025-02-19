@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Attack6
   m_EditorClassIdentifier: 
   skillName: Attack6
-  coolDown: 30
-  damage: 20
+  coolDown: 120
+  damage: 10
   minRange: 0
-  maxRange: 10
-  attackRange: 10
-  attackColliderDelay: 1.43
+  maxRange: 1000
+  attackRange: 0
+  attackColliderDelay: 0
   knockbackDistance: 2
