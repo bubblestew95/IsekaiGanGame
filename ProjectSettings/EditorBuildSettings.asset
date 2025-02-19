@@ -26,10 +26,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/01_Scenes/KSUTest/MushRoomSceneTest/LobbyTest.unity
     guid: 4227d2f5ff83afb488c7d96d99d3f6e6
-  - enabled: 0
+  - enabled: 1
     path: Assets/01_Scenes/KSUTest/MushRoomSceneTest/MushRoomSceneTest.unity
     guid: e7d394634c7210b4ab15e61102b519e4
-  - enabled: 1
+  - enabled: 0
     path: Assets/01_Scenes/S_Player.unity
     guid: 7c2905f759c96fd48861b281a7102762
   m_configObjects:

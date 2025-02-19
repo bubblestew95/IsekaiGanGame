@@ -679,7 +679,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isLocalGame: 1
-  isPCMode: 0
+  isPCMode: 1
   bgmController: {fileID: 0}
   IsGolem: 1
   IsMush: 0
