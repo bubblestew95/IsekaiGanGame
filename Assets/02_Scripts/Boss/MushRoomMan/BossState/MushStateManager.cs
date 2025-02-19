@@ -211,8 +211,6 @@ public class MushStateManager : NetworkBehaviour
     [ClientRpc]
     private void DamageParticleClientRpc(float _damage, ulong _clientId)
     {
-        Debug.LogWarning("데미지 파티클 실행됨");
-
         if (NetworkManager.Singleton.LocalClientId == _clientId)
         {
             damageParticle.SetupAndPlayParticlesMine(_damage);

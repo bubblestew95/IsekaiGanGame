@@ -126,6 +126,9 @@ public class MushAttackManager : NetworkBehaviour
         bress.transform.SetParent(mushStateManager.Boss.transform);
         bress.SetActive(true);
 
+        // 오디오 재생
+        MushAudioManager.Instance.AudioPlay(MushAudioManager.Instance.Attack1);
+
         // 애니메이션이 끝났다면
         while (true)
         {
@@ -205,6 +208,9 @@ public class MushAttackManager : NetworkBehaviour
             attack3.KnockBackDistance = knockBackDis;
         }
 
+        // 오디오 재생
+        MushAudioManager.Instance.AudioPlay(MushAudioManager.Instance.Attack3);
+
         yield return null;
     }
 
@@ -268,6 +274,9 @@ public class MushAttackManager : NetworkBehaviour
         // 프리펩 생성
         GameObject attack4Object = Instantiate(P_AttackJump, attckJumpDecalPos.transform.position, Quaternion.identity, null);
 
+        // 오디오 재생
+        MushAudioManager.Instance.AudioPlay(MushAudioManager.Instance.Attack4);
+
         MushAttackCollider attack4 = attack4Object.GetComponent<MushAttackCollider>();
 
         attack4.SkillName = skillName;
@@ -317,6 +326,9 @@ public class MushAttackManager : NetworkBehaviour
 
         // 프리펩 생성
         GameObject attack5Object = Instantiate(P_AttackJump, attckJumpDecalPos.transform.position, Quaternion.identity, null);
+
+        // 오디오 재생
+        MushAudioManager.Instance.AudioPlay(MushAudioManager.Instance.Attack5);
 
         // 스킬 데미지 설정
         MushAttackCollider attack5 = attack5Object.GetComponent<MushAttackCollider>();
