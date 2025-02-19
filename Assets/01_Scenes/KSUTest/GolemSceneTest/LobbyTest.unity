@@ -6208,7 +6208,7 @@ MonoBehaviour:
   - {fileID: 857748947}
   - {fileID: 1746900207}
   - {fileID: 55974404}
-  worldCamera: {fileID: 0}
+  worldCamera: {fileID: 1220199372}
   canvas: {fileID: 1232669484}
 --- !u!114 &619273736
 MonoBehaviour:

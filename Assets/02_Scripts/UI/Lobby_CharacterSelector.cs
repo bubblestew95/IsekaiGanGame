@@ -40,6 +40,11 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         }
         RequestExistingSelections();
 
+        if (RoomManager.Instance != null)
+        {
+            RoomManager.Instance.OnCharacterSelectionUpdated += UpdateCharacterUI;
+        }
+
     }
 
     // 캐릭터 선택 요청 (클라이언트 -> 서버)
@@ -79,8 +84,19 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         }
     }
 
-    private void UpdateCharacterUI()
+    private void UpdateCharacterUI(ulong playerId, int selectedCharacter)
     {
+        Debug.Log($"[Client] UpdateCharacterUI 호출 - Player {playerId}, 선택한 캐릭터: {selectedCharacter}");
+
+        if (!playerSelections.ContainsKey(playerId))
+        {
+            playerSelections.Add(playerId, selectedCharacter);
+        }
+        else
+        {
+            playerSelections[playerId] = selectedCharacter;
+        }
+
         bool isSelfSelected = playerSelections.ContainsKey(NetworkManager.Singleton.LocalClientId);
 
         for (int i = 0; i < characterButtons.Length; i++)
@@ -128,6 +144,14 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         foreach (var button in characterButtons)
         {
             button.interactable = !isReady;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (RoomManager.Instance != null)
+        {
+            RoomManager.Instance.OnCharacterSelectionUpdated -= UpdateCharacterUI;
         }
     }
 }
