@@ -205,8 +205,8 @@ GameObject:
   - component: {fileID: 8322631880830459007}
   - component: {fileID: 7084700428342503342}
   - component: {fileID: 6878838860696070794}
-  - component: {fileID: 5613403271390671927}
   - component: {fileID: 2741921731144188581}
+  - component: {fileID: 5613403271390671927}
   - component: {fileID: 6124878102137282868}
   - component: {fileID: -2252394323271902163}
   - component: {fileID: 2948108365831047824}
@@ -300,23 +300,6 @@ MonoBehaviour:
   skillUIManager: {fileID: 0}
   rangeAttackStartTr: {fileID: 0}
   meleeWeapon: {fileID: 8597105898812681551}
---- !u!114 &5613403271390671927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1733868696496733154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90a88b3501676794bbaba1a9e2f8a27e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particleDataList:
-  - particleName: Taunt
-    particlePrefab: {fileID: 9080140021571130472, guid: 4d18279ad5186744a8c5a2d5e1a23578, type: 3}
-  - particleName: Bigbang
-    particlePrefab: {fileID: 9027514048236820045, guid: 64384c1a6dee77941a6d743aa85b5438, type: 3}
 --- !u!114 &2741921731144188581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,6 +325,28 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &5613403271390671927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1733868696496733154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a88b3501676794bbaba1a9e2f8a27e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  particleDataList:
+  - particleName: Taunt
+    particlePrefab: {fileID: 9080140021571130472, guid: 4d18279ad5186744a8c5a2d5e1a23578, type: 3}
+    forceDestroyable: 0
+    autoDestroyTime: 1
+  - particleName: Bigbang
+    particlePrefab: {fileID: 9027514048236820045, guid: 64384c1a6dee77941a6d743aa85b5438, type: 3}
+    forceDestroyable: 0
+    autoDestroyTime: 1
 --- !u!114 &6124878102137282868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,7 +414,7 @@ MonoBehaviour:
     Layer: 0
     OriginatingState: 646380074
     DestinationState: 2145700606
-    TransitionDuration: 0.25
+    TransitionDuration: 0
     TriggerNameHash: 2145700606
     TransitionIndex: 0
   - IsCrossFadeExit: 0
@@ -436,24 +441,17 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: 1748754976
-    DestinationState: -630301556
-    TransitionDuration: 0.25
-    TriggerNameHash: 995914302
-    TransitionIndex: 4
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: 1748754976
     DestinationState: -1450044754
     TransitionDuration: 0.25
     TriggerNameHash: -1761810982
-    TransitionIndex: 5
+    TransitionIndex: 4
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: 1748754976
     DestinationState: 968658227
     TransitionDuration: 0.25
     TriggerNameHash: 968658227
-    TransitionIndex: 6
+    TransitionIndex: 5
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: 2081823275
@@ -478,24 +476,17 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: 2081823275
-    DestinationState: -630301556
-    TransitionDuration: 0.25
-    TriggerNameHash: 995914302
-    TransitionIndex: 4
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: 2081823275
     DestinationState: -1450044754
     TransitionDuration: 0.25
     TriggerNameHash: -1761810982
-    TransitionIndex: 5
+    TransitionIndex: 4
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: 2081823275
     DestinationState: 968658227
     TransitionDuration: 0.25
     TriggerNameHash: 968658227
-    TransitionIndex: 6
+    TransitionIndex: 5
   m_Animator: {fileID: 8322631880830459007}
 --- !u!65 &1376921072521282111
 BoxCollider:
