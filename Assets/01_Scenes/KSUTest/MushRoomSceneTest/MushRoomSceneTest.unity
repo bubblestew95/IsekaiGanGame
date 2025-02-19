@@ -5036,7 +5036,7 @@ GameObject:
   - component: {fileID: 1868343642272972185}
   - component: {fileID: 4470183189014038867}
   - component: {fileID: 1312699604}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FloorMushroom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
