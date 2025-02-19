@@ -42,12 +42,12 @@ public class UIBattleUIManager : MonoBehaviour
 
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
 
-        if(moveJoystick != null)
+        if (moveJoystick != null)
         {
             moveJoystick.gameObject.SetActive(false);
         }
 
-        if(skillButtonsManager != null)
+        if (skillButtonsManager != null)
         {
             skillButtonsManager.DisableButtonInteractable();
         }
@@ -71,6 +71,13 @@ public class UIBattleUIManager : MonoBehaviour
     }
     public void OnSkillJoystickUp(SkillSlot _slot)
     {
+        if (playerManager.StateMachine.CurrentState.StateType == PlayerStateType.Skill
+            && _slot != SkillSlot.Dash)
+        {
+            skillUIManager.SetSkillUIEnabled(_slot, false);
+            return;
+        }
+
         SkillPointData pointData = skillUIManager.GetSkillAimPoint(_slot);
 
         playerManager.InputManager.OnButtonInput(_slot, pointData);

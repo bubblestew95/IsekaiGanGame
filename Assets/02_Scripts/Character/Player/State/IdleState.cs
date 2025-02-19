@@ -11,7 +11,7 @@ public class IdleState : BasePlayerState
     private Coroutine updateCoroutine = null;
     private Camera mainCamera = null;
     private Vector3 mouseRayPosition = Vector3.zero;
-
+    private bool skillUsedTrigger = false;
     public IdleState(PlayerManager _playerManager) : base(_playerManager)
     {
         stateType = PlayerStateType.Idle;
@@ -23,15 +23,6 @@ public class IdleState : BasePlayerState
         //// 로컬 게임이 아니고, 네트워크 오브젝트가 로컬 플레이어가 아닐 때
         //if (!GameManager.Instance.IsLocalGame && !playerManager.PlayerNetworkManager.IsClientPlayer())
         //    return;
-
-        //if(GameManager.Instance.IsPCMode)
-        //{
-        //    updateCoroutine = playerManager.StartCoroutine(IdlePCCoroutine());
-        //}
-        //else
-        //{
-        //    updateCoroutine = playerManager.StartCoroutine(IdleMobileCoroutine());
-        //}
         */
 
         mainCamera = Camera.main;
@@ -42,11 +33,7 @@ public class IdleState : BasePlayerState
     {
         playerManager.AnimationManager.SetAnimatorWalkSpeed(0f);
 
-        //if(updateCoroutine != null)
-        //{
-        //    playerManager.StopCoroutine(updateCoroutine);
-        //    updateCoroutine = null;
-        //}
+        skillUsedTrigger = false;
     }
 
     public override void OnUpdateState()
@@ -57,12 +44,40 @@ public class IdleState : BasePlayerState
 
 #if UNITY_ANDROID
 
-        // 대기 상태일 때만 움직일 수 있음.
-        playerManager.InputManager.GetJoystickInputValue(out joystickInputData);
-        playerManager.MovementManager.MoveByJoystick(joystickInputData);
+        // 스킬 사용 처리
+        {
+            InputBufferData inputBuffer = playerManager.InputManager.GetNextInput();
+
+            if (inputBuffer.skillType != SkillSlot.None)
+            {
+                if (playerManager.SkillManager.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData))
+                {
+                    if (inputBuffer.skillType != SkillSlot.Dash && inputBuffer.skillType != SkillSlot.BasicAttack)
+                        skillUsedTrigger = true;
+                }
+
+                return;
+            }
+        }
+
+        if (!skillUsedTrigger)
+        {
+            // 대기 상태일 때만 움직일 수 있음.
+            playerManager.InputManager.GetJoystickInputValue(out joystickInputData);
+            playerManager.MovementManager.MoveByJoystick(joystickInputData);
+        }
 
 #elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
 
+         // 스킬 사용 처리
+        {
+            InputBufferData inputBuffer = playerManager.InputManager.GetNextInput();
+
+            if (inputBuffer.skillType != SkillSlot.None)
+            {
+                playerManager.SkillManager.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
+            }
+        }
         // 스킬 입력 처리
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -118,16 +133,6 @@ public class IdleState : BasePlayerState
         }
 
 #endif
-
-        // 스킬 사용 처리
-        {
-            InputBufferData inputBuffer = playerManager.InputManager.GetNextInput();
-
-            if (inputBuffer.skillType != SkillSlot.None)
-            {
-                playerManager.SkillManager.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
-            }
-        }
     }
 
     /*

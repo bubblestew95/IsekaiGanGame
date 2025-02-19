@@ -148,7 +148,7 @@ public class PlayerSkillManager
     /// 스킬 발동을 시도한다.
     /// </summary>
     /// <param name="_skillIdx"></param>
-    public void TryUseSkill(SkillSlot _type, SkillPointData _point)
+    public bool TryUseSkill(SkillSlot _type, SkillPointData _point)
     {
         // 스킬 발동에 성공했다면
         if (IsSkillUsable(_type))
@@ -171,7 +171,11 @@ public class PlayerSkillManager
             // UI에 쿨타임을 적용한다.
             if (playerManager.BattleUIManager != null)
                 playerManager.BattleUIManager.ApplyCooltime(_type, GetCoolTime(_type));
+
+            return true;
         }
+
+        return false;
     }
 
     public void TryUseSkill(SkillSlot _type, Vector3 _position)

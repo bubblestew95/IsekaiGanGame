@@ -60,7 +60,7 @@ public class SkillUI_AOE : SkillUI_Base
     /// <param name="_pos">옮기고자 하는 대상 지점</param>
     private void SetTargetPosition(Vector3 _pos)
     {
-        _pos *= maxRangeRadius;
+        _pos *= (maxRangeRadius / 2f);
         _pos += transform.position;
 
         targetRectTr.position = _pos;
