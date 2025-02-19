@@ -15,6 +15,7 @@ public class MushBehaviorManager : NetworkBehaviour
     // 보스BehaviourManager 데이터
     private List<BossSkill> tmpList = new List<BossSkill>();
     private WaitForSeconds delay1f = new WaitForSeconds(1f);
+    private bool attack3Trigger = false;
 
     // 초기화
     private void Awake()
@@ -31,6 +32,7 @@ public class MushBehaviorManager : NetworkBehaviour
             mushBT.behaviorEndCallback += () => StartCoroutine(BossPerformAction());
             mushStateManager.bossDieCallback += SetDie;
             mushStateManager.bossChangeStateCallback += SetChase;
+            mushStateManager.bossHp25Callback += SetAttack3;
         }
     }
 
@@ -69,6 +71,13 @@ public class MushBehaviorManager : NetworkBehaviour
         // 패턴 후 딜레이
         yield return delay1f;
 
+        if (attack3Trigger)
+        {
+            attack3Trigger = false;
+            SetBossBehavior(MushState.Attack3);
+            yield break;
+        }
+
         // 각종 조건들에 따라 다르게 실행 
         SetBossBehavior(GetRandomAction());
     }
@@ -82,6 +91,11 @@ public class MushBehaviorManager : NetworkBehaviour
     private void SetChase()
     {
         SetBossBehavior(MushState.Chase);
+    }
+
+    private void SetAttack3()
+    {
+        attack3Trigger = true;
     }
 
     #endregion

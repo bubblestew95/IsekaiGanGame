@@ -480,6 +480,7 @@ public class BossStateManager : NetworkBehaviour
         if (IsServer)
         {
             StartCoroutine(ReduceAggroCoroutine());
+            StartCoroutine(CheckTimeOut());
         }
     }
 
@@ -614,9 +615,28 @@ public class BossStateManager : NetworkBehaviour
     }
 
     // 타임아웃 됬을때 호출되는 함수
-    private void TimeOutCallbakc()
+    private void TimeOutCallback()
     {
         bossTimeOutCallback?.Invoke();
+    }
+
+    // 타임아웃 체크하는 코루틴
+    private IEnumerator CheckTimeOut()
+    {
+        float elapseTime = 0f;
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+
+            if (elapseTime >= 600)
+            {
+                TimeOutCallback();
+                break;
+            }
+
+            yield return null;
+        }
     }
     #endregion
 

@@ -128,6 +128,9 @@ public class BossAttackManager : NetworkBehaviour
             case "Die":
                 StartCoroutine(Die());
                 break;
+            case "TimeOut":
+                StartCoroutine(TimeOut());
+                break;
             default:
                 break;
         }
@@ -840,6 +843,68 @@ public class BossAttackManager : NetworkBehaviour
 
         yield return null;
     }
+
+    // 시간 끝났을때
+    private IEnumerator TimeOut()
+    {
+        // 돌 전부 제거
+        DestroyAllRocks();
+
+        skill = bossSkillManager.Skills.Find(skill => skill.SkillData.SkillName == "SpecialAttack").SkillData;
+
+        skillName = skill.SkillName;
+        range = skill.AttackRange;
+        damage = skill.Damage;
+        delay = skill.AttackColliderDelay / animSpd;
+        knockBackDis = skill.KnockbackDistance;
+
+        // 스킬위치 조정
+        circleSkillPos[0].transform.position = new Vector3(bossStateManager.Boss.transform.position.x, 0.3f, bossStateManager.Boss.transform.position.z);
+
+        // 스킬 데미지 설정
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().Damage = damage;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().SkillName = skillName;
+        circleAttackColliders[0].GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
+
+        // 공격 콜라이더 설정(크기, 위치, 각도 등)
+        circleAttackColliders[0].transform.localScale = new Vector3(range, 0.5f, range);
+
+        // 스킬 표시
+        circleFullRangeDecals[0].size = new Vector3(range, range, 1f);
+
+        // 스킬 차는거 표시
+        float elapseTime = 0f;
+
+        while (elapseTime < delay)
+        {
+            elapseTime += Time.deltaTime;
+
+            circleChargingRangeDecals[0].size = new Vector3(range * (elapseTime / delay), range * (elapseTime / delay), 1f);
+
+            yield return null;
+        }
+        yield return null;
+
+        // 사거리 표시 없에기
+        circleFullRangeDecals[0].size = new Vector3(0f, 0f, 0f);
+        circleChargingRangeDecals[0].size = new Vector3(0f, 0f, 0f);
+
+        yield return new WaitForSeconds(0.1f);
+
+        // attackCollider 활성화
+        circleAttackColliders[0].SetActive(true);
+
+        // 파티클 재생
+        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.SpecialAttack, circleAttackColliders[0].transform.position);
+
+
+        yield return attackColliderTime;
+
+        // attackCollider 비활성화
+        circleAttackColliders[0].SetActive(false);
+
+        yield return null;
+    }
     #endregion
 
     #region [Function]
@@ -1123,6 +1188,20 @@ public class BossAttackManager : NetworkBehaviour
         }
 
         return distance;
+    }
+
+    // 돌 전부 제거
+    private void DestroyAllRocks()
+    {
+        if (IsServer)
+        {
+            GameObject[] rocks = GameObject.FindGameObjectsWithTag("Rock");
+
+            foreach (GameObject rock in rocks)
+            {
+                rock.GetComponent<NetworkObject>().Despawn();
+            }
+        }
     }
     #endregion
 }

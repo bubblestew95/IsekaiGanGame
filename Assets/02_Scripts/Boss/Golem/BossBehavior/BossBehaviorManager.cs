@@ -15,6 +15,7 @@ public class BossBehaviorManager : NetworkBehaviour
     private bool hp10Trigger = false;
     private bool hpHalfTrigger = false;
     private int hp10Cnt = 0;
+    private bool TimeOutTrigger = false;
 
 
     private void Start()
@@ -26,6 +27,7 @@ public class BossBehaviorManager : NetworkBehaviour
             bossStateManager.bossHpHalfCallback += SetHPHalf;
             bossStateManager.bossStunCallback += SetStun;
             bossStateManager.bossDieCallback += SetDie;
+            bossStateManager.bossTimeOutCallback += SetTimeOut;
         }
     }
 
@@ -67,6 +69,13 @@ public class BossBehaviorManager : NetworkBehaviour
         // 패턴 후 딜레이
         yield return delay1f;
 
+        if (TimeOutTrigger)
+        {
+            TimeOutTrigger = false;
+            SetBossBehavior(BossState.TimeOut);
+            yield break;
+        }
+
         // 피가 10퍼 깍였을때 쓰는 패턴
         if (hp10Trigger)
         {
@@ -106,6 +115,12 @@ public class BossBehaviorManager : NetworkBehaviour
     private void SetHPHalf()
     {
         hpHalfTrigger = true;
+    }
+
+    // 타임아웃됬을때 호출되는 함수
+    private void SetTimeOut()
+    {
+        TimeOutTrigger = true;
     }
 
     // 보스가 스턴일때
