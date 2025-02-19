@@ -5585,7 +5585,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 348654883}
   m_Direction: 0
   m_Value: 0.49999955
-  m_Size: 0.9149999
+  m_Size: 0.915
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6610,7 +6610,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 454640061}
   m_HandleRect: {fileID: 454640060}
   m_Direction: 0
-  m_Value: 0.49999955
+  m_Value: 0.5000009
   m_Size: 0.9190476
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -11473,12 +11473,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
