@@ -3120,6 +3120,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLocalGame: 1
   isPCMode: 0
+  bgmController: {fileID: 0}
+  IsGolem: 1
+  IsMush: 0
 --- !u!1 &467294348 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8172849020746995793, guid: 2af5562ce69fc2d448481a1587a352a5, type: 3}
@@ -9563,6 +9566,7 @@ MonoBehaviour:
   attack7: {fileID: 198738731738625552, guid: 21461e6c060baf044ac3e717ed4170cb, type: 3}
   attack8: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
   attack9: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
+  hitParticle: {fileID: 0}
   SpecialAttack: {fileID: 198399678132347108, guid: 045d5fbbf8161ea478959fe3c8e41207, type: 3}
 --- !u!1 &1566495077
 GameObject:
@@ -13657,6 +13661,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   P_Particle: {fileID: 8572015441863317618, guid: cbaf2733c5c02f141bb9639f40792ad0, type: 3}
+  P_ParticleMine: {fileID: 0}
   bossStateManager: {fileID: 457395389}
   digitParticles: []
   numberSprites:
