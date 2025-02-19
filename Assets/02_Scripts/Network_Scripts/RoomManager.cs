@@ -37,6 +37,7 @@ public class RoomManager : NetworkBehaviour
     public RectTransform contentRect; // Scroll View의 Content 크기 조절
     public string gameSceneName = "GameTest"; // 다음 씬 이름
     public GameObject JobSelect_Panel; //캐릭터 선택창
+    public GameObject bossSelectPanel; // 보스 선택창
 
     private Dictionary<string, GameObject> roomList = new Dictionary<string, GameObject>(); // 방 목록 관리
     private float roomSpacing = 40f;
@@ -1000,6 +1001,7 @@ public class RoomManager : NetworkBehaviour
             startButton.gameObject.SetActive(isInRoom);
             startButton.interactable = !isInRoom; // 기본적으로 비활성화
             readyButton.gameObject.SetActive(!isInRoom); // 호스트는 Ready 버튼 필요 없음
+            bossSelectPanel.SetActive(isInRoom);
         }
         else
         {
