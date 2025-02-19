@@ -61,7 +61,7 @@ public class IdleState : BasePlayerState
         playerManager.InputManager.GetJoystickInputValue(out joystickInputData);
         playerManager.MovementManager.MoveByJoystick(joystickInputData);
 
-#elif UNITY_STANDALONE_WIN || UNITY_EDITOR
+#elif UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
 
         // 스킬 입력 처리
         {
