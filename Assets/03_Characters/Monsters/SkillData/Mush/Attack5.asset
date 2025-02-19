@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Attack5
   m_EditorClassIdentifier: 
   skillName: Attack5
-  coolDown: 30
-  damage: 20
+  coolDown: 10
+  damage: 10
   minRange: 0
-  maxRange: 10
+  maxRange: 20
   attackRange: 8
   attackColliderDelay: 1.57
   knockbackDistance: 2

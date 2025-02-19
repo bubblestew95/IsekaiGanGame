@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using static UnityEngine.GraphicsBuffer;
@@ -342,27 +343,36 @@ public class MushBT : NetworkBehaviour
         float elapseTime = 0f;
         float animSpd = 1f;
         mushStateManager.SetRandomPlayer();
-        mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
         Vector3 originPos = mushStateManager.Boss.transform.position;
         Vector3 targetPos = mushStateManager.RandomPlayer.transform.position;
+        bool once = true;
 
         // attack4
         while (true)
         {
+            if (once && anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4"))
+            {
+                mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
+                originPos = mushStateManager.Boss.transform.position;
+                targetPos = mushStateManager.RandomPlayer.transform.position;
+                once = false;
+            }
+
             // 점프 이동
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4"))
             {
                 elapseTime += Time.deltaTime;
 
-                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.6f / animSpd))
+                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.3f / animSpd))
                 {
-                    float t = Mathf.InverseLerp(0.5f, 1.6f, elapseTime);
+                    float t = Mathf.InverseLerp(0.5f, 1.3f, elapseTime);
                     mushStateManager.Boss.transform.position = Vector3.Lerp(originPos, targetPos, t);
                 }
             }
 
             if (CheckEndAnim(curState))
             {
+                mushStateManager.Boss.transform.position = targetPos;
                 SetAnimBool("Attack4-1", true);
                 break;
             }
@@ -373,27 +383,34 @@ public class MushBT : NetworkBehaviour
         elapseTime = 0f;
         animSpd = 1.5f;
         mushStateManager.SetRandomPlayer();
-        mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
-        originPos = mushStateManager.Boss.transform.position;
-        targetPos = mushStateManager.RandomPlayer.transform.position;
+        once = true;
 
         // 애니메이션 attack4-1
         while (true)
         {
+            if (once && anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-1"))
+            {
+                mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
+                originPos = mushStateManager.Boss.transform.position;
+                targetPos = mushStateManager.RandomPlayer.transform.position;
+                once = false;
+            }
+
             // 점프 이동
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-1"))
             {
                 elapseTime += Time.deltaTime;
 
-                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.6f / animSpd))
+                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.3f / animSpd))
                 {
-                    float t = Mathf.InverseLerp((0.5f / animSpd), (1.6f / animSpd), elapseTime);
+                    float t = Mathf.InverseLerp((0.5f / animSpd), (1.3f / animSpd), elapseTime);
                     mushStateManager.Boss.transform.position = Vector3.Lerp(originPos, targetPos, t);
                 }
             }
 
             if (CheckEndAnim("Attack4-1"))
             {
+                mushStateManager.Boss.transform.position = targetPos;
                 SetAnimBool("Attack4-2", true);
                 break;
             }
@@ -404,27 +421,34 @@ public class MushBT : NetworkBehaviour
         elapseTime = 0f;
         animSpd = 2f;
         mushStateManager.SetRandomPlayer();
-        mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
-        originPos = mushStateManager.Boss.transform.position;
-        targetPos = mushStateManager.RandomPlayer.transform.position;
+        once = true;
 
         // 애니메이션 attack4-2
         while (true)
         {
+            if (once && anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-2"))
+            {
+                mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
+                originPos = mushStateManager.Boss.transform.position;
+                targetPos = mushStateManager.RandomPlayer.transform.position;
+                once = false;
+            }
+
             // 점프 이동
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-2"))
             {
                 elapseTime += Time.deltaTime;
 
-                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.6f / animSpd))
+                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.3f / animSpd))
                 {
-                    float t = Mathf.InverseLerp((0.5f / animSpd), (1.6f / animSpd), elapseTime);
+                    float t = Mathf.InverseLerp((0.5f / animSpd), (1.3f / animSpd), elapseTime);
                     mushStateManager.Boss.transform.position = Vector3.Lerp(originPos, targetPos, t);
                 }
             }
 
             if (CheckEndAnim("Attack4-2"))
             {
+                mushStateManager.Boss.transform.position = targetPos;
                 SetAnimBool("Attack4-3", true);
                 break;
             }
@@ -435,27 +459,34 @@ public class MushBT : NetworkBehaviour
         elapseTime = 0f;
         animSpd = 2.5f;
         mushStateManager.SetRandomPlayer();
-        mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
-        originPos = mushStateManager.Boss.transform.position;
-        targetPos = mushStateManager.RandomPlayer.transform.position;
+        once = true;
 
         // 애니메이션 attack4-3
         while (true)
         {
+            if (once && anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-3"))
+            {
+                mushStateManager.Boss.transform.LookAt(mushStateManager.RandomPlayer.transform);
+                originPos = mushStateManager.Boss.transform.position;
+                targetPos = mushStateManager.RandomPlayer.transform.position;
+                once = false;
+            }
+
             // 점프 이동
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack4-3"))
             {
                 elapseTime += Time.deltaTime;
 
-                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.6f / animSpd))
+                if (elapseTime >= (0.5f / animSpd) && elapseTime <= (1.3f / animSpd))
                 {
-                    float t = Mathf.InverseLerp((0.5f / animSpd), (1.6f / animSpd), elapseTime);
+                    float t = Mathf.InverseLerp((0.5f / animSpd), (1.3f / animSpd), elapseTime);
                     mushStateManager.Boss.transform.position = Vector3.Lerp(originPos, targetPos, t);
                 }
             }
 
             if (CheckEndAnim("Attack4-3"))
             {
+                mushStateManager.Boss.transform.position = targetPos;
                 SetAnimBool("Attack4", false);
                 SetAnimBool("Attack4-1", false);
                 SetAnimBool("Attack4-2", false);
@@ -497,13 +528,21 @@ public class MushBT : NetworkBehaviour
         }
 
         float elapseTime = 0f;
-        mushStateManager.Boss.transform.LookAt(mushStateManager.AggroPlayer.transform);
         Vector3 originPos = mushStateManager.Boss.transform.position;
         Vector3 targetPos = mushStateManager.AggroPlayer.transform.position;
+        bool once = true;
 
         // 애니메이션 끝
         while (true)
         {
+            if (once && anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5"))
+            {
+                mushStateManager.Boss.transform.LookAt(mushStateManager.AggroPlayer.transform);
+                originPos = mushStateManager.Boss.transform.position;
+                targetPos = mushStateManager.AggroPlayer.transform.position;
+                once = false;
+            }
+
             // 점프 이동
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack5"))
             {
@@ -518,6 +557,7 @@ public class MushBT : NetworkBehaviour
 
             if (CheckEndAnim(curState))
             {
+                mushStateManager.Boss.transform.position = targetPos;
                 SetAnimBool(curState, false);
                 break;
             }

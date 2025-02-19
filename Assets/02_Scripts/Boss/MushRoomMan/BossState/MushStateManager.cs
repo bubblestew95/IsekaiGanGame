@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using static BossStateManager;
 
 // 보스의 상태를 관리
 public class MushStateManager : NetworkBehaviour
@@ -12,6 +13,7 @@ public class MushStateManager : NetworkBehaviour
     public delegate void MushStateDelegate2(ulong _index);
     public MushStateDelegate bossDieCallback;
     public MushStateDelegate bossChangeStateCallback;
+    public MushStateDelegate bossHp25Callback;
     public MushStateDelegate2 bossRandomTargetCallback;
 
     // 네트워크로 동기화 할것들
@@ -29,6 +31,7 @@ public class MushStateManager : NetworkBehaviour
     public int maxHp;
     public float reduceAggro;
     public float reduceAggroTime;
+    public bool[] hpCheck;
 
     // 참조 목록
     public MushDamageParticle damageParticle;
@@ -46,7 +49,7 @@ public class MushStateManager : NetworkBehaviour
 
     private void Awake()
     {
-        FindAnyObjectByType<NetworkGameManager>().playerDieCallback += PlayerDieCallback;
+        FindAnyObjectByType<NetworkGameManager>().playerDieCallback += PlayerDieReceive;
         FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += Init;
     }
 
@@ -77,6 +80,9 @@ public class MushStateManager : NetworkBehaviour
 
         // 클라이언트 모두 보스 브금 설정
         ChangeExcitedLevelClientRpc();
+
+        // 서버만 hp콜백(현재 피에 따라 패턴 설정)
+        CheckHpCallback();
     }
 
     // 데미지 받는 함수
@@ -205,8 +211,6 @@ public class MushStateManager : NetworkBehaviour
     [ClientRpc]
     private void DamageParticleClientRpc(float _damage, ulong _clientId)
     {
-        Debug.LogWarning("데미지 파티클 실행됨");
-
         if (NetworkManager.Singleton.LocalClientId == _clientId)
         {
             damageParticle.SetupAndPlayParticlesMine(_damage);
@@ -254,7 +258,7 @@ public class MushStateManager : NetworkBehaviour
     #region [Callback]
 
     // 플레이어가 죽었을때 호출되는 함수
-    private void PlayerDieCallback(ulong _clientId)
+    private void PlayerDieReceive(ulong _clientId)
     {
         int playerIndex = -1;
         bool IsAggroDie = false;
@@ -302,8 +306,8 @@ public class MushStateManager : NetworkBehaviour
         GetHighestAggroTarget();
     }
 
-    // 플레이어 살아났을때 호출
-    private void PlayerReviveCallback(ulong _clientId)
+    // 플레이어 살아났을때 실행되는 함수
+    private void PlayerReviveReceive(ulong _clientId)
     {
         // 죽은 플레이어를 alivePlayers배열에 추가
         for (int i = 0; i < 4; ++i)
@@ -314,6 +318,30 @@ public class MushStateManager : NetworkBehaviour
             {
                 alivePlayers[i] = allPlayers[i];
             }
+        }
+    }
+
+    // 특정 hp이하일때 마다 콜백을 던짐
+    private void CheckHpCallback()
+    {
+        float hp = ((float)curHp.Value / (float)maxHp) * 100f;
+
+        Debug.Log("현재 hp" + hp);
+
+        if (hp <= 75f && !hpCheck[0])
+        {
+            hpCheck[0] = true;
+            bossHp25Callback?.Invoke();
+        }
+        else if (hp <= 50f && !hpCheck[1])
+        {
+            hpCheck[1] = true;
+            bossHp25Callback?.Invoke();
+        }
+        else if (hp <= 25f && !hpCheck[2])
+        {
+            hpCheck[2] = true;
+            bossHp25Callback?.Invoke();
         }
     }
 
@@ -328,6 +356,10 @@ public class MushStateManager : NetworkBehaviour
         maxHp = 5000;
         reduceAggro = 5f;
         reduceAggroTime = 10f;
+        hpCheck = new bool[3];
+        hpCheck[0] = false;
+        hpCheck[1] = false;
+        hpCheck[2] = false;
 
         // 서버에서 저장할거 설정
         if (IsServer)
@@ -424,6 +456,7 @@ public class MushStateManager : NetworkBehaviour
     {
         alivePlayers[_index] = null;
     }
+
 
     #endregion
 }
