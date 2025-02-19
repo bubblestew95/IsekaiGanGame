@@ -567,6 +567,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 6423395268965012003, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
+      propertyPath: m_text
+      value: Try Again
+      objectReference: {fileID: 0}
     - target: {fileID: 6915816896417479058, guid: d9901a4ccdc92e443bec120e8a865a92, type: 3}
       propertyPath: m_Name
       value: SkillButtons
