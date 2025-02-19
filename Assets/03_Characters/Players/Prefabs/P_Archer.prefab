@@ -10931,7 +10931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4247319585
+  GlobalObjectIdHash: 1027924000
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -11228,10 +11228,13 @@ MonoBehaviour:
   audioDataList:
   - sfxName: ArrowShot
     sfxClip: {fileID: 8300000, guid: 64f93da7228cbe648b3594a009f749a0, type: 3}
+    startTime: 0
   - sfxName: PowerShot
     sfxClip: {fileID: 8300000, guid: 8a565abfb0a4e684380e971a7b0ae269, type: 3}
+    startTime: 0
   - sfxName: BackJump
     sfxClip: {fileID: 8300000, guid: 3241f24b24738274e907fa17324c9aa7, type: 3}
+    startTime: 0
 --- !u!1 &179126
 GameObject:
   m_ObjectHideFlags: 0
@@ -14107,7 +14110,7 @@ Transform:
   m_Children:
   - {fileID: 4554398382176959353}
   m_Father: {fileID: 497262}
-  m_LocalEulerAnglesHint: {x: 11.506557, y: -5.391297, z: 160.79976}
+  m_LocalEulerAnglesHint: {x: -0.00858488, y: 3.2947247, z: 172.72923}
 --- !u!1001 &2822885541499906713
 PrefabInstance:
   m_ObjectHideFlags: 0
