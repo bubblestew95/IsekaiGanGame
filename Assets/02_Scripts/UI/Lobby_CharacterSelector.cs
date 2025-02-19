@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class Lobby_CharacterSelector : NetworkBehaviour
 {
+    public static Lobby_CharacterSelector Instance { get; private set; }
+
     public RawImage[] characterImages;  // 캐릭터 미리보기 UI
     public Transform[] characterModels; // 3D 캐릭터 모델
     public Button[] characterButtons;   // UI 버튼 (각 슬롯)
@@ -17,6 +19,18 @@ public class Lobby_CharacterSelector : NetworkBehaviour
     //전체 플레이어들의 선택 상태를 저장하는 딕셔너리
     private Dictionary<ulong, int> playerSelections = new Dictionary<ulong, int>();
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void Start()
     {
         for (int i = 0; i < characterButtons.Length; i++)
@@ -25,6 +39,11 @@ public class Lobby_CharacterSelector : NetworkBehaviour
             characterButtons[i].onClick.AddListener(() => RequestCharacterSelection(index));
         }
         RequestExistingSelections();
+
+        if (RoomManager.Instance != null)
+        {
+            RoomManager.Instance.OnCharacterSelectionUpdated += UpdateCharacterUI;
+        }
 
     }
 
@@ -65,28 +84,69 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         }
     }
 
-    // 클라이언트 UI 업데이트 (서버에서 캐릭터 선택 동기화)
-    public void UpdateCharacterSelection(ulong clientId, int selectedCharacter)
+    public void UpdateCharacterSelection(ulong playerId, int selectedCharacter)
     {
-        Debug.Log($"[Client] Player {clientId} 선택한 캐릭터: {selectedCharacter}");
+        Debug.Log($"[Client] UpdateCharacterSelection 호출 - Player {playerId}, 선택한 캐릭터: {selectedCharacter}");
 
-        if (selectedCharacter == -1) // 선택 해제 시
+        if (!playerSelections.ContainsKey(playerId))
         {
-            if (playerSelections.ContainsKey(clientId))
-            {
-                playerSelections.Remove(clientId);
-            }
+            playerSelections.Add(playerId, selectedCharacter);
         }
         else
         {
-            playerSelections[clientId] = selectedCharacter;
+            playerSelections[playerId] = selectedCharacter;
         }
 
         // UI 업데이트
-        UpdateCharacterUI();
+        for (int i = 0; i < characterButtons.Length; i++)
+        {
+            characterImages[i].color = new Color(1f, 1f, 1f, 1f);
+            characterButtons[i].interactable = true;
+        }
+
+        // 본인이 선택한 캐릭터 UI 설정
+        if (playerSelections.ContainsKey(NetworkManager.Singleton.LocalClientId))
+        {
+            int selfSelected = playerSelections[NetworkManager.Singleton.LocalClientId];
+
+            characterImages[selfSelected].color = new Color(1f, 1f, 1f, 1f);
+
+            for (int i = 0; i < characterButtons.Length; i++)
+            {
+                if (i != selfSelected)
+                {
+                    characterImages[i].color = new Color(1f, 1f, 1f, 0.5f);
+                }
+            }
+        }
+
+        // 다른 플레이어들이 선택한 캐릭터를 UI에 반영
+        foreach (var entry in playerSelections)
+        {
+            if (entry.Key != NetworkManager.Singleton.LocalClientId)
+            {
+                characterImages[entry.Value].color = new Color(0f, 0f, 0f, 0.8f);
+                characterButtons[entry.Value].interactable = false;
+            }
+        }
+
+        Debug.Log("[Client] 캐릭터 UI 업데이트 완료!");
     }
-    private void UpdateCharacterUI()
+
+
+    private void UpdateCharacterUI(ulong playerId, int selectedCharacter)
     {
+        Debug.Log($"[Client] UpdateCharacterUI 호출 - Player {playerId}, 선택한 캐릭터: {selectedCharacter}");
+
+        if (!playerSelections.ContainsKey(playerId))
+        {
+            playerSelections.Add(playerId, selectedCharacter);
+        }
+        else
+        {
+            playerSelections[playerId] = selectedCharacter;
+        }
+
         bool isSelfSelected = playerSelections.ContainsKey(NetworkManager.Singleton.LocalClientId);
 
         for (int i = 0; i < characterButtons.Length; i++)
@@ -134,6 +194,14 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         foreach (var button in characterButtons)
         {
             button.interactable = !isReady;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (RoomManager.Instance != null)
+        {
+            RoomManager.Instance.OnCharacterSelectionUpdated -= UpdateCharacterUI;
         }
     }
 }
