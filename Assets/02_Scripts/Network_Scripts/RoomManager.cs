@@ -111,12 +111,12 @@ public class RoomManager : NetworkBehaviour
         await InitializeServices(); // Unity Services 초기화
         // PlayerPrefs에서 username 불러오기
         username = PlayerPrefs.GetString("username");
-
+        
         if (string.IsNullOrEmpty(username))
         {
             //Debug.LogError("Username not found!");
-            username = $"Player{NetworkManager.Singleton.IsClient}";
-            Debug.Log($"Player{NetworkManager.Singleton.IsClient} - Welcome : , {username}!");
+            username = "Player";
+            Debug.Log("Player - Welcome : , Player!");
         }
         else
         {
