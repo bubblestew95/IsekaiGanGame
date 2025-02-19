@@ -424,6 +424,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4633109146552052760, guid: 2c3b4b44c561d204987227d0d14da915, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2291739752
+      objectReference: {fileID: 0}
+    - target: {fileID: 4633109146552052760, guid: 2c3b4b44c561d204987227d0d14da915, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3969461586
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -440,6 +448,10 @@ PrefabInstance:
     - target: {fileID: -8203911682527767499, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1032430850
+      objectReference: {fileID: 0}
+    - target: {fileID: -8203911682527767499, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3709657405
       objectReference: {fileID: 0}
     - target: {fileID: 179124, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_Name
@@ -735,6 +747,8 @@ MonoBehaviour:
   isLocalGame: 1
   isPCMode: 0
   bgmController: {fileID: 0}
+  IsGolem: 0
+  IsMush: 0
 --- !u!1001 &1546865054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1175,6 +1189,10 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3291549335
       objectReference: {fileID: 0}
+    - target: {fileID: -2836398782895520287, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1027924000
+      objectReference: {fileID: 0}
     - target: {fileID: 179124, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
       propertyPath: m_Name
       value: P_Archer
@@ -1360,6 +1378,10 @@ PrefabInstance:
     - target: {fileID: 1735406565476749645, guid: ade512d1f4c03314c9f8baabb487f1fc, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 219140465
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735406565476749645, guid: ade512d1f4c03314c9f8baabb487f1fc, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 822026061
       objectReference: {fileID: 0}
     - target: {fileID: 2057149518702304469, guid: ade512d1f4c03314c9f8baabb487f1fc, type: 3}
       propertyPath: m_LocalPosition.x
