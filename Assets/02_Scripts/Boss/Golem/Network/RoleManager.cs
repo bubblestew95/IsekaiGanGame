@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Data;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoleManager : NetworkBehaviour
 {
@@ -29,6 +30,7 @@ public class RoleManager : NetworkBehaviour
         if (!playerRoles.ContainsKey(_clientId))
         {
             playerRoles.Add(_clientId, _role);
+            UpdateCharacterSelectionClientRpc(_clientId, _role);
         }
     }
 
@@ -41,6 +43,30 @@ public class RoleManager : NetworkBehaviour
             playerRoles.Remove(_clientId);
         }
     }
+
+    [ClientRpc]
+    private void UpdateCharacterSelectionClientRpc(ulong clientId, string selectedRole)
+    {
+        Debug.Log($"[Client] {clientId}가 {selectedRole} 선택!");
+
+        // UI에서 해당 직업 버튼 비활성화
+        switch (selectedRole)
+        {
+            case "P_Warrior":
+                warriorButton.interactable = false;
+                break;
+            case "P_Archer":
+                archerButton.interactable = false;
+                break;
+            case "P_Assassin":
+                assassinButton.interactable = false;
+                break;
+            case "P_Magician":
+                magicianButton.interactable = false;
+                break;
+        }
+    }
+
 
     // 플레이 씬 넘어가서 clientId에 맞는 플레이어 역할 가져오는 함수
     public string GetPlayerRole(ulong clientId)
