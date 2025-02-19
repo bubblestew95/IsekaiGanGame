@@ -7540,6 +7540,7 @@ MonoBehaviour:
   contentRect: {fileID: 1959464307}
   gameSceneName: GolemSceneTest
   JobSelect_Panel: {fileID: 550021654}
+  bossSelectPanel: {fileID: 1786479366}
 --- !u!4 &797183973
 Transform:
   m_ObjectHideFlags: 0
@@ -16554,7 +16555,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1786479367
 RectTransform:
   m_ObjectHideFlags: 0
