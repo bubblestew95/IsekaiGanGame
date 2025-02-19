@@ -25,7 +25,7 @@ public class PlayerListManager : MonoBehaviour
         }
     }
 
-    public void AddPlayer(string playerId, string username, PlayerStatus status)
+    public void AddPlayer(string playerId, string username, PlayerStatus status, int selectedCharacter = -1)
     {
         Debug.Log($"[PlayerListManager] AddPlayer 호출됨 - {username} / {status}");
 
@@ -44,11 +44,19 @@ public class PlayerListManager : MonoBehaviour
             return;
         }
         playerItem.SetPlayerInfo(playerId, username, status);
+        playerItem.SetCharacterSelection(selectedCharacter); // 선택한 캐릭터 설정
         playerItems.Add(playerId, playerItem);
-        Debug.Log($"[PlayerListManager] Player 추가 완료: {playerId} {username}");
-
+        Debug.Log($"[PlayerListManager] Player 추가 완료: {playerId} {username} 선택한 캐릭터: {selectedCharacter}");
     }
-
+    // 플레이어의 캐릭터 선택 변경
+    public void UpdatePlayerCharacter(string playerId, int selectedCharacter)
+    {
+        if (playerItems.ContainsKey(playerId))
+        {
+            playerItems[playerId].SetCharacterSelection(selectedCharacter);
+            Debug.Log($"[PlayerListManager] {playerId}의 캐릭터 선택 상태가 {selectedCharacter}로 변경됨.");
+        }
+    }
 
     public void UpdatePlayerStatus(string playerId, PlayerStatus status)
     {
@@ -64,7 +72,6 @@ public class PlayerListManager : MonoBehaviour
         {
             Destroy(playerItems[playerId].gameObject);
             playerItems.Remove(playerId);
-            SortPlayerList();
         }
     }
 
@@ -90,23 +97,6 @@ public class PlayerListManager : MonoBehaviour
         return playerItems.ContainsKey(playerId);
     }
 
-    public void SortPlayerList()
-    {
-        Debug.Log("[PlayerListManager] PlayerList 정렬 시작...");
-
-        List<PlayerItem> sortedList = new List<PlayerItem>(playerItems.Values);
-
-        sortedList.Sort((a, b) => string.Compare(a.usernameText.text, b.usernameText.text, System.StringComparison.Ordinal));
-
-        // UI에서 순서 변경 및 RectTransform 강제 적용
-        for (int i = 0; i < sortedList.Count; i++)
-        {
-            sortedList[i].transform.SetSiblingIndex(i);
-            sortedList[i].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -50 * i); // Y축 정렬
-        }
-
-        Debug.Log("[PlayerListManager] PlayerList 정렬 완료!");
-    }
 
 
 }

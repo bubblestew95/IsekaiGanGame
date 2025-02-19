@@ -8,7 +8,6 @@ public class PlayerMovementManager
 {
     private PlayerManager playerManager = null;
     private CharacterController characterController = null;
-    private Coroutine moveCoroutine = null;
     private float speed = 0f;
     public void Init(PlayerManager _playerManager)
     {

@@ -57,6 +57,14 @@ public class SkillButtonsManager : MonoBehaviour
         skillButtonMap[_slot].gameObject.SetActive(_enabled);
     }
 
+    public void DisableButtonInteractable()
+    {
+        foreach (var skillBtn in skillButtonMap)
+        {
+            skillBtn.Value.DisableSkillButton();
+        }
+    }
+
     private void Awake()
     {
         battleUIManager = GetComponentInParent<UIBattleUIManager>();

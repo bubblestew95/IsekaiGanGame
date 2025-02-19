@@ -28,6 +28,10 @@ public class BossAttackManager : NetworkBehaviour
     [SerializeField] private DecalProjector[] circleFullRangeDecals;
     [SerializeField] private DecalProjector[] circleChargingRangeDecals;
 
+    [Header("돌진 공격 관련")]
+    [SerializeField] private GameObject recDecalPos;
+    [SerializeField] private DecalProjector recDecal; 
+
     [Header("돌 던지기")]
     [SerializeField] private GameObject P_Stone;
     [SerializeField] private Transform rightHand;
@@ -694,22 +698,30 @@ public class BossAttackManager : NetworkBehaviour
         GetComponent<BossAttackCollider>().SkillName = skillName;
         GetComponent<BossAttackCollider>().KnockBackDistance = knockBackDis;
 
-        // 공격 콜라이더 설정(크기, 위치, 각도 등)
-        GetComponent<BoxCollider>().enabled = true;
-        Vector3 originSize = GetComponent<BoxCollider>().size;
-        GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
-        bossStateManager.Boss.tag = "BossAttack";
+        // 돌진 데칼 설정
+        recDecalPos.transform.position = bossStateManager.Boss.transform.position + bossStateManager.Boss.transform.forward * 2f;
+        recDecalPos.transform.rotation = bossStateManager.Boss.transform.localRotation;
+        recDecal.size = new Vector3(0f, 0f, 0f);
+        recDecalPos.SetActive(true);
+        StartCoroutine(rushDecalCoroutine(0.5f));
 
-        // 공격 끝났는지 Check
+        // Attack 8
         while (true)
         {
-            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Attack8") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
                 break;
             }
             yield return null;
         }
 
+        // 공격 콜라이더 설정(크기, 위치, 각도 등)
+        GetComponent<BoxCollider>().enabled = true;
+        Vector3 originSize = GetComponent<BoxCollider>().size;
+        GetComponent<BoxCollider>().size = new Vector3(2f, 2f, 2f);
+        bossStateManager.Boss.tag = "BossAttack";
+
+        // Attack 8-1
         while (true)
         {
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
@@ -923,7 +935,7 @@ public class BossAttackManager : NetworkBehaviour
     // 랜덤 타겟 설정
     private void SetRandomTarget(ulong _index)
     {
-        randomTarget = bossStateManager.AlivePlayers.FirstOrDefault(p => p.GetComponent<NetworkObject>().OwnerClientId == _index);
+        randomTarget = bossStateManager.AlivePlayers.FirstOrDefault(p => p != null && p.GetComponent<NetworkObject>().OwnerClientId == _index);
     }
 
     // 공격 초기화
@@ -1023,6 +1035,94 @@ public class BossAttackManager : NetworkBehaviour
 
             bossStateManager.AlivePlayers[i].tag = "Player";
         }
+    }
+
+    // attack8 데칼 찍는 코루틴
+    private IEnumerator rushDecalCoroutine(float _delayTime)
+    {
+        float elapseTime = 0f;
+        float dis = CheckDistanceToWall();
+
+        recDecal.pivot = new Vector3(0f, 0f, dis / 2f);
+        Vector3 startSize = new Vector3(0f, 1f, dis);
+        Vector3 targetSize = new Vector3(3f, 1f, dis);
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapseTime / _delayTime);
+            recDecal.size = Vector3.Lerp(startSize, targetSize, t);
+
+            if (elapseTime >= _delayTime)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        recDecalPos.SetActive(false);
+    }
+
+    // Attack5 데칼 찍는 코루틴2
+    private IEnumerator rushDecalCoroutine2(float _delayTime)
+    {
+        float elapseTime = 0f;
+        float dis = CheckDistanceToWall();
+
+        if (dis >= 18f) dis = 18f;
+
+        recDecal.pivot = new Vector3(0f, 0f, dis / 2f);
+        Vector3 startSize = new Vector3(0f, 1f, dis);
+        Vector3 targetSize = new Vector3(3f, 1f, dis);
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapseTime / _delayTime);
+            recDecal.size = Vector3.Lerp(startSize, targetSize, t);
+
+            if (elapseTime >= _delayTime)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        recDecalPos.SetActive(false);
+    }
+
+    public void Attack5Decal()
+    {
+        // 돌진 데칼 설정
+        recDecalPos.transform.position = bossStateManager.Boss.transform.position + bossStateManager.Boss.transform.forward * 2f;
+        recDecalPos.transform.rotation = bossStateManager.Boss.transform.localRotation;
+        recDecal.size = new Vector3(0f, 0f, 0f);
+        recDecalPos.SetActive(true);
+        StartCoroutine(rushDecalCoroutine2(0.5f));
+    }
+
+    // 벽까지 거리 계산하는 코드
+    private float CheckDistanceToWall()
+    {
+        float distance = 0f;
+
+        int layer = LayerMask.GetMask("Wall");
+
+        // 앞쪽방향 설정
+        Vector3 direction = bossStateManager.Boss.transform.forward;
+        direction.y = 0f;
+        direction = direction.normalized;
+
+        if (Physics.Raycast(bossStateManager.Boss.transform.position, direction, out RaycastHit hit, 100f, layer))
+        {
+            distance = hit.distance;
+        }
+
+        return distance;
     }
     #endregion
 }

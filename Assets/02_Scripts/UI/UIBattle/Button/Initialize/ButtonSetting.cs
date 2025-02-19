@@ -68,6 +68,19 @@ public class ButtonSetting : MonoBehaviour
         skillButtonsManager.OnSkillButtonUp(ButtonSkillType);
     }
 
+    public void DisableSkillButton()
+    {
+        foreach(var image in images)
+        {
+            image.raycastTarget = false;
+        }
+
+        if (joystick != null)
+        {
+            joystick.enabled = false;
+        }
+    }
+
     /// <summary>
     /// 지정한 스킬의 조이스틱 좌표 값을 상위 매니저에게 계속해서 보내는 코루틴.
     /// </summary>

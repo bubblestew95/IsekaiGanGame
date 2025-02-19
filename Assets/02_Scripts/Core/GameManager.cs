@@ -24,11 +24,18 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private BgmController bgmController = null;
 
+
+    [SerializeField]
+    private bool IsGolem = false;
+
+    [SerializeField]
+    private bool IsMush = false;
     #endregion
 
     #region Private Variables
 
     private BossStateManager bossStateManager = null;
+    private MushStateManager mushStateManager = null;
     private NetworkGameManager networkGameManager = null;
 
     #endregion
@@ -51,7 +58,18 @@ public class GameManager : MonoBehaviour
 
     public Transform GetBossTransform()
     {
-        return bossStateManager.transform;
+        if (IsGolem)
+        {
+            return bossStateManager.transform;
+        }
+        else if (IsMush)
+        {
+            return mushStateManager.transform;
+        }
+        else
+        {
+            return null;
+        }    
     }
 
     public int GetBossHp()
@@ -111,7 +129,14 @@ public class GameManager : MonoBehaviour
 
     public void DamageToBoss_Multi(ulong _clientId, int _damage, float _aggro)
     {
-        bossStateManager.BossDamageReceiveServerRpc(_clientId, _damage, _aggro);
+        if (IsGolem)
+        {
+            bossStateManager.BossDamageReceiveServerRpc(_clientId, _damage, _aggro);
+        }
+        else if (IsMush)
+        {
+            mushStateManager.BossDamageReceiveServerRpc(_clientId, _damage, _aggro);
+        }
     }
 
 
@@ -171,6 +196,7 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         bossStateManager = FindAnyObjectByType<BossStateManager>();
+        mushStateManager = FindAnyObjectByType<MushStateManager>();
         networkGameManager = FindAnyObjectByType<NetworkGameManager>();
     }
 
