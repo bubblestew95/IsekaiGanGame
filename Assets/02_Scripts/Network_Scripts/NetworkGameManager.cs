@@ -5,6 +5,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class NetworkGameManager : NetworkBehaviour
 {
@@ -142,8 +143,38 @@ public class NetworkGameManager : NetworkBehaviour
         FindAnyObjectByType<UIBattleUIManager>().FadeInResult(false);
         FindAnyObjectByType<BgmController>().PlayDefeat();
 
+        // 씬에 있는 버튼명 "GameResultFail" 오브젝트의 자식으로 있는 ResultButton이 클릭됬을때"
+        Button failBtn = GameObject.Find("GameResultFail").transform.Find("ResultButton").gameObject.GetComponent<Button>();
+        failBtn.onClick.AddListener(ClickFailBtn);
+
         yield return new WaitForSeconds(15f);
 
+        ClickFailBtn();
+    }
+
+    // 게임 클리어시 실행되는 코루틴
+    private IEnumerator VictoryCoroutine()
+    {
+        yield return new WaitForSeconds(3f);
+
+        FindAnyObjectByType<UIBattleUIManager>().FadeInResult(true);
+        FindAnyObjectByType<BgmController>().PlayVictory();
+
+        // 씬에 있는 버튼명 "GameResultSuccess" 오브젝트의 자식으로 있는 ResultButton이 클릭됬을때"
+        Button successBtn = GameObject.Find("GameResultSuccess").transform.Find("ResultButton").gameObject.GetComponent<Button>();
+        successBtn.onClick.AddListener(ClickSucessBtn);
+
+        yield return new WaitForSeconds(15f);
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
+        }
+    }
+
+    // Fail버튼 눌렀을때
+    private void ClickFailBtn()
+    {
         if (GameManager.Instance.IsGolem)
         {
             if (IsServer)
@@ -160,16 +191,8 @@ public class NetworkGameManager : NetworkBehaviour
         }
     }
 
-    // 게임 클리어시 실행되는 코루틴
-    private IEnumerator VictoryCoroutine()
+    private void ClickSucessBtn()
     {
-        yield return new WaitForSeconds(3f);
-
-        FindAnyObjectByType<UIBattleUIManager>().FadeInResult(true);
-        FindAnyObjectByType<BgmController>().PlayVictory();
-
-        yield return new WaitForSeconds(15f);
-
         if (IsServer)
         {
             NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
@@ -180,7 +203,7 @@ public class NetworkGameManager : NetworkBehaviour
 
     #region RPC
 
-        #region Client To Server RPC
+    #region Client To Server RPC
 
     /// <summary>
     /// 플레이어가 데미지를 받았음을 서버에게 알린다.
