@@ -84,6 +84,56 @@ public class Lobby_CharacterSelector : NetworkBehaviour
         }
     }
 
+    public void UpdateCharacterSelection(ulong playerId, int selectedCharacter)
+    {
+        Debug.Log($"[Client] UpdateCharacterSelection 호출 - Player {playerId}, 선택한 캐릭터: {selectedCharacter}");
+
+        if (!playerSelections.ContainsKey(playerId))
+        {
+            playerSelections.Add(playerId, selectedCharacter);
+        }
+        else
+        {
+            playerSelections[playerId] = selectedCharacter;
+        }
+
+        // UI 업데이트
+        for (int i = 0; i < characterButtons.Length; i++)
+        {
+            characterImages[i].color = new Color(1f, 1f, 1f, 1f);
+            characterButtons[i].interactable = true;
+        }
+
+        // 본인이 선택한 캐릭터 UI 설정
+        if (playerSelections.ContainsKey(NetworkManager.Singleton.LocalClientId))
+        {
+            int selfSelected = playerSelections[NetworkManager.Singleton.LocalClientId];
+
+            characterImages[selfSelected].color = new Color(1f, 1f, 1f, 1f);
+
+            for (int i = 0; i < characterButtons.Length; i++)
+            {
+                if (i != selfSelected)
+                {
+                    characterImages[i].color = new Color(1f, 1f, 1f, 0.5f);
+                }
+            }
+        }
+
+        // 다른 플레이어들이 선택한 캐릭터를 UI에 반영
+        foreach (var entry in playerSelections)
+        {
+            if (entry.Key != NetworkManager.Singleton.LocalClientId)
+            {
+                characterImages[entry.Value].color = new Color(0f, 0f, 0f, 0.8f);
+                characterButtons[entry.Value].interactable = false;
+            }
+        }
+
+        Debug.Log("[Client] 캐릭터 UI 업데이트 완료!");
+    }
+
+
     private void UpdateCharacterUI(ulong playerId, int selectedCharacter)
     {
         Debug.Log($"[Client] UpdateCharacterUI 호출 - Player {playerId}, 선택한 캐릭터: {selectedCharacter}");
