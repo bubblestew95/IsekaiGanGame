@@ -22,16 +22,42 @@ public class RealtimeDatabase : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("RealtimeDatabase.Start() 실행됨");
+
+
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
             if (task.IsFaulted)
             {
-                Debug.LogError("Failed to initialize Firebase: " + task.Exception);
+                Debug.LogError("Firebase 초기화 실패: " + task.Exception);
                 return;
             }
 
-            FirebaseApp app = FirebaseApp.DefaultInstance;
-            databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-            Debug.Log("Firebase Initialized");
+            if (task.Result == DependencyStatus.Available)
+            {
+                Debug.Log("Firebase 초기화 성공");
+                FirebaseApp app = FirebaseApp.DefaultInstance;
+
+                if (app == null)
+                {
+                    Debug.LogError("FirebaseApp이 null입니다.");
+                    return;
+                }
+
+                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+                if (databaseReference == null)
+                {
+                    Debug.LogError("FirebaseDatabase RootReference가 null입니다.");
+                }
+                else
+                {
+                    Debug.Log("FirebaseDatabase RootReference 정상적으로 초기화됨");
+                }
+            }
+            else
+            {
+                Debug.LogError($"Firebase 사용 불가: {task.Result}");
+            }
         });
     }
 
@@ -65,14 +91,30 @@ public class RealtimeDatabase : MonoBehaviour
     // 로그인 처리
     public void LoginUser()
     {
+        Debug.Log("LoginUser() 실행됨");
+
         string userId = usernameInput.text;
         string userPass = passwordInput.text;
+
+        if (usernameInput == null || passwordInput == null)
+        {
+            Debug.LogError("usernameInput 또는 passwordInput이 null입니다.");
+            return;
+        }
 
         if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(userPass))
         {
             Debug.LogError("Username or password cannot be empty!");
             return;
         }
+
+        if (databaseReference == null)
+        {
+            Debug.LogError("databaseReference가 null 상태입니다. Firebase가 올바르게 초기화되지 않았을 수 있습니다.");
+            return;
+        }
+
+        Debug.Log($"사용자 로그인 시도: {userId}");
 
         databaseReference.Child("users").Child(userId).GetValueAsync().ContinueWithOnMainThread(task => {
             if (task.IsFaulted)
@@ -84,7 +126,15 @@ public class RealtimeDatabase : MonoBehaviour
                 DataSnapshot snapshot = task.Result;
                 if (snapshot.Exists)
                 {
+                    Debug.Log($"사용자 데이터 확인됨: {userId}");
                     UserData userData = JsonUtility.FromJson<UserData>(snapshot.GetRawJsonValue());
+
+                    if (userData == null)
+                    {
+                        Debug.LogError("UserData 객체 변환 중 null 발생");
+                        return;
+                    }
+
                     if (userData.password == userPass)
                     {
                         username = userData.username;
@@ -93,18 +143,18 @@ public class RealtimeDatabase : MonoBehaviour
                         highestScore = userData.highestScore;
                         PlayerPrefs.SetString("username", userData.username);
                         PlayerPrefs.Save();
-                        Debug.Log($"Login successful: {username}");
+                        Debug.Log($"로그인 성공: {username}");
                         SceneManager.LoadScene("LobbyTest");
                         
                     }
                     else
                     {
-                        Debug.Log("Invalid password");
+                        Debug.Log("비밀번호 불일치");
                     }
                 }
                 else
                 {
-                    Debug.Log("User not found");
+                    Debug.Log("사용자 데이터 없음");
                 }
             }
         });
