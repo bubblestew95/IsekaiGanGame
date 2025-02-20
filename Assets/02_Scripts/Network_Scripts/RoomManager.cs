@@ -486,6 +486,7 @@ public class RoomManager : NetworkBehaviour
             Debug.Log($"[Server] Player {playerAuthId}의 캐릭터 선택 {selectedCharacter} 저장 완료.");
 
             // 모든 클라이언트에게 캐릭터 선택 정보 전파
+            //UpdateCharacterSelectionClientRpc(ulong.Parse(playerAuthId), selectedCharacter);
             UpdateCharacterSelectionClientRpc(ulong.Parse(playerAuthId), selectedCharacter);
         }
         else
@@ -583,38 +584,38 @@ public class RoomManager : NetworkBehaviour
                         // 캐릭터 선택 데이터가 있는지 확인
                         if (newData.ContainsKey("CharacterSelection"))
                         {
-                            if (int.TryParse(newData["CharacterSelection"].Value.ToString(), out int selectedCharacter))
-                            {
-                                Debug.Log($"[RoomManager] 플레이어 {playerIdString} - 선택된 캐릭터: {selectedCharacter}");
-                                UpdateCharacterSelectionClientRpc(ulong.Parse(playerIdString), selectedCharacter);
-                            }
-                            else
-                            {
-                                Debug.LogError($"[RoomManager] 플레이어 {playerIdString}의 캐릭터 선택 데이터 변환 실패! 원본 값: {newData["CharacterSelection"].Value}");
-                            }
-                            //var characterData = newData["CharacterSelection"];
-                            //if (characterData.Changed)
+                            //if (int.TryParse(newData["CharacterSelection"].Value.ToString(), out int selectedCharacter))
                             //{
-                            //    if (ulong.TryParse(playerIdString, out ulong playerId) &&
-                            //        int.TryParse(characterData.Value.ToString(), out int selectedCharacter))
-                            //        {
-                            //            Debug.Log($"[RoomManager] 플레이어 {playerId} - 캐릭터 선택 확인: {selectedCharacter}");
-
-                            //            // 모든 클라이언트에게 캐릭터 선택 동기화
-                            //            UpdateCharacterSelectionClientRpc(playerId, selectedCharacter);
-                            //        }
-                            //    //if (int.TryParse(characterData.Value.ToString(), out int selectedCharacter))
-                            //    //{
-                            //    //    Debug.Log($"[RoomManager] 플레이어 {playerId} - 캐릭터 선택 확인: {selectedCharacter}");
-
-                            //    //    // 모든 클라이언트에게 캐릭터 선택 동기화
-                            //    //    UpdateCharacterSelectionClientRpc(ulong.Parse(playerId), selectedCharacter);
-                            //    //}
-                            //    else
-                            //    {
-                            //        Debug.LogError($"[RoomManager] 플레이어 ID 변환 실패: {playerIdString} / 캐릭터 데이터: {characterData.Value}");
-                            //    }
+                            //    Debug.Log($"[RoomManager] 플레이어 {playerIdString} - 선택된 캐릭터: {selectedCharacter}");
+                            //    UpdateCharacterSelectionClientRpc(ulong.Parse(playerIdString), selectedCharacter);
                             //}
+                            //else
+                            //{
+                            //    Debug.LogError($"[RoomManager] 플레이어 {playerIdString}의 캐릭터 선택 데이터 변환 실패! 원본 값: {newData["CharacterSelection"].Value}");
+                            //}
+                            var characterData = newData["CharacterSelection"];
+                            if (characterData.Changed)
+                            {
+                                if (ulong.TryParse(playerIdString, out ulong playerId) &&
+                                    int.TryParse(characterData.Value.ToString(), out int selectedCharacter))
+                                {
+                                    Debug.Log($"[RoomManager] 플레이어 {playerId} - 캐릭터 선택 확인: {selectedCharacter}");
+
+                                    // 모든 클라이언트에게 캐릭터 선택 동기화
+                                    UpdateCharacterSelectionClientRpc(playerId, selectedCharacter);
+                                }
+                                //if (int.TryParse(characterData.Value.ToString(), out int selectedCharacter))
+                                //{
+                                //    Debug.Log($"[RoomManager] 플레이어 {playerId} - 캐릭터 선택 확인: {selectedCharacter}");
+
+                                //    // 모든 클라이언트에게 캐릭터 선택 동기화
+                                //    UpdateCharacterSelectionClientRpc(ulong.Parse(playerId), selectedCharacter);
+                                //}
+                                else
+                                {
+                                    Debug.LogError($"[RoomManager] 플레이어 ID 변환 실패: {playerIdString} / 캐릭터 데이터: {characterData.Value}");
+                                }
+                            }
                         }
                         else
                         {
@@ -689,7 +690,8 @@ public class RoomManager : NetworkBehaviour
                             Debug.Log($"[RoomManager] 플레이어 {playerId} - 캐릭터 선택 변경: {selectedCharacter}");
 
                             // 모든 클라이언트에게 캐릭터 선택 동기화
-                            UpdateCharacterSelectionClientRpc(Convert.ToUInt64(playerId), selectedCharacter);
+                            //UpdateCharacterSelectionClientRpc(Convert.ToUInt64(playerId), selectedCharacter);
+                            UpdateCharacterSelectionClientRpc((ulong)playerId, selectedCharacter);
                         }
                     }
                 }
@@ -781,16 +783,18 @@ public class RoomManager : NetworkBehaviour
         Debug.Log($"[Client] Player {playerId} 선택한 캐릭터: {selectedCharacter}");
 
         // 이벤트를 실행하여 UI 업데이트를 트리거
-        OnCharacterSelectionUpdated?.Invoke(playerId, selectedCharacter);
+        //OnCharacterSelectionUpdated?.Invoke(playerId, selectedCharacter);
         // 클라이언트에서 본인 또는 다른 플레이어의 선택한 캐릭터 UI를 업데이트
-        //if (Lobby_CharacterSelector.Instance != null)
-        //{
-        //    Lobby_CharacterSelector.Instance.UpdateCharacterSelection(playerId, selectedCharacter);
-        //}
-        //else
-        //{
-        //    Debug.LogError("[Client] Lobby_CharacterSelector 인스턴스를 찾을 수 없습니다.");
-        //}
+        if (Lobby_CharacterSelector.Instance != null)
+        {
+            Debug.Log("tttt");
+            Lobby_CharacterSelector.Instance.UpdateCharacterSelection(playerId, selectedCharacter);
+            
+        }
+        else
+        {
+            Debug.LogError("[Client] Lobby_CharacterSelector 인스턴스를 찾을 수 없습니다.");
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]

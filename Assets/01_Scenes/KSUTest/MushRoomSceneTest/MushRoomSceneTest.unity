@@ -2355,7 +2355,8 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 4
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6179971859430226796, guid: 708748e042c688c479160b027902217a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -5036,6 +5037,7 @@ GameObject:
   - component: {fileID: 1868343642272972185}
   - component: {fileID: 4470183189014038867}
   - component: {fileID: 1312699604}
+  - component: {fileID: 4470183189014038868}
   m_Layer: 12
   m_Name: FloorMushroom
   m_TagString: Untagged
@@ -5341,6 +5343,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4470183189014038868
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2668870537458313350}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.50516057, y: 0.37856925, z: 0.4924952}
+  m_Center: {x: -0.00000002980232, y: 0.16291016, z: -0.012827865}
 --- !u!1 &4537435762918734211
 GameObject:
   m_ObjectHideFlags: 0

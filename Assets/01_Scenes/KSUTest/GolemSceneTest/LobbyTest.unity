@@ -4509,7 +4509,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1708996874}
   m_HandleRect: {fileID: 1708996873}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -5584,8 +5584,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 348654884}
   m_HandleRect: {fileID: 348654883}
   m_Direction: 0
-  m_Value: 0.5
-  m_Size: 0.9149998
+  m_Value: 0.4999982
+  m_Size: 0.91499984
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6610,8 +6610,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 454640061}
   m_HandleRect: {fileID: 454640060}
   m_Direction: 0
-  m_Value: 0.5
-  m_Size: 0.9190475
+  m_Value: 0.5000014
+  m_Size: 0.9190476
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7549,8 +7549,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 797183971}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 86, y: 412.5, z: 0}
+  m_LocalRotation: {x: 0.43739325, y: 0.083422825, z: -0.04079428, w: 0.89446276}
+  m_LocalPosition: {x: -10.276643, y: 19.468203, z: -7.710368}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
