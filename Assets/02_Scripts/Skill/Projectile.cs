@@ -1,22 +1,27 @@
 using System.Collections;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Projectile : PoolableObject<Projectile>
 {
-    [SerializeField]
-    private GameObject onHitParticlePrefab = null;
-
     private PlayerManager owner = null;
     private int damage = 1;
     private float aggro = 1f;
     private float duration = 3f;
     private float speed = 2f;
+    private bool backAttackEnabled = false;
+    private int backAttackTime = 3;
 
-    public void Init(PlayerManager _player, int _damage, float _aggro)
+    public void Init(PlayerManager _player, int _damage, float _aggro, 
+        bool _backAttackEnabled = false, int _backAttackTime = 3)
     {
+        transform.position = _player.RangeAttackStartTr.position;
+        transform.rotation = _player.transform.rotation;
+
         owner = _player;
         damage = _damage;
         aggro = _aggro;
+        backAttackEnabled = _backAttackEnabled;
+        backAttackTime = _backAttackTime;
     }
 
     /// <summary>
@@ -35,24 +40,26 @@ public class Projectile : MonoBehaviour
     {
         StopAllCoroutines();
 
-        if(onHitParticlePrefab != null)
-        {
-            Instantiate(onHitParticlePrefab, transform.position, Quaternion.identity);
-        }
-
         if(other.GetComponent<BossStateManager>() != null)
         {
-            GameManager.Instance.DamageToBoss(owner, damage, aggro);
+            if (backAttackEnabled && IsHitBehindBoss(other.transform))
+            {
+                GameManager.Instance.DamageToBoss(owner, damage * backAttackTime, aggro);
+            }
+            else
+            {
+                GameManager.Instance.DamageToBoss(owner, damage, aggro);
+            }
         }
 
-        Destroy(gameObject);
+        ReturnToPool();
     }
 
     private IEnumerator ShootCoroutine()
     {
         float currentTime = 0f;
 
-        Vector3 direction = transform.forward;
+        Vector3 direction = owner.transform.forward;
 
         while(currentTime <= duration)
         {
@@ -61,6 +68,18 @@ public class Projectile : MonoBehaviour
             yield return null;
         }
 
-        Destroy(gameObject);
+        ReturnToPool();
+    }
+
+    public bool IsHitBehindBoss(Transform _targetTr)
+    {
+        if (Vector3.Angle(
+            transform.forward,
+            _targetTr.forward) < 80f)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

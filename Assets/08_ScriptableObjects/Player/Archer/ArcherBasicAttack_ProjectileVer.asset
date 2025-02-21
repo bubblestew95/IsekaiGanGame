@@ -9,13 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e9c9e1ef27cd504f90b92ac533078fd, type: 3}
-  m_Name: AssassinSkill_B
+  m_Script: {fileID: 11500000, guid: a1f4e5fa645f6854280c826cbacd9aa1, type: 3}
+  m_Name: ArcherBasicAttack_ProjectileVer
   m_EditorClassIdentifier: 
-  skillSlot: 2
-  coolTime: 6
-  damage: 40
-  aggro: 2
+  skillSlot: 4
+  coolTime: 1
+  damage: 10
+  aggro: 1
   isBackattackEnable: 1
-  backAttackTimes: 3
-  attackRange: 6
+  backAttackTimes: 2
+  projectileDuration: 3
+  projectileSpeed: 20

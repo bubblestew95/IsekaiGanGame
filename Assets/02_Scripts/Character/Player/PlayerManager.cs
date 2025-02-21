@@ -46,6 +46,7 @@ public class PlayerManager : MonoBehaviour
 
     private CharacterController characterController = null;
     private PlayerNetworkManager playerNetworkManager = null;
+    private PlayerProjectileManager projectileManager = null;
 
             #endregion
 
@@ -280,6 +281,7 @@ public class PlayerManager : MonoBehaviour
         playerNetworkManager = GetComponent<PlayerNetworkManager>();
         particleController = GetComponent<PlayerParticleController>();
         playerNameUI = GetComponentInChildren<PlayerName>();
+        projectileManager = GetComponent<PlayerProjectileManager>();
 
         InitStates();
 
