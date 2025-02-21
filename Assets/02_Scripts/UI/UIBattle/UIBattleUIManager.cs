@@ -14,7 +14,7 @@ public class UIBattleUIManager : MonoBehaviour
     private FloatingJoystick moveJoystick = null;
     [SerializeField]
     private PlayerManager playerManager = null;
-
+    private PlayerHitImpact ui_PlayerHitImpact = null;
     private UIHpsManager ui_PlayerHp = null;
     private UIBossHpsManager ui_BossHp = null;
     private UIWarningManager ui_disconnect = null;
@@ -28,6 +28,7 @@ public class UIBattleUIManager : MonoBehaviour
 
     private void Awake()
     {
+        ui_PlayerHitImpact = GetComponentInChildren<PlayerHitImpact>();
         ui_PlayerHp = GetComponentInChildren<UIHpsManager>();
         ui_BossHp = GetComponentInChildren<UIBossHpsManager>();
         ui_disconnect = GetComponentInChildren<UIWarningManager>();
