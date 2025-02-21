@@ -196,7 +196,7 @@ GameObject:
   - component: {fileID: 3576221682376214854}
   - component: {fileID: 4092652229682488070}
   m_Layer: 0
-  m_Name: How
+  m_Name: Behaviour
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -439,10 +439,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 943fd47f1f1c3394a92dede33eb04b1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image_How: {fileID: 4092652229682488070}
+  image_Behaviour: {fileID: 4092652229682488070}
   image_Who: {fileID: 506530994801045655}
   image_Whom: {fileID: 6075259669197805811}
   showLogDuration: 2
+  bossImageDataList:
+  - bossType: 0
+    bossImage: {fileID: 21300000, guid: 63c85b3380b1449488f2e1653b810073, type: 3}
+  - bossType: 1
+    bossImage: {fileID: 21300000, guid: eff4441b76c6e2c49b03e6e3d375992d, type: 3}
+  playerImageDataList:
+  - characterClass: 0
+    playerImage: {fileID: -119178975, guid: ae250cf48a1dbc84f9b1456935851015, type: 3}
+  - characterClass: 1
+    playerImage: {fileID: -1255363639, guid: ae250cf48a1dbc84f9b1456935851015, type: 3}
+  - characterClass: 2
+    playerImage: {fileID: 140428004, guid: ae250cf48a1dbc84f9b1456935851015, type: 3}
+  - characterClass: 3
+    playerImage: {fileID: -2140551184, guid: ae250cf48a1dbc84f9b1456935851015, type: 3}
+  behaviourImageDataList:
+  - behaviourType: 1
+    behaviourImage: {fileID: 21300000, guid: 41791c306e5583042a9661c32ffe0d74, type: 3}
+  - behaviourType: 2
+    behaviourImage: {fileID: 21300000, guid: d9d5a15bbe0b06741a18fea3c066ef76, type: 3}
 --- !u!1 &7135221271136189271
 GameObject:
   m_ObjectHideFlags: 0
