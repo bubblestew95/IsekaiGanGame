@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Projectile : PoolableObject<Projectile>
 {
+    [SerializeField]
+    private TrailRenderer trailRenderer = null;
+
     private PlayerManager owner = null;
     private int damage = 1;
     private float aggro = 1f;
@@ -22,6 +25,12 @@ public class Projectile : PoolableObject<Projectile>
         aggro = _aggro;
         backAttackEnabled = _backAttackEnabled;
         backAttackTime = _backAttackTime;
+
+        if(trailRenderer != null)
+        {
+            trailRenderer.Clear();
+            // trailRenderer.emitting = true;
+        }
     }
 
     /// <summary>
