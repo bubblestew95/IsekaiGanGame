@@ -40,16 +40,13 @@ public class Projectile : PoolableObject<Projectile>
     {
         StopAllCoroutines();
 
-        if(other.GetComponent<BossStateManager>() != null)
+        if (backAttackEnabled && IsHitBehindBoss(other.transform))
         {
-            if (backAttackEnabled && IsHitBehindBoss(other.transform))
-            {
-                GameManager.Instance.DamageToBoss(owner, damage * backAttackTime, aggro);
-            }
-            else
-            {
-                GameManager.Instance.DamageToBoss(owner, damage, aggro);
-            }
+            GameManager.Instance.DamageToBoss(owner, damage * backAttackTime, aggro);
+        }
+        else
+        {
+            GameManager.Instance.DamageToBoss(owner, damage, aggro);
         }
 
         ReturnToPool();

@@ -5,18 +5,22 @@ public abstract class PoolableObject<T> : MonoBehaviour where T : MonoBehaviour
 {
     private ObjectPool<T> _pool;
 
+
     public void SetPool(ObjectPool<T> pool)
     {
         _pool = pool;
     }
 
-    // 활성화 시 초기화가 필요하면 여기서 구현 (상속받은 클래스에서 오버라이드 가능)
+    
     protected virtual void OnEnable()
     {
     }
 
+    /// <summary>
+    /// 오브젝트 풀로 오브젝트를 반환하는 함수.
+    /// </summary>
     public void ReturnToPool()
     {
-        _pool.Release(this as T); // 풀로 반환
+        _pool.Release(this as T);
     }
 }
