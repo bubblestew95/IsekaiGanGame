@@ -2783,7 +2783,8 @@ MonoBehaviour:
   Attack4: {fileID: 8300000, guid: 3c81ea66b16fea14aaa85bd7780981ba, type: 3}
   Attack5: {fileID: 8300000, guid: 3c81ea66b16fea14aaa85bd7780981ba, type: 3}
   Attack6: {fileID: 8300000, guid: 3c81ea66b16fea14aaa85bd7780981ba, type: 3}
-  audioMixer: {fileID: 0}
+  GetHit: {fileID: 8300000, guid: c7aca563229ec6846bb8f2d2e2625814, type: 3}
+  audioMixer: {fileID: 24100000, guid: 9e53cb4805ef9d047abfdbb78664776a, type: 2}
 --- !u!1001 &1276957514
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3107,6 +3108,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 99606ddfd20cf8e40a5c69b89d26120e, type: 2}
   - {fileID: 21300000, guid: 1545f2c821fcef946bc1db31007d997e, type: 2}
   damage: 0
+  hitPaticle: {fileID: 4021103657954561960, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
 --- !u!1001 &1416233113
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3700,7 +3702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d6f474499c20ce4aa80eb1943403742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cam: {fileID: 0}
+  Cam: {fileID: 908672736}
 --- !u!4 &1825612640
 Transform:
   m_ObjectHideFlags: 0
@@ -10436,6 +10438,7 @@ MonoBehaviour:
   bgmController: {fileID: 0}
   mushBT: {fileID: 0}
   boss: {fileID: 1080784100645845266}
+  followCam: {fileID: 0}
 --- !u!114 &6004506743104551381
 MonoBehaviour:
   m_ObjectHideFlags: 0

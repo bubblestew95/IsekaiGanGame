@@ -12,6 +12,7 @@ public class MushAudioManager : MonoBehaviour
     public AudioClip Attack4;
     public AudioClip Attack5;
     public AudioClip Attack6;
+    public AudioClip GetHit;
     public AudioMixer audioMixer; // 임의 추가 황승원 02.14 오디오 믹서
 
     private AudioSource audioSource;

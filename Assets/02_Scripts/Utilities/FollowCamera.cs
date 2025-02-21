@@ -1,6 +1,5 @@
 using System.Collections;
 using Unity.Netcode;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
@@ -48,7 +47,7 @@ public class FollowCamera : MonoBehaviour
             }
         }
 
-        SetPlayerInfo();
+        Invoke("SetPlayerInfo", 1f);
     }
 
     // 플레이어 정보 세팅하는 함수
@@ -77,7 +76,7 @@ public class FollowCamera : MonoBehaviour
     }
 
     // 카메라 바꾸는 함수
-    private void ChangePlayerCam()
+    private void ChangePlayerCamRight()
     {
         if (IsDie)
         {
@@ -87,6 +86,30 @@ public class FollowCamera : MonoBehaviour
             {
                 // 다음 인덱스로 이동 (원형 순환)
                 myIndex = (myIndex + 1) % alivePlayer.Length;
+
+                // 만약 유효한 오브젝트면 탈출
+                if (alivePlayer[myIndex] != null)
+                {
+                    playerManager = alivePlayer[myIndex].GetComponent<PlayerManager>();
+                    break;
+                }
+
+            } while (myIndex != startIndex); // 모든 요소를 돌았으면 종료 
+
+        }
+    }
+
+    // 카메라 바꾸는 함수2
+    private void ChangePlayerCamLeft()
+    {
+        if (IsDie)
+        {
+            int startIndex = myIndex; // 무한 루프 방지용 (전체 순회 후에도 못 찾으면 종료)
+
+            do
+            {
+                // 다음 인덱스로 이동 (원형 순환)
+                myIndex = (myIndex - 1 + alivePlayer.Length) % alivePlayer.Length;
 
                 // 만약 유효한 오브젝트면 탈출
                 if (alivePlayer[myIndex] != null)

@@ -119,6 +119,9 @@ public class BossStateManager : NetworkBehaviour
         // 플레이어 카메라 흔들림 실행
         ShakePlayerCamClientRpc(_clientId);
 
+        // 맞는 오디오 재생
+        GetHitSoundClientRpc(_clientId);
+
         // 서버만 hp콜백(현재 피에 따라 패턴 설정)
         CheckHpCallback();
     }
@@ -441,6 +444,16 @@ public class BossStateManager : NetworkBehaviour
         bgmController.ExcitedLevel(0);
         bgmController.PlayBossRageBgm();
         isPhase2 = true;
+    }
+
+    // 맞는 오디오 재생
+    [ClientRpc]
+    private void GetHitSoundClientRpc(ulong _clientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == _clientId)
+        {
+            BossAudioManager.Instance.AudioPlay(BossAudioManager.Instance.GetHit);
+        }
     }
     #endregion
 

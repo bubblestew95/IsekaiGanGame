@@ -12,6 +12,7 @@ public class MushDamageParticle : MonoBehaviour
     public ParticleSystem[] digitParticles;
     public List<Sprite> numberSprites;
     public float damage;
+    public ParticleSystem hitPaticle;
 
     private Dictionary<int, Sprite> spriteDict;
     private ParticleSystemRenderer[] particleRenderers;
@@ -97,6 +98,17 @@ public class MushDamageParticle : MonoBehaviour
             {
                 particleRenderers[i].enabled = false;
             }
+        }
+    }
+
+    // 파티클 그냥 재생
+    public void PlayHitParticle( Vector3 position)
+    {
+        if (hitPaticle != null)
+        {
+            ParticleSystem newParticle = Instantiate(hitPaticle, position, Quaternion.identity);
+            newParticle.Play();
+            Destroy(newParticle.gameObject, newParticle.main.duration + newParticle.main.startLifetime.constantMax);
         }
     }
 
