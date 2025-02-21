@@ -17,6 +17,7 @@ public class BossAudioManager : MonoBehaviour
     public AudioClip Attack9;
     public AudioClip SpecialAttack;
     public AudioClip Phase2;
+    public AudioClip GetHit;
     public AudioMixer audioMixer; // 임의 추가 황승원 02.14 오디오 믹서
 
     private AudioSource audioSource;

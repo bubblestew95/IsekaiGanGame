@@ -2783,7 +2783,8 @@ MonoBehaviour:
   Attack4: {fileID: 8300000, guid: 3c81ea66b16fea14aaa85bd7780981ba, type: 3}
   Attack5: {fileID: 8300000, guid: 3c81ea66b16fea14aaa85bd7780981ba, type: 3}
   Attack6: {fileID: 8300000, guid: 3c81ea66b16fea14aaa85bd7780981ba, type: 3}
-  audioMixer: {fileID: 0}
+  GetHit: {fileID: 8300000, guid: c7aca563229ec6846bb8f2d2e2625814, type: 3}
+  audioMixer: {fileID: 24100000, guid: 9e53cb4805ef9d047abfdbb78664776a, type: 2}
 --- !u!1001 &1276957514
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -85,6 +85,9 @@ public class MushStateManager : NetworkBehaviour
         // 클라이언트 모두 보스 브금 설정
         ChangeExcitedLevelClientRpc();
 
+        // 맞는 오디오 재생
+        GetHitSoundClientRpc(_clientId);
+
         // 서버만 hp콜백(현재 피에 따라 패턴 설정)
         CheckHpCallback();
     }
@@ -274,6 +277,16 @@ public class MushStateManager : NetworkBehaviour
         {
             // 카메라 흔들리게 설정
             StartCoroutine(followCam.ShakeCam());
+        }
+    }
+
+    // 맞는 오디오 재생
+    [ClientRpc]
+    private void GetHitSoundClientRpc(ulong _clientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == _clientId)
+        {
+            MushAudioManager.Instance.AudioPlay(MushAudioManager.Instance.GetHit);
         }
     }
 
