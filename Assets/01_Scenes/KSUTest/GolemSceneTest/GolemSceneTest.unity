@@ -282,7 +282,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 5687
+    m_Bits: 13879
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2878,7 +2878,7 @@ PrefabInstance:
       objectReference: {fileID: 457395390}
     - target: {fileID: 7796279537819312077, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: maxHp
-      value: 2500
+      value: 25000
       objectReference: {fileID: 0}
     - target: {fileID: 8468617057500289297, guid: ad68a6fbbf6cfc1408ca27d9cbd7a43f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6607,6 +6607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d6f474499c20ce4aa80eb1943403742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Cam: {fileID: 1301516558}
 --- !u!4 &1087631059
 Transform:
   m_ObjectHideFlags: 0
@@ -9596,6 +9597,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6674039441048555817, guid: 2f1712a8fa5409b43a2bd6a371b5d790, type: 3}
+      propertyPath: GetHit
+      value: 
+      objectReference: {fileID: 8300000, guid: c7aca563229ec6846bb8f2d2e2625814, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9965,7 +9970,7 @@ MonoBehaviour:
   attack7: {fileID: 198738731738625552, guid: 21461e6c060baf044ac3e717ed4170cb, type: 3}
   attack8: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
   attack9: {fileID: 198044318287895918, guid: 638c8ca438a11c54987de876e500ed02, type: 3}
-  hitParticle: {fileID: 4810726212148235539, guid: c38b0c8ea4642d342872e7b57fc16959, type: 3}
+  hitParticle: {fileID: 4021103657954561960, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
   SpecialAttack: {fileID: 198399678132347108, guid: 045d5fbbf8161ea478959fe3c8e41207, type: 3}
 --- !u!114 &1562387889
 MonoBehaviour:

@@ -39,6 +39,7 @@ public class MushStateManager : NetworkBehaviour
     public BgmController bgmController;
     public MushBT mushBT;
     public GameObject boss;
+    public FollowCamera followCam;
 
 
     // 프로퍼티
@@ -75,11 +76,17 @@ public class MushStateManager : NetworkBehaviour
         // 클라이언트 모두 보스 피격 파티클 실행
         DamageParticleClientRpc(_damage, _clientId);
 
+        // 카메라 흔들림 추가
+        ShakePlayerCamClientRpc(_clientId);
+
         // 클라이언트 모두 보스 UI설정
         UpdateBossUIClientRpc(_damage);
 
         // 클라이언트 모두 보스 브금 설정
         ChangeExcitedLevelClientRpc();
+
+        // 맞는 오디오 재생
+        GetHitSoundClientRpc(_clientId);
 
         // 서버만 hp콜백(현재 피에 따라 패턴 설정)
         CheckHpCallback();
@@ -211,9 +218,15 @@ public class MushStateManager : NetworkBehaviour
     [ClientRpc]
     private void DamageParticleClientRpc(float _damage, ulong _clientId)
     {
+        // 데미지 폰트
         if (NetworkManager.Singleton.LocalClientId == _clientId)
         {
+            // 데미지 파티클
             damageParticle.SetupAndPlayParticlesMine(_damage);
+
+            // 히트 파티클
+            Vector3 pos = new Vector3(Boss.transform.position.x, 3f, Boss.transform.position.z);
+            damageParticle.PlayHitParticle(pos);
         }
         else
         {
@@ -251,6 +264,30 @@ public class MushStateManager : NetworkBehaviour
         float hp = ((float)curHp.Value / (float)maxHp);
 
         return hp;
+    }
+
+    #endregion
+
+    #region [Cam]
+
+    [ClientRpc]
+    private void ShakePlayerCamClientRpc(ulong _clientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == _clientId)
+        {
+            // 카메라 흔들리게 설정
+            StartCoroutine(followCam.ShakeCam());
+        }
+    }
+
+    // 맞는 오디오 재생
+    [ClientRpc]
+    private void GetHitSoundClientRpc(ulong _clientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == _clientId)
+        {
+            MushAudioManager.Instance.AudioPlay(MushAudioManager.Instance.GetHit);
+        }
     }
 
     #endregion
@@ -353,7 +390,7 @@ public class MushStateManager : NetworkBehaviour
     private void Init()
     {
         // 초기 값 설정
-        maxHp = 3000;
+        maxHp = 30000;
         reduceAggro = 5f;
         reduceAggroTime = 10f;
         hpCheck = new bool[3];
@@ -381,6 +418,7 @@ public class MushStateManager : NetworkBehaviour
         bossHpUI = FindFirstObjectByType<UIBossHpsManager>();
         bgmController = FindFirstObjectByType<BgmController>();
         mushBT = FindAnyObjectByType<MushBT>();
+        followCam = FindAnyObjectByType<FollowCamera>();
 
         // ui초기 설정
         bossHpUI.SetMaxHp(maxHp);

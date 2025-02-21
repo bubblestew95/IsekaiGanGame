@@ -18,8 +18,10 @@ public class PlayerParticleController : NetworkBehaviour
     [SerializeField]
     private List<PlayerParticleData> particleDataList = null;
 
-    private List<GameObject> forceDestroyParticles = null;
+    private List<PoolableParticle> forceReturnParticleList = null;
     private PlayerManager playerManager = null;
+
+    private Dictionary<string, ObjectPoolManager<PoolableParticle>> particlePoolManagerMap = null;
 
     /// <summary>
     /// 플레이어의 위치에 파티클을 생성함.
@@ -64,13 +66,13 @@ public class PlayerParticleController : NetworkBehaviour
 
     public void ForceDestroyParticles()
     {
-        foreach(var particle in forceDestroyParticles)
+        foreach(var particle in forceReturnParticleList)
         {
-            if(particle != null)
-                Destroy(particle);
+            if (particle != null)
+                particle.ReturnToPool();
         }
 
-        forceDestroyParticles.Clear();
+        forceReturnParticleList.Clear();
     }
 
     private void SpawnParticle(string _particleName, Vector3 _position, Quaternion _rotation)
@@ -103,19 +105,7 @@ public class PlayerParticleController : NetworkBehaviour
     [ClientRpc]
     private void SpawnParticleClientRpc(string _particleName, Vector3 _position, Quaternion _rotation)
     {
-        var particleData = GetParticleData(_particleName);
-
-        if (particleData == null)
-        {
-            Debug.LogWarningFormat("{0} name particle is not exist in list!");
-            return;
-        }
-
-        var spawnedParticleObj = Instantiate(particleData.particlePrefab, _position, _rotation);
-        Destroy(spawnedParticleObj, particleData.autoDestroyTime);
-
-        if (particleData.forceDestroyable)
-            forceDestroyParticles.Add(spawnedParticleObj);
+        SpawnParticleLocal(_particleName, _position, _rotation);
     }
 
     private void SpawnParticleLocal(string _particleName, Vector3 _position, Quaternion _rotation)
@@ -128,17 +118,32 @@ public class PlayerParticleController : NetworkBehaviour
             return;
         }
 
-        var spawnedParticleObj = Instantiate(particleData.particlePrefab, _position, _rotation);
-        Destroy(spawnedParticleObj, particleData.autoDestroyTime);
+        var poolableParticle = particlePoolManagerMap[_particleName].Get();
+
+        poolableParticle.Init(_position, _rotation, particleData.autoDestroyTime);
+
+        //var spawnedParticleObj = Instantiate(particleData.particlePrefab, _position, _rotation);
+        //Destroy(spawnedParticleObj, particleData.autoDestroyTime);
 
         if (particleData.forceDestroyable)
-            forceDestroyParticles.Add(spawnedParticleObj);
+            forceReturnParticleList.Add(poolableParticle);
     }
 
     private void Awake()
     {
         playerManager = GetComponent<PlayerManager>();
 
-        forceDestroyParticles = new List<GameObject>();
+        forceReturnParticleList = new List<PoolableParticle>();
+
+        particlePoolManagerMap = new Dictionary<string, ObjectPoolManager<PoolableParticle>>();
+
+        foreach(var particleData in particleDataList)
+        {
+            particlePoolManagerMap.Add(
+                particleData.particleName,
+                new ObjectPoolManager<PoolableParticle>
+                (particleData.particlePrefab.GetComponent<PoolableParticle>())
+                );
+        }
     }
 }
