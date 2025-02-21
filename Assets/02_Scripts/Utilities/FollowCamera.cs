@@ -48,7 +48,7 @@ public class FollowCamera : MonoBehaviour
             }
         }
 
-        SetPlayerInfo();
+        Invoke("SetPlayerInfo", 1f);
     }
 
     // 플레이어 정보 세팅하는 함수
