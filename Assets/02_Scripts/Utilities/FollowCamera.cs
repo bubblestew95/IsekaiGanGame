@@ -1,13 +1,23 @@
+using System.Collections;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
 {
     private PlayerManager playerManager = null;
+    private BossStateManager bossStateManager = null;
+    private MushStateManager mushStateManager = null;
+    private int myIndex;
+    private bool IsDie = false;
+
+    private GameObject[] alivePlayer;
 
     private void Awake()
     {
         FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += FindPlayerObjectForClient;
+        bossStateManager = FindAnyObjectByType<BossStateManager>();
+        mushStateManager = FindAnyObjectByType<MushStateManager>();
     }
 
     private void Update()
@@ -31,6 +41,72 @@ public class FollowCamera : MonoBehaviour
             {
                 playerManager = client.PlayerObject.GetComponent<PlayerManager>();
             }
+        }
+
+        SetPlayerInfo();
+    }
+
+    // 플레이어 정보 세팅하는 함수
+    private void SetPlayerInfo()
+    {
+        if (bossStateManager != null)
+        {
+            alivePlayer = bossStateManager.AlivePlayers;
+        }
+        else if (mushStateManager != null)
+        {
+            alivePlayer = mushStateManager.AlivePlayers;
+        }
+
+        for (int i = 0; i < 4; ++i)
+        {
+            if (alivePlayer[i] == null) continue;
+
+            if (alivePlayer[i].GetComponent<NetworkObject>().OwnerClientId == NetworkManager.Singleton.LocalClientId)
+            {
+                myIndex = i;
+            }
+        }
+
+        StartCoroutine(DieCheckCoroutine());
+    }
+
+    // 카메라 바꾸는 함수
+    private void ChangePlayerCam()
+    {
+        if (IsDie)
+        {
+            int startIndex = myIndex; // 무한 루프 방지용 (전체 순회 후에도 못 찾으면 종료)
+
+            do
+            {
+                // 다음 인덱스로 이동 (원형 순환)
+                myIndex = (myIndex + 1) % alivePlayer.Length;
+
+                // 만약 유효한 오브젝트면 탈출
+                if (alivePlayer[myIndex] != null)
+                {
+                    playerManager = alivePlayer[myIndex].GetComponent<PlayerManager>();
+                    break;
+                }
+
+            } while (myIndex != startIndex); // 모든 요소를 돌았으면 종료 
+
+        }
+    }
+
+    // 내가 죽었는지 check하는 함수
+    private IEnumerator DieCheckCoroutine()
+    {
+        WaitForSeconds checkTime = new WaitForSeconds(1f);
+        while (true)
+        {
+            if (alivePlayer[myIndex] == null)
+            {
+                IsDie = true;
+            }
+
+            yield return checkTime;
         }
     }
 }
