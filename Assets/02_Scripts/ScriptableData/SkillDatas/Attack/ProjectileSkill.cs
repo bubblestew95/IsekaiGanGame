@@ -7,8 +7,6 @@ using UnityEngine;
 public class ProjectileSkill : AttackSkill
 {
     [Header("Projectile Skill")]
-    //public GameObject projectilePrefab = null;
-
     public float projectileDuration = 3f;
     public float projectileSpeed = 1f;
 
@@ -27,20 +25,5 @@ public class ProjectileSkill : AttackSkill
 
         projectileManager.ShootProjectile(damage, aggro, projectileDuration, projectileSpeed
             , isBackattackEnable, backAttackTimes);
-
-        //GameObject projectileObj = Instantiate
-        //    (
-        //    projectilePrefab, 
-        //    _player.RangeAttackStartTr.position, 
-        //    _player.transform.rotation
-        //    );
-
-        //if(projectileObj != null)
-        //{
-        //    var projectile = projectileObj.GetComponent<Projectile>();
-
-        //    projectile.Init(_player, damage, aggro);
-        //    projectile.ShootProjectile(projectileDuration, projectileSpeed);
-        //}
     }
 }

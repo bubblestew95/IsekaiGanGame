@@ -16597,6 +16597,7 @@ GameObject:
   - component: {fileID: 163959230460716445}
   - component: {fileID: 2131741412249865223}
   - component: {fileID: 8764508196304023252}
+  - component: {fileID: 4921239638386775615}
   m_Layer: 9
   m_Name: P_Magician
   m_TagString: Player
@@ -16700,7 +16701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 822026061
+  GlobalObjectIdHash: 2972721087
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -16969,6 +16970,19 @@ MonoBehaviour:
   - sfxName: Meteor
     sfxClip: {fileID: 8300000, guid: 2aaa869317d4ff34eaef5ce91b395285, type: 3}
     startTime: 1
+--- !u!114 &4921239638386775615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7514786493872156022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 458d7f961d22e844e8adb33bcfc1314e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 3389193100321507943, guid: 4116ef1937f75e5458a9c2dc967f353c, type: 3}
 --- !u!1 &7617502916217710384
 GameObject:
   m_ObjectHideFlags: 0
