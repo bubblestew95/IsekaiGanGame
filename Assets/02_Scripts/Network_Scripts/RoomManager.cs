@@ -266,7 +266,6 @@ public class RoomManager : NetworkBehaviour
             }
 
             await SubscribeToLobbyEvents(currentLobby.Id);
-            //PlayerListManager.Instance.AddPlayer(AuthenticationService.Instance.PlayerId, username, PlayerStatus.Host);
             PlayerListManager.Instance.AddPlayer(AuthenticationService.Instance.PlayerId, username, PlayerStatus.Host);
             await RefreshRoomList();
 
@@ -748,6 +747,22 @@ public class RoomManager : NetworkBehaviour
         }
     }
 
+
+    //[ServerRpc(RequireOwnership = false)]
+    //public void UpdateCharacterSelectionServerRpc(ulong clientId, int selectedCharacter)
+    //{
+    //    if (currentLobby == null)
+    //    {
+    //        Debug.LogError("[RoomManager] 현재 로비가 존재하지 않습니다.");
+    //        return;
+    //    }
+
+    //    string playerId = clientId.ToString();
+    //    Debug.Log($"[Server] 클라이언트 {playerId} 캐릭터 선택: {selectedCharacter}");
+
+    //    // 비동기 함수 호출 (서버에서 실행)
+    //    _ = UpdateCharacterSelectionAsync(playerId, selectedCharacter);
+    //}
     [ServerRpc(RequireOwnership = false)]
     public void UpdateCharacterSelectionServerRpc(ulong clientId, int selectedCharacter)
     {
@@ -760,8 +775,23 @@ public class RoomManager : NetworkBehaviour
         string playerId = clientId.ToString();
         Debug.Log($"[Server] 클라이언트 {playerId} 캐릭터 선택: {selectedCharacter}");
 
-        // 비동기 함수 호출 (서버에서 실행)
-        _ = UpdateCharacterSelectionAsync(playerId, selectedCharacter);
+        try
+        {
+            UpdatePlayerOptions options = new UpdatePlayerOptions
+            {
+                Data = new Dictionary<string, PlayerDataObject>
+            {
+                { "CharacterSelection", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, selectedCharacter.ToString()) }
+            }
+            };
+
+            LobbyService.Instance.UpdatePlayerAsync(currentLobby.Id, playerId, options);
+            Debug.Log($"[Server] 플레이어 {playerId} 캐릭터 선택 업데이트 완료: {selectedCharacter}");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[Server] 캐릭터 선택 업데이트 실패: {ex.Message}");
+        }
     }
 
     private async Task UpdateCharacterSelectionAsync(string playerId, int selectedCharacter)
@@ -801,23 +831,6 @@ public class RoomManager : NetworkBehaviour
             Debug.LogError("[Client] Lobby_CharacterSelector 인스턴스를 찾을 수 없음.");
         }
     }
-
-    //[ClientRpc]
-    //private void UpdateCharacterSelectionClientRpc(ulong playerId, int selectedCharacter)
-    //{
-    //    //playerCharacterSelect[playerId] = selectedCharacter;
-    //    Debug.Log($"[Client] Player {playerId} 선택한 캐릭터: {selectedCharacter}");
-
-    //    // Lobby_CharacterSelector가 존재하면 업데이트 실행
-    //    if (Lobby_CharacterSelector.Instance != null)
-    //    {
-    //        Lobby_CharacterSelector.Instance.UpdateCharacterSelection(playerId, selectedCharacter);
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("[Client] Lobby_CharacterSelector 인스턴스를 찾을 수 없음.");
-    //    }
-    //}
 
     [ClientRpc]
     private void UpdateReadyStateClientRpc(ulong clientId, bool isReady)
