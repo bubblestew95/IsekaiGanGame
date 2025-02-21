@@ -140,7 +140,7 @@ public class NetworkGameManager : NetworkBehaviour
     // 게임 오버시 실행되는 코루틴
     private IEnumerator FailCoroutine()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
 
         FindAnyObjectByType<UIBattleUIManager>().FadeInResult(false);
         FindAnyObjectByType<BgmController>().PlayDefeat();
@@ -157,7 +157,7 @@ public class NetworkGameManager : NetworkBehaviour
     // 게임 클리어시 실행되는 코루틴
     private IEnumerator VictoryCoroutine()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
 
         FindAnyObjectByType<UIBattleUIManager>().FadeInResult(true);
         FindAnyObjectByType<BgmController>().PlayVictory();

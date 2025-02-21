@@ -22,7 +22,7 @@ public class FollowCamera : MonoBehaviour
     private void Awake()
     {
         FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += FindPlayerObjectForClient;
-        FindAnyObjectByType<NetworkGameManager>().gameEndCallback += DieUiOff;
+        FindAnyObjectByType<NetworkGameManager>().gameEndCallback += () => { Invoke("DieUiOff", 1f); };
         bossStateManager = FindAnyObjectByType<BossStateManager>();
         mushStateManager = FindAnyObjectByType<MushStateManager>();
     }
@@ -133,16 +133,13 @@ public class FollowCamera : MonoBehaviour
         {
             if (alivePlayer[myIndex] == null)
             {
+                IsDie = true;
+                PlayerDieSetting();
                 break;
             }
 
             yield return checkTime;
         }
-
-        yield return checkTime;
-
-        IsDie = true;
-        PlayerDieSetting();
     }
 
     // 카메라 흔드는 함수
