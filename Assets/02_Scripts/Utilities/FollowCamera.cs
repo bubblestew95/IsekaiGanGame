@@ -12,8 +12,8 @@ public class FollowCamera : MonoBehaviour
 
     // 카메라 흔들기 관련
     public Transform Cam;
-    private float shakeAmout = 0.2f;
-    private float shakeTime = 0.2f;
+    public float shakeAmout = 0.2f;
+    public float shakeTime = 0.2f;
 
     private GameObject[] alivePlayer;
 
