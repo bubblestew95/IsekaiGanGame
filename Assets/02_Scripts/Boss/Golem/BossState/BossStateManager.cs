@@ -55,6 +55,7 @@ public class BossStateManager : NetworkBehaviour
     public GameObject boss;
     public GameObject bossSkin;
     public BoxCollider hitCollider;
+    public FollowCamera followCam;
 
     private void Awake()
     {
@@ -115,6 +116,9 @@ public class BossStateManager : NetworkBehaviour
         // 클라이언트 모두 보스 브금 설정
         ChangeExcitedLevelClientRpc();
 
+        // 플레이어 카메라 흔들림 실행
+        ShakePlayerCamClientRpc(_clientId);
+
         // 서버만 hp콜백(현재 피에 따라 패턴 설정)
         CheckHpCallback();
     }
@@ -134,17 +138,17 @@ public class BossStateManager : NetworkBehaviour
         // 데미지 폰트
         if (NetworkManager.Singleton.LocalClientId == _clientId)
         {
+            // 데미지 파티클
             damageParticle.SetupAndPlayParticlesMine(_damage);
+
+            // 히트 파티클
+            Vector3 pos = new Vector3(Boss.transform.position.x, 3f, Boss.transform.position.z);
+            ParticleManager.Instance.PlayParticle(ParticleManager.Instance.hitParticle, pos);
         }
         else
         {
             damageParticle.SetupAndPlayParticles(_damage);
         }
-
-        Vector3 pos = new Vector3(Boss.transform.position.x, 3f, Boss.transform.position.z);
-
-        // 히트 파티클
-        ParticleManager.Instance.PlayParticle(ParticleManager.Instance.hitParticle, pos);
     }
 
     // 보스 UI 업데이트
@@ -172,6 +176,16 @@ public class BossStateManager : NetworkBehaviour
     private void SetAlivePlayerClientRpc(int _index)
     {
         alivePlayers[_index] = null;
+    }
+
+    [ClientRpc]
+    private void ShakePlayerCamClientRpc(ulong _clientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == _clientId)
+        {
+            // 카메라 흔들리게 설정
+            StartCoroutine(followCam.ShakeCam());
+        }
     }
     #endregion
 
@@ -449,6 +463,7 @@ public class BossStateManager : NetworkBehaviour
         bossHpUI = FindFirstObjectByType<UIBossHpsManager>();
         bgmController = FindFirstObjectByType<BgmController>();
         bossBT = FindAnyObjectByType<BossBT>();
+        followCam = FindAnyObjectByType<FollowCamera>();
 
         // ui초기 설정
         bossHpUI.SetMaxHp(maxHp);

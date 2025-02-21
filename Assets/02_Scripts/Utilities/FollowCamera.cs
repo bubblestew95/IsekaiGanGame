@@ -11,6 +11,11 @@ public class FollowCamera : MonoBehaviour
     private int myIndex;
     private bool IsDie = false;
 
+    // 카메라 흔들기 관련
+    public Transform Cam;
+    private float shakeAmout = 0.2f;
+    private float shakeTime = 0.2f;
+
     private GameObject[] alivePlayer;
 
     private void Awake()
@@ -108,5 +113,29 @@ public class FollowCamera : MonoBehaviour
 
             yield return checkTime;
         }
+    }
+
+    // 카메라 흔드는 함수
+    public IEnumerator ShakeCam()
+    {
+        float elapseTime = 0f;
+
+        Vector3 originPos = Cam.localPosition;
+
+        while (true)
+        {
+            elapseTime += Time.deltaTime;
+
+            Cam.localPosition = Random.insideUnitSphere * shakeAmout + originPos;
+
+            if (elapseTime >= shakeTime)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        Cam.localPosition = originPos;
     }
 }
