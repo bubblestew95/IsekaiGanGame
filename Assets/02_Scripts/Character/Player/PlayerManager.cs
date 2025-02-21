@@ -158,8 +158,6 @@ public class PlayerManager : MonoBehaviour
 
     public void ChangeState_Local(PlayerStateType _type)
     {
-        Debug.LogFormat("Player State Change To {0}.", _type);
-
         StateMachine.ChangeState(_type);
     }
 
