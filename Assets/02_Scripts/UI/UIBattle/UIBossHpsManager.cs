@@ -57,8 +57,9 @@ public class UIBossHpsManager : MonoBehaviour
     {
         textMeshPro.text = (curHp + "/" + maxHp); // 텍스트 업데이트 "현재체력/최대체력"
         Vector2 newCurHP = images[curHpIndex].rectTransform.sizeDelta;
+        Vector2 maxHpImage = images[maxHpIndex].rectTransform.sizeDelta;
         float hpRatio = (float)curHp / (float)maxHp;
-        newCurHP.x = hpRatio * newCurHP.x;  // X 값만 변경
+        newCurHP.x = hpRatio * maxHpImage.x;  // X 값만 변경
         images[curHpIndex].rectTransform.sizeDelta = newCurHP;  // 변경된 sizeDelta 적용
         StartCoroutine(Shake());//보스체력바 흔들기
     }//UI 표시 함수
