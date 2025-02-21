@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class NetworkGameManager : NetworkBehaviour
 {
     public event Action loadingFinishCallback;
+    public event Action gameEndCallback;
     public event UnityAction<ulong> playerDieCallback;
 
     // 플레이어 로딩 동기화 관련 변수들
@@ -131,6 +132,7 @@ public class NetworkGameManager : NetworkBehaviour
             if (IsServer)
             {
                 FailClientRpc();
+                GameEndClientRpc();
             }
         }
     }
@@ -294,11 +296,25 @@ public class NetworkGameManager : NetworkBehaviour
 
         if (IsServer)
         {
-            BossStateManager Boss = FindAnyObjectByType<BossStateManager>();
-
-            if (Boss != null)
+            if (GameManager.Instance.IsGolem)
             {
-                Boss.bossDieCallback += VictoryClientRpc;
+                BossStateManager Boss = FindAnyObjectByType<BossStateManager>();
+
+                if (Boss != null)
+                {
+                    Boss.bossDieCallback += VictoryClientRpc;
+                    Boss.bossDieCallback += GameEndClientRpc;
+                }
+            }
+            else if (GameManager.Instance.IsMush)
+            {
+                MushStateManager Mush = FindAnyObjectByType<MushStateManager>();
+
+                if (Mush != null)
+                {
+                    Mush.bossDieCallback += VictoryClientRpc;
+                    Mush.bossDieCallback += GameEndClientRpc;
+                }
             }
         }
 
@@ -417,6 +433,13 @@ public class NetworkGameManager : NetworkBehaviour
     private void VictoryClientRpc()
     {
         StartCoroutine(VictoryCoroutine());
+    }
+
+    // 게임 끝났을때, 클라에 호출
+    [ClientRpc]
+    private void GameEndClientRpc()
+    {
+        gameEndCallback?.Invoke();
     }
     #endregion
 }

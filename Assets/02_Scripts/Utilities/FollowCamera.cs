@@ -22,6 +22,7 @@ public class FollowCamera : MonoBehaviour
     private void Awake()
     {
         FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += FindPlayerObjectForClient;
+        FindAnyObjectByType<NetworkGameManager>().gameEndCallback += DieUiOff;
         bossStateManager = FindAnyObjectByType<BossStateManager>();
         mushStateManager = FindAnyObjectByType<MushStateManager>();
     }
@@ -31,7 +32,6 @@ public class FollowCamera : MonoBehaviour
         if(playerManager != null)
             transform.position = playerManager.transform.position;
     }
-
 
     private void FindPlayerObjectForClient()
     {
@@ -75,11 +75,6 @@ public class FollowCamera : MonoBehaviour
         }
 
         StartCoroutine(DieCheckCoroutine());
-
-        Button LeftBtn = GameObject.Find("Left").gameObject.GetComponent<Button>();
-        Button RightBtn = GameObject.Find("Right").gameObject.GetComponent<Button>();
-        LeftBtn.onClick.AddListener(ChangePlayerCamLeft);
-        RightBtn.onClick.AddListener(ChangePlayerCamRight);
     }
 
     // 카메라 바꾸는 함수
@@ -138,13 +133,16 @@ public class FollowCamera : MonoBehaviour
         {
             if (alivePlayer[myIndex] == null)
             {
-                IsDie = true;
-                PlayerDieSetting();
                 break;
             }
 
             yield return checkTime;
         }
+
+        yield return checkTime;
+
+        IsDie = true;
+        PlayerDieSetting();
     }
 
     // 카메라 흔드는 함수
@@ -184,5 +182,11 @@ public class FollowCamera : MonoBehaviour
         Button RightBtn = DieUi.transform.Find("Right").gameObject.GetComponent<Button>();
         LeftBtn.onClick.AddListener(ChangePlayerCamLeft);
         RightBtn.onClick.AddListener(ChangePlayerCamRight);
+    }
+
+    // 게임 끝났을때 ui끄기
+    private void DieUiOff()
+    {
+        DieUi.SetActive(false);
     }
 }
