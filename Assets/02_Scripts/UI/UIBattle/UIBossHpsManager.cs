@@ -14,6 +14,10 @@ public class UIBossHpsManager : MonoBehaviour
     public RectTransform rectTransform = null; // 흔들릴 RectTransform
     public float shakeAmount = 3f;     // 흔드는 강도
     public float shakeDuration = 0.5f;  // 흔드는 시간
+    private const int maxHpIndex = 0;
+    private const int curHpIndex = 1;
+    private const int bossImgBackgroundIndex = 2;
+    private const int bossImgIndex = 3;
     private void Awake()
     {
         // rectTransform을 이 오브젝트의 RectTransform으로 설정
@@ -52,10 +56,10 @@ public class UIBossHpsManager : MonoBehaviour
     public void HpBarUIUpdate()
     {
         textMeshPro.text = (curHp + "/" + maxHp); // 텍스트 업데이트 "현재체력/최대체력"
-        Vector2 newCurHP = images[0].rectTransform.sizeDelta;
+        Vector2 newCurHP = images[curHpIndex].rectTransform.sizeDelta;
         float hpRatio = (float)curHp / (float)maxHp;
         newCurHP.x = hpRatio * newCurHP.x;  // X 값만 변경
-        images[images.Count - 1].rectTransform.sizeDelta = newCurHP;  // 변경된 sizeDelta 적용
+        images[curHpIndex].rectTransform.sizeDelta = newCurHP;  // 변경된 sizeDelta 적용
         StartCoroutine(Shake());//보스체력바 흔들기
     }//UI 표시 함수
     IEnumerator Shake()
