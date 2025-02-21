@@ -7,7 +7,7 @@ using UnityEngine;
 public class ProjectileSkill : AttackSkill
 {
     [Header("Projectile Skill")]
-    public GameObject projectilePrefab = null;
+    //public GameObject projectilePrefab = null;
 
     public float projectileDuration = 3f;
     public float projectileSpeed = 1f;
@@ -17,19 +17,30 @@ public class ProjectileSkill : AttackSkill
         // 발사체 스폰 후 정면 방향으로 발사.
         base.UseSkill(_player);
 
-        GameObject projectileObj = Instantiate
-            (
-            projectilePrefab, 
-            _player.RangeAttackStartTr.position, 
-            _player.transform.rotation
-            );
+        PlayerProjectileManager projectileManager = _player.GetComponent<PlayerProjectileManager>();
 
-        if(projectileObj != null)
+        if(projectileManager == null)
         {
-            var projectile = projectileObj.GetComponent<Projectile>();
-
-            projectile.Init(_player, damage, aggro);
-            projectile.ShootProjectile(projectileDuration, projectileSpeed);
+            Debug.LogWarning("Projectile Manager is Null!");
+            return;
         }
+
+        projectileManager.ShootProjectile(damage, aggro, projectileDuration, projectileSpeed
+            , isBackattackEnable, backAttackTimes);
+
+        //GameObject projectileObj = Instantiate
+        //    (
+        //    projectilePrefab, 
+        //    _player.RangeAttackStartTr.position, 
+        //    _player.transform.rotation
+        //    );
+
+        //if(projectileObj != null)
+        //{
+        //    var projectile = projectileObj.GetComponent<Projectile>();
+
+        //    projectile.Init(_player, damage, aggro);
+        //    projectile.ShootProjectile(projectileDuration, projectileSpeed);
+        //}
     }
 }
