@@ -14,10 +14,12 @@ public class UIBattleUIManager : MonoBehaviour
     private FloatingJoystick moveJoystick = null;
     [SerializeField]
     private PlayerManager playerManager = null;
+
     private PlayerHitImpact ui_PlayerHitImpact = null;
     private UIHpsManager ui_PlayerHp = null;
     private UIBossHpsManager ui_BossHp = null;
     private UIWarningManager ui_disconnect = null;
+
     public List<UI_GameResultManager> ui_GameResultManager = new List<UI_GameResultManager>();
     public VolumeControl ui_VolumeControl = null;
     public List<Button> ui_VolumeControlButtons = new List<Button>();

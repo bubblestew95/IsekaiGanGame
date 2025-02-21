@@ -48,9 +48,9 @@ public class PlayerManager : MonoBehaviour
     private PlayerNetworkManager playerNetworkManager = null;
     private PlayerProjectileManager projectileManager = null;
 
-            #endregion
+    #endregion
 
-        #endregion
+    #endregion
 
     #endregion
 

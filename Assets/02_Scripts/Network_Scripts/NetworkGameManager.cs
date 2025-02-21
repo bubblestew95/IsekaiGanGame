@@ -7,6 +7,8 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+using EnumTypes;
+
 public class NetworkGameManager : NetworkBehaviour
 {
     public event Action loadingFinishCallback;
@@ -372,8 +374,6 @@ public class NetworkGameManager : NetworkBehaviour
         }
     }
 
-
-
     #endregion
 
     #region [ClientRpc]
@@ -397,6 +397,25 @@ public class NetworkGameManager : NetworkBehaviour
     [ClientRpc]
     private void PlayerDieClientRpc(ulong _clientId)
     {
+        foreach(var playerObj in Players)
+        {
+            if(playerObj.GetComponent<PlayerManager>().PlayerNetworkManager.OwnerClientId
+                == _clientId)
+            {
+                if(GameManager.Instance.IsGolem)
+                {
+                    GameManager.Instance.BattleLog.SetKillLog(BossType.Golem, 
+                        playerObj.GetComponent<PlayerManager>().PlayerData.characterClass);
+                }
+                else
+                {
+                    GameManager.Instance.BattleLog.SetKillLog(BossType.Mushroom,
+                        playerObj.GetComponent<PlayerManager>().PlayerData.characterClass);
+                }
+                    
+            }
+        }
+
         if (IsServer)
         {
             playerDieCallback?.Invoke(_clientId);
