@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
-using static BossStateManager;
 
 // 보스의 상태를 관리
 public class MushStateManager : NetworkBehaviour
@@ -40,6 +39,7 @@ public class MushStateManager : NetworkBehaviour
     public MushBT mushBT;
     public GameObject boss;
     public FollowCamera followCam;
+    public MushHitMat mushHitMat;
 
 
     // 프로퍼티
@@ -81,6 +81,9 @@ public class MushStateManager : NetworkBehaviour
 
         // 클라이언트 모두 보스 UI설정
         UpdateBossUIClientRpc(_damage);
+
+        // 데미지 피격 mat 설정
+        DamageMatClientRpc(_clientId);
 
         // 클라이언트 모두 보스 브금 설정
         ChangeExcitedLevelClientRpc();
@@ -266,6 +269,16 @@ public class MushStateManager : NetworkBehaviour
         return hp;
     }
 
+    // 맞는 오디오 재생
+    [ClientRpc]
+    private void GetHitSoundClientRpc(ulong _clientId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == _clientId)
+        {
+            MushAudioManager.Instance.AudioPlay(MushAudioManager.Instance.GetHit);
+        }
+    }
+
     #endregion
 
     #region [Cam]
@@ -280,13 +293,18 @@ public class MushStateManager : NetworkBehaviour
         }
     }
 
-    // 맞는 오디오 재생
+
+    #endregion
+
+    #region [Material]
+
+    // 데미지 히트 mat 실행
     [ClientRpc]
-    private void GetHitSoundClientRpc(ulong _clientId)
+    private void DamageMatClientRpc(ulong _clientId)
     {
         if (NetworkManager.Singleton.LocalClientId == _clientId)
         {
-            MushAudioManager.Instance.AudioPlay(MushAudioManager.Instance.GetHit);
+            StartCoroutine(mushHitMat.ChangeMat());
         }
     }
 
@@ -419,6 +437,8 @@ public class MushStateManager : NetworkBehaviour
         bgmController = FindFirstObjectByType<BgmController>();
         mushBT = FindAnyObjectByType<MushBT>();
         followCam = FindAnyObjectByType<FollowCamera>();
+        mushHitMat = FindFirstObjectByType<MushHitMat>();
+
 
         // ui초기 설정
         bossHpUI.SetMaxHp(maxHp);

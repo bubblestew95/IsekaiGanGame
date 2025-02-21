@@ -56,6 +56,7 @@ public class BossStateManager : NetworkBehaviour
     public GameObject bossSkin;
     public BoxCollider hitCollider;
     public FollowCamera followCam;
+    public HitMaterial hitMaterial;
 
     private void Awake()
     {
@@ -80,7 +81,7 @@ public class BossStateManager : NetworkBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            BossDamageReceiveServerRpc(100, 100, 0);
+            BossDamageReceiveServerRpc(100, 1000, 0);
         }
     }
 
@@ -109,6 +110,9 @@ public class BossStateManager : NetworkBehaviour
 
         // 클라이언트 모두 보스 피격 파티클 실행
         DamageParticleClientRpc(_damage, _clientId);
+
+        // 데미지 피격 mat 설정
+        DamageMatClientRpc(_clientId);
 
         // 클라이언트 모두 보스 UI설정
         UpdateBossUIClientRpc(_damage);
@@ -188,6 +192,17 @@ public class BossStateManager : NetworkBehaviour
         {
             // 카메라 흔들리게 설정
             StartCoroutine(followCam.ShakeCam());
+        }
+    }
+
+    // 데미지 히트 mat 실행
+    [ClientRpc]
+    private void DamageMatClientRpc(ulong _clientId)
+    {
+        // 데미지 폰트
+        if (NetworkManager.Singleton.LocalClientId == _clientId)
+        {
+            StartCoroutine(hitMaterial.ChangeMat());
         }
     }
     #endregion
@@ -477,6 +492,7 @@ public class BossStateManager : NetworkBehaviour
         bgmController = FindFirstObjectByType<BgmController>();
         bossBT = FindAnyObjectByType<BossBT>();
         followCam = FindAnyObjectByType<FollowCamera>();
+        hitMaterial = FindFirstObjectByType<HitMaterial>();
 
         // ui초기 설정
         bossHpUI.SetMaxHp(maxHp);
