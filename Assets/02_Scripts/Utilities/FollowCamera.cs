@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FollowCamera : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class FollowCamera : MonoBehaviour
     private MushStateManager mushStateManager = null;
     private int myIndex;
     private bool IsDie = false;
+    private GameObject DieUi;
 
     // 카메라 흔들기 관련
     public Transform Cam;
@@ -73,6 +75,11 @@ public class FollowCamera : MonoBehaviour
         }
 
         StartCoroutine(DieCheckCoroutine());
+
+        Button LeftBtn = GameObject.Find("Left").gameObject.GetComponent<Button>();
+        Button RightBtn = GameObject.Find("Right").gameObject.GetComponent<Button>();
+        LeftBtn.onClick.AddListener(ChangePlayerCamLeft);
+        RightBtn.onClick.AddListener(ChangePlayerCamRight);
     }
 
     // 카메라 바꾸는 함수
@@ -132,6 +139,8 @@ public class FollowCamera : MonoBehaviour
             if (alivePlayer[myIndex] == null)
             {
                 IsDie = true;
+                PlayerDieSetting();
+                break;
             }
 
             yield return checkTime;
@@ -160,5 +169,20 @@ public class FollowCamera : MonoBehaviour
         }
 
         Cam.localPosition = originPos;
+    }
+
+    // 플레이어 죽었을때 UI 키는 함수
+    private void PlayerDieSetting()
+    {
+        DieUi = GameObject.Find("ObserverMode");
+        DieUi.transform.GetChild(0).gameObject.SetActive(true);
+        DieUi.transform.GetChild(1).gameObject.SetActive(true);
+        DieUi.transform.GetChild(2).gameObject.SetActive(true);
+        DieUi.transform.GetChild(3).gameObject.SetActive(true);
+
+        Button LeftBtn = DieUi.transform.Find("Left").gameObject.GetComponent<Button>();
+        Button RightBtn = DieUi.transform.Find("Right").gameObject.GetComponent<Button>();
+        LeftBtn.onClick.AddListener(ChangePlayerCamLeft);
+        RightBtn.onClick.AddListener(ChangePlayerCamRight);
     }
 }
