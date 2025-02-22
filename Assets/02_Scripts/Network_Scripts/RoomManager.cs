@@ -15,6 +15,7 @@ using Unity.Collections;
 using System.Linq;
 using Unity.Services.Matchmaker.Models;
 using Unity.IO.LowLevel.Unsafe;
+using System.Collections;
 
 public class RoomManager : NetworkBehaviour
 {
@@ -549,17 +550,17 @@ public class RoomManager : NetworkBehaviour
         // 새로운 플레이어가 입장하면 기존 캐릭터 데이터 동기화
         if (changes.PlayerJoined.Changed)
         {
-            foreach (var player in currentLobby.Players)
-            {
-                if (player.Data.ContainsKey("CharacterSelection"))
-                {
-                    if (int.TryParse(player.Data["CharacterSelection"].Value, out int selectedCharacter))
-                    {
-                        Debug.Log($"[RoomManager] 기존 플레이어 {player.Id} - 선택된 캐릭터: {selectedCharacter}");
+            //foreach (var player in currentLobby.Players)
+            //{
+            //    if (player.Data.ContainsKey("CharacterSelection"))
+            //    {
+            //        if (int.TryParse(player.Data["CharacterSelection"].Value, out int selectedCharacter))
+            //        {
+            //            Debug.Log($"[RoomManager] 기존 플레이어 {player.Id} - 선택된 캐릭터: {selectedCharacter}");
                         
-                    }
-                }
-            }
+            //        }
+            //    }
+            //}
         }
 
         // 플레이어 상태 변경 감지 (Ready 상태 등)
@@ -571,6 +572,7 @@ public class RoomManager : NetworkBehaviour
                 int playerId = playerData.Key;
                 var playerChanges = playerData.Value;
                 string playerIdString = playerData.Key.ToString();
+                string playerUUID = AuthenticationService.Instance.PlayerId;
 
                 if (playerChanges.ChangedData.Changed)
                 {
@@ -615,8 +617,8 @@ public class RoomManager : NetworkBehaviour
                         if (!string.IsNullOrEmpty(rawValue) && int.TryParse(rawValue, out int selectedCharacter))
                         {
                             Debug.Log($"[OnLobbyChanged] Player {playerId} 캐릭터 선택 변경 감지! 선택한 캐릭터: {selectedCharacter}");
-
-                            UpdateCharacterSelectionClientRpc((ulong)playerId, selectedCharacter);
+                            
+                            UpdateCharacterSelectionClientRpc(playerUUID, selectedCharacter);
                         }
                         else
                         {
@@ -644,6 +646,8 @@ public class RoomManager : NetworkBehaviour
                 Debug.LogWarning("[RoomManager] 현재 로비 정보가 존재하지 않음.");
             }
         }
+        
+        Debug.Log($"[DEBUG] OnLobbyChanged 실행 후 characterSelections 상태: {string.Join(", ", Lobby_CharacterSelector.Instance.characterSelections.Select(kv => kv.Key + "=>" + kv.Value))}");
     }
 
     // 네트워크 연결 상태 변경 감지
@@ -818,13 +822,19 @@ public class RoomManager : NetworkBehaviour
 
 
     [ClientRpc]
-    private void UpdateCharacterSelectionClientRpc(ulong playerId, int selectedCharacter)
+    private void UpdateCharacterSelectionClientRpc(string playerId, int selectedCharacter)
     {
         Debug.Log($"[Client] Player {playerId} 선택한 캐릭터: {selectedCharacter}");
 
         if (Lobby_CharacterSelector.Instance != null)
         {
+            Debug.Log($"[Client] characterSelections 업데이트 전 상태: {string.Join(", ", Lobby_CharacterSelector.Instance.characterSelections.Select(kv => kv.Key + "=>" + kv.Value))}");
+
+            // characterSelections 동기화
             Lobby_CharacterSelector.Instance.UpdateCharacterSelection(playerId, selectedCharacter);
+            Lobby_CharacterSelector.Instance.UpdateCharacterUI();
+
+            Debug.Log($"[Client] characterSelections 업데이트 후 상태: {string.Join(", ", Lobby_CharacterSelector.Instance.characterSelections.Select(kv => kv.Key + "=>" + kv.Value))}");
         }
         else
         {
@@ -1036,6 +1046,7 @@ public class RoomManager : NetworkBehaviour
 
         Debug.Log($"[PlayerListManager] 최신 로비 정보 확인 - 총 {currentLobby.Players.Count}명 존재");
 
+
         foreach (var player in currentLobby.Players)
         {
             string playerName = "알 수 없음";
@@ -1063,7 +1074,6 @@ public class RoomManager : NetworkBehaviour
                 {
                     string characterSelectionValue = player.Data["CharacterSelection"].Value;
                     
-
                     if (int.TryParse(characterSelectionValue, out int charIndex))
                     {
                         selectedCharacter = charIndex;
@@ -1099,6 +1109,9 @@ public class RoomManager : NetworkBehaviour
                 PlayerListManager.Instance.UpdatePlayerCharacter(player.Id, selectedCharacter);
             }
         }
+        // 캐릭터 선택 UI 동기화
+        Debug.Log("[PlayerListManager] 방 입장 후 캐릭터 UI 동기화 실행");
+        Lobby_CharacterSelector.Instance?.UpdateCharacterUI();
     }
 
 

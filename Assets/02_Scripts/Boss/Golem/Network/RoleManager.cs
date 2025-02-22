@@ -42,9 +42,15 @@ public class RoleManager : NetworkBehaviour
         }
 
         string playerId = AuthenticationService.Instance.PlayerId;
-        selectedCharacter = characterIndex.ToString();
 
-        Debug.Log($"[RoleManager] 플레이어 {playerId} -> 캐릭터 {selectedCharacter} 선택");
+        if (characterIndex == -1)
+        {
+            Debug.Log($"[RoleManager] 플레이어 {playerId} 캐릭터 선택 해제 (-1)");
+        }
+        else
+        {
+            Debug.Log($"[RoleManager] 플레이어 {playerId} -> 캐릭터 {characterIndex} 선택");
+        }
 
         try
         {
@@ -52,18 +58,19 @@ public class RoleManager : NetworkBehaviour
             {
                 Data = new Dictionary<string, PlayerDataObject>
                 {
-                    { "CharacterSelection", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, selectedCharacter) }
+                    { "CharacterSelection", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, characterIndex.ToString()) }
                 }
             };
 
             await LobbyService.Instance.UpdatePlayerAsync(currentLobbyId, playerId, options);
-            Debug.Log($"[RoleManager] 플레이어 {playerId} 캐릭터 선택 업데이트 완료: {selectedCharacter}");
+            Debug.Log($"[RoleManager] 플레이어 {playerId} 캐릭터 선택 업데이트 완료: {characterIndex}");
         }
         catch (LobbyServiceException ex)
         {
             Debug.LogError($"[RoleManager] 캐릭터 선택 업데이트 실패: {ex.Message}");
         }
     }
+
 
     // 플레이어 역활과 id를 매칭해서 저장하는 함수
     [ServerRpc(RequireOwnership = false)]

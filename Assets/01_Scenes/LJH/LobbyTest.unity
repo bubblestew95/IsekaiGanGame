@@ -285,6 +285,10 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3803736299
       objectReference: {fileID: 0}
+    - target: {fileID: 8322631880830459007, guid: 2c3b4b44c561d204987227d0d14da915, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 94f5cbb5c3f26c84fa989817fb71d975, type: 2}
     - target: {fileID: 8636361346487574334, guid: 2c3b4b44c561d204987227d0d14da915, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -2342,7 +2346,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 156782906}
   m_HandleRect: {fileID: 156782905}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3911,6 +3915,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3451853758380156579, guid: ade512d1f4c03314c9f8baabb487f1fc, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 3e931b61b9846f445bb6747eeaee47b6, type: 2}
     - target: {fileID: 6167981279900202186, guid: ade512d1f4c03314c9f8baabb487f1fc, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -5372,7 +5380,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 348654884}
   m_HandleRect: {fileID: 348654883}
   m_Direction: 0
-  m_Value: 0.4999991
+  m_Value: 0.49999955
   m_Size: 0.9149999
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -6481,7 +6489,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 454640061}
   m_HandleRect: {fileID: 454640060}
   m_Direction: 0
-  m_Value: 0.5000009
+  m_Value: 0.49999955
   m_Size: 0.9190477
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -7189,6 +7197,7 @@ MonoBehaviour:
   contentRect: {fileID: 1959464307}
   gameSceneName: GolemSceneTest
   JobSelect_Panel: {fileID: 550021654}
+  bossSelectPanel: {fileID: 0}
 --- !u!4 &797183973
 Transform:
   m_ObjectHideFlags: 0
@@ -7812,6 +7821,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9563318, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 8a1c5fdd87f93d34097c487f20a106e0, type: 2}
     - target: {fileID: 752347360854626866, guid: 62fc4629625d3ec46a9fa351a642cd44, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -11474,6 +11487,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9563318, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 5a27ee14bb8f3d9439c150eb9131f469, type: 2}
     - target: {fileID: 5880042934171809441, guid: e301d76eb3fa17c4bb043554d86312b3, type: 3}
       propertyPath: m_IsActive
       value: 0

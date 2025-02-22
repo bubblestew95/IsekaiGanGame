@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using Unity.Netcode;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Services.Authentication;
+using Unity.Services.Lobbies.Models;
 
 public class Lobby_CharacterSelector : NetworkBehaviour
 {
@@ -10,11 +12,11 @@ public class Lobby_CharacterSelector : NetworkBehaviour
 
     public RawImage[] characterImages;  // 캐릭터 미리보기 UI
     public Transform[] characterModels; // 3D 캐릭터 모델
-    public List<Button> characterButtons;   // UI 버튼 (각 슬롯)
+    public Button[] characterButtons;   // UI 버튼 (각 슬롯)
     public Button readyButton;
     private bool isReady = false; // Ready 상태 저장
 
-    private Dictionary<int, string> characterSelections = new Dictionary<int, string>(); // <캐릭터 번호, 플레이어 ID>
+    public Dictionary<int, string> characterSelections = new Dictionary<int, string>(); // <캐릭터 번호, 플레이어 ID>
 
 
     private void Awake()
@@ -28,77 +30,119 @@ public class Lobby_CharacterSelector : NetworkBehaviour
             Destroy(gameObject);
         }
     }
-    private void Start()
-    {
-        UpdateCharacterUI();
-    }
 
     // 네트워크 데이터 기반으로 UI 업데이트
     public void UpdateCharacterUI()
     {
         Debug.Log("[Lobby_CharacterSelector] UI 업데이트 실행");
-        string playerId = Unity.Services.Authentication.AuthenticationService.Instance.PlayerId;
 
-        for (int i = 0; i < characterButtons.Count; i++)
+        string localPlayerId = AuthenticationService.Instance.PlayerId;
+        Debug.Log($"[Lobby_CharacterSelector] localPlayerId 확인: {localPlayerId}");
+
+        int localSelectedCharacter = -1;
+
+        // 현재 플레이어가 선택한 캐릭터 찾기
+        foreach (var entry in characterSelections)
         {
-            Button button = characterButtons[i];
-            string ownerId = characterSelections.ContainsKey(i) ? characterSelections[i] : null;
+            Debug.Log($"[DEBUG] 현재 characterSelections: {entry.Key} => {entry.Value}");
 
-            if (ownerId == playerId)
+            if (entry.Value == localPlayerId)
             {
-                // 본인이 선택한 캐릭터 (불투명 1.0, 선택 가능)
-                SetButtonState(button, 1.0f, false);
-                Debug.Log($"[Lobby_CharacterSelector] Player {playerId}가 선택한 캐릭터 {i} → 불투명 (1.0) / 선택 가능");
+                localSelectedCharacter = entry.Key;
+                Debug.Log($"[DEBUG] 본인이 선택한 캐릭터 확인 완료: {localSelectedCharacter}");
+                break;
             }
-            else if (ownerId == null)
+        }
+        if (!IsHost)
+        {
+            Debug.Log($"[ClientDEBUG] 현재 characterSelections 상태: {string.Join(", ", characterSelections.Select(kv => kv.Key + "=>" + kv.Value))}");
+        }
+
+        for (int i = 0; i < characterButtons.Length; i++)
+        {
+            if (!IsHost)
             {
-                // 아무도 선택하지 않은 캐릭터
-                if (RoleManager.Instance.SelectedCharacter == "-1")
+                Debug.Log($"[ClientDEBUG] 시작 확인 : {i}");
+            }
+            if (characterSelections.ContainsKey(i))
+            {
+                if(!IsHost)
                 {
-                    // 본인이 선택하지 않은 경우 (불투명 1.0, 선택 가능)
-                    SetButtonState(button, 1.0f, false);
+                    Debug.Log($"[ClientDEBUG]characterSelections[{i}] 확인 : {characterSelections[i]}");
+                }
+                string ownerId = characterSelections[i];
+                Debug.Log($"[Lobby_CharacterSelector] ownerId 확인: {ownerId}, localPlayerId: {localPlayerId}");
+
+                if (ownerId == localPlayerId)
+                {
+                    // 본인이 선택한 캐릭터 → 불투명 (1.0)
+                    SetButtonState(characterButtons[i], 1.0f, false);
+                    SetImageState(characterImages[i], 1.0f);
+                    Debug.Log($"[Lobby_CharacterSelector] 본인이 선택한 캐릭터 {i} → 불투명 (1.0)");
                 }
                 else
                 {
-                    // 본인이 다른 캐릭터를 선택한 경우 (반투명 0.5, 선택 가능)
-                    SetButtonState(button, 0.5f, false);
+                    // 다른 플레이어가 선택한 캐릭터 → 검은색 반투명 (0.8)
+                    SetButtonState(characterButtons[i], 0.8f, true);
+                    SetImageState(characterImages[i], 0.8f);
+                    Debug.Log($"[Lobby_CharacterSelector] 다른 플레이어가 선택한 캐릭터 {i} → 검은색 반투명 (0.8)");
                 }
-                Debug.Log($"[Lobby_CharacterSelector] 선택 가능한 캐릭터 {i} → {(RoleManager.Instance.SelectedCharacter == "-1" ? "불투명 (1.0)" : "반투명 (0.5)")} / 선택 가능");
             }
             else
             {
-                // 다른 플레이어가 선택한 캐릭터 (검은색 반투명 0.8, 선택 불가능)
-                SetButtonState(button, 0.8f, true);
-                Debug.Log($"[Lobby_CharacterSelector] Player {ownerId}가 선택한 캐릭터 {i} → 검은색 반투명 (0.8) / 선택 불가");
+                // 선택되지 않은 캐릭터 → 반투명 (0.5)
+                SetButtonState(characterButtons[i], 0.5f, false);
+                SetImageState(characterImages[i], 0.5f);
+                Debug.Log($"[Lobby_CharacterSelector] 선택 가능한 캐릭터 {i} → 반투명 (0.5)");
             }
         }
+
+        //if (localSelectedCharacter == -1)
+        //{
+        //    Debug.Log("[Lobby_CharacterSelector] 본인이 선택 해제, 모든 캐릭터를 기본 상태(0.5)로 변경");
+        //    for (int i = 0; i < characterButtons.Length; i++)
+        //    {
+        //        SetButtonState(characterButtons[i], 1.0f, false);
+        //        SetImageState(characterImages[i], 1.0f);
+        //    }
+        //}
     }
 
-    // 클라이언트에서 UI를 업데이트하는 메서드 추가
-    public void UpdateCharacterSelection(ulong playerId, int selectedCharacter)
+
+
+
+
+    public void UpdateCharacterSelection(string playerId, int selectedCharacter)
     {
-        string playerIdStr = playerId.ToString();
-        Debug.Log($"[Lobby_CharacterSelector] Player {playerIdStr} 선택한 캐릭터: {selectedCharacter}");
+        Debug.Log($"[Lobby_CharacterSelector] Player {playerId} 선택한 캐릭터: {selectedCharacter}");
 
         // 기존 선택 해제
         foreach (var key in characterSelections.Keys.ToList())
         {
-            if (characterSelections[key] == playerIdStr)
+            if (characterSelections[key] == playerId)
             {
-                characterSelections.Remove(key);
+                characterSelections.Remove(key); // 기존 선택 제거
             }
         }
 
-        // 새로운 선택 저장
-        characterSelections[selectedCharacter] = playerIdStr;
+        if (selectedCharacter == -1)
+        {
+            Debug.Log($"[Lobby_CharacterSelector] Player {playerId} 캐릭터 선택 해제 (-1)");
+        }
+        else
+        {
+            // 새로운 선택 저장
+            characterSelections[selectedCharacter] = playerId;
+            Debug.Log($"새로운 선택 characterSelections[{selectedCharacter}]: {characterSelections[selectedCharacter]}");
+        }
 
-        // UI 갱신
+        // UI 강제 갱신
+        Debug.Log("[Lobby_CharacterSelector] UI 갱신 실행");
         UpdateCharacterUI();
-        Debug.Log($"[Lobby_CharacterSelector] UI 업데이트 완료 - 현재 선택 상태: {characterSelections.Count}");
     }
 
 
-    // 버튼 상태 설정
+
     // 버튼 상태 설정
     private void SetButtonState(Button button, float alpha, bool disable = false)
     {
@@ -120,22 +164,38 @@ public class Lobby_CharacterSelector : NetworkBehaviour
 
         Debug.Log($"[Lobby_CharacterSelector] 버튼 상태 변경됨: Alpha={alpha}, Interactable={button.interactable}");
     }
+    private void SetImageState(RawImage image, float alpha, bool isDisabled = false)
+    {
+        Color newColor = image.color;
+        newColor.a = alpha;
+
+        if (isDisabled)
+        {
+            // 다른 플레이어가 선택한 캐릭터 → 검은색 반투명 처리
+            newColor = Color.black * 0.8f;
+        }
+
+        image.color = newColor;
+        Debug.Log($"[Lobby_CharacterSelector] 이미지 상태 변경됨: Alpha={alpha}");
+    }
 
 
     public void SelectCharacter(int characterIndex)
     {
-        string playerId = Unity.Services.Authentication.AuthenticationService.Instance.PlayerId;
+        string playerId = AuthenticationService.Instance.PlayerId;
 
         if (characterSelections.ContainsKey(characterIndex) && characterSelections[characterIndex] == playerId)
         {
-            // 본인이 선택한 캐릭터를 다시 선택 → 선택 해제
+            // 본인이 선택한 캐릭터를 다시 선택 -> 선택 해제
             RoleManager.Instance.SelectCharacter(-1);
+            //characterSelections.Remove(characterIndex); // 즉시 반영
             Debug.Log($"[Lobby_CharacterSelector] Player {playerId} 캐릭터 선택 해제");
         }
         else
         {
             // 새로운 캐릭터 선택
             RoleManager.Instance.SelectCharacter(characterIndex);
+            //characterSelections[characterIndex] = playerId; // 즉시 반영
             Debug.Log($"[Lobby_CharacterSelector] Player {playerId}가 캐릭터 {characterIndex} 선택");
         }
 
