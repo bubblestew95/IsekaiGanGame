@@ -41,6 +41,8 @@ public class BattleLog : MonoBehaviour
     private Dictionary<CharacterClass, Sprite> CharacterImageDic = null;
     private Dictionary<BehaviourLogType, Sprite> behaviourImageDic = null;
 
+    private Coroutine LogCoroutine = null;
+
     /// <summary>
     /// 사망 로그를 출력하는 함수
     /// </summary>
@@ -77,6 +79,13 @@ public class BattleLog : MonoBehaviour
     /// </summary>
     public void ShowLog()
     {
+        // 로그 출력 코루틴이 아직 실행중이라면 코루틴을 정지한 후 초기화한다.
+        if (LogCoroutine != null)
+        {
+            StopCoroutine(LogCoroutine);
+            LogCoroutine = null;
+        }
+
         // 로그를 출력한다.
         {
             image_Behaviour.gameObject.SetActive(true);
@@ -85,7 +94,7 @@ public class BattleLog : MonoBehaviour
         }
 
         // 일정 시간 후 로그를 다시 종료한다.
-        StartCoroutine(HideLogCoroutine(showLogDuration));
+        LogCoroutine = StartCoroutine(HideLogCoroutine(showLogDuration));
     }
 
     private IEnumerator HideLogCoroutine(float _duration)

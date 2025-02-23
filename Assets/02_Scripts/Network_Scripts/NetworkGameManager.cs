@@ -412,7 +412,10 @@ public class NetworkGameManager : NetworkBehaviour
                     GameManager.Instance.BattleLog.SetKillLog(BossType.Mushroom,
                         playerObj.GetComponent<PlayerManager>().PlayerData.characterClass);
                 }
-                    
+
+                GameManager.Instance.BattleLog.ShowLog();
+
+                break;
             }
         }
 
