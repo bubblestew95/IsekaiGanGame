@@ -1,6 +1,5 @@
 using Unity.Netcode;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class GameManager : MonoBehaviour
 {
@@ -37,6 +36,7 @@ public class GameManager : MonoBehaviour
     private BossStateManager bossStateManager = null;
     private MushStateManager mushStateManager = null;
     private NetworkGameManager networkGameManager = null;
+    private BattleLog battleLog = null;
 
     #endregion
 
@@ -50,6 +50,11 @@ public class GameManager : MonoBehaviour
     public bool IsPCMode
     {
         get { return isPCMode; }
+    }
+
+    public BattleLog BattleLog
+    {
+        get { return battleLog; }
     }
 
     #endregion
@@ -139,7 +144,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     public void ApplyDamageToPlayer
         (PlayerManager _damageReceiver, int _damage)
     {
@@ -176,11 +180,6 @@ public class GameManager : MonoBehaviour
         _player.BattleUIManager.UpdatePlayerHp();
     }
 
-    private void UpdateBossHpUI(PlayerManager _player)
-    {
-        _player.BattleUIManager.UpdateBossHp();
-    }
-
     #endregion
 
     #region Unity Callbacks
@@ -198,6 +197,8 @@ public class GameManager : MonoBehaviour
         bossStateManager = FindAnyObjectByType<BossStateManager>();
         mushStateManager = FindAnyObjectByType<MushStateManager>();
         networkGameManager = FindAnyObjectByType<NetworkGameManager>();
+
+        battleLog = FindAnyObjectByType<BattleLog>(FindObjectsInactive.Include);
     }
 
     private void Start()
@@ -207,6 +208,7 @@ public class GameManager : MonoBehaviour
             // 캐릭터 종류에 따라서 인덱스를 다르게 두어서 각각 다른 BGM을 재생시킨다.
             bgmController.SetCurCharacterIndex(0);
         }
+
     }
 }
 

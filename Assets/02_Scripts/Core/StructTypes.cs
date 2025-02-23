@@ -32,4 +32,25 @@ namespace StructTypes
 
         public Quaternion skillUsedRotation;
     }
+
+    [Serializable]
+    public struct BossImageData
+    {
+        public BossType bossType;
+        public Sprite bossImage;
+    }
+
+    [Serializable]
+    public struct PlayerImageData
+    {
+        public CharacterClass characterClass;
+        public Sprite playerImage;
+    }
+
+    [Serializable]
+    public struct BehaviourImageData
+    {
+        public BehaviourLogType behaviourType;
+        public Sprite behaviourImage;
+    }
 }
