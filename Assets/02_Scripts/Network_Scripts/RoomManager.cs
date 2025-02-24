@@ -542,7 +542,7 @@ public class RoomManager : NetworkBehaviour
         // 방 인원 변화 감지 (UI 갱신)
         if (changes.PlayerJoined.Changed || changes.PlayerLeft.Changed)
         {
-            Debug.Log("[RoomManager] 방 인원 변경 감지 - Room UI 업데이트");
+            Debug.Log("[RoomManager] 방 인원 변경 감지 - Room UI 업데이트.");
             UpdateRoomUI(currentLobby);
             UpdateRoomUICallClientRpc(currentLobby.Players.Count);
         }
