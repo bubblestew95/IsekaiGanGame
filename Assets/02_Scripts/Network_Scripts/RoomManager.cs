@@ -1104,7 +1104,7 @@ public class RoomManager : NetworkBehaviour
             }
             else
             {
-                Debug.Log($"[PlayerListManager] 기존 플레이어 상태 업데이트: {playerName} -> {status} / 선택한 캐릭터: {selectedCharacter}");
+                Debug.Log($"[PlayerListManager] [UI]기존 플레이어 상태 업데이트: {playerName} -> {status} / 선택한 캐릭터: {selectedCharacter}");
                 PlayerListManager.Instance.UpdatePlayerStatus(player.Id, status);
                 PlayerListManager.Instance.UpdatePlayerCharacter(player.Id, selectedCharacter);
             }
