@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: WarriorSkill_C_Tackle
   m_EditorClassIdentifier: 
   skillSlot: 3
-  coolTime: 4
+  coolTime: 10
   damage: 100
-  aggro: 5
+  aggro: 8
   isBackattackEnable: 0
   backAttackTimes: 3
   moveSpeed: 50

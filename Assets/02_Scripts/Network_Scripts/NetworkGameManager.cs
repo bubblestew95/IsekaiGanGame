@@ -173,7 +173,7 @@ public class NetworkGameManager : NetworkBehaviour
 
         if (IsServer)
         {
-            NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene("MushRoomSceneTest", LoadSceneMode.Single);
         }
     }
 
@@ -198,9 +198,13 @@ public class NetworkGameManager : NetworkBehaviour
 
     private void ClickSucessBtn()
     {
-        if (IsServer)
+        if (IsServer && GameManager.Instance.IsMush)
         {
             NetworkManager.Singleton.SceneManager.LoadScene("LobbyTest", LoadSceneMode.Single);
+        }
+        else if (IsServer)
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene("MushRoomSceneTest", LoadSceneMode.Single);
         }
     }
 

@@ -141,7 +141,8 @@ public class UI_GameResultManager : MonoBehaviour
             {
                 if (isGood == true)
                 {
-                    button.transform.GetChild(0).GetComponent<TMP_Text>().text = "Go Lobby";
+                    // button.transform.GetChild(0).GetComponent<TMP_Text>().text = "Go Lobby";
+                    button.transform.GetChild(0).GetComponent<TMP_Text>().text = "Next";
                 }
                 else
                 {

@@ -3864,6 +3864,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  playerObject: {fileID: 0}
 --- !u!114 &1831748017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4350,7 +4351,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2089999295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10523,13 +10524,14 @@ MonoBehaviour:
     m_InternalValue: -1
   curHp:
     m_InternalValue: -1
+  maxHp:
+    m_InternalValue: -1
   bestAggro:
     m_InternalValue: -1
   allPlayers: []
   alivePlayers: []
   aggroPlayer: {fileID: 0}
   randomPlayer: {fileID: 0}
-  maxHp: 0
   reduceAggro: 0
   reduceAggroTime: 0
   hpCheck: 
