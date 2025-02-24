@@ -421,7 +421,7 @@ public class MushStateManager : NetworkBehaviour
         // 초기 값 설정
         if (IsServer)
         {
-            maxHp.Value = 3000;
+            maxHp.Value = 30000;
         }
         reduceAggro = 5f;
         reduceAggroTime = 10f;
@@ -459,9 +459,6 @@ public class MushStateManager : NetworkBehaviour
         mushHitMat = FindFirstObjectByType<MushHitMat>();
 
 
-        // ui초기 설정
-        bossHpUI.SetMaxHp(maxHp.Value);
-        bossHpUI.HpBarUIUpdate();
 
         // 플레이어 참조 설정
         allPlayers = (GameObject[])FindFirstObjectByType<NetworkGameManager>().Players.Clone();
@@ -471,6 +468,9 @@ public class MushStateManager : NetworkBehaviour
         {
             // 어그로 플레이어 설정
             GetHighestAggroTarget();
+
+            // ui설정
+            ResetBossUIClientRpc(maxHp.Value);
         }
 
         // 설정 끝났으니 보스 상태 바꾸라고 콜백
@@ -534,6 +534,13 @@ public class MushStateManager : NetworkBehaviour
         alivePlayers[_index] = null;
     }
 
+    // 최대체력으로 다같이 세팅
+    [ClientRpc]
+    private void ResetBossUIClientRpc(int _value)
+    {
+        bossHpUI.SetMaxHp(_value);
+        bossHpUI.HpBarUIUpdate();
+    }
 
     #endregion
 }

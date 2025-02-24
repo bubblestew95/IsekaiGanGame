@@ -42,7 +42,7 @@ public class BossStateManager : NetworkBehaviour
     public NetworkVariable<float> bestAggro;
     public NetworkVariable<int> aggroPlayerIndex = new NetworkVariable<int>(-1);
     public NetworkVariable<int> curHp = new NetworkVariable<int>(-1);
-    public NetworkVariable<int> maxHp = new NetworkVariable<int>(-1);
+    public NetworkVariable<int> maxHp = new NetworkVariable<int>(25000);
     public NetworkList<float> playerDamage = new NetworkList<float>();
     public NetworkList<float> playerAggro = new NetworkList<float>();
 
@@ -204,6 +204,14 @@ public class BossStateManager : NetworkBehaviour
         {
             StartCoroutine(hitMaterial.ChangeMat());
         }
+    }
+
+    // 최대체력으로 다같이 세팅
+    [ClientRpc]
+    private void ResetBossUIClientRpc(int _value)
+    {
+        bossHpUI.SetMaxHp(_value);
+        bossHpUI.HpBarUIUpdate();
     }
     #endregion
 
@@ -493,10 +501,6 @@ public class BossStateManager : NetworkBehaviour
         bossBT = FindAnyObjectByType<BossBT>();
         followCam = FindAnyObjectByType<FollowCamera>();
         hitMaterial = FindFirstObjectByType<HitMaterial>();
-
-        // ui초기 설정
-        bossHpUI.SetMaxHp(maxHp.Value);
-        bossHpUI.HpBarUIUpdate();
     }
 
     // 멀티에서 초기화 해야할것들
@@ -504,6 +508,8 @@ public class BossStateManager : NetworkBehaviour
     {
         if (IsServer)
         {
+            maxHp.Value = 25000;
+
             if (FindAnyObjectByType<SetBossHp>() != null && FindAnyObjectByType<SetBossHp>().GetBossHP() != 0)
             {
                 maxHp.Value = FindAnyObjectByType<SetBossHp>().GetBossHP();
@@ -530,6 +536,7 @@ public class BossStateManager : NetworkBehaviour
         {
             StartCoroutine(ReduceAggroCoroutine());
             StartCoroutine(CheckTimeOut());
+            ResetBossUIClientRpc(maxHp.Value);
         }
     }
 

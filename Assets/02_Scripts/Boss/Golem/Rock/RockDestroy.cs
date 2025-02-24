@@ -7,11 +7,13 @@ public class RockDestroy : NetworkBehaviour
     private NavMeshObstacle nav;
     private Collider col;
     private bool donDestory = true;
+    private ParticleManager particleManager;
 
     private void Awake()
     {
         nav = GetComponent<NavMeshObstacle>();
         col = GetComponent<Collider>();
+        particleManager = FindAnyObjectByType<ParticleManager>();
     }
 
     public override void OnNetworkSpawn()
@@ -37,6 +39,7 @@ public class RockDestroy : NetworkBehaviour
                     return;
                 }
 
+                ParticleClientRpc();
                 transform.GetComponent<NetworkObject>().Despawn(true);
             }
         }
@@ -46,5 +49,11 @@ public class RockDestroy : NetworkBehaviour
     {
         nav.enabled = true;
         col.enabled = true;
+    }
+
+    [ClientRpc]
+    private void ParticleClientRpc()
+    {
+        particleManager.PlayParticle(particleManager.attack2, transform.position);
     }
 }
