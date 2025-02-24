@@ -13,9 +13,6 @@ using System;
 using Player = Unity.Services.Lobbies.Models.Player;
 using Unity.Collections;
 using System.Linq;
-using Unity.Services.Matchmaker.Models;
-using Unity.IO.LowLevel.Unsafe;
-using System.Collections;
 
 public class RoomManager : NetworkBehaviour
 {

@@ -4,7 +4,6 @@ using Unity.Netcode;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Services.Authentication;
-using Unity.Services.Lobbies.Models;
 
 public class Lobby_CharacterSelector : NetworkBehaviour
 {
