@@ -31,7 +31,6 @@ public class BossStateManager : NetworkBehaviour
     public bool[] hpCheck = new bool[9];
     public GameObject randomTarget;
     public bool isPhase2 = false;
-    public int maxHp = 1000;
     public float chainTime = 0f;
     public float reduceAggro = 5f;
     public float reduceAggroTime = 10f;
@@ -43,6 +42,7 @@ public class BossStateManager : NetworkBehaviour
     public NetworkVariable<float> bestAggro;
     public NetworkVariable<int> aggroPlayerIndex = new NetworkVariable<int>(-1);
     public NetworkVariable<int> curHp = new NetworkVariable<int>(-1);
+    public NetworkVariable<int> maxHp = new NetworkVariable<int>(-1);
     public NetworkList<float> playerDamage = new NetworkList<float>();
     public NetworkList<float> playerAggro = new NetworkList<float>();
 
@@ -81,7 +81,7 @@ public class BossStateManager : NetworkBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            BossDamageReceiveServerRpc(100, 1000, 0);
+            BossDamageReceiveServerRpc(100, 999, 0);
         }
     }
 
@@ -241,7 +241,7 @@ public class BossStateManager : NetworkBehaviour
     // 특정 hp이하일때 마다 콜백을 던짐
     private void CheckHpCallback()
     {
-        float hp = ((float)curHp.Value / (float)maxHp) * 100f;
+        float hp = ((float)curHp.Value / (float)maxHp.Value) * 100f;
 
         Debug.Log("현재 hp" + hp);
 
@@ -439,7 +439,7 @@ public class BossStateManager : NetworkBehaviour
     // hp 1페이즈일때 0~1, 2페이즈 일때 0~1
     private float ChangeHpToExciteLevel()
     {
-        float hp = ((float)curHp.Value / (float)maxHp);
+        float hp = ((float)curHp.Value / (float)maxHp.Value);
 
         if (!isPhase2)
         {
@@ -495,7 +495,7 @@ public class BossStateManager : NetworkBehaviour
         hitMaterial = FindFirstObjectByType<HitMaterial>();
 
         // ui초기 설정
-        bossHpUI.SetMaxHp(maxHp);
+        bossHpUI.SetMaxHp(maxHp.Value);
         bossHpUI.HpBarUIUpdate();
     }
 
@@ -504,13 +504,18 @@ public class BossStateManager : NetworkBehaviour
     {
         if (IsServer)
         {
+            if (FindAnyObjectByType<SetBossHp>() != null && FindAnyObjectByType<SetBossHp>().GetBossHP() != 0)
+            {
+                maxHp.Value = FindAnyObjectByType<SetBossHp>().GetBossHP();
+            }
+
             for (int i = 0; i < 4; i++)
             {
                 playerDamage.Add(0f);
                 playerAggro.Add(0f);
             }
 
-            curHp.Value = maxHp;
+            curHp.Value = maxHp.Value;
             aggroPlayerIndex.Value = 0;
             bestAggro.Value = 0f;
         }
