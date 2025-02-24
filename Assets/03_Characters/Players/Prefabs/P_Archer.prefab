@@ -10932,7 +10932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1328922022
+  GlobalObjectIdHash: 334951936
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -11248,7 +11248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 458d7f961d22e844e8adb33bcfc1314e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 3579401373718050828, guid: 60b650a0b32eece4fb4f6de0fc757361, type: 3}
+  projectilePrefab: {fileID: 262878909276921121, guid: 00d1f23fbb33d1049948a14a86f850fa, type: 3}
 --- !u!1 &179126
 GameObject:
   m_ObjectHideFlags: 0
