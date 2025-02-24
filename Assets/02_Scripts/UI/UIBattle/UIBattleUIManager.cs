@@ -66,6 +66,11 @@ public class UIBattleUIManager : MonoBehaviour
         }
     }
 
+    public void ShowDamagedUI()
+    {
+        ui_PlayerHitImpact.PlayerDamagedImpactOn();
+    }
+
     #region Skill Button, Joysticks
 
     public void OnSkillJoystickDown(SkillSlot _slot)
