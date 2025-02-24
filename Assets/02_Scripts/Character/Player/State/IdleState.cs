@@ -11,7 +11,7 @@ public class IdleState : BasePlayerState
     private Coroutine updateCoroutine = null;
     private Camera mainCamera = null;
     private Vector3 mouseRayPosition = Vector3.zero;
-    private bool skillUsedTrigger = false;
+
     public IdleState(PlayerManager _playerManager) : base(_playerManager)
     {
         stateType = PlayerStateType.Idle;
@@ -32,8 +32,6 @@ public class IdleState : BasePlayerState
     public override void OnExitState()
     {
         playerManager.AnimationManager.SetAnimatorWalkSpeed(0f);
-
-        skillUsedTrigger = false;
     }
 
     public override void OnUpdateState()
@@ -136,108 +134,4 @@ public class IdleState : BasePlayerState
 
 #endif
     }
-
-    /*
-    /// <summary>
-    /// 대기 상태일 때 모바일 입력 처리를 하는 코루틴.
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator IdleMobileCoroutine()
-    {
-        while(true)
-        {
-            // 대기 상태일 때만 움직일 수 있음.
-            playerManager.InputManager.GetJoystickInputValue(out joystickInputData);
-            playerManager.MovementManager.MoveByJoystick(joystickInputData);
-
-            // 대기 상태일 때만 스킬이 사용 가능함. 스킬 사용 체크.
-            InputBufferData inputBuffer = playerManager.InputManager.GetNextInput();
-
-            if (inputBuffer.skillType != SkillSlot.None)
-            {
-                playerManager.SkillManager.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
-            }
-
-            yield return null;
-        }
-    }
-
-    /// <summary>
-    /// 대기 상태일 때 PC 입력에 대한 처리를 하는 코루틴
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator IdlePCCoroutine()
-    {
-        Camera mainCamera = Camera.main;
-        Vector3 mouseRayPosition = Vector3.zero;
-        while (true)
-        {
-            // 스킬 입력 처리
-            {
-                if (Input.GetKeyDown(KeyCode.Alpha1))
-                {
-                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Skill_A);
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha2))
-                {
-                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Skill_B);
-                }
-
-                if (Input.GetKeyDown(KeyCode.Alpha3))
-                {
-                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Skill_C);
-                }
-
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Dash);
-                }
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.BasicAttack);
-                }
-            }
-
-            // 스킬 사용 처리
-            {
-                InputBufferData inputBuffer = playerManager.InputManager.GetNextInput();
-
-                if (inputBuffer.skillType != SkillSlot.None)
-                {
-                    playerManager.SkillManager.TryUseSkill(inputBuffer.skillType, inputBuffer.pointData);
-                }
-            }
-
-            yield return null;
-
-            // 플레이어 이동 처리
-            {
-                // 오른 쪽 마우스 입력을 감지했을 때 이동 가능한 곳에 마우스가 있을 시
-                if (Input.GetMouseButton(1))
-                {
-                    // 마우스의 위치에 이동 가능한 지형이 있을 때만 이동.
-                    if (playerManager.InputManager.GetMouseRayHitPosition(out mouseRayPosition))
-                    {
-                        // 지정한 위치로 이동.
-                        playerManager.MovementManager.MoveToPosition(mouseRayPosition);
-                    }
-                    // 마우스의 위치에 이동 가능한 지형이 없으면 이동 중지.
-                    else
-                    {
-                        playerManager.MovementManager.StopMove();
-                        playerManager.AnimationManager.SetAnimatorWalkSpeed(0f);
-                    }
-                }
-                // 마우스 클릭을 멈추면 이동 중지.
-                if (Input.GetMouseButtonUp(1))
-                {
-                    playerManager.MovementManager.StopMove();
-                    playerManager.AnimationManager.SetAnimatorWalkSpeed(0f);
-                }
-            }
-        }
-    }
-    */
 }

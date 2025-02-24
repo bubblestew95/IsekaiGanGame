@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: AssassinSkill_A
   m_EditorClassIdentifier: 
   skillSlot: 1
-  coolTime: 3
+  coolTime: 5
   damage: 20
-  aggro: 2
+  aggro: 3
   isBackattackEnable: 1
   backAttackTimes: 3
   teleportDistance: 2
