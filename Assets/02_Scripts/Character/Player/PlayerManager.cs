@@ -48,9 +48,9 @@ public class PlayerManager : MonoBehaviour
     private PlayerNetworkManager playerNetworkManager = null;
     private PlayerProjectileManager projectileManager = null;
 
-            #endregion
+    #endregion
 
-        #endregion
+    #endregion
 
     #endregion
 
@@ -139,7 +139,7 @@ public class PlayerManager : MonoBehaviour
 
     #region Public Functions
 
-    #region State Functions
+        #region State Functions
 
     public void ChangeState(PlayerStateType _type)
     {
@@ -158,8 +158,6 @@ public class PlayerManager : MonoBehaviour
 
     public void ChangeState_Local(PlayerStateType _type)
     {
-        Debug.LogFormat("Player State Change To {0}.", _type);
-
         StateMachine.ChangeState(_type);
     }
 
@@ -233,6 +231,11 @@ public class PlayerManager : MonoBehaviour
     }
 
     #endregion
+
+    public void ShowDamagedUI()
+    {
+        battleUIManager.ShowDamagedUI();
+    }
 
     #endregion
 

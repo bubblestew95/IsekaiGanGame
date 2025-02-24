@@ -7,9 +7,12 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+using EnumTypes;
+
 public class NetworkGameManager : NetworkBehaviour
 {
     public event Action loadingFinishCallback;
+    public event Action gameEndCallback;
     public event UnityAction<ulong> playerDieCallback;
 
     // 플레이어 로딩 동기화 관련 변수들
@@ -28,6 +31,7 @@ public class NetworkGameManager : NetworkBehaviour
     private int playerDieCnt = 0;
 
     public GameObject[] Players { get { return players; } }
+    public GameObject playerObject;
 
     #region Public Functions
 
@@ -84,14 +88,14 @@ public class NetworkGameManager : NetworkBehaviour
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
             // 임시용 프리펩 설정
-            GameObject playerObject = prefabs[cnt];
-            
+            //playerObject = prefabs[cnt];
+
             // GameObject를 역할에 맞게 설정
-            //string role = RoleManager.Instance.GetPlayerRole(clientId);
-            //foreach (GameObject prefab in prefabs)
-            //{
-            //    if (prefab.name == role) playerObject = prefab;
-            //}
+            string role = RoleManager.Instance.GetPlayerRole(clientId);
+            foreach (GameObject prefab in prefabs)
+            {
+                if (prefab.name == role) playerObject = prefab;
+            }
 
 
             players[cnt] = Instantiate(playerObject, spwanTr[cnt].position, Quaternion.identity);
@@ -131,6 +135,7 @@ public class NetworkGameManager : NetworkBehaviour
             if (IsServer)
             {
                 FailClientRpc();
+                GameEndClientRpc();
             }
         }
     }
@@ -138,7 +143,7 @@ public class NetworkGameManager : NetworkBehaviour
     // 게임 오버시 실행되는 코루틴
     private IEnumerator FailCoroutine()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
 
         FindAnyObjectByType<UIBattleUIManager>().FadeInResult(false);
         FindAnyObjectByType<BgmController>().PlayDefeat();
@@ -155,7 +160,7 @@ public class NetworkGameManager : NetworkBehaviour
     // 게임 클리어시 실행되는 코루틴
     private IEnumerator VictoryCoroutine()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
 
         FindAnyObjectByType<UIBattleUIManager>().FadeInResult(true);
         FindAnyObjectByType<BgmController>().PlayVictory();
@@ -294,11 +299,25 @@ public class NetworkGameManager : NetworkBehaviour
 
         if (IsServer)
         {
-            BossStateManager Boss = FindAnyObjectByType<BossStateManager>();
-
-            if (Boss != null)
+            if (GameManager.Instance.IsGolem)
             {
-                Boss.bossDieCallback += VictoryClientRpc;
+                BossStateManager Boss = FindAnyObjectByType<BossStateManager>();
+
+                if (Boss != null)
+                {
+                    Boss.bossDieCallback += VictoryClientRpc;
+                    Boss.bossDieCallback += GameEndClientRpc;
+                }
+            }
+            else if (GameManager.Instance.IsMush)
+            {
+                MushStateManager Mush = FindAnyObjectByType<MushStateManager>();
+
+                if (Mush != null)
+                {
+                    Mush.bossDieCallback += VictoryClientRpc;
+                    Mush.bossDieCallback += GameEndClientRpc;
+                }
             }
         }
 
@@ -372,8 +391,6 @@ public class NetworkGameManager : NetworkBehaviour
         }
     }
 
-
-
     #endregion
 
     #region [ClientRpc]
@@ -397,6 +414,28 @@ public class NetworkGameManager : NetworkBehaviour
     [ClientRpc]
     private void PlayerDieClientRpc(ulong _clientId)
     {
+        foreach(var playerObj in Players)
+        {
+            if(playerObj.GetComponent<PlayerManager>().PlayerNetworkManager.OwnerClientId
+                == _clientId)
+            {
+                if(GameManager.Instance.IsGolem)
+                {
+                    GameManager.Instance.BattleLog.SetKillLog(BossType.Golem, 
+                        playerObj.GetComponent<PlayerManager>().PlayerData.characterClass);
+                }
+                else
+                {
+                    GameManager.Instance.BattleLog.SetKillLog(BossType.Mushroom,
+                        playerObj.GetComponent<PlayerManager>().PlayerData.characterClass);
+                }
+
+                GameManager.Instance.BattleLog.ShowLog();
+
+                break;
+            }
+        }
+
         if (IsServer)
         {
             playerDieCallback?.Invoke(_clientId);
@@ -417,6 +456,13 @@ public class NetworkGameManager : NetworkBehaviour
     private void VictoryClientRpc()
     {
         StartCoroutine(VictoryCoroutine());
+    }
+
+    // 게임 끝났을때, 클라에 호출
+    [ClientRpc]
+    private void GameEndClientRpc()
+    {
+        gameEndCallback?.Invoke();
     }
     #endregion
 }

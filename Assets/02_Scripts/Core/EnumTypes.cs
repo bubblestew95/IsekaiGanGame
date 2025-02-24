@@ -40,4 +40,17 @@ namespace EnumTypes
         Archer, // ±Ã¼ö
         Thief // µµÀû
     }
+
+    public enum BossType
+    {
+        Golem = 0,
+        Mushroom,
+    }
+
+    public enum BehaviourLogType
+    {
+        None = 0,
+        Kill,
+        Revive
+    }
 }
