@@ -31,6 +31,7 @@ public class NetworkGameManager : NetworkBehaviour
     private int playerDieCnt = 0;
 
     public GameObject[] Players { get { return players; } }
+    public GameObject playerObject;
 
     #region Public Functions
 
@@ -87,14 +88,14 @@ public class NetworkGameManager : NetworkBehaviour
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
             // 임시용 프리펩 설정
-            GameObject playerObject = prefabs[cnt];
-            
+            //playerObject = prefabs[cnt];
+
             // GameObject를 역할에 맞게 설정
-            //string role = RoleManager.Instance.GetPlayerRole(clientId);
-            //foreach (GameObject prefab in prefabs)
-            //{
-            //    if (prefab.name == role) playerObject = prefab;
-            //}
+            string role = RoleManager.Instance.GetPlayerRole(clientId);
+            foreach (GameObject prefab in prefabs)
+            {
+                if (prefab.name == role) playerObject = prefab;
+            }
 
 
             players[cnt] = Instantiate(playerObject, spwanTr[cnt].position, Quaternion.identity);
