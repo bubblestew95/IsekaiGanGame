@@ -155,7 +155,7 @@ public class GameManager : MonoBehaviour
         }
 
         _damageReceiver.AttackManager.TakeDamage(_damage);
-
+        _damageReceiver.BattleUIManager.ShowDamagedUI();
         UpdatePlayerHpUI(_damageReceiver);
     }
 
