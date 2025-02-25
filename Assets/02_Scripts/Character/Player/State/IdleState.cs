@@ -12,6 +12,8 @@ public class IdleState : BasePlayerState
     private Camera mainCamera = null;
     private Vector3 mouseRayPosition = Vector3.zero;
 
+    private bool skillUsedTrigger = false;
+
     public IdleState(PlayerManager _playerManager) : base(_playerManager)
     {
         stateType = PlayerStateType.Idle;
@@ -27,6 +29,7 @@ public class IdleState : BasePlayerState
 
         mainCamera = Camera.main;
         mouseRayPosition = Vector3.zero;
+        skillUsedTrigger = false;
     }
 
     public override void OnExitState()
