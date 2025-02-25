@@ -8,6 +8,7 @@ public class LogSlot : MonoBehaviour
 
     public void SetImage(Sprite sprite)
     {
+        Debug.LogFormat("Sprite Name : {0}", sprite.name);
         slotImage.sprite = sprite;
     }
 }

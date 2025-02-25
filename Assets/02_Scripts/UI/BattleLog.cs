@@ -50,6 +50,7 @@ public class BattleLog : MonoBehaviour
     {
         if(_isPlayerDied)
         {
+            Debug.LogFormat("{0} image : {1}", _player, CharacterImageDic[_player]);
             image_Who.SetImage(bossImageDic[_boss]);
             image_Whom.SetImage(CharacterImageDic[_player]);
         }
