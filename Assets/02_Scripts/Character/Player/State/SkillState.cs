@@ -33,10 +33,10 @@ public class SkillState : BasePlayerState
 
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
 
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Dash);
-        //}
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            playerManager.InputManager.PC_OnSkillKeyInput(SkillSlot.Dash);
+        }
 
 #endif
 
