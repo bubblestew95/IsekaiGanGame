@@ -423,6 +423,9 @@ public class NetworkGameManager : NetworkBehaviour
             if(playerObj.GetComponent<PlayerManager>().PlayerNetworkManager.OwnerClientId
                 == _clientId)
             {
+                Debug.LogFormat("Died Client Id : {0}", _clientId);
+                Debug.LogFormat("Character Class : {0}", playerObj.GetComponent<PlayerManager>().PlayerData.characterClass);
+
                 if(GameManager.Instance.IsGolem)
                 {
                     GameManager.Instance.BattleLog.SetKillLog(BossType.Golem, 

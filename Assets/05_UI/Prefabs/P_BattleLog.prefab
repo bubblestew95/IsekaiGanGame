@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3834857592315548141}
   - component: {fileID: 9133828527525257727}
-  - component: {fileID: 6821295417587825580}
   - component: {fileID: 7098096286137960371}
   m_Layer: 0
   m_Name: Img
@@ -46,23 +45,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1053632269877458895}
   m_CullTransparentMesh: 1
---- !u!114 &6821295417587825580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1053632269877458895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b9f4bac02dde714e86e1875b47afb34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  logImgList:
-  - {fileID: 140428004, guid: ae250cf48a1dbc84f9b1456935851015, type: 3}
-  - {fileID: -1255363639, guid: ae250cf48a1dbc84f9b1456935851015, type: 3}
-  - {fileID: -2140551184, guid: ae250cf48a1dbc84f9b1456935851015, type: 3}
-  - {fileID: -119178975, guid: ae250cf48a1dbc84f9b1456935851015, type: 3}
 --- !u!114 &7098096286137960371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,7 +265,6 @@ GameObject:
   - component: {fileID: 6726788212565334765}
   - component: {fileID: 3926614896495860113}
   - component: {fileID: 3774218190593583521}
-  - component: {fileID: 7071906501323096599}
   m_Layer: 0
   m_Name: Img
   m_TagString: Untagged
@@ -348,21 +329,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7071906501323096599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3034218877929855892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b9f4bac02dde714e86e1875b47afb34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  logImgList:
-  - {fileID: 21300000, guid: 63c85b3380b1449488f2e1653b810073, type: 3}
-  - {fileID: 21300000, guid: eff4441b76c6e2c49b03e6e3d375992d, type: 3}
 --- !u!1 &3621389219889376714
 GameObject:
   m_ObjectHideFlags: 0
