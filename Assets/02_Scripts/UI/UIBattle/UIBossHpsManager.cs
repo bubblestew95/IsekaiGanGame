@@ -9,6 +9,7 @@ public class UIBossHpsManager : MonoBehaviour
 {
     public int maxHp = 0;
     public int curHp = 0;
+
     private List<Image> images = new List<Image>();
     private TextMeshProUGUI textMeshPro = null;
     public RectTransform rectTransform = null; // Èçµé¸± RectTransform

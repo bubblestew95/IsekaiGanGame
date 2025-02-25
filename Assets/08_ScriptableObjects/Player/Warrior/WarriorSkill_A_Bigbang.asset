@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: WarriorSkill_A_Bigbang
   m_EditorClassIdentifier: 
   skillSlot: 1
-  coolTime: 3
+  coolTime: 6
   damage: 50
-  aggro: 3
+  aggro: 4
   isBackattackEnable: 0
   backAttackTimes: 3
   attackAreaRadius: 4

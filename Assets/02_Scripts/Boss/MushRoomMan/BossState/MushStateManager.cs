@@ -18,6 +18,7 @@ public class MushStateManager : NetworkBehaviour
     // 네트워크로 동기화 할것들
     public NetworkVariable<int> aggroPlayerIndex = new NetworkVariable<int>(-1);
     public NetworkVariable<int> curHp = new NetworkVariable<int>(-1);
+    public NetworkVariable<int> maxHp = new NetworkVariable<int>(-1);
     public NetworkVariable<float> bestAggro = new NetworkVariable<float>(-1f);
     public NetworkList<float> playerDamage = new NetworkList<float>();
     public NetworkList<float> playerAggro = new NetworkList<float>();
@@ -27,7 +28,7 @@ public class MushStateManager : NetworkBehaviour
     public GameObject[] alivePlayers;
     public GameObject aggroPlayer;
     public GameObject randomPlayer;
-    public int maxHp;
+
     public float reduceAggro;
     public float reduceAggroTime;
     public bool[] hpCheck;
@@ -52,6 +53,14 @@ public class MushStateManager : NetworkBehaviour
     {
         FindAnyObjectByType<NetworkGameManager>().playerDieCallback += PlayerDieReceive;
         FindAnyObjectByType<NetworkGameManager>().loadingFinishCallback += Init;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            BossDamageReceiveServerRpc(100, 999, 0);
+        }
     }
 
     #region [Damage]
@@ -163,6 +172,8 @@ public class MushStateManager : NetworkBehaviour
     // 플레이어의 데미지, 어그로 수치 관리하는 함수
     private void RegisterDamageAndAggro(ulong _clientId, int _damage, float _aggro)
     {
+        if (_clientId == 100) return;
+
         for (int i = 0; i < alivePlayers.Length; i++)
         {
             if (alivePlayers[i] == null) continue;
@@ -264,7 +275,7 @@ public class MushStateManager : NetworkBehaviour
     // hp 리턴
     private float ChangeHpToExciteLevel()
     {
-        float hp = ((float)curHp.Value / (float)maxHp);
+        float hp = ((float)curHp.Value / (float)maxHp.Value);
 
         return hp;
     }
@@ -379,7 +390,7 @@ public class MushStateManager : NetworkBehaviour
     // 특정 hp이하일때 마다 콜백을 던짐
     private void CheckHpCallback()
     {
-        float hp = ((float)curHp.Value / (float)maxHp) * 100f;
+        float hp = ((float)curHp.Value / (float)maxHp.Value) * 100f;
 
         Debug.Log("현재 hp" + hp);
 
@@ -408,7 +419,10 @@ public class MushStateManager : NetworkBehaviour
     private void Init()
     {
         // 초기 값 설정
-        maxHp = 30000;
+        if (IsServer)
+        {
+            maxHp.Value = 30000;
+        }
         reduceAggro = 5f;
         reduceAggroTime = 10f;
         hpCheck = new bool[3];
@@ -419,13 +433,18 @@ public class MushStateManager : NetworkBehaviour
         // 서버에서 저장할거 설정
         if (IsServer)
         {
+            if (FindAnyObjectByType<SetBossHp>() != null && FindAnyObjectByType<SetBossHp>().GetBossHP() != 0)
+            {
+                maxHp.Value = FindAnyObjectByType<SetBossHp>().GetBossHP();
+            }
+
             for (int i = 0; i < 4; i++)
             {
                 playerDamage.Add(0f);
                 playerAggro.Add(0f);
             }
 
-            curHp.Value = maxHp;
+            curHp.Value = maxHp.Value;
             aggroPlayerIndex.Value = 0;
             bestAggro.Value = 0f;
         }
@@ -440,9 +459,6 @@ public class MushStateManager : NetworkBehaviour
         mushHitMat = FindFirstObjectByType<MushHitMat>();
 
 
-        // ui초기 설정
-        bossHpUI.SetMaxHp(maxHp);
-        bossHpUI.HpBarUIUpdate();
 
         // 플레이어 참조 설정
         allPlayers = (GameObject[])FindFirstObjectByType<NetworkGameManager>().Players.Clone();
@@ -452,6 +468,9 @@ public class MushStateManager : NetworkBehaviour
         {
             // 어그로 플레이어 설정
             GetHighestAggroTarget();
+
+            // ui설정
+            ResetBossUIClientRpc(maxHp.Value);
         }
 
         // 설정 끝났으니 보스 상태 바꾸라고 콜백
@@ -515,6 +534,13 @@ public class MushStateManager : NetworkBehaviour
         alivePlayers[_index] = null;
     }
 
+    // 최대체력으로 다같이 세팅
+    [ClientRpc]
+    private void ResetBossUIClientRpc(int _value)
+    {
+        bossHpUI.SetMaxHp(_value);
+        bossHpUI.HpBarUIUpdate();
+    }
 
     #endregion
 }
