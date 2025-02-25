@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: MageSkill_B_Meteor
   m_EditorClassIdentifier: 
   skillSlot: 2
-  coolTime: 19
+  coolTime: 15
   damage: 550
-  aggro: 10
+  aggro: 15
   isBackattackEnable: 0
   backAttackTimes: 3
   maxRange: 15

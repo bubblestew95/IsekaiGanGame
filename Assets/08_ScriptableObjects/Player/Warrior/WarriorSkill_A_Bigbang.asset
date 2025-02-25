@@ -15,7 +15,7 @@ MonoBehaviour:
   skillSlot: 1
   coolTime: 6
   damage: 50
-  aggro: 5
+  aggro: 4
   isBackattackEnable: 0
   backAttackTimes: 3
   attackAreaRadius: 4

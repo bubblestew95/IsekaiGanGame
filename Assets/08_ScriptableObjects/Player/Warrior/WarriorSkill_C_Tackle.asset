@@ -15,7 +15,7 @@ MonoBehaviour:
   skillSlot: 3
   coolTime: 10
   damage: 100
-  aggro: 8
+  aggro: 10
   isBackattackEnable: 0
   backAttackTimes: 3
   moveSpeed: 50
