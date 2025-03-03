@@ -1,0 +1,1 @@
+G:\Projects\Unity\IsekaiGanGame_Ver\IsekaiGanGame\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\2c6m542f\obj\armeabi-v7a

@@ -1,0 +1,10 @@
+# ninja log v5
+22	944	7626653252054541	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	6acde4ac69e33cef
+33	952	7626653251873783	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	81cf0b861feeacbc
+15	986	7626653252484870	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	233306fff738937e
+71	1038	7626653253032982	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	40bfd9203e969f1a
+0	1057	7626653253233785	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	6dcefe650853486c
+60	1060	7626653253283942	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	5f90376fe0843881
+46	1243	7626653255062554	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	c8529bf3d19f514f
+8	1331	7626653256015560	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	baff9d1e78f8dbfe
+1331	1449	7626653257220411	G:/Projects/Unity/IsekaiGanGame_Ver/IsekaiGanGame/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/2c6m542f/obj/armeabi-v7a/libgame.so	fd9b6161e907662e
