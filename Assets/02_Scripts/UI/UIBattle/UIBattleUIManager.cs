@@ -119,7 +119,7 @@ public class UIBattleUIManager : MonoBehaviour
 
     public void SetupAllUI() // 전체적으로 한번 싹 정하고 시작
     {
-        ui_BossHp.SetMaxHp(GameManager.Instance.GetBossHp());
+        ui_BossHp.SetMaxHp(1);
         ui_BossHp.HpBarUIUpdate();
 
         ui_PlayerHp.SetMaxHp(playerManager.StatusManager.MaxHp);
@@ -137,15 +137,6 @@ public class UIBattleUIManager : MonoBehaviour
         {
             ui_PlayerHp.SetCurrentHp(playerManager.StatusManager.CurrentHp);
             ui_PlayerHp.HpBarUIUpdate();
-        }
-    }
-
-    public void UpdateBossHp()
-    {
-        if(ui_BossHp != null)
-        {
-            ui_BossHp.SetCurrentHp(GameManager.Instance.GetBossHp());
-            ui_BossHp.HpBarUIUpdate();
         }
     }
 

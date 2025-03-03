@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     public bool IsMush = false;
     #endregion
 
-    #region Private Variables
+    #region Reference Variables
 
     private BossStateManager bossStateManager = null;
     private MushStateManager mushStateManager = null;
@@ -61,6 +61,11 @@ public class GameManager : MonoBehaviour
 
     #region Public Functions
 
+    /// <summary>
+    /// 현재 씬에 있는 보스의 트랜스폼을 리턴함.
+    /// 만약 현재 씬에 보스가 없다면 null을 리턴.
+    /// </summary>
+    /// <returns></returns>
     public Transform GetBossTransform()
     {
         if (IsGolem)
@@ -77,11 +82,12 @@ public class GameManager : MonoBehaviour
         }    
     }
 
-    public int GetBossHp()
-    {
-        return -1;
-    }
-
+    /// <summary>
+    /// 플레이어가 보스에게 데미지를 주는 함수.
+    /// </summary>
+    /// <param name="_damageGiver"></param>
+    /// <param name="_damage"></param>
+    /// <param name="_aggro"></param>
     public void DamageToBoss(PlayerManager _damageGiver, int _damage, float _aggro)
     {
         ulong clientId = _damageGiver.GetComponent<NetworkObject>().OwnerClientId;
@@ -92,7 +98,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// 보스가 플레이어에게 데미지를 주는 함수.
+    /// 만약 로컬 게임이라면 바로 데미지를 처리하게 된다.
+    /// 멀티 게임이라면 네트워크 게임 매니저에게 네트워크로 데미지 처리를 하라고 알린다.
+    /// </summary>
+    /// <param name="_damageReceiver"></param>
+    /// <param name="_damage"></param>
     public void DamageToPlayer(PlayerManager _damageReceiver, int _damage)
     {
         if (_damageReceiver.StateMachine.CurrentState.StateType == EnumTypes.PlayerStateType.Damaged
