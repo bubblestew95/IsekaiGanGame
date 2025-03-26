@@ -29,6 +29,9 @@ public class BattleLog : MonoBehaviour
     [SerializeField]
     private float showLogDuration = 2f;
 
+    /// <summary>
+    /// 보스, 플레이어, 행동 스프라이트 리스트
+    /// </summary>
     [Header("Data")]
     [SerializeField]
     private List<BossImageData> bossImageDataList = null;

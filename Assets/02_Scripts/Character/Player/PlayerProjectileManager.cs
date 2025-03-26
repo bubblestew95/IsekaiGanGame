@@ -32,6 +32,4 @@ public class PlayerProjectileManager : MonoBehaviour
 
         playerManager = GetComponent<PlayerManager>();
     }
-
-
 }
